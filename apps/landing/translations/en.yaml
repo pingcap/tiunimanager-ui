@@ -1,0 +1,11 @@
+name: Login
+switch_language: Switch Language
+form:
+  username: Username
+  password: Password
+  submit: Login
+message:
+  error: 'Login in failed: {{ msg }}'
+  success: Login in successfully
+validation:
+  required: '${label} is required!'

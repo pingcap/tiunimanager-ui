@@ -1,0 +1,37 @@
+import { rest } from 'msw'
+import { basePath } from '@/api/client'
+
+export default [
+  rest.post(basePath + '/user/login', (req, res, ctx) => {
+    // Persist user's authentication in the session
+    sessionStorage.setItem('is-authenticated', 'true')
+    const { userName, userPassword } = req.body as Record<string, string>
+    if (userPassword === 'fail')
+      return res(
+        ctx.status(401),
+        ctx.json({
+          code: 1,
+          message: 'login failed',
+        })
+      )
+    return res(
+      ctx.status(200),
+      ctx.set('token', "it's fake token"),
+      ctx.json({
+        code: 0,
+        data: {
+          userName: userName,
+        },
+      })
+    )
+  }),
+  rest.get(basePath + '/user/logout', (req, res, ctx) => {
+    sessionStorage.removeItem('is-authenticated')
+    return res(
+      ctx.status(200),
+      ctx.json({
+        code: 0,
+      })
+    )
+  }),
+]

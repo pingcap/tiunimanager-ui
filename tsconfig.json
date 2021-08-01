@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
+    "skipLibCheck": false,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@components/*": ["components/*"],
+      "@hooks/*": ["hooks/*"],
+      "@apps/*": ["apps/*"],
+      "@store/*": ["store/*"],
+      "@mock/*": ["mock/*"],
+      "@untyped/*": ["untyped/*"],
+      "#/*": ["generated/*"]
+    }
+  },
+  "include": [
+    "./src",
+    "./components",
+    "./apps",
+    "./store",
+    "./mock",
+    "./untyped",
+    "./generated",
+    "./types"
+  ]
+}
