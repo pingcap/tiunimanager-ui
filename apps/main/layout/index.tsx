@@ -1,4 +1,4 @@
-import { CSSProperties, FC, ReactNode } from 'react'
+import { CSSProperties, FC, ReactNode, useState } from 'react'
 import { Layout } from 'antd'
 import SideMenu from '@apps/main/layout/SideMenu'
 import { IMenuItem } from '@import-pages-macro'
@@ -7,26 +7,16 @@ import { IPageMeta } from '@/model/page'
 export interface MainLayoutProps {
   logo?: ReactNode
 
-  className?: string
-  style?: CSSProperties
-  contentClassName?: string
-  contentStyle?: CSSProperties
-  sideMenuClassName?: string
-  sideMenuStyle?: CSSProperties
-
   menuItems: IMenuItem<IPageMeta>[]
 }
+
+const COLLAPSED_WIDTH = 80
+const EXPANDED_WIDTH = 240
 
 const MainLayout: FC<MainLayoutProps> = (props) => {
   const {
     children,
     // logo,
-    className,
-    contentClassName,
-    sideMenuClassName,
-    style,
-    contentStyle,
-    sideMenuStyle,
     menuItems,
   } = props || {}
 
@@ -45,23 +35,26 @@ const MainLayout: FC<MainLayoutProps> = (props) => {
 
   // TODO: Calculate SideMenu width
 
+  const [marginWidth, setMarginWidth] = useState(EXPANDED_WIDTH)
+
   return (
-    <Layout
-      className={className}
-      style={{
-        minHeight: '100vh',
-        ...style,
-      }}
-    >
+    <Layout>
       <SideMenu
-        width={240}
-        className={sideMenuClassName}
-        style={sideMenuStyle}
+        width={EXPANDED_WIDTH}
+        collapsedWidth={COLLAPSED_WIDTH}
+        onCollapsedChange={(collapsed) => {
+          setMarginWidth(collapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH)
+        }}
         items={menuItems}
       />
-      <Layout>
-        {/* XXX: Should we add page header? */}
-        <Layout.Content className={contentClassName} style={contentStyle}>
+      <Layout style={{ marginLeft: marginWidth, transition: 'margin 0.2s' }}>
+        {/* XXX: Should add page header? */}
+        <Layout.Content
+          style={{
+            padding: 36,
+            minHeight: '100vh',
+          }}
+        >
           {children}
         </Layout.Content>
       </Layout>

@@ -22,7 +22,7 @@ const initialState: AuthState = {
   },
 }
 
-const { dispatch, useGlobalState } = createStore(
+const { dispatch, useGlobalState, getState } = createStore(
   (state, action: AuthStateAction) => {
     switch (action.type) {
       case 'logout': {
@@ -52,3 +52,4 @@ const { dispatch, useGlobalState } = createStore(
 
 export const dispatchAuthState = dispatch
 export const useAuthState = () => useGlobalState('state')
+export const getAuthState = getState

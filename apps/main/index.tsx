@@ -6,16 +6,7 @@ import { IPageMeta } from '@/model/page'
 const menuItems = importMenus<IPageMeta>('./', '/')
 
 const Main: FC = ({ children }) => {
-  return (
-    <MainLayout
-      contentStyle={{
-        padding: 36,
-      }}
-      menuItems={menuItems}
-    >
-      {children}
-    </MainLayout>
-  )
+  return <MainLayout menuItems={menuItems}>{children}</MainLayout>
 }
 
 export default Main

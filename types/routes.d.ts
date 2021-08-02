@@ -3,8 +3,8 @@ declare module '@routes' {
     | '/login'
     | '/notfound'
     | '/dashboard'
-    | '/host'
-    | '/instances'
+    | '/resource'
+    | '/cluster'
     | '/'
     | string
 }

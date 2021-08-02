@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react'
 import ProTable, { ProTableProps } from '@ant-design/pro-table'
 
 const defaultTableProps = {
-  bordered: true,
+  // bordered: true,
   size: 'middle',
   headerTitle: '列表',
   tooltip: '列表',

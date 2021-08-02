@@ -1,6 +1,12 @@
 import { loadTranslations } from '@/i18n'
 import axios, { AxiosInstance } from 'axios'
-import { Configuration, InstanceApi, PlatformApi, ResourceApi } from '#/api'
+import {
+  Configuration,
+  ClusterApi,
+  ClusterBackupApi,
+  PlatformApi,
+  ResourceApi,
+} from '#/api'
 import { readonly } from '@/utils/obj'
 
 function initAxios() {
@@ -24,7 +30,12 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
   return readonly({
     Platform: new PlatformApi(configuration, undefined, axiosInstance),
     Resource: new ResourceApi(configuration, undefined, axiosInstance),
-    Instance: new InstanceApi(configuration, undefined, axiosInstance),
+    Cluster: new ClusterApi(configuration, undefined, axiosInstance),
+    ClusterBackup: new ClusterBackupApi(
+      configuration,
+      undefined,
+      axiosInstance
+    ),
   })
 }
 

@@ -22,6 +22,8 @@ export interface SideMenuProps extends MenuProps {
   className?: string
   items: IMenuItem<IPageMeta>[]
   defaultCollapsed?: boolean
+  collapsedWidth?: number
+  onCollapsedChange?: (collapsed: boolean) => void
   width?: number
 }
 
@@ -43,6 +45,8 @@ function getMatchedMenuItemKeys(items: IMenuItem<IPageMeta>[], path: string) {
 
 const SideMenu: FC<SideMenuProps> = ({
   defaultCollapsed,
+  collapsedWidth,
+  onCollapsedChange,
   className = '',
   items,
   width,
@@ -101,10 +105,17 @@ const SideMenu: FC<SideMenuProps> = ({
       // trigger={null}
       className={className}
       width={width}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        zIndex: 999,
+        height: '100vh',
+      }}
+      collapsedWidth={collapsedWidth}
       theme="light"
       collapsible
       collapsed={collapsed}
-      // onCollapse={toggleCollapsed}
       trigger={null}
     >
       {/* TODO: Logo */}
@@ -133,7 +144,10 @@ const SideMenu: FC<SideMenuProps> = ({
         </LanguageDropdown>
         <SettingOutlined />
         <CollapseIcon
-          onClick={() => toggleCollapsed()}
+          onClick={() => {
+            onCollapsedChange?.(!collapsed)
+            toggleCollapsed()
+          }}
           style={{
             fontSize: collapsed ? 24 : 18,
           }}

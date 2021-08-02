@@ -1,6 +1,5 @@
 declare module '@import-pages-macro' {
   import { ComponentType } from 'react'
-
   export interface IRoute<T> {
     id: string
     defaultName: string
@@ -21,7 +20,6 @@ declare module '@import-pages-macro' {
   }
 
   export function importRoutes<T>(pagesPath: string, prefix?: string): IRoute<T>
-
   export function importMenus<T>(
     pagesPath: string,
     prefix?: string
