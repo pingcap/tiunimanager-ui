@@ -1,9 +1,9 @@
-import { ClusterapiClusterDisplayInfo, ModelsClusterTypeSpec } from '#/api'
+import { ClusterapiClusterDisplayInfo, KnowledgeClusterTypeSpec } from '#/api'
 import { datatype, name } from 'faker'
 import { rest } from 'msw'
 import { basePath } from '@/api/client'
 
-const fakeKnowledge: ModelsClusterTypeSpec[] = [
+const fakeKnowledge: KnowledgeClusterTypeSpec[] = [
   {
     clusterType: {
       code: 'tidb',
@@ -22,7 +22,7 @@ const fakeKnowledge: ModelsClusterTypeSpec[] = [
               componentType: 'tidb',
             },
             componentConstraint: {
-              availableSpecCodes: ['RegionA'],
+              availableSpecCodes: ['middle', 'large', 'small'],
               componentRequired: true,
               minZoneQuantity: 1,
               suggestedNodeQuantities: [],
@@ -34,7 +34,7 @@ const fakeKnowledge: ModelsClusterTypeSpec[] = [
               componentType: 'tikv',
             },
             componentConstraint: {
-              availableSpecCodes: ['RegionA', 'RegionB'],
+              availableSpecCodes: ['middle', 'large', 'small'],
               componentRequired: true,
               minZoneQuantity: 3,
               suggestedNodeQuantities: [3, 5],
@@ -46,7 +46,7 @@ const fakeKnowledge: ModelsClusterTypeSpec[] = [
               componentType: 'pd',
             },
             componentConstraint: {
-              availableSpecCodes: ['RegionA', 'RegionB', 'RegionC'],
+              availableSpecCodes: ['middle', 'large', 'small'],
               componentRequired: true,
               minZoneQuantity: 3,
               suggestedNodeQuantities: [3, 5],
@@ -74,7 +74,7 @@ const fakeKnowledge: ModelsClusterTypeSpec[] = [
               componentType: 'tidb',
             },
             componentConstraint: {
-              availableSpecCodes: ['RegionA'],
+              availableSpecCodes: ['middle', 'large', 'small'],
               componentRequired: true,
               minZoneQuantity: 1,
               suggestedNodeQuantities: [],
@@ -86,7 +86,7 @@ const fakeKnowledge: ModelsClusterTypeSpec[] = [
               componentType: 'tikv',
             },
             componentConstraint: {
-              availableSpecCodes: ['RegionA', 'RegionB'],
+              availableSpecCodes: ['middle', 'large'],
               componentRequired: true,
               minZoneQuantity: 3,
               suggestedNodeQuantities: [3, 5],
@@ -98,7 +98,7 @@ const fakeKnowledge: ModelsClusterTypeSpec[] = [
               componentType: 'pd',
             },
             componentConstraint: {
-              availableSpecCodes: ['RegionA', 'RegionB', 'RegionC'],
+              availableSpecCodes: ['middle', 'large'],
               componentRequired: true,
               minZoneQuantity: 3,
               suggestedNodeQuantities: [3, 5],
@@ -118,7 +118,7 @@ const fakeKnowledge: ModelsClusterTypeSpec[] = [
               componentType: 'tidb',
             },
             componentConstraint: {
-              availableSpecCodes: ['RegionA'],
+              availableSpecCodes: ['middle', 'large', 'small'],
               componentRequired: true,
               minZoneQuantity: 1,
               suggestedNodeQuantities: [],
@@ -130,7 +130,7 @@ const fakeKnowledge: ModelsClusterTypeSpec[] = [
               componentType: 'tikv',
             },
             componentConstraint: {
-              availableSpecCodes: ['RegionA', 'RegionB'],
+              availableSpecCodes: ['middle', 'large', 'small'],
               componentRequired: true,
               minZoneQuantity: 3,
               suggestedNodeQuantities: [3, 5],
@@ -142,7 +142,7 @@ const fakeKnowledge: ModelsClusterTypeSpec[] = [
               componentType: 'pd',
             },
             componentConstraint: {
-              availableSpecCodes: ['RegionA', 'RegionB', 'RegionC'],
+              availableSpecCodes: ['middle', 'large', 'small'],
               componentRequired: true,
               minZoneQuantity: 3,
               suggestedNodeQuantities: [3, 5],
@@ -162,7 +162,12 @@ const fakeClusters: ClusterapiClusterDisplayInfo[] = Array.from(
     clusterId: datatype.uuid().slice(0, 18),
     clusterName: name.firstName() + name.lastName(),
     statusName: 'running',
-    tags: name.lastName(),
+    tags: Array.from(
+      {
+        length: datatype.number(3),
+      },
+      () => name.lastName()
+    ),
     clusterType: 'tidb',
     clusterVersion: '5.1',
     dbPassword: datatype.string(10),
@@ -199,23 +204,18 @@ const fakeClusters: ClusterapiClusterDisplayInfo[] = Array.from(
 )
 
 export default [
-  // rest.post(basePath + '/instance/create', (req, res, ctx) => {
-  //   const { instanceName, instanceVersion } = req.body as any
-  //   const newInstance: ClusterapiClusterDisplayInfo = {
-  //     instanceId: datatype.uuid(),
-  //     instanceName,
-  //     instanceVersion,
-  //     instanceStatus: 0,
-  //   }
-  //   fakeClusters.unshift(newInstance)
-  //   return res(
-  //     ctx.status(200),
-  //     ctx.json({
-  //       code: 0,
-  //       data: newInstance,
-  //     })
-  //   )
-  // }),
+  rest.post(basePath + '/cluster', (req, res, ctx) => {
+    const { clusterName } = req.body as any
+    return res(
+      ctx.status(200),
+      ctx.json({
+        code: 0,
+        data: {
+          clusterName,
+        },
+      })
+    )
+  }),
   rest.post(basePath + '/cluster/query', (req, res, ctx) => {
     const { page, pageSize } = req.body as any
     return res(
@@ -249,6 +249,16 @@ export default [
       ctx.json({
         code: 0,
         data: fakeKnowledge,
+      })
+    )
+  }),
+  rest.get(basePath + '/cluster/:clusterId', (req, res, ctx) => {
+    const { clusterId } = req.params
+    return res(
+      ctx.status(200),
+      ctx.json({
+        code: 0,
+        data: fakeClusters[0],
       })
     )
   }),

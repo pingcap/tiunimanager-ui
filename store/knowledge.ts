@@ -1,9 +1,9 @@
 import { createGlobalState } from 'react-hooks-global-state'
-import { ModelsClusterTypeSpec } from '#/api'
+import { KnowledgeClusterTypeSpec } from '#/api'
 import { APIS } from '@/api/client'
 
 type KnowledgeStore = {
-  state: ModelsClusterTypeSpec[]
+  state: KnowledgeClusterTypeSpec[]
 }
 
 const { getGlobalState, setGlobalState, useGlobalState } =

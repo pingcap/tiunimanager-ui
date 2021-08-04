@@ -4,6 +4,9 @@ declare module '@routes' {
     | '/notfound'
     | '/dashboard'
     | '/resource'
+    | '/cluster/:clusterId/params'
+    | '/cluster/:clusterId/backup'
+    | '/cluster/:clusterId'
     | '/cluster'
     | '/'
     | string

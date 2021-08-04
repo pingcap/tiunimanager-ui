@@ -14,7 +14,7 @@ import {
 } from '../utils'
 import { lstatSync, readdirSync } from 'fs'
 import { readFile, writeFile } from 'fs/promises'
-import { basename, dirname, join, resolve } from 'path'
+import { basename, dirname, join, normalize, resolve } from 'path'
 import { createMacroPlugin, defineMacro } from '@ulab/create-vite-macro-plugin'
 import { NodePath } from '@babel/traverse'
 import { Program } from '@babel/types'
@@ -122,7 +122,7 @@ export default function vitePluginImportPagesMacro(): Plugin {
 
       const prefix = $do(() => {
         if (args.length < 2) {
-          const temp = fsPathToRoutePath.get(dirname(filepath))
+          const temp = fsPathToRoutePath.get(normalize(dirname(filepath)))
           if (!temp)
             throw new Error(
               `prefix should be specified in importMenus() because ${filepath} is not in parsed routes`
@@ -266,7 +266,9 @@ export interface IMenuItem<T> {
         imports: {
           metaFile: $do(() => {
             // XXX: all in typescript so only test meta.tsx
-            const child = children.find((c) => /^meta.tsx?$/.test(c))
+            const child = children.find((c) =>
+              /^meta\.tsx?$/.test(c.toLowerCase())
+            )
             if (!child) throw new Error(`no meta.ts(x) found in ${dirPath}`)
             return resolver(joinUrlPath(dir, child))
           }),
@@ -276,8 +278,15 @@ export interface IMenuItem<T> {
             if (!child) return undefined
             return resolver(joinUrlPath(dir, child))
           }),
+          layoutComponent: $do(() => {
+            // XXX: components should be defined in typescript so only test layout.tsx
+            const child = children.find((c) =>
+              /^layouts?\.tsx?$/.test(c.toLowerCase())
+            )
+            if (!child) return undefined
+            return resolver(joinUrlPath(dir, child))
+          }),
           translations: $do(() => {
-            // XXX: all in typescript so only test index.tsx
             const child = children.find((c) =>
               /^translations?$/.test(c.toLowerCase())
             )
@@ -331,6 +340,8 @@ interface PageNode {
     metaFile: string
     // undefined means no component for this route
     indexComponent?: string
+    // undefined means this page is standalone (not a wrapper for children)
+    layoutComponent?: string
     // glob to load translations file
     translations?: string
   }
@@ -359,6 +370,7 @@ interface Route {
 
   metaFile: string
   indexComponent?: string
+  layoutComponent?: string
   translations?: string
 
   children: Route[]
@@ -383,6 +395,18 @@ function createRoute(node: PageNode, override?: Partial<Route>): Route {
 function genRoutes(pages: PageNode): Route {
   function traverse(page: PageNode) {
     const routes: Route[] = []
+    {
+      if (pages.children.length) {
+        const route = createRoute(page, {
+          exact: true,
+          // only keep index component
+          translations: undefined,
+          metaFile: undefined,
+          layoutComponent: undefined,
+        })
+        routes.push(route)
+      }
+    }
     {
       const hasMenuItems = page.children.filter((c) => c.meta.index > 0)
       hasMenuItems
@@ -437,8 +461,12 @@ function renderRoutes(route: Route): string {
   exact: ${route.exact},
   sync: ${route.sync},
   component: ${
-    route.indexComponent
-      ? `__lazy(() => import('${route.indexComponent}'))`
+    route.exact
+      ? route.indexComponent
+        ? `__lazy(() => import('${route.indexComponent}'))`
+        : `({children}) => /*#__PURE__*/__createElement(__Fragment, null, 'NOT IMPLEMENTED YET')`
+      : route.layoutComponent
+      ? `__lazy(() => import('${route.layoutComponent}'))`
       : `({children}) => /*#__PURE__*/__createElement(__Fragment, null, children)`
   },
   meta: ${route.importID},

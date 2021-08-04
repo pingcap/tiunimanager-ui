@@ -1,6 +1,7 @@
 import { CopyOutlined } from '@ant-design/icons'
 import copyToClipboard from 'copy-to-clipboard'
 import { message as _message, Tooltip } from 'antd'
+import styles from './index.module.less'
 
 export function CopyIconButton({
   text,
@@ -13,6 +14,7 @@ export function CopyIconButton({
 }) {
   let dom = (
     <CopyOutlined
+      className={styles.copyIcon}
       onClick={() => {
         copyToClipboard(text)
         message && _message.success(message)

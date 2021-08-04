@@ -9,7 +9,7 @@ export interface LanguageProp {
   tag: string
 }
 
-type LanguageID = 'en' | 'zh'
+export type LanguageID = 'en' | 'zh'
 export const LANGUAGE_IDS: LanguageID[] = ['en', 'zh']
 
 export const LANGUAGES: Record<LanguageID, LanguageProp> = {

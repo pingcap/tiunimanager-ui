@@ -1,12 +1,6 @@
-import { FC } from 'react'
-import MainLayout from '@apps/main/layout'
-import { importMenus } from '@import-pages-macro'
-import { IPageMeta } from '@/model/page'
+import { Redirect } from 'react-router-dom'
 
-const menuItems = importMenus<IPageMeta>('./', '/')
-
-const Main: FC = ({ children }) => {
-  return <MainLayout menuItems={menuItems}>{children}</MainLayout>
+export default function () {
+  // redirect to dashboard directly
+  return <Redirect to="/dashboard" />
 }
-
-export default Main

@@ -1,27 +1,22 @@
-import {
-  ActionType,
-  ColumnsState,
-  ProColumns,
-  TableDropdown,
-} from '@ant-design/pro-table'
+import { ActionType, ColumnsState, ProColumns } from '@ant-design/pro-table'
 import { APIS } from '@/api/client'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { Button, message, Popconfirm, Progress, Tooltip } from 'antd'
 import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
 import styles from './ClusterTable.module.less'
-import { getAuthState, useAuthState } from '@store/auth'
+import { useAuthState } from '@store/auth'
 import useToggle from '@hooks/useToggle'
 import HeavyTable from '@/components/HeavyTable'
 import { CreatePanel } from '@apps/main/[3]cluster/components/CreatePanel'
 import {
   ClusterapiClusterDisplayInfo,
   ControllerUsage,
-  ModelsClusterTypeSpec,
+  KnowledgeClusterTypeSpec,
 } from '#/api'
 import { CopyIconButton } from '@/components/CopyToClipboard'
 import useLocalStorage from '@hooks/useLocalstorage'
-import { AxiosError } from 'axios'
 import { getKnowledge } from '@store/knowledge'
+import { Link } from 'react-router-dom'
 
 function getUsageCircle(
   { total, usageRate, used }: Required<ControllerUsage>,
@@ -44,7 +39,7 @@ function getUsageCircle(
   )
 }
 
-function getClusterTypes(raw: ModelsClusterTypeSpec[]) {
+function getClusterTypes(raw: KnowledgeClusterTypeSpec[]) {
   const result = Object.create(null)
   raw.forEach(
     (r) =>
@@ -58,7 +53,6 @@ function getClusterTypes(raw: ModelsClusterTypeSpec[]) {
 async function getColumns(
   token: string
 ): Promise<ProColumns<ClusterapiClusterDisplayInfo>[]> {
-  // TODO: err handler
   const knowledge = await getKnowledge(token)
   const clusterTypesEnum = getClusterTypes(knowledge)
   return [
@@ -67,6 +61,9 @@ async function getColumns(
       width: 180,
       dataIndex: 'clusterId',
       key: 'clusterId',
+      render: (_, record) => (
+        <Link to={`/cluster/${record.clusterId}`}>{record.clusterId}</Link>
+      ),
     },
     {
       title: '名称',
@@ -134,8 +131,19 @@ async function getColumns(
     {
       title: '标签',
       width: 120,
-      dataIndex: 'tags',
       key: 'tags',
+      render(_, record) {
+        return (
+          <>
+            {record.tags?.map((tag) => (
+              <Fragment key={tag}>
+                <span>{tag}</span>
+                <br />
+              </Fragment>
+            ))}
+          </>
+        )
+      },
     },
     {
       title: '端口',
@@ -165,7 +173,7 @@ async function getColumns(
       dataIndex: 'createTime',
       key: 'createTime',
       hideInSearch: true,
-      // valueType: 'dateTime',
+      valueType: 'dateTime',
     },
     {
       title: '更新时间',
@@ -173,7 +181,7 @@ async function getColumns(
       dataIndex: 'updateTime',
       key: 'updateTime',
       hideInSearch: true,
-      // valueType: 'dateTime',
+      valueType: 'dateTime',
     },
     {
       title: '删除时间',
@@ -181,7 +189,7 @@ async function getColumns(
       dataIndex: 'deleteTime',
       key: 'deleteTime',
       hideInSearch: true,
-      // valueType: 'dateTime',
+      valueType: 'dateTime',
     },
     {
       title: 'TLS',
@@ -212,25 +220,25 @@ async function getColumns(
               getUsageCircle(
                 record.memoryUsage as Required<ControllerUsage>,
                 '内存',
-                'Gb'
+                'MB'
               )}
             {record.diskUsage &&
               getUsageCircle(
                 record.diskUsage as Required<ControllerUsage>,
                 '磁盘',
-                'Gb'
+                'MB'
               )}
             {record.backupFileUsage &&
               getUsageCircle(
                 record.backupFileUsage as Required<ControllerUsage>,
                 '备份',
-                'Gb'
+                'MB'
               )}
             {record.storageUsage &&
               getUsageCircle(
                 record.storageUsage as Required<ControllerUsage>,
                 '存储',
-                'Gb'
+                'MB'
               )}
           </span>
         )
@@ -243,6 +251,7 @@ async function getColumns(
       valueType: 'option',
       render(_, record, i, action) {
         return [
+          // TODO: implement actions in cluster list
           <a key="edit">修改</a>,
           <a key="reboot">重启</a>,
           <Popconfirm

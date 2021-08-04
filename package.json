@@ -17,6 +17,7 @@
     "antd": "^4.16.8",
     "axios": "^0.21.1",
     "copy-to-clipboard": "^3.3.1",
+    "cron-parser": "^3.5.0",
     "i18next": "^20.3.3",
     "i18next-browser-languagedetector": "^6.1.2",
     "nprogress": "^0.2.0",
@@ -24,6 +25,7 @@
     "react-dom": "^17.0.0",
     "react-hooks-global-state": "^1.0.1",
     "react-i18next": "^11.11.3",
+    "react-js-cron": "^1.2.1",
     "react-query": "^3.19.0",
     "react-router-dom": "^5.2.0"
   },

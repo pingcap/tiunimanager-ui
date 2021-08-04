@@ -1,6 +1,6 @@
-import { CSSProperties, FC, ReactNode, useState } from 'react'
+import { FC, ReactNode, useState } from 'react'
 import { Layout } from 'antd'
-import SideMenu from '@apps/main/layout/SideMenu'
+import SideMenu from '@apps/main/layouts/SideMenu'
 import { IMenuItem } from '@import-pages-macro'
 import { IPageMeta } from '@/model/page'
 

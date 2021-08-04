@@ -23,7 +23,7 @@ export default function HeavyTable<T, U, R>({
         ...pagination,
       }}
       options={{
-        density: true,
+        density: false,
         fullScreen: true,
         setting: true,
         ...options,

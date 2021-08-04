@@ -1,7 +1,5 @@
 import ClusterTable from '@apps/main/[3]cluster/components/ClusterTable'
 
-function App() {
+export default function () {
   return <ClusterTable />
 }
-
-export default App

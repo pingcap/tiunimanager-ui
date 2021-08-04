@@ -6,6 +6,7 @@ import {
   ClusterBackupApi,
   PlatformApi,
   ResourceApi,
+  ClusterParamsApi,
 } from '#/api'
 import { readonly } from '@/utils/obj'
 
@@ -31,6 +32,11 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
     Platform: new PlatformApi(configuration, undefined, axiosInstance),
     Resource: new ResourceApi(configuration, undefined, axiosInstance),
     Cluster: new ClusterApi(configuration, undefined, axiosInstance),
+    ClusterParams: new ClusterParamsApi(
+      configuration,
+      undefined,
+      axiosInstance
+    ),
     ClusterBackup: new ClusterBackupApi(
       configuration,
       undefined,

@@ -6,7 +6,6 @@ import { useMemo, useState } from 'react'
 import { useAuthState } from '@store/auth'
 import { message, Popconfirm } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
-import styles from '@apps/main/[3]cluster/components/ClusterTable.module.less'
 
 function getHostColumns(token: string): ProColumns<HostapiHostInfo>[] {
   return [
