@@ -1,78 +1,112 @@
-import { ProColumns } from '@ant-design/pro-table'
+import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import HeavyTable from '@/components/HeavyTable'
 import { HostapiHostInfo } from '#/api'
 import { APIS } from '@/api/client'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useAuthState } from '@store/auth'
-import { message, Popconfirm } from 'antd'
-import { QuestionCircleOutlined } from '@ant-design/icons'
+import { Button, message, Popconfirm } from 'antd'
+import { PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import useLocalStorage from '@hooks/useLocalstorage'
+import UploadModal from '@apps/main/[2]resource/components/UploadModal'
+import useToggle from '@hooks/useToggle'
 
 function getHostColumns(token: string): ProColumns<HostapiHostInfo>[] {
   return [
     {
       title: 'ID',
-      width: 100,
+      width: 140,
+      dataIndex: 'hostId',
+      key: 'id',
+      hideInSearch: true,
+    },
+    {
+      title: '主机名',
+      width: 120,
       dataIndex: 'hostName',
       key: 'hostName',
+      hideInSearch: true,
     },
     {
       title: 'IP',
-      width: 100,
+      width: 140,
       dataIndex: 'ip',
       key: 'ip',
+      hideInSearch: true,
     },
     {
       title: '状态',
-      width: 100,
+      width: 80,
       dataIndex: 'status',
       key: 'status',
-      // TODO: valueEnum
-    },
-    {
-      title: '位置',
-      width: 180,
-      key: 'position',
-      tooltip: '可用区 数据中心 机架',
-      render(_, record) {
-        return `${record.az} ${record.dc} ${record.rack}`
+      valueType: 'select',
+      // TODO: add i18n
+      valueEnum: {
+        0: { text: '空闲中', status: 'Success' },
+        1: { text: '已下线', status: 'Default' },
+        2: { text: '使用中', status: 'Processing' },
+        3: { text: '已满载', status: 'Warning' },
+        4: { text: '已删除', status: 'Error' },
       },
     },
     {
-      title: '网络',
-      width: 180,
+      title: '位置',
+      width: 200,
+      key: 'location',
+      tooltip: '可用区 数据中心 机架',
+      hideInSearch: true,
+      render(_, record) {
+        return `${record.az}, ${record.dc}, ${record.rack}`
+      },
+    },
+    {
+      title: '网卡',
+      width: 120,
       dataIndex: 'nic',
       key: 'nic',
+      hideInSearch: true,
     },
     {
       title: '类型',
-      width: 100,
+      width: 80,
       dataIndex: 'purpose',
       key: 'purpose',
+      // TODO: ignore purpose in sprint 1
+      hideInSearch: true,
     },
     {
       title: '系统信息',
-      width: 100,
+      width: 140,
       key: 'system',
       render(_, record) {
         return `${record.os} ${record.kernel}`
       },
+      hideInSearch: true,
     },
     {
-      title: '硬件信息',
+      title: '可用规格',
       width: 130,
-      key: 'hardware',
+      key: 'availableSpec',
       render(_, record) {
-        return `${record.cpuCores} Core ${record.memory}Gb RAM`
+        return `${record.cpuCores} Core ${record.memory} GB`
       },
+      hideInSearch: true,
+    },
+    {
+      title: '总规格',
+      width: 130,
+      dataIndex: 'spec',
+      key: 'spec',
+      hideInSearch: true,
     },
     {
       title: '操作',
-      width: 140,
+      width: 120,
       key: 'actions',
       valueType: 'option',
       render(_, record, i, action) {
+        const editAction = getActionOfStatus(record.status!)
         return [
-          <a key="edit">上线</a>,
+          editAction ? <a key="edit">{editAction}</a> : <span />,
           <a key="monitor">监控</a>,
           <Popconfirm
             key="delete"
@@ -80,11 +114,7 @@ function getHostColumns(token: string): ProColumns<HostapiHostInfo>[] {
             icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
             onConfirm={async () => {
               try {
-                await APIS.Resource.hostHostIdDelete(
-                  token,
-                  // TODO: FIXME: where is the hostId?
-                  record.hostName!
-                )
+                await APIS.Resource.hostHostIdDelete(token, record.hostId!)
                 message.success(`删除主机 ${record.hostName} 成功`)
                 action?.reload()
               } catch (e) {
@@ -102,37 +132,88 @@ function getHostColumns(token: string): ProColumns<HostapiHostInfo>[] {
   ]
 }
 
+function getActionOfStatus(status: number) {
+  switch (status) {
+    case 0:
+    case 2:
+      return '上线'
+    case 1:
+      return '下线'
+  }
+  return undefined
+}
+
+const defaultColumnsSetting: Record<string, ColumnsState> = {
+  id: {
+    show: false,
+  },
+  spec: {
+    show: false,
+  },
+  actions: {
+    fixed: 'right',
+  },
+}
+
 export default function HostTable() {
+  // TODO: add pagination after api supports
   const [{ token }] = useAuthState()
-  const [total, setTotal] = useState(0)
+  // const [total, setTotal] = useState(0)
   const hostColumns = useMemo(() => getHostColumns(token), [token])
+
+  const [columnsSetting, setColumnSetting] = useLocalStorage(
+    'host-table-show',
+    defaultColumnsSetting
+  )
+
+  const [uploaderVisible, toggleUploaderVisible] = useToggle(false)
+
   return (
-    <HeavyTable
-      headerTitle={<h3>主机列表</h3>}
-      tooltip={false}
-      columns={hostColumns}
-      pagination={{
-        pageSize: 15,
-        total,
-        showSizeChanger: false,
-      }}
-      rowKey="hostId"
-      request={async (params) => {
-        // TODO: Use react-query instead.
-        const resp = await APIS.Resource.hostQueryPost(token, {
-          // TODO: does page index start from 0?
-          page: (params.current || 1) - 1,
-          pageSize: params.pageSize,
-        })
-
-        setTotal((resp.data as any).page?.total || 0)
-
-        // TODO: handle errors
-        return {
-          data: resp.data.data,
-          success: true,
+    <>
+      <HeavyTable
+        headerTitle={
+          <Button
+            type="primary"
+            key="import"
+            onClick={() => toggleUploaderVisible()}
+          >
+            <PlusOutlined /> 导入主机
+          </Button>
         }
-      }}
-    />
+        tooltip={false}
+        columns={hostColumns}
+        // pagination={{
+        //   pageSize: 15,
+        //   total,
+        //   showSizeChanger: false,
+        // }}
+        pagination={false}
+        rowKey="hostId"
+        columnsStateMap={columnsSetting}
+        search={{
+          filterType: 'light',
+        }}
+        onColumnsStateChange={(m) => setColumnSetting(m)}
+        request={async (params) => {
+          const { purpose, status } = params as any
+          // TODO: Use react-query instead.
+          // const resp = await APIS.Resource.hostsGet(token, {
+          //   // TODO: does page index start from 0?
+          //   page: (params.current || 1) - 1,
+          //   pageSize: params.pageSize,
+          // })
+          const resp = await APIS.Resource.hostsGet(token, purpose, status)
+
+          // setTotal((resp.data as any).page?.total || 0)
+
+          // TODO: handle errors
+          return {
+            data: resp.data.data,
+            success: true,
+          }
+        }}
+      />
+      <UploadModal visible={uploaderVisible} close={toggleUploaderVisible} />
+    </>
   )
 }

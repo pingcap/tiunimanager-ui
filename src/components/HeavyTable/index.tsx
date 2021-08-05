@@ -13,20 +13,29 @@ const defaultTableProps = {
 export default function HeavyTable<T, U, R>({
   pagination,
   options,
+  locale,
   ...props
 }: PropsWithChildren<ProTableProps<T, U, R>>) {
   return (
     <ProTable
       {...defaultTableProps}
-      pagination={{
-        pageSize: 10,
-        ...pagination,
-      }}
+      pagination={
+        pagination === false
+          ? false
+          : {
+              pageSize: 10,
+              ...pagination,
+            }
+      }
       options={{
         density: false,
         fullScreen: true,
         setting: true,
         ...options,
+      }}
+      locale={{
+        emptyText: '',
+        ...locale,
       }}
       {...props}
       toolBarRender={props.toolBarRender}

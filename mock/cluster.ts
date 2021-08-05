@@ -161,6 +161,7 @@ const fakeClusters: ClusterapiClusterDisplayInfo[] = Array.from(
   (_, i) => ({
     clusterId: datatype.uuid().slice(0, 18),
     clusterName: name.firstName() + name.lastName(),
+    statusCode: datatype.number(3).toString(),
     statusName: 'running',
     tags: Array.from(
       {
@@ -253,7 +254,7 @@ export default [
     )
   }),
   rest.get(basePath + '/cluster/:clusterId', (req, res, ctx) => {
-    const { clusterId } = req.params
+    // const { clusterId } = req.params
     return res(
       ctx.status(200),
       ctx.json({

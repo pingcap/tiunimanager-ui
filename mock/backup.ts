@@ -1,7 +1,7 @@
 import { rest } from 'msw'
 import { basePath } from '@/api/client'
-import { InstanceapiBackupRecord, InstanceapiParamItem } from '#/api'
-import { datatype, system, name } from 'faker'
+import { InstanceapiBackupRecord } from '#/api'
+import { datatype, name, system } from 'faker'
 
 const fakeBackups: InstanceapiBackupRecord[] = Array.from(
   {

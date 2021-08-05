@@ -76,9 +76,13 @@ async function getColumns(
       width: 100,
       dataIndex: 'statusCode',
       key: 'statusCode',
-      render(dom, record) {
-        // TODO: status enum
-        return record.statusName
+      // TODO: i18n
+      valueType: 'select',
+      valueEnum: {
+        '0': { text: '未上线', status: 'Default' },
+        '1': { text: '运行中', status: 'Processing' },
+        '2': { text: '已下线', status: 'Warning' },
+        '3': { text: '已删除', status: 'Default' },
       },
     },
     {
@@ -322,7 +326,15 @@ export default function ClusterTable() {
     <>
       <HeavyTable
         className={styles.clusterTable}
-        headerTitle={<h3>集群列表</h3>}
+        headerTitle={
+          <Button
+            type="primary"
+            key="create"
+            onClick={() => toggleCreateFormVisible()}
+          >
+            <PlusOutlined /> 创建集群
+          </Button>
+        }
         tooltip={false}
         columns={columns}
         pagination={{
@@ -337,15 +349,6 @@ export default function ClusterTable() {
         search={{
           filterType: 'light',
         }}
-        toolBarRender={() => [
-          <Button
-            type="primary"
-            key="create"
-            onClick={() => toggleCreateFormVisible()}
-          >
-            <PlusOutlined /> 创建集群
-          </Button>,
-        ]}
         request={async ({ current, pageSize, ...params }) => {
           // TODO: Use react-query instead.
           const resp = await APIS.Cluster.clusterQueryPost(token, {

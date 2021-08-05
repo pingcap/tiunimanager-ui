@@ -1,17 +1,7 @@
-import {
-  Button,
-  Card,
-  Drawer,
-  Form,
-  List,
-  message,
-  Popconfirm,
-  Row,
-} from 'antd'
+import { Button, Card, Drawer, List, message } from 'antd'
 import { ArrowRightOutlined } from '@ant-design/icons'
 import { useAuthState } from '@store/auth'
 import styles from './SettingPanel.module.less'
-import { Cron } from 'react-js-cron'
 import CronInput from '@/components/CronInput'
 import { useEffect, useMemo, useState } from 'react'
 import parser from 'cron-parser'
@@ -52,7 +42,9 @@ export default function ({ onClose, visible, cluster }: SettingPanelProps) {
         )
       }
     }
-    fetchCron()
+    if (visible) {
+      fetchCron()
+    }
   }, [token, cluster.clusterId, visible])
 
   const nextTimes = useMemo(() => {
