@@ -1,0 +1,21 @@
+label:
+  id: ID
+  name: 名称
+  tag: 标签
+  type: 类型
+  version: 版本
+  tls: TLS
+  port: 端口
+  extranetConnectAddresses: 外网地址
+  intranetConnectAddresses: 内网地址
+  createTime: 创建时间
+  updateTime: 更新时间
+  deleteTime: 删除时间
+
+tls:
+  enable: 已启用
+  disable: 未启用
+
+addresses:
+  copy: 复制连接地址
+  success: '复制连接地址 {{ content }} 成功'

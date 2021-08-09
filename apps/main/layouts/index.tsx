@@ -1,8 +1,9 @@
 import { FC, ReactNode, useState } from 'react'
 import { Layout } from 'antd'
 import SideMenu from '@apps/main/layouts/SideMenu'
-import { IMenuItem } from '@import-pages-macro'
+import { IMenuItem } from '@pages-macro'
 import { IPageMeta } from '@/model/page'
+import styles from './index.module.less'
 
 export interface MainLayoutProps {
   logo?: ReactNode
@@ -20,21 +21,6 @@ const MainLayout: FC<MainLayoutProps> = (props) => {
     menuItems,
   } = props || {}
 
-  // TODO: Keep it.
-  // useEffect(() => {
-  // 稍微慢一点 render，不然会造成性能问题，看起来像是菜单的卡顿
-  // const animationFrameId = requestAnimationFrame(() => {
-  //   setMenuInfoData(infoData)
-  // })
-  // return () =>
-  //   window.cancelAnimationFrame &&
-  //   window.cancelAnimationFrame(animationFrameId)
-  // }, [])
-
-  // TODO: Calculate className according to [prop.className, collapsed?]
-
-  // TODO: Calculate SideMenu width
-
   const [marginWidth, setMarginWidth] = useState(EXPANDED_WIDTH)
 
   return (
@@ -47,16 +33,9 @@ const MainLayout: FC<MainLayoutProps> = (props) => {
         }}
         items={menuItems}
       />
-      <Layout style={{ marginLeft: marginWidth, transition: 'margin 0.2s' }}>
+      <Layout style={{ marginLeft: marginWidth }} className={styles.pageLayout}>
         {/* XXX: Should add page header? */}
-        <Layout.Content
-          style={{
-            padding: 36,
-            minHeight: '100vh',
-          }}
-        >
-          {children}
-        </Layout.Content>
+        <Layout.Content className={styles.content}>{children}</Layout.Content>
       </Layout>
     </Layout>
   )

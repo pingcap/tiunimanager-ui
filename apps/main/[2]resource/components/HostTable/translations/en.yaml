@@ -1,0 +1,29 @@
+columns:
+  id: ID
+  hostName: Host Name
+  ip: IP
+  status: Status
+  location: Location
+  nic: NIC
+  purpose: Purpose
+  system: System
+  availableSpec: Available Spec
+  spec: Total Spec
+  actions: Actions
+actions:
+  online: Online
+  offline: Offline
+  monitor: Monitor
+  delete: Delete
+tips:
+  location: Availabile Zone / Data Center / Rack
+status:
+  idle: Free
+  offline: Offlined
+  using: In Use
+  full: Full Load
+  deleted: Deleted
+delete:
+  confirm: Are you sure to delete this host?
+  success: 'Delete {{ msg }} successfully'
+  fail: 'Fail: {{ msg }}'

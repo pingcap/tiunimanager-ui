@@ -1,0 +1,25 @@
+.cluster-table {
+  :global(.ant-tag) {
+    width: 100px;
+  }
+
+  :global(.ant-pro-table-list-toolbar-right) {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .usage-circle-container {
+    display: inline-flex;
+    justify-content: space-evenly;
+    width: 100%;
+  }
+
+  .address-container {
+    display: inline-flex;
+    flex-direction: column;
+    & > span:not(:first-child) {
+      display: inline-block;
+      margin-top: 6px;
+    }
+  }
+}

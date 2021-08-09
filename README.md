@@ -1,0 +1,5 @@
+- use mvp to manage routes and menus
+- use react-query to manage apis
+- more i18n
+- better structure
+-

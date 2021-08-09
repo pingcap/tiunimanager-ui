@@ -1,0 +1,19 @@
+title: Cluster Detail
+actions:
+  edit: Edit
+  import: Import
+  export: Export
+  reboot: Reboot
+  backup: Backup
+  delete: Delete
+delete:
+  confirm: Are you sure to delete this cluster?
+  success: 'Delete cluster {{ msg }} successfully'
+  fail: 'Fail: {{ msg }}'
+backup:
+  confirm: Are you sure to create backup task for this cluster?
+  success: 'Create backup task for cluster {{ msg }} successfully'
+  fail: 'Fail: {{ msg }}'
+id:
+  copy: copy cluster id
+  success: copy cluster id successfully

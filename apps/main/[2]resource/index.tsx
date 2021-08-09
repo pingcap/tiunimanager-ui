@@ -1,7 +1,11 @@
 import HostTable from '@apps/main/[2]resource/components/HostTable'
+import HeaderBar from '@apps/main/[2]resource/components/HeaderBar'
 
-function App() {
-  return <HostTable />
+export default function () {
+  return (
+    <>
+      <HeaderBar />
+      <HostTable />
+    </>
+  )
 }
-
-export default App

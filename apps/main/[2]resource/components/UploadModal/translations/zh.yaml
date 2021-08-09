@@ -1,0 +1,11 @@
+title: 导入主机
+status:
+  uploading: 上传中...
+  success: 导入成功!
+  fail: '导入失败: {{ msg }}'
+hint:
+  upload: 点击或将文件拖拽到此以上传文件
+  format: 目前仅支持通过 .xls 或 .xlsx 文件批量导入主机
+  download: 下载模板文件
+error:
+  format: 目前仅支持通过 .xls 或 .xlsx 文件批量导入主机

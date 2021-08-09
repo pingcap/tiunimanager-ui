@@ -1,0 +1,11 @@
+title: Import Hosts
+status:
+  uploading: Uploading...
+  success: Success!
+  fail: 'Fail: {{ msg }}'
+hint:
+  upload: Click or drag the file to there to upload.
+  format: Currently only .xls or .xlsx files are supported.
+  download: Download template file
+error:
+  format: Currently only .xls or .xlsx files are supported.

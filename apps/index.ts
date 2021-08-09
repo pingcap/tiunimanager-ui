@@ -1,12 +1,12 @@
-import { importRoutes } from '@import-pages-macro'
+import { loadRoutes } from '@pages-macro'
 import mountRouter from '@/router'
 import { IPageMeta } from '@/model/page'
 
 export default function prepareApps() {
   return mountRouter(
     [
-      importRoutes<IPageMeta>('./landing', '/login'),
-      importRoutes<IPageMeta>('./main', '/'),
+      loadRoutes<IPageMeta>('./landing', '/login'),
+      loadRoutes<IPageMeta>('./main', '/'),
     ],
     {
       noSession: '/login',

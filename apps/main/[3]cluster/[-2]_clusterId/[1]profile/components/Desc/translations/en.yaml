@@ -1,0 +1,21 @@
+label:
+  id: ID
+  name: Name
+  tag: Tag
+  type: Type
+  version: Version
+  tls: TLS
+  port: Port
+  extranetConnectAddresses: Extranet Address
+  intranetConnectAddresses: Intranet Address
+  createTime: Create Time
+  updateTime: Update Time
+  deleteTime: Delete Time
+
+tls:
+  enable: Enabled
+  disable: Disabled
+
+addresses:
+  copy: Copy addresses
+  success: 'Copy address {{ content }} successfully'

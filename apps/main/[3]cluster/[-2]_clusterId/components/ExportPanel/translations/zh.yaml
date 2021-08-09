@@ -1,0 +1,15 @@
+title: 导出集群数据
+export:
+  success: 导出成功
+  fail: '导出失败: {{ msg }}'
+form:
+  target: 导出目标
+  filepath: 文件路径
+  filetype: 文件类型
+  source: 源数据库
+  username: 用户名
+  password: 密码
+  submit: 确认导出
+filetype:
+  csv: CSV
+  sql: SQL

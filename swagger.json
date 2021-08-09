@@ -1,0 +1,3091 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "TiEM UI API",
+    "title": "TiEM UI API",
+    "contact": {
+      "name": "zhangpeijin",
+      "email": "zhangpeijin@pingcap.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0"
+  },
+  "host": "localhost:4116",
+  "basePath": "/api/v1/",
+  "paths": {
+    "/backups": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "query backup records of a cluster",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster backup"],
+        "summary": "query backup records of a cluster",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "cluster id",
+            "name": "clusterId",
+            "in": "query",
+            "required": true
+          },
+          {
+            "description": "page",
+            "name": "request",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/instanceapi.BackupRecordQueryReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.ResultWithPage"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/instanceapi.BackupRecord"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "backup",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster backup"],
+        "summary": "backup",
+        "parameters": [
+          {
+            "description": "backup request",
+            "name": "backupReq",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/instanceapi.BackupReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/instanceapi.BackupRecord"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/backups/{backupId}": {
+      "delete": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "delete backup record",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster backup"],
+        "summary": "delete backup record",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "backup record id",
+            "name": "backupId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/backups/{backupId}/restore": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "recover backup record of a cluster",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster backup"],
+        "summary": "recover backup record of a cluster",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "backupId",
+            "name": "backupId",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "backup recover request",
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/instanceapi.BackupRecoverReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/controller.StatusInfo"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/clusters": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "query clusters",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
+        "summary": "query clusters",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "clusterId",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "clusterName",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "clusterStatus",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "clusterTag",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "clusterType",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.ResultWithPage"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/clusterapi.ClusterDisplayInfo"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "create a cluster",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
+        "summary": "create a cluster",
+        "parameters": [
+          {
+            "description": "create request",
+            "name": "createReq",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/clusterapi.CreateReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/clusterapi.CreateClusterRsp"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/export": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "export",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster export"],
+        "summary": "export data from tidb cluster",
+        "parameters": [
+          {
+            "description": "cluster info for data export",
+            "name": "dataExport",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/databaseapi.DataExportReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/databaseapi.DataExportResp"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/import": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "import",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster import"],
+        "summary": "import data to tidb cluster",
+        "parameters": [
+          {
+            "description": "cluster info for import data",
+            "name": "dataImport",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/databaseapi.DataImportReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/databaseapi.DataImportResp"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/{clusterId}": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "show details of a cluster",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
+        "summary": "show details of a cluster",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "cluster id",
+            "name": "clusterId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/clusterapi.DetailClusterRsp"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "delete cluster",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
+        "summary": "delete cluster",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "cluster id",
+            "name": "clusterId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/clusterapi.DeleteClusterRsp"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/{clusterId}/dashboard": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "dashboard",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
+        "summary": "dashboard",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "cluster id",
+            "name": "clusterId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/clusterapi.DescribeDashboardRsp"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/{clusterId}/params": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "query params of a cluster",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster params"],
+        "summary": "query params of a cluster",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "clusterId",
+            "name": "clusterId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.ResultWithPage"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/instanceapi.ParamItem"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "submit params",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster params"],
+        "summary": "submit params",
+        "parameters": [
+          {
+            "description": "update params request",
+            "name": "updateReq",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/instanceapi.ParamUpdateReq"
+            }
+          },
+          {
+            "type": "string",
+            "description": "clusterId",
+            "name": "clusterId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/instanceapi.ParamUpdateRsp"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/{clusterId}/strategy": {
+      "put": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "save the backup strategy of a cluster",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster backup"],
+        "summary": "save the backup strategy of a cluster",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "clusterId",
+            "name": "clusterId",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "备份策略信息",
+            "name": "updateReq",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/instanceapi.BackupStrategyUpdateReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/instanceapi.BackupStrategy"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/{clusterId}/strategy/": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "show the backup strategy of a cluster",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster backup"],
+        "summary": "show the backup strategy of a cluster",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "clusterId",
+            "name": "clusterId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/instanceapi.BackupStrategy"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/{clusterId}/transport": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "query records of import and export",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster data transport"],
+        "summary": "query records of import and export",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "cluster id",
+            "name": "clusterId",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "cluster info for query records",
+            "name": "dataTransportQueryReq",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/databaseapi.DataTransportQueryReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/databaseapi.DataTransportRecordQueryResp"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/flowwork/{flowWorkId}": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "show details of a flow work",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["task"],
+        "summary": "show details of a flow work",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "flow work id",
+            "name": "flowWorkId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/taskapi.FlowWorkDetailInfo"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/flowworks": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "query flow works",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["task"],
+        "summary": "query flow works",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "clusterId",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "keyword",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "status",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.ResultWithPage"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/taskapi.FlowWorkDisplayInfo"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/knowledges": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "show cluster knowledge",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["knowledge"],
+        "summary": "show cluster knowledge",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/knowledge.ClusterTypeSpec"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/resources/allochosts": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "should be used in testing env",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
+        "summary": "Alloc host/disk resources for creating tidb cluster",
+        "parameters": [
+          {
+            "description": "location and spec of hosts",
+            "name": "Alloc",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/hostapi.AllocHostsReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/hostapi.AllocHostsRsp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/resources/failuredomains": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "get resource info in each failure domain",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
+        "summary": "Show the resources on failure domain view",
+        "parameters": [
+          {
+            "enum": [1, 2, 3],
+            "type": "integer",
+            "description": "failure domain type of dc/zone/rack",
+            "name": "failureDomainType",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/hostapi.DomainResource"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/resources/host": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "import one host by json",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
+        "summary": "Import a host to TiEM System",
+        "parameters": [
+          {
+            "description": "Host information",
+            "name": "host",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/hostapi.HostInfo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/resources/hosts": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "get hosts lit",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
+        "summary": "Show all hosts list in TiEM",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "purpose",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "status",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.ResultWithPage"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/hostapi.HostInfo"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "import hosts by xlsx file",
+        "consumes": ["multipart/form-data"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
+        "summary": "Import a batch of hosts to TiEM",
+        "parameters": [
+          {
+            "type": "file",
+            "description": "hosts information in a xlsx file",
+            "name": "file",
+            "in": "formData",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/resources/hosts-template/": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "get host template xlsx file",
+        "consumes": ["application/json"],
+        "produces": ["application/octet-stream"],
+        "tags": ["resource"],
+        "summary": "Download the host information template file for importing",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "file"
+            }
+          }
+        }
+      }
+    },
+    "/resources/hosts/": {
+      "delete": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "remove hosts by a list",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
+        "summary": "Remove a batch of hosts",
+        "parameters": [
+          {
+            "description": "list of host IDs",
+            "name": "hostIds",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/resources/hosts/{hostId}": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "get one host by id",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
+        "summary": "Show a host",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "host ID",
+            "name": "hostId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/hostapi.HostInfo"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "remove a host by id",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
+        "summary": "Remove a host",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "host id",
+            "name": "hostId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "string"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "description": "login",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["platform"],
+        "summary": "login",
+        "parameters": [
+          {
+            "description": "login info",
+            "name": "loginInfo",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userapi.LoginInfo"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/userapi.UserIdentity"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/user/logout": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "logout",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["platform"],
+        "summary": "logout",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/userapi.UserIdentity"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/user/profile": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "profile",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["platform"],
+        "summary": "user profile",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/userapi.UserIdentity"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "clusterapi.ClusterDisplayInfo": {
+      "type": "object",
+      "properties": {
+        "backupFileUsage": {
+          "$ref": "#/definitions/controller.Usage"
+        },
+        "clusterId": {
+          "type": "string"
+        },
+        "clusterName": {
+          "type": "string"
+        },
+        "clusterType": {
+          "type": "string"
+        },
+        "clusterVersion": {
+          "type": "string"
+        },
+        "cpuUsage": {
+          "$ref": "#/definitions/controller.Usage"
+        },
+        "createTime": {
+          "type": "string"
+        },
+        "dbPassword": {
+          "type": "string"
+        },
+        "deleteTime": {
+          "type": "string"
+        },
+        "diskUsage": {
+          "$ref": "#/definitions/controller.Usage"
+        },
+        "extranetConnectAddresses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "inProcessFlowId": {
+          "type": "integer"
+        },
+        "intranetConnectAddresses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "memoryUsage": {
+          "$ref": "#/definitions/controller.Usage"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "statusCode": {
+          "type": "string"
+        },
+        "statusName": {
+          "type": "string"
+        },
+        "storageUsage": {
+          "$ref": "#/definitions/controller.Usage"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tls": {
+          "type": "boolean"
+        },
+        "updateTime": {
+          "type": "string"
+        },
+        "whitelist": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "clusterapi.ClusterNodeDemand": {
+      "type": "object",
+      "properties": {
+        "componentType": {
+          "type": "string"
+        },
+        "distributionItems": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/clusterapi.DistributionItem"
+          }
+        },
+        "totalNodeCount": {
+          "type": "integer"
+        }
+      }
+    },
+    "clusterapi.ComponentInstance": {
+      "type": "object",
+      "properties": {
+        "componentName": {
+          "type": "string"
+        },
+        "componentType": {
+          "type": "string"
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/clusterapi.ComponentNodeDisplayInfo"
+          }
+        }
+      }
+    },
+    "clusterapi.ComponentNodeDisplayInfo": {
+      "type": "object",
+      "properties": {
+        "cpuUsage": {
+          "$ref": "#/definitions/controller.Usage"
+        },
+        "hostId": {
+          "type": "string"
+        },
+        "ioUtil": {
+          "type": "number"
+        },
+        "iops": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "memoryUsage": {
+          "$ref": "#/definitions/controller.Usage"
+        },
+        "nodeId": {
+          "type": "string"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "role": {
+          "$ref": "#/definitions/clusterapi.ComponentNodeRole"
+        },
+        "spec": {
+          "$ref": "#/definitions/hostapi.SpecBaseInfo"
+        },
+        "status": {
+          "type": "string"
+        },
+        "storageUsage": {
+          "$ref": "#/definitions/controller.Usage"
+        },
+        "version": {
+          "type": "string"
+        },
+        "zone": {
+          "$ref": "#/definitions/hostapi.ZoneBaseInfo"
+        }
+      }
+    },
+    "clusterapi.ComponentNodeRole": {
+      "type": "object",
+      "properties": {
+        "roleCode": {
+          "type": "string"
+        },
+        "roleName": {
+          "type": "string"
+        }
+      }
+    },
+    "clusterapi.CreateClusterRsp": {
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        },
+        "clusterName": {
+          "type": "string"
+        },
+        "clusterType": {
+          "type": "string"
+        },
+        "clusterVersion": {
+          "type": "string"
+        },
+        "createTime": {
+          "type": "string"
+        },
+        "dbPassword": {
+          "type": "string"
+        },
+        "deleteTime": {
+          "type": "string"
+        },
+        "inProcessFlowId": {
+          "type": "integer"
+        },
+        "statusCode": {
+          "type": "string"
+        },
+        "statusName": {
+          "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tls": {
+          "type": "boolean"
+        },
+        "updateTime": {
+          "type": "string"
+        }
+      }
+    },
+    "clusterapi.CreateReq": {
+      "type": "object",
+      "properties": {
+        "clusterName": {
+          "type": "string"
+        },
+        "clusterType": {
+          "type": "string"
+        },
+        "clusterVersion": {
+          "type": "string"
+        },
+        "dbPassword": {
+          "type": "string"
+        },
+        "nodeDemandList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/clusterapi.ClusterNodeDemand"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tls": {
+          "type": "boolean"
+        }
+      }
+    },
+    "clusterapi.DeleteClusterRsp": {
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        },
+        "createTime": {
+          "type": "string"
+        },
+        "deleteTime": {
+          "type": "string"
+        },
+        "inProcessFlowId": {
+          "type": "integer"
+        },
+        "statusCode": {
+          "type": "string"
+        },
+        "statusName": {
+          "type": "string"
+        },
+        "updateTime": {
+          "type": "string"
+        }
+      }
+    },
+    "clusterapi.DescribeDashboardRsp": {
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        },
+        "shareCode": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "clusterapi.DetailClusterRsp": {
+      "type": "object",
+      "properties": {
+        "backupFileUsage": {
+          "$ref": "#/definitions/controller.Usage"
+        },
+        "clusterId": {
+          "type": "string"
+        },
+        "clusterName": {
+          "type": "string"
+        },
+        "clusterType": {
+          "type": "string"
+        },
+        "clusterVersion": {
+          "type": "string"
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/clusterapi.ComponentInstance"
+          }
+        },
+        "cpuUsage": {
+          "$ref": "#/definitions/controller.Usage"
+        },
+        "createTime": {
+          "type": "string"
+        },
+        "dbPassword": {
+          "type": "string"
+        },
+        "deleteTime": {
+          "type": "string"
+        },
+        "diskUsage": {
+          "$ref": "#/definitions/controller.Usage"
+        },
+        "extranetConnectAddresses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "inProcessFlowId": {
+          "type": "integer"
+        },
+        "intranetConnectAddresses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "maintainTaskCron": {
+          "type": "string"
+        },
+        "memoryUsage": {
+          "$ref": "#/definitions/controller.Usage"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "statusCode": {
+          "type": "string"
+        },
+        "statusName": {
+          "type": "string"
+        },
+        "storageUsage": {
+          "$ref": "#/definitions/controller.Usage"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tls": {
+          "type": "boolean"
+        },
+        "updateTime": {
+          "type": "string"
+        },
+        "whitelist": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "clusterapi.DistributionItem": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "specCode": {
+          "type": "string"
+        },
+        "zoneCode": {
+          "type": "string"
+        }
+      }
+    },
+    "controller.CommonResult": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer"
+        },
+        "data": {
+          "type": "object"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "controller.Operator": {
+      "type": "object",
+      "properties": {
+        "manualOperator": {
+          "type": "boolean"
+        },
+        "operatorId": {
+          "type": "string"
+        },
+        "operatorName": {
+          "type": "string"
+        },
+        "tenantId": {
+          "type": "string"
+        }
+      }
+    },
+    "controller.Page": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer"
+        },
+        "pageSize": {
+          "type": "integer"
+        },
+        "total": {
+          "type": "integer"
+        }
+      }
+    },
+    "controller.ResultWithPage": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer"
+        },
+        "data": {
+          "type": "object"
+        },
+        "message": {
+          "type": "string"
+        },
+        "page": {
+          "$ref": "#/definitions/controller.Page"
+        }
+      }
+    },
+    "controller.StatusInfo": {
+      "type": "object",
+      "properties": {
+        "createTime": {
+          "type": "string"
+        },
+        "deleteTime": {
+          "type": "string"
+        },
+        "inProcessFlowId": {
+          "type": "integer"
+        },
+        "statusCode": {
+          "type": "string"
+        },
+        "statusName": {
+          "type": "string"
+        },
+        "updateTime": {
+          "type": "string"
+        }
+      }
+    },
+    "controller.Usage": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "number"
+        },
+        "usageRate": {
+          "type": "number"
+        },
+        "used": {
+          "type": "number"
+        }
+      }
+    },
+    "databaseapi.DataExportReq": {
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        },
+        "fileType": {
+          "type": "string"
+        },
+        "filter": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
+        }
+      }
+    },
+    "databaseapi.DataExportResp": {
+      "type": "object",
+      "properties": {
+        "recordId": {
+          "type": "string"
+        }
+      }
+    },
+    "databaseapi.DataImportReq": {
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        },
+        "filePath": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
+        }
+      }
+    },
+    "databaseapi.DataImportResp": {
+      "type": "object",
+      "properties": {
+        "recordId": {
+          "type": "string"
+        }
+      }
+    },
+    "databaseapi.DataTransportInfo": {
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        },
+        "endTime": {
+          "type": "string"
+        },
+        "filePath": {
+          "type": "string"
+        },
+        "recordId": {
+          "type": "string"
+        },
+        "startTime": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "transportType": {
+          "type": "string"
+        }
+      }
+    },
+    "databaseapi.DataTransportQueryReq": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer"
+        },
+        "pageSize": {
+          "type": "integer"
+        },
+        "recordId": {
+          "type": "string"
+        }
+      }
+    },
+    "databaseapi.DataTransportRecordQueryResp": {
+      "type": "object",
+      "properties": {
+        "transportRecords": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/databaseapi.DataTransportInfo"
+          }
+        }
+      }
+    },
+    "hostapi.AllocHostsReq": {
+      "type": "object",
+      "properties": {
+        "pdReq": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hostapi.Allocation"
+          }
+        },
+        "tidbReq": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hostapi.Allocation"
+          }
+        },
+        "tikvReq": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hostapi.Allocation"
+          }
+        }
+      }
+    },
+    "hostapi.AllocHostsRsp": {
+      "type": "object",
+      "properties": {
+        "pdHosts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hostapi.AllocateRsp"
+          }
+        },
+        "tidbHosts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hostapi.AllocateRsp"
+          }
+        },
+        "tikvHosts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hostapi.AllocateRsp"
+          }
+        }
+      }
+    },
+    "hostapi.AllocateRsp": {
+      "type": "object",
+      "properties": {
+        "cpuCore": {
+          "type": "integer"
+        },
+        "disk": {
+          "$ref": "#/definitions/hostapi.Disk"
+        },
+        "hostName": {
+          "type": "string"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "memory": {
+          "type": "integer"
+        },
+        "passwd": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
+        }
+      }
+    },
+    "hostapi.Allocation": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "cpuCores": {
+          "type": "integer"
+        },
+        "failureDomain": {
+          "type": "string"
+        },
+        "memory": {
+          "type": "integer"
+        }
+      }
+    },
+    "hostapi.Disk": {
+      "type": "object",
+      "properties": {
+        "capacity": {
+          "description": "Disk size, Unit: GB",
+          "type": "integer"
+        },
+        "diskId": {
+          "type": "string"
+        },
+        "name": {
+          "description": "[sda/sdb/nvmep0...]",
+          "type": "string"
+        },
+        "path": {
+          "description": "Disk mount path: [/data1]",
+          "type": "string"
+        },
+        "status": {
+          "description": "Disk Status, 0 for available, 1 for inused",
+          "type": "integer"
+        }
+      }
+    },
+    "hostapi.DomainResource": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer"
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "specCode": {
+          "type": "string"
+        },
+        "specName": {
+          "type": "string"
+        },
+        "zoneCode": {
+          "type": "string"
+        },
+        "zoneName": {
+          "type": "string"
+        }
+      }
+    },
+    "hostapi.HostInfo": {
+      "type": "object",
+      "properties": {
+        "az": {
+          "type": "string"
+        },
+        "cpuCores": {
+          "type": "integer"
+        },
+        "createTime": {
+          "type": "integer"
+        },
+        "dc": {
+          "type": "string"
+        },
+        "disks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hostapi.Disk"
+          }
+        },
+        "hostId": {
+          "type": "string"
+        },
+        "hostName": {
+          "type": "string"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "kernel": {
+          "type": "string"
+        },
+        "memory": {
+          "description": "Host memory size, Unit:GB",
+          "type": "integer"
+        },
+        "nic": {
+          "description": "Host network type: 1GE or 10GE",
+          "type": "string"
+        },
+        "os": {
+          "type": "string"
+        },
+        "passwd": {
+          "type": "string"
+        },
+        "purpose": {
+          "description": "What Purpose is the host used for? [compute/storage or both]",
+          "type": "string"
+        },
+        "rack": {
+          "type": "string"
+        },
+        "spec": {
+          "description": "Host Spec, init while importing",
+          "type": "string"
+        },
+        "status": {
+          "description": "Host Status, 0 for Online, 1 for offline",
+          "type": "integer"
+        },
+        "userName": {
+          "type": "string"
+        }
+      }
+    },
+    "hostapi.SpecBaseInfo": {
+      "type": "object",
+      "properties": {
+        "specCode": {
+          "type": "string"
+        },
+        "specName": {
+          "type": "string"
+        }
+      }
+    },
+    "hostapi.ZoneBaseInfo": {
+      "type": "object",
+      "properties": {
+        "zoneCode": {
+          "type": "string"
+        },
+        "zoneName": {
+          "type": "string"
+        }
+      }
+    },
+    "instanceapi.BackupRecord": {
+      "type": "object",
+      "properties": {
+        "backupRange": {
+          "type": "string"
+        },
+        "backupType": {
+          "type": "string"
+        },
+        "clusterId": {
+          "type": "string"
+        },
+        "endTime": {
+          "type": "string"
+        },
+        "filePath": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "operator": {
+          "$ref": "#/definitions/controller.Operator"
+        },
+        "size": {
+          "type": "integer"
+        },
+        "startTime": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/controller.StatusInfo"
+        }
+      }
+    },
+    "instanceapi.BackupRecordQueryReq": {
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        },
+        "page": {
+          "type": "integer"
+        },
+        "pageSize": {
+          "type": "integer"
+        }
+      }
+    },
+    "instanceapi.BackupRecoverReq": {
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        }
+      }
+    },
+    "instanceapi.BackupReq": {
+      "type": "object",
+      "properties": {
+        "backupRange": {
+          "type": "string"
+        },
+        "backupType": {
+          "type": "string"
+        },
+        "clusterId": {
+          "type": "string"
+        },
+        "filePath": {
+          "type": "string"
+        }
+      }
+    },
+    "instanceapi.BackupStrategy": {
+      "type": "object",
+      "properties": {
+        "backupDate": {
+          "type": "string"
+        },
+        "backupRange": {
+          "type": "string"
+        },
+        "backupType": {
+          "type": "string"
+        },
+        "clusterId": {
+          "type": "string"
+        },
+        "filePath": {
+          "type": "string"
+        },
+        "period": {
+          "type": "string"
+        }
+      }
+    },
+    "instanceapi.BackupStrategyUpdateReq": {
+      "type": "object",
+      "properties": {
+        "strategy": {
+          "$ref": "#/definitions/instanceapi.BackupStrategy"
+        }
+      }
+    },
+    "instanceapi.ParamInstance": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "object"
+        }
+      }
+    },
+    "instanceapi.ParamItem": {
+      "type": "object",
+      "properties": {
+        "currentValue": {
+          "$ref": "#/definitions/instanceapi.ParamInstance"
+        },
+        "definition": {
+          "$ref": "#/definitions/knowledge.Parameter"
+        }
+      }
+    },
+    "instanceapi.ParamUpdateReq": {
+      "type": "object",
+      "properties": {
+        "values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/instanceapi.ParamInstance"
+          }
+        }
+      }
+    },
+    "instanceapi.ParamUpdateRsp": {
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "taskId": {
+          "type": "integer"
+        }
+      }
+    },
+    "knowledge.ClusterComponent": {
+      "type": "object",
+      "properties": {
+        "componentName": {
+          "type": "string"
+        },
+        "componentType": {
+          "type": "string"
+        }
+      }
+    },
+    "knowledge.ClusterComponentSpec": {
+      "type": "object",
+      "properties": {
+        "clusterComponent": {
+          "$ref": "#/definitions/knowledge.ClusterComponent"
+        },
+        "componentConstraint": {
+          "$ref": "#/definitions/knowledge.ComponentConstraint"
+        }
+      }
+    },
+    "knowledge.ClusterType": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "knowledge.ClusterTypeSpec": {
+      "type": "object",
+      "properties": {
+        "clusterType": {
+          "$ref": "#/definitions/knowledge.ClusterType"
+        },
+        "versionSpecs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/knowledge.ClusterVersionSpec"
+          }
+        }
+      }
+    },
+    "knowledge.ClusterVersion": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "knowledge.ClusterVersionSpec": {
+      "type": "object",
+      "properties": {
+        "clusterVersion": {
+          "$ref": "#/definitions/knowledge.ClusterVersion"
+        },
+        "componentSpecs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/knowledge.ClusterComponentSpec"
+          }
+        }
+      }
+    },
+    "knowledge.ComponentConstraint": {
+      "type": "object",
+      "properties": {
+        "availableSpecCodes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "componentRequired": {
+          "type": "boolean"
+        },
+        "minZoneQuantity": {
+          "type": "integer"
+        },
+        "suggestedNodeQuantities": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "knowledge.ParamValueConstraint": {
+      "type": "object",
+      "properties": {
+        "contrastValue": {
+          "type": "object"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "knowledge.Parameter": {
+      "type": "object",
+      "properties": {
+        "constraints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/knowledge.ParamValueConstraint"
+          }
+        },
+        "defaultValue": {
+          "type": "object"
+        },
+        "desc": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "needRestart": {
+          "type": "boolean"
+        },
+        "type": {
+          "type": "integer"
+        },
+        "unit": {
+          "type": "string"
+        }
+      }
+    },
+    "taskapi.FlowWorkDetailInfo": {
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        },
+        "clusterName": {
+          "type": "string"
+        },
+        "createTime": {
+          "type": "string"
+        },
+        "deleteTime": {
+          "type": "string"
+        },
+        "flowWorkName": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "inProcessFlowId": {
+          "type": "integer"
+        },
+        "manualOperator": {
+          "type": "boolean"
+        },
+        "operatorId": {
+          "type": "string"
+        },
+        "operatorName": {
+          "type": "string"
+        },
+        "statusCode": {
+          "type": "string"
+        },
+        "statusName": {
+          "type": "string"
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/taskapi.FlowWorkTaskInfo"
+          }
+        },
+        "tenantId": {
+          "type": "string"
+        },
+        "updateTime": {
+          "type": "string"
+        }
+      }
+    },
+    "taskapi.FlowWorkDisplayInfo": {
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string"
+        },
+        "clusterName": {
+          "type": "string"
+        },
+        "createTime": {
+          "type": "string"
+        },
+        "deleteTime": {
+          "type": "string"
+        },
+        "flowWorkName": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "inProcessFlowId": {
+          "type": "integer"
+        },
+        "manualOperator": {
+          "type": "boolean"
+        },
+        "operatorId": {
+          "type": "string"
+        },
+        "operatorName": {
+          "type": "string"
+        },
+        "statusCode": {
+          "type": "string"
+        },
+        "statusName": {
+          "type": "string"
+        },
+        "tenantId": {
+          "type": "string"
+        },
+        "updateTime": {
+          "type": "string"
+        }
+      }
+    },
+    "taskapi.FlowWorkTaskInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "taskName": {
+          "type": "string"
+        }
+      }
+    },
+    "userapi.LoginInfo": {
+      "type": "object",
+      "properties": {
+        "userName": {
+          "type": "string"
+        },
+        "userPassword": {
+          "type": "string"
+        }
+      }
+    },
+    "userapi.UserIdentity": {
+      "type": "object",
+      "properties": {
+        "tenantId": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "ApiKeyAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

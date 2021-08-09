@@ -69,23 +69,24 @@ const fakeStocks: HostapiDomainResource[] = [
 ]
 
 export default [
-  rest.get(basePath + '/hosts', (req, res, ctx) => {
-    // const { page, pageSize } = req.body as any
+  rest.get(basePath + '/resources/hosts', (req, res, ctx) => {
+    const page = parseInt(req.url.searchParams.get('page') || '0')
+    const pageSize = parseInt(req.url.searchParams.get('pageSize') || '15')
     return res(
       ctx.status(200),
       ctx.json({
         code: 0,
-        // data: fakeHosts.slice(page * pageSize, (page + 1) * pageSize),
-        data: fakeHosts,
-        // page: {
-        //   page,
-        //   pageSize,
-        //   total: fakeHosts.length,
-        // },
+        data: fakeHosts.slice(page * pageSize, (page + 1) * pageSize),
+        // data: fakeHosts,
+        page: {
+          page,
+          pageSize,
+          total: fakeHosts.length,
+        },
       })
     )
   }),
-  rest.delete(basePath + '/host/:hostId', (req, res, ctx) => {
+  rest.delete(basePath + '/resources/hosts/:hostId', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -93,7 +94,7 @@ export default [
       })
     )
   }),
-  rest.get(basePath + '/failuredomains', (req, res, ctx) => {
+  rest.get(basePath + '/resources/failuredomains', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({

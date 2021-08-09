@@ -8,29 +8,29 @@ import {
 } from 'react-router-dom'
 import { ComponentType, ElementType, Suspense } from 'react'
 import useProgress from '@hooks/useProgress'
-import { IRoute } from '@import-pages-macro'
+import { IRoute } from '@pages-macro'
 import { IPageMeta } from '@/model/page'
 import { Role } from '@/model/role'
-import { Routes } from '@routes'
-import { setTitle } from '@/utils/document'
-import i18next from 'i18next'
 import { useAuthState } from '@store/auth'
+import {
+  LocationWithState,
+  Redirector,
+  RouteState,
+  useLocationWithState,
+} from '@/router/helper'
 
 const Router: ComponentType = import.meta.env.DEV ? HashRouter : BrowserRouter
 
-function locationToRoutePath(location: Location) {
-  if (import.meta.env.DEV) {
-    return location.hash.slice(1)
-  } else {
-    return location.pathname
-  }
+function getCurrentRoutePath() {
+  if (import.meta.env.DEV) return window.location.hash.slice(1)
+  else return window.location.pathname
 }
 
 export interface RoleGuard {
   // has role but no permission
-  noPermission: Routes
+  noPermission: string
   // not logged in
-  noSession: Routes
+  noSession: string
 }
 
 export default function mountRouter(
@@ -50,8 +50,8 @@ export default function mountRouter(
 
 function genRouteProp(
   {
-    id,
-    defaultName,
+    // id,
+    // defaultName,
     path,
     exact,
     sync,
@@ -92,8 +92,9 @@ function genRouteProp(
     dom = <Suspense fallback={<FallbackComp />}>{dom}</Suspense>
   }
 
-  const withTitle = () => {
-    setTitle(i18next.t(`${id}:name`, defaultName))
+  const comp = () => {
+    // XXX: Do we really need it?
+    // setTitle(i18next.t(`${id}:name`, defaultName))
     return dom
   }
 
@@ -101,11 +102,18 @@ function genRouteProp(
   const render =
     redirect && typeof redirect === 'function'
       ? guard
-        ? () => checkRole(role, guard) || checkRedirect(redirect) || withTitle()
-        : () => checkRedirect(redirect) || withTitle()
+        ? () => {
+            const [session, location] = useSessionLocation()
+            return (
+              checkRole(role, guard, session) ||
+              checkRedirect(redirect, session, location) ||
+              comp()
+            )
+          }
+        : () => checkRedirect(redirect, ...useSessionLocation()) || comp()
       : guard
-      ? () => checkRole(role, guard) || withTitle()
-      : withTitle
+      ? () => checkRole(role, guard, useSession()) || comp()
+      : comp
 
   return {
     path,
@@ -114,28 +122,38 @@ function genRouteProp(
   }
 }
 
-function checkRole(role: Role[], guard: RoleGuard) {
-  // TODO: use real role model later
-  const [{ session }] = useAuthState()
+function useSessionLocation(): [string, LocationWithState] {
+  return [useSession(), useLocationWithState()]
+}
+
+function useSession(): string {
+  return useAuthState((state) => state.session)
+}
+
+function checkRole(role: Role[], guard: RoleGuard, session: string) {
   if (role[0] === 'user' && !session)
     return (
       <Redirect
         to={{
           pathname: guard.noSession,
-          state: { from: locationToRoutePath(location) },
+          state: { from: getCurrentRoutePath() } as RouteState,
         }}
       />
     )
 }
 
-function checkRedirect(redirect: () => string | false | null | undefined) {
-  const res = redirect()
+function checkRedirect(
+  redirect: Redirector,
+  session: string,
+  location: LocationWithState
+) {
+  const res = redirect(session, location)
   if (res)
     return (
       <Redirect
         to={{
           pathname: res,
-          state: { from: locationToRoutePath(location) },
+          state: { from: getCurrentRoutePath() } as RouteState,
         }}
       />
     )

@@ -1,0 +1,9 @@
+title: Backup Strategy
+preview: The next 5 times backup tasks will be executed at are
+reset: Reset
+save: Save
+fetch:
+  fail: 'Fail to fetch backup strategy: {{ msg }}'
+update:
+  success: 'Update backup strategy for cluster {{ msg }} successfully'
+  fail: 'Fail: {{ msg }}'

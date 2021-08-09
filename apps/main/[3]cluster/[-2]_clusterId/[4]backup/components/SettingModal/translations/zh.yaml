@@ -1,0 +1,9 @@
+title: 备份计划
+preview: 下五次执行备份任务的时间为
+reset: 重置
+save: 保存
+fetch:
+  fail: '获取集群 {{ msg }} 的备份计划失败'
+update:
+  success: '更新集群 {{ msg }} 的备份计划成功'
+  fail: '更新备份计划失败: {{ msg }}'

@@ -1,0 +1,6 @@
+name: Details
+pages:
+  profile: Profile
+  perf: Performance
+  params: Params
+  backup: Backup

@@ -1,1 +1,4 @@
 name: 资源管理
+header:
+  title: 主机列表
+  import: 导入主机

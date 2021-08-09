@@ -4,6 +4,7 @@ import resources from '@mock/resources'
 import cluster from '@mock/cluster'
 import params from '@mock/params'
 import backup from '@mock/backup'
+import knowledge from '@mock/knowledge'
 
 export function initMock() {
   const worker = setupWorker(
@@ -11,7 +12,8 @@ export function initMock() {
     ...resources,
     ...cluster,
     ...params,
-    ...backup
+    ...backup,
+    ...knowledge
   )
   return worker.start({
     onUnhandledRequest: 'bypass',

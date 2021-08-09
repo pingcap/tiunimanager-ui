@@ -1,0 +1,11 @@
+title: Import Cluster Data
+import:
+  success: Import successfully!
+  fail: 'Fail: {{ msg }}'
+form:
+  source: Data Source
+  filepath: File Path
+  target: Target Database
+  username: Username
+  password: Password
+  submit: Confirm

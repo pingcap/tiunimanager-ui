@@ -1,31 +1,33 @@
 import { useI18n } from '@i18n-macro'
-import { dispatchAuthState } from '@store/auth'
-import { useHistory } from 'react-router-dom'
+import { useAuthState } from '@store/auth'
 import { Button, Card, Form, Input, Layout } from 'antd'
 import { useRef, useState } from 'react'
-import { RouteContext } from '@/router/helper'
+import { useHistoryWithState } from '@/router/helper'
 
 import styles from './index.module.less'
-import { GlobalOutlined, KeyOutlined, UserOutlined } from '@ant-design/icons'
+import { DownOutlined, KeyOutlined, UserOutlined } from '@ant-design/icons'
 import LanguageDropdown from '@/components/LanguageDropdown'
-import { UserapiUserIdentity } from '#/api'
-import { APIS } from '@/api/client'
+import { ControllerCommonResult, UserapiUserIdentity } from '#/api'
+import { doUserLogin } from '@/api/platform'
+import IntlForm from '@/components/IntlForm'
 
 export default function Login() {
   const { t } = useI18n()
-  const history = useHistory<RouteContext>()
+  const {
+    push,
+    location: {
+      state: { from },
+    },
+  } = useHistoryWithState()
+  const dispatchLogin = useAuthState((state) => state.login)
 
   const [refForm] = Form.useForm()
   const refPassword = useRef<Input>(null)
 
   const { handleSubmit, errorMsg, clearErrorMsg, loading } = useLogin(
     (data) => {
-      dispatchAuthState({
-        type: 'login',
-        session: data.userName!,
-        token: data.token,
-      })
-      history.push(history.location.state.from || '/')
+      dispatchLogin(data.token!, data.userName!)
+      push(from)
     },
     () => {
       refForm.setFieldsValue({ password: '' })
@@ -39,39 +41,27 @@ export default function Login() {
         minHeight: '100vh',
       }}
     >
-      <Card
-        className={styles.container}
-        bordered={false}
-        bodyStyle={{
-          minHeight: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Form
+      <Card className={styles.container} bordered={false}>
+        <IntlForm
           className={styles.form}
           onFinish={handleSubmit}
           layout="vertical"
           form={refForm}
-          validateMessages={{
-            required: t('validation.required'),
-          }}
         >
           {/*<Logo className={styles.logo} />*/}
           {/*<Form.Item>*/}
           {/*  <h2>{t('form.title')}</h2>*/}
           {/*</Form.Item>*/}
-          <Form.Item
-            name="username"
-            label={t('form.username')}
-            rules={[{ required: true }]}
-          >
-            <Input prefix={<UserOutlined />} disabled={loading} />
+          <Form.Item name="username" rules={[{ required: true }]}>
+            <Input
+              prefix={<UserOutlined />}
+              size="large"
+              placeholder={t('form.username')}
+              disabled={loading}
+            />
           </Form.Item>
           <Form.Item
             name="password"
-            label={t('form.password')}
             {...(errorMsg && {
               help: errorMsg,
               validateStatus: 'error',
@@ -79,7 +69,9 @@ export default function Login() {
           >
             <Input
               prefix={<KeyOutlined />}
+              placeholder={t('form.password')}
               type="password"
+              size="large"
               disabled={loading}
               onInput={clearErrorMsg}
               ref={refPassword}
@@ -96,51 +88,55 @@ export default function Login() {
               {t('form.submit')}
             </Button>
           </Form.Item>
-        </Form>
-        <LanguageDropdown className={styles.switchLanguage}>
-          <a>
-            <GlobalOutlined /> {t('switch_language')}
-          </a>
-        </LanguageDropdown>
+        </IntlForm>
+        <div className={styles.toolbar}>
+          <LanguageDropdown className={styles.switchLanguage}>
+            <a>
+              {t('switch_language')} <DownOutlined />
+            </a>
+          </LanguageDropdown>
+        </div>
       </Card>
     </Layout>
   )
 }
 
 function useLogin(
-  onSuccess: (data: UserapiUserIdentity & { token: string }) => void,
+  onSuccess: (data: UserapiUserIdentity) => void,
   onFailure: (msg: string) => void
 ) {
   const { t } = useI18n()
   const [loading, setLoading] = useState(false)
   // Error from response.
-  const [error, setError] = useState(null)
+  const [errorMsg, setErrorMsg] = useState(null)
 
-  const clearErrorMsg = () => setError(null)
+  const clearErrorMsg = () => setErrorMsg(null)
 
   const handleSubmit = async (form: { username: string; password: string }) => {
-    try {
-      clearErrorMsg()
-      setLoading(true)
-      const resp = await APIS.Platform.userLoginPost({
-        userName: form.username,
-        userPassword: form.password,
-      })
-      setLoading(false)
-      if (resp.data.data)
-        onSuccess({
-          ...resp.data.data,
-          token: resp.headers.token,
+    clearErrorMsg()
+    setLoading(true)
+    const result = await doUserLogin({
+      userName: form.username,
+      userPassword: form.password,
+    })
+    setLoading(false)
+    if (result.type === 'Result') {
+      const { data } = result
+      onSuccess(data.data!)
+      return
+    } else {
+      const errMsg =
+        (result.type === 'AxiosError'
+          ? (result.err.response!.data as ControllerCommonResult).message
+          : result.type === 'Error' && result.err.message) || 'unknown reason'
+      setErrorMsg(
+        t('message.error', {
+          msg: errMsg,
         })
-      else onFailure((resp.data as any).message)
-    } catch (e) {
-      setLoading(false)
-      if (!e.handled) {
-        setError(t('message.error', { msg: e.response.data.message }))
-        onFailure(e.response.data.message)
-      }
+      )
+      onFailure(errMsg)
     }
   }
 
-  return { handleSubmit, loading, errorMsg: error, clearErrorMsg }
+  return { handleSubmit, loading, errorMsg, clearErrorMsg }
 }

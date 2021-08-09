@@ -1,0 +1,44 @@
+columns:
+  id: ID
+  name: Name
+  status: Status
+  addresses: Address
+  password: Password
+  tag: Tag
+  port: Port
+  version: Version
+  type: Type
+  createTime: Create Time
+  updateTime: Update Time
+  deleteTime: Delete Time
+  tls: TLS
+  usage: Usage
+  actions: Actions
+actions:
+  edit: Edit
+  reboot: Reboot
+  delete: Delete
+status:
+  idle: Idle
+  online: Online
+  offline: Offline
+  deleted: Deleted
+addresses:
+  copy: copy address
+  success: copy address successfully
+password:
+  copy: copy password
+  success: copy password successfully
+usage:
+  cpu: CPU
+  mem: MEM
+  disk: DIS
+  backup: BAK
+  storage: STO
+delete:
+  confirm: Are you sure to delete this cluster?
+  success: 'Delete cluster {{ msg }} successfully'
+  fail: 'Fail: {{ msg }}'
+tls:
+  on: ON
+  off: OFF

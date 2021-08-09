@@ -7,5 +7,3 @@ form:
 message:
   error: 'Login in failed: {{ msg }}'
   success: Login in successfully
-validation:
-  required: '${label} is required!'

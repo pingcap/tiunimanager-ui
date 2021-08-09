@@ -1,0 +1,32 @@
+delete:
+  confirm: Are you sure to delete this backup?
+  success: Delete backup successfully
+  fail: 'Fail: {{ msg }}'
+restore:
+  confirm: Are you sure to restore this backup?
+  success: Restore backup successfully
+  fail: 'Fail: {{ msg }}'
+enum:
+  range:
+    full: Full
+    incr: Incremental
+  type:
+    logic: Logical
+    physic: Physic
+  method:
+    manual: Manual
+    auto: Plan
+fields:
+  startTime: Start Time
+  endTime: End Time
+  range: Range
+  type: Type
+  method: Method
+  operator: Operator
+  size: Size
+  status: Status
+  filepath: File Path
+  actions: Actions
+actions:
+  restore: Restore
+  delete: Delete

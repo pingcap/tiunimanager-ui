@@ -16,11 +16,11 @@ export default [
       )
     return res(
       ctx.status(200),
-      ctx.set('token', "it's fake token"),
       ctx.json({
         code: 0,
         data: {
           userName: userName,
+          token: "it's fake token",
         },
       })
     )

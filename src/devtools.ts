@@ -18,3 +18,15 @@ if (import.meta.env.VITE_MOCK) {
   // By default MSW will catch all requests during its initialization
   mock.initMock().then()
 }
+
+if (import.meta.env.VITE_WDYR) {
+  // CJS module
+  const whyDidYouRender = (
+    await import('@welldone-software/why-did-you-render')
+  ).default
+  const React = (await import('react')).default
+  whyDidYouRender(React, {
+    trackAllPureComponents: true,
+  })
+  console.log('hacked')
+}

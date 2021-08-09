@@ -1,7 +1,6 @@
-import { FC } from 'react'
+import { useI18n } from '@i18n-macro'
 
-const Index: FC = ({ children }) => {
-  return <>Dashboard {children}</>
+export default function () {
+  const { t } = useI18n()
+  return <>{t('name')}</>
 }
-
-export default Index

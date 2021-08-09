@@ -1,0 +1,2 @@
+validation:
+  required: '${label} 字段不能为空!'

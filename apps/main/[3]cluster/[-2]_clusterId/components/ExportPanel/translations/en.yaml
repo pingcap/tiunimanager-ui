@@ -1,0 +1,15 @@
+title: Export Cluster Data
+export:
+  success: Export successfully!
+  fail: 'Fail: {{ msg }}'
+form:
+  target: Export Target
+  filepath: File Path
+  filetype: File Type
+  source: Source Database
+  username: Username
+  password: Password
+  submit: Confirm
+filetype:
+  csv: CSV
+  sql: SQL

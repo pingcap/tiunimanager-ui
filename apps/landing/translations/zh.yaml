@@ -7,5 +7,3 @@ form:
 message:
   error: '登录失败: {{ msg }}'
   success: 登录成功
-validation:
-  required: '${label} 不能为空!'

@@ -1,0 +1,11 @@
+title: 导入集群数据
+import:
+  success: 导入成功
+  fail: '导入失败: {{ msg }}'
+form:
+  source: 数据源
+  filepath: 文件路径
+  target: 目标数据库
+  username: 用户名
+  password: 密码
+  submit: 确认导入

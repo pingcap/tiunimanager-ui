@@ -40,7 +40,7 @@ const fakeParams: InstanceapiParamItem[] = [
 ]
 
 export default [
-  rest.post(basePath + '/params/submit', (req, res, ctx) => {
+  rest.post(basePath + '/clusters/:clusterId/params', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -51,7 +51,7 @@ export default [
       })
     )
   }),
-  rest.post(basePath + '/params/:clusterId', (req, res, ctx) => {
+  rest.get(basePath + '/clusters/:clusterId/params', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({

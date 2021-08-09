@@ -1,0 +1,44 @@
+columns:
+  id: ID
+  name: 名称
+  status: 状态
+  addresses: 连接地址
+  password: 密码
+  tag: 标签
+  port: 端口
+  version: 版本
+  type: 类型
+  createTime: 创建时间
+  updateTime: 更新时间
+  deleteTime: 删除时间
+  tls: TLS
+  usage: 资源使用率
+  actions: 操作
+actions:
+  edit: 修改
+  reboot: 重启
+  delete: 删除
+status:
+  idle: 空闲中
+  online: 运行中
+  offline: 已下线
+  deleted: 已删除
+addresses:
+  copy: 复制连接地址
+  success: 复制连接地址成功
+password:
+  copy: 复制密码
+  success: 复制密码成功
+usage:
+  cpu: CPU
+  mem: 内存
+  disk: 磁盘
+  backup: 备份
+  storage: 存储
+delete:
+  confirm: 确认删除此集群吗?
+  success: '删除集群 {{ msg }} 成功'
+  fail: '删除失败: {{ msg }}'
+tls:
+  on: 启用
+  off: 无

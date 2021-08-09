@@ -3,10 +3,15 @@ import reactRefresh from '@vitejs/plugin-react-refresh'
 import { resolve } from 'path'
 import vitePluginImp from 'vite-plugin-imp'
 import vitePluginHtml from 'vite-plugin-html'
-import vitePluginYaml from './plugins/yaml-loader'
-import vitePluginImportPagesMacro from './plugins/import-pages-macro'
-import vitePluginI18nMacro from './plugins/i18n-macro'
-import vitePluginImportAssetsMacro from './plugins/import-assets-macro'
+import pluginYaml from 'rollup-plugin-yamlx'
+import {
+  provideAssets,
+  provideComponents,
+  provideI18n,
+  providePages,
+} from '@ulab/mvp'
+import { LANGUAGE_IDS } from './src/i18n'
+import { vitePluginMacro } from 'vite-plugin-macro'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -43,10 +48,18 @@ export default defineConfig(({ mode }) => {
           },
         ],
       }),
-      vitePluginYaml(),
-      vitePluginImportPagesMacro(),
-      vitePluginI18nMacro(),
-      vitePluginImportAssetsMacro(),
+      pluginYaml(),
+      vitePluginMacro()
+        .use(
+          provideI18n({
+            languageWhitelist: new Set(LANGUAGE_IDS),
+            defaultLoadGlob: './translations/*.{yaml,yml}',
+          }),
+          provideAssets(),
+          providePages(),
+          provideComponents()
+        )
+        .toPlugin(),
     ],
     css: {
       modules: {

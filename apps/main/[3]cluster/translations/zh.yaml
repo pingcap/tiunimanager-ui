@@ -1,1 +1,4 @@
 name: 集群管理
+header:
+  title: 集群列表
+  new: 新建集群

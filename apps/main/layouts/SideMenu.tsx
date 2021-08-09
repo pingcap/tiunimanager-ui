@@ -1,25 +1,26 @@
-import { FC } from 'react'
+import { FC, useMemo } from 'react'
 import { Dropdown, Layout, Menu, MenuProps } from 'antd'
 import { matchPath, useHistory, useLocation } from 'react-router-dom'
 import styles from './SideMenu.module.less'
 import {
   GlobalOutlined,
   LeftOutlined,
-  LogoutOutlined,
   RightOutlined,
   SettingOutlined,
   UserOutlined,
 } from '@ant-design/icons'
 import LanguageDropdown from '@/components/LanguageDropdown'
-import { APIS } from '@/api/client'
 import { IPageMeta } from '@/model/page'
-import { IMenuItem } from '@import-pages-macro'
+import { IMenuItem } from '@pages-macro'
 import { useTranslation } from 'react-i18next'
 import useToggle from '@hooks/useToggle'
-import { dispatchAuthState, useAuthState } from '@store/auth'
+import { useAuthState } from '@store/auth'
+import { doUserLogout } from '@/api/platform'
+import { loadI18n, useI18n } from '@i18n-macro'
+
+loadI18n()
 
 export interface SideMenuProps extends MenuProps {
-  className?: string
   items: IMenuItem<IPageMeta>[]
   defaultCollapsed?: boolean
   collapsedWidth?: number
@@ -47,71 +48,23 @@ const SideMenu: FC<SideMenuProps> = ({
   defaultCollapsed,
   collapsedWidth,
   onCollapsedChange,
-  className = '',
   items,
   width,
-  ...rest
 }) => {
+  const location = useLocation()
   const [collapsed, toggleCollapsed] = useToggle(defaultCollapsed ?? false)
-
-  // TODO: Calculate matched item and opened items
-  const matchedKeys = getMatchedMenuItemKeys(items, useLocation().pathname)
-
-  // no need to be memoized
+  const matchedKeys = useMemo(
+    () => getMatchedMenuItemKeys(items, location.pathname),
+    [location.pathname]
+  )
   const selectedKey = matchedKeys[matchedKeys.length - 1]
-
-  const { t } = useTranslation()
-
-  const getItemName = (item: IMenuItem<IPageMeta>) =>
-    t(`${item.id}:name`, item.defaultName)
-
-  const history = useHistory()
-
-  function renderMenu(items: IMenuItem<IPageMeta>[]) {
-    return items.map((item) => {
-      if (item.children.length) {
-        return (
-          <Menu.SubMenu
-            key={item.id}
-            icon={item.meta.icon}
-            title={getItemName(item)}
-          >
-            {renderMenu(item.children)}
-          </Menu.SubMenu>
-        )
-      } else {
-        return (
-          <Menu.Item
-            key={item.id}
-            icon={item.meta.icon}
-            title={getItemName(item)}
-            onClick={() =>
-              history.location.pathname !== item.path && history.push(item.path)
-            }
-          >
-            {getItemName(item)}
-          </Menu.Item>
-        )
-      }
-    })
-  }
-
   const CollapseIcon = collapsed ? RightOutlined : LeftOutlined
+  const menus = useMenus(items)
 
-  // const menuItems = <Menu.Item></Menu.Item>
   return (
     <Layout.Sider
-      // TODO: Use custom collapsed trigger.
-      // trigger={null}
-      className={className}
       width={width}
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        zIndex: 999,
-        height: '100vh',
-      }}
+      className={styles.sider}
       collapsedWidth={collapsedWidth}
       theme="light"
       collapsible
@@ -120,16 +73,14 @@ const SideMenu: FC<SideMenuProps> = ({
     >
       {/* TODO: Logo */}
       <div className={styles.logo} />
-      {/* TODO: Add collapse button */}
       <Menu
         theme="light"
         mode="inline"
         className={styles.menu}
-        {...rest}
         selectedKeys={[selectedKey]}
         defaultOpenKeys={matchedKeys}
       >
-        {renderMenu(items)}
+        {menus}
       </Menu>
       <div
         className={styles.actions}
@@ -160,21 +111,20 @@ const SideMenu: FC<SideMenuProps> = ({
 export default SideMenu
 
 function UserAction() {
-  const [{ token }] = useAuthState()
+  const dispatchLogout = useAuthState((state) => state.logout)
+  const { t } = useI18n()
   const userAction = (
     <Menu>
       <Menu.Item
         key="logout"
-        title="logout"
+        title={t('actions.logout')}
         onClick={() => {
-          APIS.Platform.userLogoutPost(token, {})
-          dispatchAuthState({
-            type: 'logout',
-          })
+          doUserLogout().then()
+          dispatchLogout()
         }}
       >
         {/* TODO: logout & i18n */}
-        <LogoutOutlined /> logout
+        {t('actions.logout')}
       </Menu.Item>
     </Menu>
   )
@@ -184,4 +134,44 @@ function UserAction() {
       <UserOutlined />
     </Dropdown>
   )
+}
+
+function useMenus(rawItems: IMenuItem<IPageMeta>[]) {
+  const { t, i18n } = useTranslation()
+  const history = useHistory()
+  return useMemo(() => {
+    const getItemName = (item: IMenuItem<IPageMeta>) =>
+      t(`${item.id}:name`, item.defaultName)
+
+    function renderMenu(items: IMenuItem<IPageMeta>[]) {
+      return items.map((item) => {
+        if (item.children.length) {
+          return (
+            <Menu.SubMenu
+              key={item.id}
+              icon={item.meta.icon}
+              title={getItemName(item)}
+            >
+              {renderMenu(item.children)}
+            </Menu.SubMenu>
+          )
+        } else {
+          return (
+            <Menu.Item
+              key={item.id}
+              icon={item.meta.icon}
+              title={getItemName(item)}
+              onClick={() =>
+                history.location.pathname !== item.path &&
+                history.push(item.path)
+              }
+            >
+              {getItemName(item)}
+            </Menu.Item>
+          )
+        }
+      })
+    }
+    return renderMenu(rawItems)
+  }, [i18n.language, history, rawItems])
 }

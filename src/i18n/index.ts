@@ -1,6 +1,11 @@
 import i18next from 'i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
-import { initReactI18next } from 'react-i18next'
+import { initReactI18next, useTranslation } from 'react-i18next'
+import { createElement, FC } from 'react'
+import { ConfigProvider } from 'antd'
+import enUS from 'antd/lib/locale/en_US'
+import zhCN from 'antd/lib/locale/zh_CN'
+import { Locale } from 'antd/lib/locale-provider'
 
 export interface LanguageProp {
   // display name
@@ -37,27 +42,11 @@ export function loadTranslations(
   )
 }
 
-export type TranslationEntry = Record<LanguageID, string>
-
-export function loadTranslationEntry(
-  t: TranslationEntry,
-  name: string,
-  ns = 'translation'
-) {
-  onI18nInitialized(() =>
-    Object.keys(t).forEach((key) =>
-      i18next.addResource(key, ns, name, t[key as LanguageID])
-    )
-  )
-}
-
 // Ensure hook will be called after i18next is initialized.
 export function onI18nInitialized(hook: () => any) {
   if (i18next.isInitialized) hook()
-  else onInitializedHooks.push(hook)
+  else i18next.on('initialized', hook)
 }
-
-const onInitializedHooks: (() => any)[] = []
 
 export async function init() {
   !i18next.isInitialized &&
@@ -77,32 +66,19 @@ export async function init() {
           lookupLocalStorage: 'lang',
           lookupSessionStorage: 'lang',
         },
-      })
-      .then(() => {
-        onInitializedHooks.forEach((h) => h())
-        onInitializedHooks.length = 0
       }))
 }
 
-export async function toggleLang(
-  target: (cur: LanguageID) => LanguageID
-): Promise<void>
-export async function toggleLang(target: LanguageID): Promise<void>
-export async function toggleLang(target: unknown) {
-  let lang: LanguageID
-  switch (typeof target) {
-    case 'string':
-      lang = target as LanguageID
-      break
-    case 'function':
-      lang = target(i18next.language)
-      break
-    default:
-      return
-  }
-  if (!LANGUAGE_IDS.includes(lang)) return
-  await i18next.changeLanguage(lang, (err) => {
-    if (!err) document.documentElement.lang = LANGUAGES[lang].tag
-  })
-  return
+const AntdLocaleMap: Record<string, Locale> = {
+  en: enUS,
+  zh: zhCN,
+}
+
+export const AntdI18nProvider: FC = ({ children }) => {
+  const { i18n } = useTranslation()
+  return createElement(
+    ConfigProvider,
+    { locale: AntdLocaleMap[i18n.language] },
+    children
+  )
 }

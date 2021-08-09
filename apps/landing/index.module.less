@@ -1,18 +1,31 @@
 .container {
-  width: 400px;
+  width: 480px;
+  display: flex;
+  justify-content: center;
   max-width: 100vw;
-
   min-height: 100vh;
-
   background: rgba(255, 255, 255, .8);
 
-  .form {
-    width: 80%;
+  :global(.ant-card-body) {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 400px;
   }
 
-  .switch-language{
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
+  .form {
+    width: 100%;
+  }
+
+  .toolbar {
+    align-self: flex-end;
+    .switch-language {
+      span {
+        margin-left: 4px;
+        vertical-align: middle;
+      }
+    }
   }
 }

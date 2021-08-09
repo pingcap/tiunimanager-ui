@@ -1,1 +1,4 @@
 name: Resources
+header:
+  title: Resources List
+  import: Import Hosts

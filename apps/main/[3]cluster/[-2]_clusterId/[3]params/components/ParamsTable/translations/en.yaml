@@ -1,0 +1,28 @@
+actions:
+  refresh: Refresh
+  reset: Reset
+  save: Save
+reset:
+  confirm: Are you sure to reset edited params?
+save:
+  nochanges: No changes
+  confirm: Are you sure to save the following parameter changes?
+  success: Update params successfully
+  fail: 'Fail: {{ msg }}'
+  fields:
+    name: Param Name
+    before: Before
+    after: After
+fields:
+  name: Param Name
+  reboot:
+    title: Reboot
+    true: Need
+    false: No
+  desc: Description
+  range: Value Range
+  default: Default Value
+  current: Current Value
+  actions:
+    title: Actions
+    edit: Edit

@@ -1,55 +1,35 @@
-import { createStore } from 'react-hooks-global-state'
+import create from 'zustand'
+import { setRequestToken } from '@/api/client'
+
+type AuthState = {
+  token: string
+  // currently username
+  session: string
+  login: (token: string, session: string) => void
+  logout: () => void
+}
 
 const TOKEN_KEY = 'APP_TOKEN'
 const SESSION_KEY = 'APP_SESSION'
 
-type AuthState = {
-  state: {
-    token: string
-    // username
-    session: string
+export const useAuthState = create<AuthState>((set) => {
+  const token = sessionStorage.getItem(TOKEN_KEY) || ''
+  const session = sessionStorage.getItem(SESSION_KEY) || ''
+  if (token) setRequestToken(token)
+  return {
+    token: token,
+    session: session,
+    login: (token: string, session: string) => {
+      sessionStorage.setItem(TOKEN_KEY, token)
+      sessionStorage.setItem(SESSION_KEY, session)
+      setRequestToken(token)
+      set({ token, session })
+    },
+    logout: () => {
+      sessionStorage.removeItem(TOKEN_KEY)
+      sessionStorage.removeItem(SESSION_KEY)
+      setRequestToken()
+      set({ token: '', session: '' })
+    },
   }
-}
-
-type AuthStateAction =
-  | { type: 'logout' }
-  | { type: 'login'; token: string; session: string }
-
-const initialState: AuthState = {
-  state: {
-    token: sessionStorage.getItem(TOKEN_KEY) || '',
-    session: sessionStorage.getItem(SESSION_KEY) || '',
-  },
-}
-
-const { dispatch, useGlobalState, getState } = createStore(
-  (state, action: AuthStateAction) => {
-    switch (action.type) {
-      case 'logout': {
-        sessionStorage.removeItem(TOKEN_KEY)
-        sessionStorage.removeItem(SESSION_KEY)
-        return {
-          state: {
-            token: '',
-            session: '',
-          },
-        }
-      }
-      case 'login': {
-        const { token, session } = action
-        sessionStorage.setItem(TOKEN_KEY, token)
-        sessionStorage.setItem(SESSION_KEY, session)
-        return {
-          state: { token, session },
-        }
-      }
-      default:
-        return state
-    }
-  },
-  initialState
-)
-
-export const dispatchAuthState = dispatch
-export const useAuthState = () => useGlobalState('state')
-export const getAuthState = getState
+})
