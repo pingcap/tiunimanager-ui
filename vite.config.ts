@@ -12,8 +12,8 @@ import vitePluginImportAssetsMacro from './plugins/import-assets-macro'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())
   const proxy =
-    !env.VITE_APP_MOCK &&
-    !!env.VITE_APP_PROXY_TARGET &&
+    !env.VITE_MOCK &&
+    !!env.VITE_PROXY_TARGET &&
     ({
       proxy: {
         '/api': {
