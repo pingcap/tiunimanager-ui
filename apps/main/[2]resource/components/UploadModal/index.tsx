@@ -4,6 +4,7 @@ import { useAuthState } from '@store/auth'
 import { getHostsTemplateURL, getHostsUploadURL } from '@/api/resources'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { useMemo } from 'react'
+import { useDownload } from '@hooks/useDownload'
 
 loadI18n()
 
@@ -73,7 +74,10 @@ export default function UploadModal({ visible, close }: UploadModalProps) {
             marginTop: 20,
           }}
         >
-          <Button type="link" onClick={() => window.open(DownloadURL)}>
+          <Button
+            type="link"
+            onClick={() => useDownload(DownloadURL, 'template.xls')}
+          >
             {t('hint.download')}
           </Button>
         </div>

@@ -4,14 +4,14 @@ actions:
   import: 导入
   export: 导出
   reboot: 重启
-  backup: 备份
+  backup: 立即备份
   delete: 删除
 delete:
   confirm: 确认删除该集群吗?
   success: '删除集群 {{ msg }} 成功'
   fail: '删除失败: {{ msg }}'
 backup:
-  confirm: 确认立即创建备份任务吗?
+  confirm: '确认立即备份集群 {{ name }} 吗?'
   success: '集群 {{ msg }} 创建备份任务成功'
   fail: '创建备份任务失败: {{ msg }}'
 id:

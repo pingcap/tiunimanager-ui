@@ -1,6 +1,11 @@
-import { useI18n } from '@i18n-macro'
+import TaskTable from '@apps/main/[4]task/components/TaskTable'
+import HeaderBar from './components/HeaderBar'
 
 export default function () {
-  const { t } = useI18n()
-  return <>{t('name')}</>
+  return (
+    <>
+      <HeaderBar />
+      <TaskTable />
+    </>
+  )
 }

@@ -6,6 +6,7 @@ label:
   version: Version
   tls: TLS
   port: Port
+  status: Status
   extranetConnectAddresses: Extranet Address
   intranetConnectAddresses: Intranet Address
   createTime: Create Time
@@ -19,3 +20,16 @@ tls:
 addresses:
   copy: Copy addresses
   success: 'Copy address {{ content }} successfully'
+
+status:
+  idle: Idle
+  online: Online
+  offline: Offline
+  deleted: Deleted
+  CreateCluster: Creating
+  DeleteCluster: Deleting
+  BackupCluster: Backuping
+  RecoverCluster: Recovering
+  ModifyParameters: Modifying
+  ExportData: Exporting
+  ImportData: Importing

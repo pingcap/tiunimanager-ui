@@ -4,6 +4,7 @@ import { formatTimeString } from '@/utils/time'
 import { ClusterapiDetailClusterRsp } from '#/api'
 import { loadI18n, useI18n } from '@i18n-macro'
 import styles from './index.module.less'
+import { TFunction } from 'react-i18next'
 
 loadI18n()
 
@@ -64,6 +65,9 @@ export function Desc({ cluster }: DescProps) {
       <Descriptions.Item label={t('label.port')}>
         {cluster.portList?.join(', ')}
       </Descriptions.Item>
+      <Descriptions.Item label={t('label.status')}>
+        {getStatus(t, cluster.statusCode!)}
+      </Descriptions.Item>
       <Descriptions.Item label={t('label.createTime')}>
         {formatTimeString(cluster.createTime!)}
       </Descriptions.Item>
@@ -80,4 +84,32 @@ export function Desc({ cluster }: DescProps) {
       {/*)}*/}
     </Descriptions>
   )
+}
+
+function getStatus(t: TFunction<''>, statusCode: string) {
+  switch (statusCode) {
+    case '0':
+      return t('status.idle')
+    case '1':
+      return t('status.online')
+    case '2':
+      return t('status.offline')
+    case '3':
+      return t('status.deleted')
+    case 'CreateCluster':
+      return t('status.CreateCluster')
+    case 'DeleteCluster':
+      return t('status.DeleteCluster')
+    case 'BackupCluster':
+      return t('status.BackupCluster')
+    case 'RecoverCluster':
+      return t('status.RecoverCluster')
+    case 'ModifyParameters':
+      return t('status.ModifyParameters')
+    case 'ExportData':
+      return t('status.ExportData')
+    case 'ImportData':
+      return t('status.ImportData')
+  }
+  return 'unknown'
 }

@@ -11,7 +11,7 @@ delete:
   success: 'Delete cluster {{ msg }} successfully'
   fail: 'Fail: {{ msg }}'
 backup:
-  confirm: Are you sure to create backup task for this cluster?
+  confirm: 'Are you sure to create backup task for cluster {{ name }} now?'
   success: 'Create backup task for cluster {{ msg }} successfully'
   fail: 'Fail: {{ msg }}'
 id:

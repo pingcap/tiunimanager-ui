@@ -32,7 +32,6 @@ const Layout: FC = ({ children }) => {
     return menuItems.find((i) => i.key === history.location.pathname)?.key
   }, [history.location.pathname])
 
-  // TODO: handle error
   return (
     <div>
       {isLoading ? (

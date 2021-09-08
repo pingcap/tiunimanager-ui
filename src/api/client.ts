@@ -10,6 +10,7 @@ import {
   KnowledgeApi,
   PlatformApi,
   ResourceApi,
+  TaskApi,
 } from '#/api'
 import { readonly } from '@/utils/obj'
 import { createElement, FC } from 'react'
@@ -56,6 +57,7 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
       axiosInstance
     ),
     Knowledge: new KnowledgeApi(configuration, undefined, axiosInstance),
+    Task: new TaskApi(configuration, undefined, axiosInstance),
   })
 }
 

@@ -6,7 +6,7 @@ columns:
   location: 位置
   nic: 网卡
   purpose: 类型
-  system: 系统信息
+  system: OS版本
   availableSpec: 可用规格
   spec: 总规格
   actions: 操作

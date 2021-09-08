@@ -1,6 +1,6 @@
 import { useHistory } from 'react-router-dom'
 import { useMemo, useState } from 'react'
-import { Button, message, Tag } from 'antd'
+import { Button, message, Modal } from 'antd'
 import {
   DeleteOutlined,
   DownloadOutlined,
@@ -88,16 +88,17 @@ export default function HeaderBar() {
       )
     }
     const backupBtn = (
-      <IntlPopConfirm
+      <Button
         key="backup"
-        title={t('backup.confirm')}
-        icon={<QuestionCircleOutlined />}
-        onConfirm={handleBackup}
+        onClick={() => {
+          Modal.confirm({
+            content: t('backup.confirm', { name: cluster.clusterName! }),
+            onOk: handleBackup,
+          })
+        }}
       >
-        <Button>
-          <SaveOutlined /> {t('actions.backup')}
-        </Button>
-      </IntlPopConfirm>
+        <SaveOutlined /> {t('actions.backup')}
+      </Button>
     )
     const deleteBtn = (
       <IntlPopConfirm
@@ -111,8 +112,6 @@ export default function HeaderBar() {
         </Button>
       </IntlPopConfirm>
     )
-
-    const status = <Tag color="blue">{statusName}</Tag>
 
     const actions = [
       // TODO: wait for edit support
@@ -151,7 +150,6 @@ export default function HeaderBar() {
             ID: {clusterId}
           </>
         }
-        tags={status}
         extra={actions}
       />
     )

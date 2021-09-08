@@ -1,0 +1,14 @@
+fields:
+  id: ID
+  name: Task Name
+  status: Status
+  clusterId: Cluster ID
+  startTime: Start Time
+  endTime: End Time
+  operator: Operator
+
+status:
+  init: Init
+  processing: Processing
+  finished: Finished
+  error: Error
