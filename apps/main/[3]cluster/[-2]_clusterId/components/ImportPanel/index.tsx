@@ -52,11 +52,7 @@ export function ImportPanel({ clusterId, visible, close }: ImportPanelProps) {
         <Form.Item
           name="filePath"
           label={t('form.filepath')}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
+          rules={[{ required: true }]}
         >
           <Input />
         </Form.Item>
@@ -64,23 +60,11 @@ export function ImportPanel({ clusterId, visible, close }: ImportPanelProps) {
         <Form.Item
           name="userName"
           label={t('form.username')}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
+          rules={[{ required: true }]}
         >
           <Input />
         </Form.Item>
-        <Form.Item
-          name="password"
-          label={t('form.password')}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
+        <Form.Item name="password" label={t('form.password')}>
           <Input.Password />
         </Form.Item>
         <Form.Item className={styles.actions}>

@@ -74,11 +74,7 @@ export function ExportPanel({ clusterId, visible, close }: ExportPanelProps) {
         >
           <Input />
         </Form.Item>
-        <Form.Item
-          name="password"
-          label={t('form.password')}
-          rules={[{ required: true }]}
-        >
+        <Form.Item name="password" label={t('form.password')}>
           <Input.Password />
         </Form.Item>
         <Form.Item className={styles.actions}>
