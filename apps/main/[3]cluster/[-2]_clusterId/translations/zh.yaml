@@ -3,5 +3,6 @@ pages:
   profile: 基本信息
   perf: 性能分析
   monitor: 集群监控
+  alert: 集群告警
   params: 参数管理
   backup: 备份管理

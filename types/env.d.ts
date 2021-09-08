@@ -6,4 +6,5 @@ interface ImportMetaEnv {
   VITE_LOG_URL: string
   VITE_MONITOR_URL: string
   VITE_TIDB_MONITOR_URL: string
+  VITE_TIDB_ALERT_URL: string
 }

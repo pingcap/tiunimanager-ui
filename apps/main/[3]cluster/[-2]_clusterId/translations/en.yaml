@@ -3,5 +3,6 @@ pages:
   profile: Profile
   perf: Performance
   monitor: Monitor
+  alert: Alert
   params: Params
   backup: Backup
