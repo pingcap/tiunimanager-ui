@@ -1,5 +1,5 @@
 import { message } from 'antd'
-import { IframeHTMLAttributes, MutableRefObject, Ref, useState } from 'react'
+import { IframeHTMLAttributes, Ref, useState } from 'react'
 import { loadI18n, useI18n } from '@i18n-macro'
 
 loadI18n()
@@ -24,7 +24,7 @@ export function EmbedDashboard({
   url,
   path,
   iframeRef,
-  ...attr
+  ...attrs
 }: EmbedDashboardProps) {
   const portalUrl = `${url}#/portal`
   const pageUrl = `${url}#${path}`
@@ -39,7 +39,7 @@ export function EmbedDashboard({
       scrolling="no"
       frameBorder="0"
       src={loaded ? pageUrl : portalUrl}
-      {...attr}
+      {...attrs}
       onLoad={(e) => {
         if (!(e.target as HTMLIFrameElement).contentWindow)
           message.error(t('load.fail'))

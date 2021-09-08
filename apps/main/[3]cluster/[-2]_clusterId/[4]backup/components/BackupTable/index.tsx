@@ -20,6 +20,7 @@ import { useQueryClient } from 'react-query'
 import styles from './index.module.less'
 import { errToMsg } from '@/utils/error'
 import { TFunction } from 'react-i18next'
+import { getTimestamp } from '@/utils/time'
 
 loadI18n()
 
@@ -47,6 +48,7 @@ export default function BackupTable({ cluster }: BackupTableProps) {
     isPreviousData,
     setPagination,
     pagination,
+    setFilter,
   } = useFetchBackupData(cluster.clusterId!)
 
   const { columns, columnsSetting, setColumnSetting } = useTableColumn()
@@ -57,6 +59,16 @@ export default function BackupTable({ cluster }: BackupTableProps) {
       dataSource={data?.data.data || []}
       className={styles.backupTable}
       headerTitle={null}
+      onSubmit={(filters) => {
+        const { startTime, endTime } = filters as {
+          startTime?: string
+          endTime?: string
+        }
+        setFilter({
+          startTime: startTime ? getTimestamp(startTime) : undefined,
+          endTime: endTime ? getTimestamp(endTime) : undefined,
+        })
+      }}
       tooltip={false}
       columns={columns}
       pagination={{
@@ -70,7 +82,7 @@ export default function BackupTable({ cluster }: BackupTableProps) {
       }}
       columnsStateMap={columnsSetting}
       onColumnsStateChange={(m) => setColumnSetting(m)}
-      rowKey="clusterId"
+      rowKey="id"
       search={{
         filterType: 'light',
       }}
@@ -86,11 +98,19 @@ function useFetchBackupData(clusterId: string) {
     page: 1,
     pageSize: 10,
   })
+  const [filters, setFilter] = useState<{
+    startTime?: number
+    endTime?: number
+  }>({
+    startTime: undefined,
+    endTime: undefined,
+  })
   const { data, isLoading, isPreviousData, refetch } = useQueryClusterBackups(
     {
       id: clusterId,
       page: pagination.page - 1,
       pageSize: pagination.pageSize,
+      ...filters,
     },
     { keepPreviousData: true, suspense: true }
   )
@@ -99,6 +119,7 @@ function useFetchBackupData(clusterId: string) {
     setPagination,
     data,
     isPreviousData,
+    setFilter,
     isLoading,
     refetch,
   }
@@ -117,7 +138,7 @@ function useTableColumn() {
   const deleteAction = useCallback(
     (clusterId, backupId) =>
       deleteBackup.mutateAsync(
-        { backupId },
+        { backupId, clusterId },
         {
           onSuccess(data) {
             message.success(t('delete.success', { msg: data.data.data })).then()
@@ -142,7 +163,7 @@ function useTableColumn() {
   const restoreAction = useCallback(
     (clusterId, backupId) =>
       deleteBackup.mutateAsync(
-        { backupId },
+        { backupId, clusterId },
         {
           onSuccess(data) {
             message

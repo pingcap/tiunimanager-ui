@@ -154,13 +154,16 @@ export function useQueryClusterBackups(
     id: string
     page?: number
     pageSize?: number
+    startTime?: number
+    endTime?: number
   },
   options?: PartialUseQueryOptions
 ) {
-  const { id, page, pageSize } = query
+  const { id, page, pageSize, startTime, endTime } = query
   return useQuery(
-    [CACHE_CLUSTER_BACKUPS, id, page, pageSize],
-    () => APIS.ClusterBackups.backupsGet(id, { page, pageSize }),
+    [CACHE_CLUSTER_BACKUPS, id, page, pageSize, startTime, endTime],
+    () =>
+      APIS.ClusterBackups.backupsGet(id, endTime, page, pageSize, startTime),
     options
   )
 }
@@ -172,8 +175,13 @@ export async function invalidateClusterBackups(
   await client.invalidateQueries([CACHE_CLUSTER_BACKUPS, clusterId])
 }
 
-const deleteClusterBackup = (payload: { backupId: number }) =>
-  APIS.ClusterBackups.backupsBackupIdDelete(payload.backupId)
+const deleteClusterBackup = (payload: {
+  backupId: number
+  clusterId: string
+}) =>
+  APIS.ClusterBackups.backupsBackupIdDelete(payload.backupId, {
+    clusterId: payload.clusterId,
+  })
 
 export function useDeleteClusterBackup() {
   return useMutation(deleteClusterBackup)

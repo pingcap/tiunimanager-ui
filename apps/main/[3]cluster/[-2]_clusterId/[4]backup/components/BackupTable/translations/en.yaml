@@ -12,7 +12,7 @@ enum:
     incr: Incremental
   type:
     logic: Logical
-    physic: Physic
+    physical: Physical
   method:
     manual: Manual
     auto: Plan

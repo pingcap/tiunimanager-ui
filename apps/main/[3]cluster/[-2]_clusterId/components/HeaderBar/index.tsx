@@ -36,106 +36,107 @@ export default function HeaderBar() {
   const createBackup = useCreateClusterBackup()
   const deleteCluster = useDeleteCluster()
   const queryClient = useQueryClient()
-  const { t } = useI18n()
+  const { t, i18n } = useI18n()
 
   const { clusterId, statusName } = cluster
-  const backToList = () => history.push(resolveRoute('../'))
-  const handleBackup = async () => {
-    await createBackup.mutateAsync(
-      { clusterId },
-      {
-        onSuccess(data) {
-          message.success(
-            t('backup.success', { msg: data.data.data!.clusterId })
-          )
-        },
-        onSettled() {
-          return invalidateClusterBackups(queryClient, clusterId!)
-        },
-        onError(e: any) {
-          message.error(
-            t('backup.fail', {
-              msg: errToMsg(e),
-            })
-          )
-        },
-      }
-    )
-  }
-  const handleDelete = async () => {
-    await deleteCluster.mutateAsync(
-      { id: clusterId! },
-      {
-        onSuccess(data) {
-          message.success(
-            t('delete.success', { msg: data.data.data!.clusterId })
-          )
-        },
-        onSettled() {
-          return invalidateClusterDetail(queryClient, clusterId!)
-        },
-        onError(e: any) {
-          message.error(
-            t('delete.fail', {
-              msg: errToMsg(e),
-            })
-          )
-        },
-      }
-    )
-  }
-  const backupBtn = (
-    <IntlPopConfirm
-      key="backup"
-      title={t('backup.confirm')}
-      icon={<QuestionCircleOutlined />}
-      onConfirm={handleBackup}
-    >
-      <Button>
-        <SaveOutlined /> {t('actions.backup')}
-      </Button>
-    </IntlPopConfirm>
-  )
-  const deleteBtn = (
-    <IntlPopConfirm
-      key="delete"
-      title={t('delete.confirm')}
-      icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-      onConfirm={handleDelete}
-    >
-      <Button danger>
-        <DeleteOutlined /> {t('actions.delete')}
-      </Button>
-    </IntlPopConfirm>
-  )
-
-  const status = <Tag color="blue">{statusName}</Tag>
 
   const [importPanelVisible, setImportPanelVisible] = useState(false)
   const [exportPanelVisible, setExportPanelVisible] = useState(false)
 
-  const actions = [
-    <Button key="1">
-      <EditOutlined />
-      {t('actions.edit')}
-    </Button>,
-    <Button key="import" onClick={() => setImportPanelVisible(true)}>
-      <UploadOutlined />
-      {t('actions.import')}
-    </Button>,
-    <Button key="export" onClick={() => setExportPanelVisible(true)}>
-      <DownloadOutlined />
-      {t('actions.export')}
-    </Button>,
-    <Button key="4">
-      <RedoOutlined />
-      {t('actions.reboot')}
-    </Button>,
-    backupBtn,
-    deleteBtn,
-  ]
-  return (
-    <>
+  const header = useMemo(() => {
+    const backToList = () => history.push(resolveRoute('../'))
+    const handleBackup = async () => {
+      await createBackup.mutateAsync(
+        { clusterId },
+        {
+          onSuccess(data) {
+            message.success(
+              t('backup.success', { msg: data.data.data!.clusterId })
+            )
+          },
+          onSettled() {
+            return invalidateClusterBackups(queryClient, clusterId!)
+          },
+          onError(e: any) {
+            message.error(
+              t('backup.fail', {
+                msg: errToMsg(e),
+              })
+            )
+          },
+        }
+      )
+    }
+    const handleDelete = async () => {
+      await deleteCluster.mutateAsync(
+        { id: clusterId! },
+        {
+          onSuccess(data) {
+            message.success(
+              t('delete.success', { msg: data.data.data!.clusterId })
+            )
+          },
+          onSettled() {
+            return invalidateClusterDetail(queryClient, clusterId!)
+          },
+          onError(e: any) {
+            message.error(
+              t('delete.fail', {
+                msg: errToMsg(e),
+              })
+            )
+          },
+        }
+      )
+    }
+    const backupBtn = (
+      <IntlPopConfirm
+        key="backup"
+        title={t('backup.confirm')}
+        icon={<QuestionCircleOutlined />}
+        onConfirm={handleBackup}
+      >
+        <Button>
+          <SaveOutlined /> {t('actions.backup')}
+        </Button>
+      </IntlPopConfirm>
+    )
+    const deleteBtn = (
+      <IntlPopConfirm
+        key="delete"
+        title={t('delete.confirm')}
+        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+        onConfirm={handleDelete}
+      >
+        <Button danger>
+          <DeleteOutlined /> {t('actions.delete')}
+        </Button>
+      </IntlPopConfirm>
+    )
+
+    const status = <Tag color="blue">{statusName}</Tag>
+
+    const actions = [
+      <Button key="1">
+        <EditOutlined />
+        {t('actions.edit')}
+      </Button>,
+      <Button key="import" onClick={() => setImportPanelVisible(true)}>
+        <UploadOutlined />
+        {t('actions.import')}
+      </Button>,
+      <Button key="export" onClick={() => setExportPanelVisible(true)}>
+        <DownloadOutlined />
+        {t('actions.export')}
+      </Button>,
+      <Button key="4">
+        <RedoOutlined />
+        {t('actions.reboot')}
+      </Button>,
+      backupBtn,
+      deleteBtn,
+    ]
+    return (
       <Header
         onBack={backToList}
         className={styles.header}
@@ -153,6 +154,19 @@ export default function HeaderBar() {
         tags={status}
         extra={actions}
       />
+    )
+  }, [
+    clusterId,
+    statusName,
+    createBackup.mutateAsync,
+    deleteCluster.mutateAsync,
+    i18n.language,
+    history,
+    queryClient,
+  ])
+  return (
+    <>
+      {header}
       <ImportPanel
         clusterId={clusterId!}
         close={() => setImportPanelVisible(false)}
