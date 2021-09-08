@@ -21,6 +21,7 @@ import styles from './index.module.less'
 import { errToMsg } from '@/utils/error'
 import { TFunction } from 'react-i18next'
 import { getTimestamp } from '@/utils/time'
+import { usePagination } from '@hooks/usePagination'
 
 loadI18n()
 
@@ -94,10 +95,7 @@ export default function BackupTable({ cluster }: BackupTableProps) {
 }
 
 function useFetchBackupData(clusterId: string) {
-  const [pagination, setPagination] = useState({
-    page: 1,
-    pageSize: 10,
-  })
+  const [pagination, setPagination] = usePagination()
   const [filters, setFilter] = useState<{
     startTime?: number
     endTime?: number
@@ -108,11 +106,10 @@ function useFetchBackupData(clusterId: string) {
   const { data, isLoading, isPreviousData, refetch } = useQueryClusterBackups(
     {
       id: clusterId,
-      page: pagination.page - 1,
-      pageSize: pagination.pageSize,
+      ...pagination,
       ...filters,
     },
-    { keepPreviousData: true, suspense: true }
+    { keepPreviousData: true }
   )
   return {
     pagination,

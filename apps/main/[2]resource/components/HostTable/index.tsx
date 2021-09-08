@@ -17,6 +17,7 @@ import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction } from 'react-i18next'
 import IntlPopConfirm from '@/components/IntlPopConfirm'
 import { errToMsg } from '@/utils/error'
+import { usePagination } from '@hooks/usePagination'
 
 loadI18n()
 
@@ -66,17 +67,13 @@ export default function HostTable() {
 }
 
 function useFetchHostData() {
-  const [pagination, setPagination] = useState({
-    page: 1,
-    pageSize: 10,
-  })
+  const [pagination, setPagination] = usePagination()
   const [filters, setFilter] = useState<{ status?: number }>({
     status: undefined,
   })
   const { data, isLoading, isPreviousData, refetch } = useQueryHostsList(
     {
-      page: pagination.page - 1,
-      pageSize: pagination.pageSize,
+      ...pagination,
       ...filters,
     },
     { keepPreviousData: true }

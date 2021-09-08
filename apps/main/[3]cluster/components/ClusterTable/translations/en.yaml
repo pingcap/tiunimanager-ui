@@ -23,6 +23,13 @@ status:
   online: Online
   offline: Offline
   deleted: Deleted
+  CreateCluster: Creating
+  DeleteCluster: Deleting
+  BackupCluster: Backuping
+  RecoverCluster: Recovering
+  ModifyParameters: Modifying
+  ExportData: Exporting
+  ImportData: Importing
 addresses:
   copy: copy address
   success: copy address successfully

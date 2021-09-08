@@ -4,6 +4,6 @@ import { resolveRoute } from '@pages-macro'
 export default definePage({
   role: ['user'],
   redirect(_, location) {
-    if (location.pathname === resolveRoute()) return resolveRoute('dashboard')
+    if (location.pathname === resolveRoute()) return resolveRoute('cluster')
   },
 })

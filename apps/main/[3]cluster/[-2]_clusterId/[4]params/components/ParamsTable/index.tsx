@@ -33,6 +33,7 @@ import { useQueryClient } from 'react-query'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction } from 'react-i18next'
 import { errToMsg } from '@/utils/error'
+import { usePagination } from '@hooks/usePagination'
 
 loadI18n()
 
@@ -262,15 +263,11 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
 }
 
 function useFetchParamsData(id: string) {
-  const [pagination, setPagination] = useState({
-    page: 1,
-    pageSize: 40,
-  })
+  const [pagination, setPagination] = usePagination(40)
   const { data, isLoading, refetch } = useQueryClusterParams(
     {
       id,
-      page: pagination.page - 1,
-      pageSize: pagination.pageSize,
+      ...pagination,
     },
     { refetchOnWindowFocus: false }
   )

@@ -1,10 +1,10 @@
-import BackupTable from '@apps/main/[3]cluster/[-2]_clusterId/[4]backup/components/BackupTable'
+import BackupTable from './components/BackupTable'
 import { useClusterContext } from '@apps/main/[3]cluster/[-2]_clusterId/context'
 import useToggle from '@hooks/useToggle'
-import styles from '@apps/main/[3]cluster/[-2]_clusterId/[4]backup/components/BackupTable/index.module.less'
+import styles from '@apps/main/[3]cluster/[-2]_clusterId/[5]backup/components/BackupTable/index.module.less'
 import { Button } from 'antd'
 import { SettingOutlined } from '@ant-design/icons'
-import SettingModal from '@apps/main/[3]cluster/[-2]_clusterId/[4]backup/components/SettingModal'
+import SettingModal from './components/SettingModal'
 import { useI18n } from '@i18n-macro'
 
 export default function () {

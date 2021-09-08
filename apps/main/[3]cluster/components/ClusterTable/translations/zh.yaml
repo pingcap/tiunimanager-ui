@@ -1,6 +1,6 @@
 columns:
-  id: ID
-  name: 名称
+  id: 集群ID
+  name: 集群名称
   status: 状态
   addresses: 连接地址
   password: 密码
@@ -23,6 +23,13 @@ status:
   online: 运行中
   offline: 已下线
   deleted: 已删除
+  CreateCluster: 创建中
+  DeleteCluster: 删除中
+  BackupCluster: 备份中
+  RecoverCluster: 备份恢复中
+  ModifyParameters: 修改参数中
+  ExportData: 数据导出中
+  ImportData: 数据导入中
 addresses:
   copy: 复制连接地址
   success: 复制连接地址成功

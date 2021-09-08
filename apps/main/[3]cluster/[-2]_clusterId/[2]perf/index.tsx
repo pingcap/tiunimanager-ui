@@ -1,5 +1,4 @@
-import { FC, useMemo, useRef, useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useMemo, useRef, useState } from 'react'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { CardTabListType } from 'antd/es/card'
 import { Card } from 'antd'

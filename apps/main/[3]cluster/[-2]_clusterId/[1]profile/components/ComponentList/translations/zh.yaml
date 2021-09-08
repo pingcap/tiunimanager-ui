@@ -1,0 +1,19 @@
+title: 组件拓扑
+list:
+  title: '{{ name }} 节点列表'
+
+columns:
+  id: ID
+  hostId: 主机ID
+  status: 状态
+  port: 端口
+  version: 版本
+  spec: 规格
+  usage: 资源占用
+  ioutil: IOUtil
+  iops: IOPS
+  zone: 可用区
+
+usage:
+  mem: 内存
+  storage: 存储

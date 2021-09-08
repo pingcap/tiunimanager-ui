@@ -2,7 +2,7 @@ import { IframeHTMLAttributes } from 'react'
 
 export type ExternalServiceProps = IframeHTMLAttributes<HTMLIFrameElement>
 
-export function ExternalService({ style, ...attrs }: ExternalServiceProps) {
+export function ExternalService(props: ExternalServiceProps) {
   return (
     <iframe
       width="100%"
@@ -13,7 +13,7 @@ export function ExternalService({ style, ...attrs }: ExternalServiceProps) {
       }}
       scrolling="auto"
       frameBorder="0"
-      {...attrs}
+      {...props}
     />
   )
 }

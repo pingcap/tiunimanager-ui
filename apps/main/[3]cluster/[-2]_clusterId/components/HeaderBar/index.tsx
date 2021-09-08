@@ -4,9 +4,7 @@ import { Button, message, Tag } from 'antd'
 import {
   DeleteOutlined,
   DownloadOutlined,
-  EditOutlined,
   QuestionCircleOutlined,
-  RedoOutlined,
   SaveOutlined,
   UploadOutlined,
 } from '@ant-design/icons'
@@ -117,10 +115,11 @@ export default function HeaderBar() {
     const status = <Tag color="blue">{statusName}</Tag>
 
     const actions = [
-      <Button key="1">
-        <EditOutlined />
-        {t('actions.edit')}
-      </Button>,
+      // TODO: wait for edit support
+      // <Button key="1">
+      //   <EditOutlined />
+      //   {t('actions.edit')}
+      // </Button>,
       <Button key="import" onClick={() => setImportPanelVisible(true)}>
         <UploadOutlined />
         {t('actions.import')}
@@ -129,10 +128,11 @@ export default function HeaderBar() {
         <DownloadOutlined />
         {t('actions.export')}
       </Button>,
-      <Button key="4">
-        <RedoOutlined />
-        {t('actions.reboot')}
-      </Button>,
+      // TODO: wait for reboot support
+      // <Button key="4">
+      //   <RedoOutlined />
+      //   {t('actions.reboot')}
+      // </Button>,
       backupBtn,
       deleteBtn,
     ]

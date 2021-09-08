@@ -1,13 +1,12 @@
 import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import { Fragment, useCallback, useMemo, useState } from 'react'
-import { message, Progress, Tooltip } from 'antd'
+import { message } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import styles from './index.module.less'
 import HeavyTable from '@/components/HeavyTable'
 import {
   ClusterapiClusterDisplayInfo,
   ControllerResultWithPage,
-  ControllerUsage,
   KnowledgeClusterTypeSpec,
 } from '#/api'
 import { CopyIconButton } from '@/components/CopyToClipboard'
@@ -28,6 +27,7 @@ import { TFunction } from 'react-i18next'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { errToMsg } from '@/utils/error'
 import { SmallUsageCircle } from '@/components/UsageCircle'
+import { usePagination } from '@hooks/usePagination'
 
 loadI18n()
 
@@ -81,10 +81,7 @@ export default function ClusterTable() {
 }
 
 function useFetchClustersData() {
-  const [pagination, setPagination] = useState({
-    page: 1,
-    pageSize: 10,
-  })
+  const [pagination, setPagination] = usePagination()
   const [filters, setFilter] = useState<{
     id?: string
     name?: string
@@ -100,11 +97,10 @@ function useFetchClustersData() {
   })
   const { data, isLoading, isPreviousData, refetch } = useQueryClustersList(
     {
-      page: pagination.page - 1,
-      pageSize: pagination.pageSize,
+      ...pagination,
       ...filters,
     },
-    { keepPreviousData: true, suspense: true }
+    { keepPreviousData: true }
   )
   return {
     pagination,
@@ -211,9 +207,31 @@ function getColumns(
       valueType: 'select',
       valueEnum: {
         '0': { text: t('status.idle'), status: 'Default' },
-        '1': { text: t('status.online'), status: 'Processing' },
+        '1': { text: t('status.online'), status: 'Success' },
         '2': { text: t('status.offline'), status: 'Warning' },
         '3': { text: t('status.deleted'), status: 'Error' },
+        CreateCluster: {
+          text: t('status.CreateCluster'),
+          status: 'Processing',
+        },
+        DeleteCluster: {
+          text: t('status.DeleteCluster'),
+          status: 'Processing',
+        },
+        BackupCluster: {
+          text: t('status.BackupCluster'),
+          status: 'Processing',
+        },
+        RecoverCluster: {
+          text: t('status.RecoverCluster'),
+          status: 'Processing',
+        },
+        ModifyParameters: {
+          text: t('status.ModifyParameters'),
+          status: 'Processing',
+        },
+        ExportData: { text: t('status.ExportData'), status: 'Processing' },
+        ImportData: { text: t('status.ImportData'), status: 'Processing' },
       },
     },
     {
@@ -224,10 +242,7 @@ function getColumns(
       render(dom, record) {
         return (
           <span className={styles.addressContainer}>
-            {[
-              ...(record.extranetConnectAddresses || []),
-              ...(record.intranetConnectAddresses || []),
-            ].map((a) => (
+            {record.extranetConnectAddresses?.map((a) => (
               <span key={a}>
                 <CopyIconButton
                   text={a}

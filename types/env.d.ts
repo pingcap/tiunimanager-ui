@@ -5,4 +5,5 @@ interface ImportMetaEnv {
   VITE_API_BASE_URL: string
   VITE_LOG_URL: string
   VITE_MONITOR_URL: string
+  VITE_TIDB_MONITOR_URL: string
 }
