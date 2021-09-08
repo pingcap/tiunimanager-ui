@@ -29,7 +29,8 @@ export default function TaskTable() {
       dataSource={data?.data.data || []}
       className={styles.taskTable}
       headerTitle={null}
-      onSubmit={(filters) => {
+      onSubmit={(filters: any) => {
+        if (!filters.status) filters.status = -1
         setFilter(filters as any)
       }}
       tooltip={false}
@@ -63,7 +64,7 @@ function useFetchTaskData() {
   }>({
     keyword: undefined,
     clusterId: undefined,
-    status: undefined,
+    status: -1,
   })
   const { data, isLoading, isPreviousData, refetch } = useQueryTasks(
     {

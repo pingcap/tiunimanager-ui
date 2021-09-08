@@ -7,3 +7,16 @@ fetch:
 update:
   success: 'Update backup strategy for cluster {{ msg }} successfully'
   fail: 'Fail: {{ msg }}'
+
+form:
+  period: Backup Period
+  time: Backup Time
+
+week:
+  mon: Monday
+  tue: Tuesday
+  wed: Wednesday
+  thu: Thursday
+  fri: Friday
+  sat: Satday
+  sun: Sunday

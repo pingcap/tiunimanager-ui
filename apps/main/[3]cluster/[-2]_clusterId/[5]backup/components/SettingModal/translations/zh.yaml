@@ -7,3 +7,16 @@ fetch:
 update:
   success: '更新集群 {{ msg }} 的备份计划成功'
   fail: '更新备份计划失败: {{ msg }}'
+
+form:
+  period: 备份周期
+  time: 备份时间
+
+week:
+  mon: 周一
+  tue: 周二
+  wed: 周三
+  thu: 周四
+  fri: 周五
+  sat: 周六
+  sun: 周日

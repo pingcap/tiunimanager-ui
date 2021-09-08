@@ -1,4 +1,14 @@
-import { Button, Card, List, message, Modal } from 'antd'
+import {
+  Button,
+  Card,
+  Divider,
+  Form,
+  List,
+  message,
+  Modal,
+  Select,
+  TimePicker,
+} from 'antd'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import parser from 'cron-parser'
@@ -7,6 +17,7 @@ import {
   useUpdateClusterBackupStrategy,
 } from '@/api/cluster'
 import { errToMsg } from '@/utils/error'
+import styles from './index.module.less'
 
 loadI18n()
 
@@ -16,6 +27,8 @@ export interface SettingModalProps {
   close: () => void
 }
 
+const WEEK = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+
 export default function SettingModal({
   clusterId,
   visible,
@@ -23,7 +36,7 @@ export default function SettingModal({
 }: SettingModalProps) {
   const { t, i18n } = useI18n()
 
-  const [cron, setCron] = useState('* * * * *')
+  const [cron, setCron] = useState('0 1 * * *')
 
   const { isLoading, data, isError, error, refetch } =
     useQueryClusterBackupStrategy({ id: clusterId })
@@ -39,10 +52,7 @@ export default function SettingModal({
         {
           onSuccess(data) {
             refetch()
-            message.success(
-              t('update.success' /* { msg: data.data.data!.cronString }*/),
-              0.8
-            )
+            message.success(t('update.success', { msg: clusterId }), 0.8)
             close()
           },
           onError(e: any) {
@@ -81,17 +91,30 @@ export default function SettingModal({
   const dom = useMemo(() => {
     return (
       <div>
-        <Card bordered={false}>
-          {/*<CronInput value={cron} setValue={setCron} lang={'zh'} />*/}
-        </Card>
-        <Card bordered={false} title={t('preview')}>
+        <Form>
+          <Form.Item name="period" label={t('form.period')}>
+            <Select mode="multiple" allowClear>
+              {WEEK.map((day) => (
+                <Select.Option key={day} value={day}>
+                  {t(`week.${day}`)}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item name="time" label={t('form.time')}>
+            <TimePicker allowClear={false} />
+          </Form.Item>
+        </Form>
+        <Divider />
+        <div className={styles.preview}>
+          <h4> {t('preview')}</h4>
           <List
             size="small"
             dataSource={nextTimes}
-            style={{ fontSize: 16 }}
+            className={styles.previewList}
             renderItem={(item) => <p>{item}</p>}
           />
-        </Card>
+        </div>
       </div>
     )
   }, [i18n.language, nextTimes])
