@@ -296,9 +296,9 @@ function getColumns(
     {
       title: t('columns.port'),
       width: 60,
-      dataIndex: 'port',
       key: 'port',
       hideInSearch: true,
+      render: (_, record) => record.portList?.join(', '),
     },
     {
       title: t('columns.version'),

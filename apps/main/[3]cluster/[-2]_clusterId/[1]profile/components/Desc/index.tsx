@@ -62,7 +62,7 @@ export function Desc({ cluster }: DescProps) {
         ))}
       </Descriptions.Item>
       <Descriptions.Item label={t('label.port')}>
-        {cluster.port}
+        {cluster.portList?.join(', ')}
       </Descriptions.Item>
       <Descriptions.Item label={t('label.createTime')}>
         {formatTimeString(cluster.createTime!)}
