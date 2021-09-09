@@ -7,19 +7,19 @@ restore:
   success: 还原备份成功
   fail: '还原备份失败: {{ msg }}'
 enum:
-  range:
+  type:
     full: 全量
     incr: 增量
-  type:
+  method:
     logic: 逻辑
     physical: 物理
-  method:
+  mode:
     manual: 手动
     auto: 自动
 fields:
   startTime: 起始时间
   endTime: 截止时间
-  range: 范围
+  mode: 触发模式
   type: 类型
   method: 方式
   operator: 操作者
@@ -28,5 +28,5 @@ fields:
   filepath: 备份文件路径
   actions: 操作
 actions:
-  restore: 还原
+  restore: 恢复
   delete: 删除

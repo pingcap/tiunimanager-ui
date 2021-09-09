@@ -7,23 +7,22 @@ const errorMessage: Record<string, string> = {
   en: `Fail to download file: `,
 }
 
-export function useDownload(url: string, filename: string) {
-  fetch(url, {
+export async function useDownload(url: string, defaultFilename?: string) {
+  const res = await fetch(url, {
     method: 'GET',
     headers: axiosInstance.defaults.headers,
   })
-    .then((res) => {
-      if (res.ok) return res.blob()
-      throw res.text()
-    })
-    .then((data) => {
-      const blobUrl = window.URL.createObjectURL(data)
-      const a = document.createElement('a')
-      a.download = filename
-      a.href = blobUrl
-      a.click()
-    })
-    .catch(async (msg) => {
-      message.error(errorMessage[i18next.language] + (await msg))
-    })
+
+  if (!res.ok) {
+    message.error(errorMessage[i18next.language] + (await res.text()))
+    return
+  }
+  const blobUrl = window.URL.createObjectURL(await res.blob())
+  const a = document.createElement('a')
+  a.download =
+    res.headers.get('Content-Disposition')?.match(/filename=(.+)$/)?.[1] ||
+    defaultFilename ||
+    'download_file'
+  a.href = blobUrl
+  a.click()
 }

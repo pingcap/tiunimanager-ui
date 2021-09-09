@@ -7,19 +7,19 @@ restore:
   success: Restore backup successfully
   fail: 'Fail: {{ msg }}'
 enum:
-  range:
+  type:
     full: Full
     incr: Incremental
-  type:
+  method:
     logic: Logical
     physical: Physical
-  method:
+  mode:
     manual: Manual
     auto: Plan
 fields:
   startTime: Start Time
   endTime: End Time
-  range: Range
+  mode: Mode
   type: Type
   method: Method
   operator: Operator

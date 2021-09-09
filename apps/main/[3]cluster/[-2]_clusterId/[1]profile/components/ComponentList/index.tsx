@@ -64,30 +64,31 @@ function getColumns(
   t: TFunction<''>
 ): ColumnsType<ClusterapiComponentNodeDisplayInfo> {
   return [
-    {
-      title: t('columns.id'),
-      width: 140,
-      dataIndex: 'nodeId',
-      key: 'id',
-    },
+    // Note: hide some fields now
+    // {
+    //   title: t('columns.id'),
+    //   width: 140,
+    //   dataIndex: 'nodeId',
+    //   key: 'id',
+    // },
     {
       title: t('columns.hostId'),
       width: 140,
       dataIndex: 'hostId',
       key: 'hostId',
     },
-    {
-      title: t('columns.zone'),
-      width: 120,
-      dataIndex: ['zone', 'zoneName'],
-      key: 'zone',
-    },
-    {
-      title: t('columns.spec'),
-      width: 100,
-      dataIndex: ['spec', 'specName'],
-      key: 'spec',
-    },
+    // {
+    //   title: t('columns.zone'),
+    //   width: 120,
+    //   dataIndex: ['zone', 'zoneName'],
+    //   key: 'zone',
+    // },
+    // {
+    //   title: t('columns.spec'),
+    //   width: 100,
+    //   dataIndex: ['spec', 'specName'],
+    //   key: 'spec',
+    // },
     {
       title: t('columns.status'),
       width: 80,

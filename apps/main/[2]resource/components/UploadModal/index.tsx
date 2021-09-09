@@ -76,7 +76,7 @@ export default function UploadModal({ visible, close }: UploadModalProps) {
         >
           <Button
             type="link"
-            onClick={() => useDownload(DownloadURL, 'template.xls')}
+            onClick={() => useDownload(DownloadURL, 'template.xlsx')}
           >
             {t('hint.download')}
           </Button>

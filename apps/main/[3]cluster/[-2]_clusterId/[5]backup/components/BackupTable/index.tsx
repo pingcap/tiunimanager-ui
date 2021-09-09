@@ -221,13 +221,6 @@ function getColumns(
       valueType: 'dateTime',
     },
     {
-      title: t('fields.range'),
-      width: 60,
-      key: 'range',
-      hideInSearch: true,
-      render: (_, record) => t(`enum.range.${record.backupRange!}`),
-    },
-    {
       title: t('fields.type'),
       width: 60,
       key: 'type',
@@ -239,10 +232,17 @@ function getColumns(
       width: 60,
       key: 'method',
       hideInSearch: true,
+      render: (_, record) => t(`enum.method.${record.backupMethod!}`),
+    },
+    {
+      title: t('fields.mode'),
+      width: 60,
+      key: 'mode',
+      hideInSearch: true,
       render: (_, record) =>
         record.operator?.manualOperator
-          ? t('enum.method.manual')
-          : t('enum.method.plan'),
+          ? t('enum.mode.manual')
+          : t('enum.mode.auto'),
     },
     {
       title: t('fields.operator'),
