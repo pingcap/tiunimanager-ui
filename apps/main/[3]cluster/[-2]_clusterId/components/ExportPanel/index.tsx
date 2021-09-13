@@ -2,7 +2,7 @@ import { Button, Form, Input, message, Modal, Radio } from 'antd'
 import styles from './index.module.less'
 import { useExportCluster } from '@/api/cluster'
 import { errToMsg } from '@/utils/error'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { loadI18n, useI18n } from '@i18n-macro'
 
 loadI18n()
@@ -17,6 +17,7 @@ export function ExportPanel({ clusterId, visible, close }: ExportPanelProps) {
   const [form] = Form.useForm()
   const exportCluster = useExportCluster()
   const { t, i18n } = useI18n()
+  const [storageType, setStorageType] = useState<'nfs' | 's3'>('s3')
   const formDom = useMemo(() => {
     async function onConfirm() {
       const value = await form.validateFields()
@@ -50,12 +51,32 @@ export function ExportPanel({ clusterId, visible, close }: ExportPanelProps) {
       >
         <h3>{t('form.target')}</h3>
         <Form.Item
-          name="filePath"
-          label={t('form.filepath')}
-          rules={[{ required: true }]}
+          name="storageType"
+          label={t('form.storageType')}
+          initialValue="s3"
         >
-          <Input />
+          <Radio.Group onChange={(e) => setStorageType(e.target.value)}>
+            <Radio value="s3">{t('storageType.s3')}</Radio>
+            <Radio value="nfs">{t('storageType.nfs')}</Radio>
+          </Radio.Group>
         </Form.Item>
+        {storageType === 's3' ? (
+          <Form.Item
+            name="filePath"
+            label={t('form.s3.filepath')}
+            rules={[{ required: true }]}
+          >
+            <Input />
+          </Form.Item>
+        ) : (
+          <Form.Item
+            name="filePath"
+            label={t('form.nfs.filepath')}
+            rules={[{ required: true }]}
+          >
+            <Input />
+          </Form.Item>
+        )}
         <Form.Item
           name="fileType"
           label={t('form.filetype')}
@@ -84,7 +105,7 @@ export function ExportPanel({ clusterId, visible, close }: ExportPanelProps) {
         </Form.Item>
       </Form>
     )
-  }, [i18n.language, form, exportCluster.mutateAsync])
+  }, [storageType, i18n.language, form, exportCluster.mutateAsync])
 
   return (
     <Modal

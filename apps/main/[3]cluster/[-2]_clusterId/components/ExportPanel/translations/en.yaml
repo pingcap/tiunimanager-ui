@@ -4,7 +4,11 @@ export:
   fail: 'Fail: {{ msg }}'
 form:
   target: Export Target
-  filepath: File Path
+  storageType: Target Type
+  s3:
+    filepath: Bucket URL
+  nfs:
+    filepath: File Path
   filetype: File Type
   source: Source Database
   username: Username
@@ -13,3 +17,6 @@ form:
 filetype:
   csv: CSV
   sql: SQL
+storageType:
+  s3: AWS S3
+  nfs: Local

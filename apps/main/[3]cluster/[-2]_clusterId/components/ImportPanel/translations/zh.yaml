@@ -4,8 +4,15 @@ import:
   fail: '导入失败: {{ msg }}'
 form:
   source: 数据源
-  filepath: 文件路径
+  storageType: 目标类型
+  s3:
+    filepath: Bucket路径
+  nfs:
+    filepath: 文件路径
   target: 目标数据库
   username: 用户名
   password: 密码
   submit: 确认导入
+storageType:
+  s3: AWS S3
+  nfs: 本地文件

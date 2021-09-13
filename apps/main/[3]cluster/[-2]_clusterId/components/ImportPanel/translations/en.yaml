@@ -4,8 +4,15 @@ import:
   fail: 'Fail: {{ msg }}'
 form:
   source: Data Source
-  filepath: File Path
+  storageType: Target Type
+  s3:
+    filepath: Bucket URL
+  nfs:
+    filepath: File Path
   target: Target Database
   username: Username
   password: Password
   submit: Confirm
+storageType:
+  s3: AWS S3
+  nfs: Local

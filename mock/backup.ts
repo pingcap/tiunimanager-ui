@@ -16,7 +16,7 @@ const fakeBackups: InstanceapiBackupRecord[] = Array.from(
       operatorId: datatype.uuid().slice(0, 18),
       operatorName: name.lastName(),
     },
-    backupRange: 'full',
+    backupMethod: 'logic',
     size: datatype.number(),
     startTime: datatype.datetime().toLocaleString('en'),
     endTime: datatype.datetime().toLocaleString('en'),
@@ -28,7 +28,7 @@ const fakeBackups: InstanceapiBackupRecord[] = Array.from(
       statusName: 'Ok',
       updateTime: datatype.datetime().toLocaleString('en'),
     },
-    backupType: 'logic',
+    backupType: 'full',
   })
 )
 

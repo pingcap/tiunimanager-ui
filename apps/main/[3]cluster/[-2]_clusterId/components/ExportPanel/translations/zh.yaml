@@ -4,7 +4,11 @@ export:
   fail: '导出失败: {{ msg }}'
 form:
   target: 导出目标
-  filepath: 文件路径
+  storageType: 目标类型
+  s3:
+    filepath: Bucket路径
+  nfs:
+    filepath: 文件路径
   filetype: 文件类型
   source: 源数据库
   username: 用户名
@@ -13,3 +17,6 @@ form:
 filetype:
   csv: CSV
   sql: SQL
+storageType:
+  s3: AWS S3
+  nfs: 本地文件
