@@ -9,14 +9,14 @@ update:
   fail: '更新备份计划失败: {{ msg }}'
 
 form:
-  period: 备份周期
-  time: 备份时间
+  backupDate: 备份日期
+  period: 备份时间
 
 week:
-  mon: 周一
-  tue: 周二
-  wed: 周三
-  thu: 周四
-  fri: 周五
-  sat: 周六
-  sun: 周日
+  Monday: 周一
+  Tuesday: 周二
+  Wednesday: 周三
+  Thursday: 周四
+  Friday: 周五
+  Saturday: 周六
+  Sunday: 周日

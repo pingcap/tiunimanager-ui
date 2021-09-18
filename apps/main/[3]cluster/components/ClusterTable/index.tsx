@@ -1,7 +1,5 @@
 import { ColumnsState, ProColumns } from '@ant-design/pro-table'
-import { Fragment, useCallback, useMemo, useState } from 'react'
-import { message } from 'antd'
-import { QuestionCircleOutlined } from '@ant-design/icons'
+import { Fragment, useMemo, useState } from 'react'
 import styles from './index.module.less'
 import HeavyTable from '@/components/HeavyTable'
 import {
@@ -14,18 +12,10 @@ import useLocalStorage from '@hooks/useLocalstorage'
 import { Link } from 'react-router-dom'
 import { resolveRoute } from '@pages-macro'
 import { useQueryKnowledge } from '@/api/knowledge'
-import { useQueryClient } from 'react-query'
-import {
-  invalidateClusterDetail,
-  invalidateClustersList,
-  useDeleteCluster,
-  useQueryClustersList,
-} from '@/api/cluster'
-import IntlPopConfirm from '@/components/IntlPopConfirm'
+import { useQueryClustersList } from '@/api/cluster'
 import { ProSchemaValueEnumObj } from '@ant-design/pro-utils/lib/typing'
 import { TFunction } from 'react-i18next'
 import { loadI18n, useI18n } from '@i18n-macro'
-import { errToMsg } from '@/utils/error'
 import { SmallUsageCircle } from '@/components/UsageCircle'
 import { usePagination } from '@hooks/usePagination'
 
@@ -122,39 +112,9 @@ function useTableColumn() {
     defaultColumnsSetting
   )
 
-  const deleteCluster = useDeleteCluster()
-  const queryClient = useQueryClient()
-  const deleteAction = useCallback(
-    (clusterId) =>
-      deleteCluster.mutateAsync(
-        { id: clusterId },
-        {
-          onSuccess(data) {
-            message.success(t('delete.success', { msg: data.data.data })).then()
-          },
-          onSettled() {
-            return Promise.allSettled([
-              invalidateClustersList(queryClient),
-              invalidateClusterDetail(queryClient, clusterId),
-            ])
-          },
-          onError(e: any) {
-            message
-              .error(
-                t('delete.fail', {
-                  msg: errToMsg(e),
-                })
-              )
-              .then()
-          },
-        }
-      ),
-    [queryClient, deleteCluster.mutateAsync]
-  )
-
   const columns = useMemo(
-    () => getColumns(t, getClusterTypes(data?.data?.data || []), deleteAction),
-    [i18n.language, isLoading, deleteAction]
+    () => getColumns(t, getClusterTypes(data?.data?.data || [])),
+    [i18n.language, isLoading]
   )
 
   return {
@@ -178,8 +138,7 @@ function getClusterTypes(raw: KnowledgeClusterTypeSpec[]) {
 
 function getColumns(
   t: TFunction<''>,
-  clusterTypes: ProColumns['valueEnum'],
-  deleteAction: (clusterId: string) => void
+  clusterTypes: ProColumns['valueEnum']
 ): ProColumns<ClusterapiClusterDisplayInfo>[] {
   return [
     {
@@ -408,24 +367,14 @@ function getColumns(
     },
     {
       title: t('columns.actions'),
-      width: 140,
+      width: 100,
       key: 'actions',
       valueType: 'option',
-      render(_, record) {
+      render(_) {
         return [
           // TODO: implement actions in cluster list
           <a key="edit">{t('actions.edit')}</a>,
           <a key="reboot">{t('actions.reboot')}</a>,
-          <IntlPopConfirm
-            key="delete"
-            title={t('delete.confirm')}
-            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-            onConfirm={async () => {
-              await deleteAction(record.clusterId!)
-            }}
-          >
-            <a className="danger-link">{t('actions.delete')}</a>
-          </IntlPopConfirm>,
         ]
       },
     },

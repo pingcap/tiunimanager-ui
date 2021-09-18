@@ -34,7 +34,6 @@ const MainLayout: FC<MainLayoutProps> = (props) => {
         items={menuItems}
       />
       <Layout style={{ marginLeft: marginWidth }} className={styles.pageLayout}>
-        {/* XXX: Should add page header? */}
         <Layout.Content className={styles.content}>{children}</Layout.Content>
       </Layout>
     </Layout>

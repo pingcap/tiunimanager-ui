@@ -9,14 +9,14 @@ update:
   fail: 'Fail: {{ msg }}'
 
 form:
-  period: Backup Period
-  time: Backup Time
+  backupDate: Date
+  period: Time Period
 
 week:
-  mon: Monday
-  tue: Tuesday
-  wed: Wednesday
-  thu: Thursday
-  fri: Friday
-  sat: Satday
-  sun: Sunday
+  Monday: Monday
+  Tuesday: Tuesday
+  Wednesday: Wednesday
+  Thursday: Thursday
+  Friday: Friday
+  Saturday: Saturday
+  Sunday: Sunday
