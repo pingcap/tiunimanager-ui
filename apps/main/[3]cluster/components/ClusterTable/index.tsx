@@ -159,6 +159,21 @@ function getColumns(
       key: 'name',
     },
     {
+      title: t('columns.type'),
+      width: 60,
+      dataIndex: 'clusterType',
+      key: 'type',
+      valueType: 'select',
+      valueEnum: clusterTypes,
+    },
+    {
+      title: t('columns.version'),
+      width: 60,
+      dataIndex: 'clusterVersion',
+      key: 'version',
+      hideInSearch: true,
+    },
+    {
       title: t('columns.status'),
       width: 100,
       dataIndex: 'statusCode',
@@ -260,45 +275,6 @@ function getColumns(
       render: (_, record) => record.portList?.join(', '),
     },
     {
-      title: t('columns.version'),
-      width: 60,
-      dataIndex: 'clusterVersion',
-      key: 'version',
-      hideInSearch: true,
-    },
-    {
-      title: t('columns.type'),
-      width: 60,
-      dataIndex: 'clusterType',
-      key: 'type',
-      valueType: 'select',
-      valueEnum: clusterTypes,
-    },
-    {
-      title: t('columns.createTime'),
-      width: 180,
-      dataIndex: 'createTime',
-      key: 'createTime',
-      hideInSearch: true,
-      valueType: 'dateTime',
-    },
-    {
-      title: t('columns.updateTime'),
-      width: 180,
-      dataIndex: 'updateTime',
-      key: 'updateTime',
-      hideInSearch: true,
-      valueType: 'dateTime',
-    },
-    {
-      title: t('columns.deleteTime'),
-      width: 180,
-      dataIndex: 'deleteTime',
-      key: 'deleteTime',
-      hideInSearch: true,
-      valueType: 'dateTime',
-    },
-    {
       title: t('columns.tls'),
       width: 60,
       dataIndex: 'tls',
@@ -366,6 +342,30 @@ function getColumns(
       },
     },
     {
+      title: t('columns.createTime'),
+      width: 180,
+      dataIndex: 'createTime',
+      key: 'createTime',
+      hideInSearch: true,
+      valueType: 'dateTime',
+    },
+    {
+      title: t('columns.updateTime'),
+      width: 180,
+      dataIndex: 'updateTime',
+      key: 'updateTime',
+      hideInSearch: true,
+      valueType: 'dateTime',
+    },
+    {
+      title: t('columns.deleteTime'),
+      width: 180,
+      dataIndex: 'deleteTime',
+      key: 'deleteTime',
+      hideInSearch: true,
+      valueType: 'dateTime',
+    },
+    {
       title: t('columns.actions'),
       width: 100,
       key: 'actions',
@@ -382,19 +382,13 @@ function getColumns(
 }
 
 const defaultColumnsSetting: Record<string, ColumnsState> = {
-  updateTime: {
-    show: false,
-  },
-  deleteTime: {
-    show: false,
-  },
-  tls: {
-    show: false,
-  },
-  password: {
-    show: false,
-  },
-  actions: {
-    fixed: 'right',
-  },
+  actions: { fixed: 'right' },
+  deleteTime: { show: false },
+  dbPassword: { show: false },
+  backup: { show: false },
+  updateTime: { show: false },
+  password: { show: false },
+  tag: { show: false },
+  port: { show: false },
+  tls: { show: false },
 }

@@ -16,7 +16,7 @@ actions:
   monitor: 监控
   delete: 删除
 tips:
-  location: 可用区 数据中心 机架
+  location: 可用区 区域 机架
 status:
   idle: 空闲中
   offline: 已下线

@@ -16,7 +16,7 @@ actions:
   monitor: Monitor
   delete: Delete
 tips:
-  location: Availabile Zone / Data Center / Rack
+  location: Availabile Zone / Region / Rack
 status:
   idle: Free
   offline: Offlined

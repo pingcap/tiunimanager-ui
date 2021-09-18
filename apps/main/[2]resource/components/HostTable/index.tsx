@@ -179,7 +179,7 @@ function getHostColumns(
       tooltip: t('tips.location'),
       hideInSearch: true,
       render(_, record) {
-        return `${record.az}, ${record.dc}, ${record.rack}`
+        return `${record.az}, ${record.region}, ${record.rack}`
       },
     },
     {
@@ -249,13 +249,9 @@ function getHostColumns(
 }
 
 const defaultColumnsSetting: Record<string, ColumnsState> = {
-  id: {
-    show: false,
-  },
-  spec: {
-    show: false,
-  },
-  actions: {
-    fixed: 'right',
-  },
+  operator: { show: false },
+  actions: { fixed: 'right' },
+  id: { show: false },
+  nic: { show: false },
+  system: { show: false },
 }
