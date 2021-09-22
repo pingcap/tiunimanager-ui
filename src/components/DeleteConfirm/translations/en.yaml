@@ -1,0 +1,2 @@
+tip: 'Please input {{ tip }} <strong>{{ expect }}</strong> to confirm.'
+confirm: I understand the consequences, delete it.

@@ -22,6 +22,7 @@ import { errToMsg } from '@/utils/error'
 import { TFunction } from 'react-i18next'
 import { getTimestamp } from '@/utils/time'
 import { usePagination } from '@hooks/usePagination'
+import { DeleteConfirm } from '@/components/DeleteConfirm'
 
 loadI18n()
 
@@ -286,16 +287,20 @@ function getColumns(
           >
             <a>{t('actions.restore')}</a>
           </Popconfirm>,
-          <Popconfirm
+          <DeleteConfirm
             key="delete"
             title={t('delete.confirm')}
-            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-            onConfirm={async () => {
-              deleteAction(record.clusterId!, record.id!)
+            confirmInput={{
+              tip: '',
+              expect: 'delete',
+            }}
+            onConfirm={async (close) => {
+              await deleteAction(record.clusterId!, record.id!)
+              close()
             }}
           >
             <a className="danger-link">{t('actions.delete')}</a>
-          </Popconfirm>,
+          </DeleteConfirm>,
         ]
       },
     },

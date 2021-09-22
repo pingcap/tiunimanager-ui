@@ -8,6 +8,7 @@ actions:
   delete: Delete
 delete:
   confirm: Are you sure to delete this cluster?
+  confirm-tip: the tail of cluster id
   success: 'Delete cluster {{ msg }} successfully'
   fail: 'Fail: {{ msg }}'
 backup:

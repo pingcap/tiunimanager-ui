@@ -27,3 +27,4 @@ delete:
   confirm: 确认删除该主机吗?
   success: '删除主机 {{ msg }} 成功'
   fail: '删除失败: {{ msg }}'
+  confirm-tip: 主机名称

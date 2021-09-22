@@ -4,7 +4,6 @@ import { Button, message, Modal } from 'antd'
 import {
   DeleteOutlined,
   DownloadOutlined,
-  QuestionCircleOutlined,
   SaveOutlined,
   UploadOutlined,
 } from '@ant-design/icons'
@@ -20,11 +19,11 @@ import {
 import { resolveRoute } from '@pages-macro'
 import { useQueryClient } from 'react-query'
 import Header from '@/components/Header'
-import IntlPopConfirm from '@/components/IntlPopConfirm'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { errToMsg } from '@/utils/error'
 import { ImportPanel } from '@apps/main/[3]cluster/[-2]_clusterId/components/ImportPanel'
 import { ExportPanel } from '../ExportPanel'
+import { DeleteConfirm } from '@/components/DeleteConfirm'
 
 loadI18n()
 
@@ -101,16 +100,19 @@ export default function HeaderBar() {
       </Button>
     )
     const deleteBtn = (
-      <IntlPopConfirm
+      <DeleteConfirm
         key="delete"
         title={t('delete.confirm')}
-        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+        confirmInput={{
+          tip: t('delete.confirm-tip'),
+          expect: clusterId!.slice(-8),
+        }}
         onConfirm={handleDelete}
       >
         <Button danger>
           <DeleteOutlined /> {t('actions.delete')}
         </Button>
-      </IntlPopConfirm>
+      </DeleteConfirm>
     )
 
     const actions = [

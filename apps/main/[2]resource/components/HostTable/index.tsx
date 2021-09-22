@@ -3,7 +3,6 @@ import HeavyTable from '@/components/HeavyTable'
 import { ControllerResultWithPage, HostapiHostInfo } from '#/api'
 import { useCallback, useMemo, useState } from 'react'
 import { message } from 'antd'
-import { QuestionCircleOutlined } from '@ant-design/icons'
 import useLocalStorage from '@hooks/useLocalstorage'
 import {
   invalidateHostDetail,
@@ -15,9 +14,9 @@ import { useQueryClient } from 'react-query'
 import styles from './index.module.less'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction } from 'react-i18next'
-import IntlPopConfirm from '@/components/IntlPopConfirm'
 import { errToMsg } from '@/utils/error'
 import { usePagination } from '@hooks/usePagination'
+import { DeleteConfirm } from '@/components/DeleteConfirm'
 
 loadI18n()
 
@@ -232,16 +231,20 @@ function getHostColumns(
             {record.status === 1 ? t('actions.offline') : t('actions.online')}
           </a>,
           <a key="monitor">{t('actions.monitor')}</a>,
-          <IntlPopConfirm
+          <DeleteConfirm
             key="delete"
             title={t('delete.confirm')}
-            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-            onConfirm={async () => {
+            confirmInput={{
+              tip: t('delete.confirm-tip'),
+              expect: record.hostName!,
+            }}
+            onConfirm={async (close) => {
               await deleteAction(record.hostId!)
+              close()
             }}
           >
             <a className="danger-link">{t('actions.delete')}</a>
-          </IntlPopConfirm>,
+          </DeleteConfirm>,
         ]
       },
     },

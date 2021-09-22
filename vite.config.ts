@@ -50,15 +50,15 @@ export default defineConfig(({ mode }) => {
       }),
       pluginYaml(),
       vitePluginMacro()
-        .use(
+        .use([
           provideI18n({
             languageWhitelist: new Set(LANGUAGE_IDS),
             defaultLoadGlob: './translations/*.{yaml,yml}',
           }),
           provideAssets(),
           providePages(),
-          provideComponents()
-        )
+          provideComponents(),
+        ])
         .toPlugin(),
     ],
     css: {

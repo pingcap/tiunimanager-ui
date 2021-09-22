@@ -1,0 +1,29 @@
+.expect {
+  font-weight: bold;
+}
+
+.confirm-modal {
+  :global(.ant-modal-body) {
+    font-size: 16px;
+  }
+}
+
+.expect-input {
+  width: 100%;
+
+  &:hover {
+    --antd-wave-shadow-color: #e8505c !important;
+    border-color: #e8505c !important;
+  }
+
+  &:focus {
+    border-color: #e8505c !important;
+    outline: 0;
+    -webkit-box-shadow: 0 0 0 2px rgba(232, 80, 92, 0.2);
+    box-shadow: 0 0 0 2px rgba(232, 80, 92, 0.2);
+  }
+}
+
+.confirm-button {
+  width: 100%;
+}
