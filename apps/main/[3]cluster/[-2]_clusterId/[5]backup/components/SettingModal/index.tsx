@@ -79,21 +79,25 @@ export default function SettingModal({
 
   const handleUpdate = () => {
     const value = form.getFieldsValue()
-    const payload = {
-      clusterId: clusterId,
-      backupDate: value?.backupDate?.join(','),
-      period: value?.period,
-    }
-    updateBackupStrategy.mutateAsync(payload, {
-      onSuccess() {
-        message.success(t('update.success', { msg: clusterId }), 0.8)
-        close()
-        refetch()
+    updateBackupStrategy.mutateAsync(
+      {
+        clusterId: clusterId,
+        strategy: {
+          backupDate: value?.backupDate?.join(','),
+          period: value?.period,
+        },
       },
-      onError(e: any) {
-        message.error(t('update.fail', { msg: errToMsg(e) }))
-      },
-    })
+      {
+        onSuccess() {
+          message.success(t('update.success', { msg: clusterId }), 0.8)
+          close()
+          refetch()
+        },
+        onError(e: any) {
+          message.error(t('update.fail', { msg: errToMsg(e) }))
+        },
+      }
+    )
   }
 
   // set initial values

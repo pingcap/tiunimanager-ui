@@ -239,10 +239,7 @@ function getColumns(
       width: 60,
       key: 'mode',
       hideInSearch: true,
-      render: (_, record) =>
-        record.operator?.manualOperator
-          ? t('enum.mode.manual')
-          : t('enum.mode.auto'),
+      render: (_, record) => t(`enum.mode.${record.backupMode}`),
     },
     {
       title: t('fields.operator'),
