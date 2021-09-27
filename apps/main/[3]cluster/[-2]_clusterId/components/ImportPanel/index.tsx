@@ -1,4 +1,4 @@
-import { Button, Form, Input, message, Modal, Radio } from 'antd'
+import { Button, Drawer, Form, Input, message, Radio } from 'antd'
 import styles from './index.module.less'
 import { useImportCluster } from '@/api/cluster'
 import { errToMsg } from '@/utils/error'
@@ -88,26 +88,32 @@ export function ImportPanel({ clusterId, visible, close }: ImportPanelProps) {
         <Form.Item name="password" label={t('form.password')}>
           <Input.Password />
         </Form.Item>
-        <Form.Item className={styles.actions}>
-          <Button className={styles.confirm} type="primary" htmlType="submit">
-            {t('form.submit')}
-          </Button>
-        </Form.Item>
       </Form>
     )
   }, [storageType, i18n.language, form, importCluster.mutateAsync])
 
   return (
-    <Modal
+    <Drawer
       width={720}
-      className={styles.modal}
+      className={styles.drawer}
       title={t('title')}
       visible={visible}
-      onCancel={close}
-      footer={null}
+      onClose={close}
+      bodyStyle={{ paddingBottom: 80 }}
+      maskClosable={false}
+      footer={
+        <Button
+          className={styles.confirm}
+          type="primary"
+          size="large"
+          onClick={() => form.submit()}
+        >
+          {t('form.submit')}
+        </Button>
+      }
       destroyOnClose={true}
     >
       {formDom}
-    </Modal>
+    </Drawer>
   )
 }

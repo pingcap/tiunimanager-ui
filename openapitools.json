@@ -11,7 +11,8 @@
         "additionalProperties": {
           "supportsES6": "true",
           "enumPropertyNaming": "original"
-        }
+        },
+        "skipValidateSpec": true
       }
     }
   }

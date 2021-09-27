@@ -6,10 +6,17 @@ form:
   target: Export Target
   storageType: Target Type
   s3:
-    filepath: Bucket URL
+    endpointUrl: Endpoint
+    bucket: Bucket
+    bucketUrl: URL
+    bucketRegion: Region (Optional)
+    accessKey: Access Key
+    secretAccessKey: Secret Key
   nfs:
     filepath: File Path
   filetype: File Type
+  filterType: Filter
+  options: Export Options
   source: Source Database
   username: Username
   password: Password
@@ -17,6 +24,14 @@ form:
 filetype:
   csv: CSV
   sql: SQL
+filterType:
+  none: None
+  db: Database
+  sql: SQL
 storageType:
   s3: AWS S3
   nfs: Local
+tips:
+  filter:
+    db: Specify databases and/or tables. Multiple are separated by semicolons, such as dba.tb1; dbB.tb2;
+    sql: Specify the SQL statement to use for filtering

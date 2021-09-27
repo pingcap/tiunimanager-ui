@@ -15,7 +15,7 @@
     "@ant-design/pro-form": "^1.32.4",
     "@ant-design/pro-table": "^2.43.6",
     "ace-builds": "^1.4.12",
-    "antd": "^4.16.8",
+    "antd": "^4.16.13",
     "axios": "^0.21.1",
     "copy-to-clipboard": "^3.3.1",
     "cron-parser": "^3.5.0",
