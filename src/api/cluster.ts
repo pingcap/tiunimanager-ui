@@ -2,7 +2,7 @@ import { QueryClient, useMutation, useQuery } from 'react-query'
 import { APIS, PartialUseQueryOptions } from '@/api/client'
 import {
   ClusterapiCreateReq,
-  ClusterapiRecoverReq,
+  ClusterapiRestoreReq,
   DatabaseapiDataExportReq,
   DatabaseapiDataImportReq,
   InstanceapiBackupReq,
@@ -194,12 +194,8 @@ export function useCreateClusterBackup() {
   return useMutation(createClusterBackup)
 }
 
-const restoreClusterBackup = ({
-  backupId,
-  ...payload
-}: ClusterapiRecoverReq & {
-  backupId: string
-}) => APIS.Clusters.clustersRecoverPost(payload)
+const restoreClusterBackup = (payload: ClusterapiRestoreReq) =>
+  APIS.Clusters.clustersRestorePost(payload)
 
 export function useRestoreClusterBackup() {
   return useMutation(restoreClusterBackup)

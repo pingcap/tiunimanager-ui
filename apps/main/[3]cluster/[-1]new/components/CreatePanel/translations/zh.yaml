@@ -1,42 +1,12 @@
-basic:
-  title: 基础配置
-  fields:
-    name: 集群名称
-    tags: 集群标签
-    password: 数据库密码
-    type: 集群属性
-    tls: 启用TLS
-  tooltip:
-    name: 大小写字母、数字和连字符，并以字母开头，长度8-32位
-    password: 大小写，可见特殊字符(!@#$%^&*()_+=)，数字三种以上组合，长度8-32位
-  rules:
-    name:
-      require: 请输入集群名称
-      length: 长度须达到8-32位
-    password:
-      require: 请输入数据库密码
-      length: 长度须达到8-32位
-    type:
-      require: 请选择集群类型
-    version:
-      require: 请选择集群版本
-nodes:
-  title: '{{ name }} 配置'
-  allocator:
-    title: 快速分配
-    items: '{{ count }} 节点'
-  fields:
-    zone: 可用区
-    spec: 规格
-    amount: 数量
-footer:
-  reset:
-    title: 重置
-    confirm: 确认重置表单吗?
-  create: 创建
 create:
-  validation:
-    miss: '不能缺失 {{ name }} 节点！'
-    zone: '{{ name }} 至少需要 {{ count }} 个不同 Zone 的节点!'
   success: '集群 {{ msg }} 创建成功'
   fail: '集群创建失败: {{ msg }}'
+restore:
+  title: 源配置
+  fields:
+    clusterId: 源集群 ID
+    backupId: 源备份 ID
+  tips:
+    not-editable: 这项配置无法手动修改
+  success: '恢复备份 {{ msg }} 成功'
+  fail: '恢复备份失败: {{ msg }}'

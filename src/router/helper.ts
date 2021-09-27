@@ -12,20 +12,23 @@ export type Redirector = (
   location: LocationWithState
 ) => string | false | null | undefined
 
-export function useHistoryWithState(): HistoryWithState {
+export function useHistoryWithState(
+  defaultState: RouteState = {
+    from: '/',
+  }
+): HistoryWithState {
   const history = useHistory<RouteState>()
   if (!history.location.state || !history.location.state.from)
-    history.location.state = {
-      from: '/',
-    }
+    history.location.state = defaultState
   return history
 }
 
-export function useLocationWithState(): LocationWithState {
+export function useLocationWithState(
+  defaultState: RouteState = {
+    from: '/',
+  }
+): LocationWithState {
   const location = useLocation<RouteState>()
-  if (!location.state || !location.state.from)
-    location.state = {
-      from: '/',
-    }
+  if (!location.state || !location.state.from) location.state = defaultState
   return location
 }

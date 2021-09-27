@@ -3,9 +3,7 @@ delete:
   success: Delete backup successfully
   fail: 'Fail: {{ msg }}'
 restore:
-  confirm: Are you sure to restore this backup?
-  success: Restore backup successfully
-  fail: 'Fail: {{ msg }}'
+  confirm: Are you sure to restore cluster from this backup?
 enum:
   type:
     full: Full

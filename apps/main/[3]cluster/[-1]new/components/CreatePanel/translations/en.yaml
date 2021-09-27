@@ -1,43 +1,12 @@
-basic:
-  title: Basic Options
-  fields:
-    name: Cluster Name
-    tags: Cluster Tags
-    password: DB Password
-    type: Cluster Type
-    tls: Enable TLS
-  tooltip:
-    name: Upper and lower case letters, numbers and hyphens, starting with a letter, and with length between 8-32
-    password: Upper and lower case letters, visible special characters !@#$%^&*()_+=, numbers, with length between 8-32
-    tags: "You can use comma ',' or space ' ' to separate each tag"
-  rules:
-    name:
-      require: Please enter the cluster name
-      length: The length must be between 8-32
-    password:
-      require: Please enter the database password
-      length: The length must be between 8-32
-    type:
-      require: Please select the cluster type
-    version:
-      require: Please select the cluster version
-nodes:
-  title: '{{ name }} Options'
-  allocator:
-    title: Quick Allocate
-    items: '{{ count }} Nodes'
-  fields:
-    zone: Available Zone
-    spec: Spec
-    amount: Amount
-footer:
-  reset:
-    title: Reset
-    confirm: Are you sure to reset the form?
-  create: Create
 create:
-  validation:
-    miss: 'The {{ name }} node cannot be missing！'
-    zone: '{{ name }} requires at least {{ count }} nodes in different zones!'
   success: 'Create cluster {{ msg }} successfully'
+  fail: 'Fail: {{ msg }}'
+restore:
+  title: Restore Source
+  fields:
+    clusterId: Source Cluster ID
+    backupId: Source Backup ID
+  tips:
+    not-editable: You can not change this manually.
+  success: 'Restore backup {{ msg }} successfully'
   fail: 'Fail: {{ msg }}'

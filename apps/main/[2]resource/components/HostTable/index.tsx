@@ -52,7 +52,7 @@ export default function HostTable() {
         },
       }}
       rowKey="hostId"
-      columnsStateMap={columnsSetting}
+      columnsState={columnsSetting}
       search={{
         filterType: 'light',
       }}
@@ -128,7 +128,13 @@ function useTableColumn() {
     'host-table-show',
     defaultColumnsSetting
   )
-  return { columns, columnsSetting, setColumnSetting }
+  return {
+    columns,
+    columnsSetting: {
+      value: columnsSetting,
+    },
+    setColumnSetting,
+  }
 }
 
 function getHostColumns(

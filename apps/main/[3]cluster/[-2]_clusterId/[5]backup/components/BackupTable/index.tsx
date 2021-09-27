@@ -13,7 +13,6 @@ import {
   invalidateClusterBackups,
   useDeleteClusterBackup,
   useQueryClusterBackups,
-  useRestoreClusterBackup,
 } from '@/api/cluster'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { useQueryClient } from 'react-query'
@@ -23,6 +22,8 @@ import { TFunction } from 'react-i18next'
 import { getTimestamp } from '@/utils/time'
 import { usePagination } from '@hooks/usePagination'
 import { DeleteConfirm } from '@/components/DeleteConfirm'
+import { useHistoryWithState } from '@/router/helper'
+import { resolveRoute } from '@pages-macro'
 
 loadI18n()
 
@@ -82,7 +83,7 @@ export default function BackupTable({ cluster }: BackupTableProps) {
             setPagination({ page, pageSize: pageSize || pagination.pageSize })
         },
       }}
-      columnsStateMap={columnsSetting}
+      columnsState={columnsSetting}
       onColumnsStateChange={(m) => setColumnSetting(m)}
       rowKey="id"
       search={{
@@ -129,9 +130,9 @@ function useTableColumn() {
     'cluster-backup-table-show',
     defaultColumnsSetting
   )
+  const history = useHistoryWithState()
 
   const deleteBackup = useDeleteClusterBackup()
-  const restoreBackup = useRestoreClusterBackup()
   const queryClient = useQueryClient()
   const deleteAction = useCallback(
     (clusterId, backupId) =>
@@ -159,27 +160,14 @@ function useTableColumn() {
   )
 
   const restoreAction = useCallback(
-    (clusterId, backupId) =>
-      deleteBackup.mutateAsync(
-        { backupId, clusterId },
-        {
-          onSuccess(data) {
-            message
-              .success(t('restore.success', { msg: data.data.data }))
-              .then()
-          },
-          onError(e: any) {
-            message
-              .error(
-                t('restore.fail', {
-                  msg: errToMsg(e),
-                })
-              )
-              .then()
-          },
-        }
-      ),
-    [queryClient, restoreBackup.mutateAsync]
+    (clusterId: string, backupId: number) => {
+      history.push({
+        pathname: `${resolveRoute('../../new')}`,
+        search: `?clusterId=${clusterId}&backupId=${backupId}`,
+        state: { from: resolveRoute('.', clusterId) },
+      })
+    },
+    [history]
   )
 
   const columns = useMemo(
@@ -189,7 +177,9 @@ function useTableColumn() {
 
   return {
     columns,
-    columnsSetting,
+    columnsSetting: {
+      value: columnsSetting,
+    },
     setColumnSetting,
   }
 }

@@ -508,26 +508,26 @@
         }
       }
     },
-    "/clusters/recover": {
+    "/clusters/restore": {
       "post": {
         "security": [
           {
             "ApiKeyAuth": []
           }
         ],
-        "description": "recover a new cluster by backup record",
+        "description": "restore a new cluster by backup record",
         "consumes": ["application/json"],
         "produces": ["application/json"],
         "tags": ["cluster"],
-        "summary": "recover a new cluster by backup record",
+        "summary": "restore a new cluster by backup record",
         "parameters": [
           {
-            "description": "recover request",
+            "description": "restore request",
             "name": "request",
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/clusterapi.RecoverReq"
+              "$ref": "#/definitions/clusterapi.RestoreReq"
             }
           }
         ],
@@ -2001,6 +2001,9 @@
             "type": "integer"
           }
         },
+        "recoverInfo": {
+          "$ref": "#/definitions/clusterapi.RecoverInfo"
+        },
         "statusCode": {
           "type": "string"
         },
@@ -2149,6 +2152,9 @@
         "inProcessFlowId": {
           "type": "integer"
         },
+        "recoverInfo": {
+          "$ref": "#/definitions/clusterapi.RecoverInfo"
+        },
         "statusCode": {
           "type": "string"
         },
@@ -2189,6 +2195,9 @@
           "items": {
             "$ref": "#/definitions/clusterapi.ClusterNodeDemand"
           }
+        },
+        "recoverInfo": {
+          "$ref": "#/definitions/clusterapi.RecoverInfo"
         },
         "tags": {
           "type": "array",
@@ -2307,6 +2316,9 @@
             "type": "integer"
           }
         },
+        "recoverInfo": {
+          "$ref": "#/definitions/clusterapi.RecoverInfo"
+        },
         "statusCode": {
           "type": "string"
         },
@@ -2350,7 +2362,18 @@
         }
       }
     },
-    "clusterapi.RecoverReq": {
+    "clusterapi.RecoverInfo": {
+      "type": "object",
+      "properties": {
+        "backupRecordId": {
+          "type": "integer"
+        },
+        "sourceClusterId": {
+          "type": "string"
+        }
+      }
+    },
+    "clusterapi.RestoreReq": {
       "type": "object",
       "properties": {
         "clusterName": {
@@ -2370,6 +2393,9 @@
           "items": {
             "$ref": "#/definitions/clusterapi.ClusterNodeDemand"
           }
+        },
+        "recoverInfo": {
+          "$ref": "#/definitions/clusterapi.RecoverInfo"
         },
         "tags": {
           "type": "array",

@@ -57,7 +57,7 @@ export default function ClusterTable() {
             setPagination({ page, pageSize: pageSize || pagination.pageSize })
         },
       }}
-      columnsStateMap={columnsSetting}
+      columnsState={columnsSetting}
       onColumnsStateChange={setColumnSetting}
       rowKey="clusterId"
       search={{
@@ -120,7 +120,9 @@ function useTableColumn() {
   return {
     columns,
     isKnowledgeLoading: isLoading,
-    columnsSetting,
+    columnsSetting: {
+      value: columnsSetting,
+    },
     setColumnSetting,
   }
 }

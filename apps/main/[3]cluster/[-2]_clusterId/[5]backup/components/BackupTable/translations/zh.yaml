@@ -3,9 +3,7 @@ delete:
   success: 删除备份成功
   fail: '删除备份失败: {{ msg }}'
 restore:
-  confirm: 确认还原该备份吗?
-  success: 还原备份成功
-  fail: '还原备份失败: {{ msg }}'
+  confirm: 确认使用该备份恢复集群吗?
 enum:
   type:
     full: 全量
