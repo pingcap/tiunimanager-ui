@@ -112,6 +112,68 @@ export function useUpdateClusterParams() {
 }
 
 /**
+ * Cluster Logs
+ */
+
+export const CACHE_CLUSTER_LOGS = 'cluster-logs'
+
+export type UseQueryClusterLogsParams = {
+  clusterId: string
+  endTime?: string
+  page?: number
+  ip?: string
+  level?: string
+  message?: string
+  module?: string
+  pageSize?: number
+  startTime?: string
+}
+
+export function useQueryClusterLogs(
+  query: UseQueryClusterLogsParams,
+  options?: PartialUseQueryOptions
+) {
+  const {
+    clusterId,
+    startTime,
+    endTime,
+    page,
+    ip,
+    pageSize,
+    message,
+    module,
+    level,
+  } = query
+  return useQuery(
+    [
+      CACHE_CLUSTER_LOGS,
+      clusterId,
+      startTime,
+      endTime,
+      level,
+      ip,
+      page,
+      pageSize,
+      message,
+      module,
+    ],
+    () =>
+      APIS.Logs.logsTidbClusterIdGet(
+        clusterId,
+        endTime,
+        ip,
+        level,
+        message,
+        module,
+        page,
+        pageSize,
+        startTime
+      ),
+    options
+  )
+}
+
+/**
  * Cluster Backups
  */
 

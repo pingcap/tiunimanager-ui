@@ -2,6 +2,7 @@ name: Details
 pages:
   profile: Profile
   perf: Performance
+  logs: Logs
   monitor: Monitor
   alert: Alert
   params: Params

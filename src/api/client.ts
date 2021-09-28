@@ -8,6 +8,7 @@ import {
   ClusterParamsApi,
   Configuration,
   KnowledgeApi,
+  LogsApi,
   PlatformApi,
   ResourceApi,
   TaskApi,
@@ -58,6 +59,7 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
     ),
     Knowledge: new KnowledgeApi(configuration, undefined, axiosInstance),
     Task: new TaskApi(configuration, undefined, axiosInstance),
+    Logs: new LogsApi(configuration, undefined, axiosInstance),
   })
 }
 

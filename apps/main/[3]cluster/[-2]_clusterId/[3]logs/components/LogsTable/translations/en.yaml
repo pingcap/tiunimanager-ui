@@ -1,0 +1,9 @@
+fields:
+  time: Time
+  component: Component
+  level: Level
+  message: Message
+  ip: IP
+  source: Source
+  startTime: Start Time
+  endTime: End Time

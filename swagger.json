@@ -1,4 +1,5 @@
 {
+  "schemes": [],
   "swagger": "2.0",
   "info": {
     "description": "TiEM UI API",
@@ -1329,12 +1330,6 @@
             "in": "query"
           },
           {
-            "type": "integer",
-            "example": 0,
-            "name": "from",
-            "in": "query"
-          },
-          {
             "type": "string",
             "example": "127.0.0.1",
             "name": "ip",
@@ -1360,8 +1355,14 @@
           },
           {
             "type": "integer",
+            "example": 1,
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "integer",
             "example": 10,
-            "name": "size",
+            "name": "pageSize",
             "in": "query"
           },
           {

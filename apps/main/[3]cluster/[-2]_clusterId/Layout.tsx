@@ -21,6 +21,7 @@ const Layout: FC = ({ children }) => {
     () => [
       { key: resolveRoute('.', clusterId), tab: t('pages.profile') },
       { key: resolveRoute('perf', clusterId), tab: t('pages.perf') },
+      { key: resolveRoute('logs', clusterId), tab: t('pages.logs') },
       { key: resolveRoute('monitor', clusterId), tab: t('pages.monitor') },
       { key: resolveRoute('alert', clusterId), tab: t('pages.alert') },
       { key: resolveRoute('params', clusterId), tab: t('pages.params') },

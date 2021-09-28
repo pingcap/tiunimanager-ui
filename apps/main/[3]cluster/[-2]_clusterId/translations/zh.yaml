@@ -2,6 +2,7 @@ name: 集群详情
 pages:
   profile: 基本信息
   perf: 性能分析
+  logs: 日志管理
   monitor: 集群监控
   alert: 告警管理
   params: 参数管理
