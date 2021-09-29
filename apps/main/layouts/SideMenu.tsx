@@ -17,6 +17,7 @@ import useToggle from '@hooks/useToggle'
 import { useAuthState } from '@store/auth'
 import { doUserLogout } from '@/api/platform'
 import { loadI18n, useI18n } from '@i18n-macro'
+import { Logo } from '@/components/Logo'
 
 loadI18n()
 
@@ -71,8 +72,7 @@ const SideMenu: FC<SideMenuProps> = ({
       collapsed={collapsed}
       trigger={null}
     >
-      {/* TODO: Logo */}
-      <div className={styles.logo} />
+      <Logo className={styles.logo} logoWidth={140} />
       <Menu
         theme="light"
         mode="inline"

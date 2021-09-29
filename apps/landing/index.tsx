@@ -10,6 +10,7 @@ import LanguageDropdown from '@/components/LanguageDropdown'
 import { ControllerCommonResult, UserapiUserIdentity } from '#/api'
 import { doUserLogin } from '@/api/platform'
 import IntlForm from '@/components/IntlForm'
+import { Logo } from '@/components/Logo'
 
 export default function Login() {
   const { t } = useI18n()
@@ -48,10 +49,7 @@ export default function Login() {
           layout="vertical"
           form={refForm}
         >
-          {/*<Logo className={styles.logo} />*/}
-          {/*<Form.Item>*/}
-          {/*  <h2>{t('form.title')}</h2>*/}
-          {/*</Form.Item>*/}
+          <Logo size="common" className={styles.logo} logoWidth={200} />
           <Form.Item name="username" rules={[{ required: true }]}>
             <Input
               prefix={<UserOutlined />}

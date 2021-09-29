@@ -1,8 +1,8 @@
 .logo {
-  height: 32px;
+  height: 60px;
   margin: 16px;
-  // TODO: use real logo png.
-  background: rgb(121 113 113 / 20%);
+  text-align: center;
+  overflow: hidden;
 }
 
 .actions {
@@ -35,7 +35,11 @@
 
 .menu {
   :global(.ant-menu-item-icon) {
-    font-size: 18px;
+    font-size: 20px !important;
+  }
+
+  &:global(.ant-menu-inline-collapsed) > :global(.ant-menu-item) {
+    padding: 0 calc(50% - 20px / 2) !important;
   }
 }
 
