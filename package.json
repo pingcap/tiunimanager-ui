@@ -3,12 +3,13 @@
   "scripts": {
     "dev": "vite",
     "dev:mock": "cross-env VITE_MOCK=1 vite",
+    "dev:wdyr": "cross-env VITE_WDYR=1 vite",
     "dev:mock:wdyr": "cross-env VITE_MOCK=1 VITE_WDYR=1 vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
     "lint": "eslint . --cache",
     "prepare": "is-ci || husky install",
-    "gen:api": "yarn openapi-generator-cli generate"
+    "api:gen": "yarn openapi-generator-cli generate"
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
@@ -52,16 +53,14 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.24.0",
     "faker": "^5.5.3",
-    "fast-glob": "^3.2.7",
     "husky": "^7.0.1",
     "is-ci": "^3.0.0",
-    "js-yaml": "^4.1.0",
     "less": "^4.1.1",
     "lint-staged": "^11.0.1",
     "msw": "^0.32.0",
     "prettier": "^2.3.2",
+    "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-yamlx": "^0.0.1",
-    "shelljs": "^0.8.4",
     "typescript": "^4.3.2",
     "vite": "^2.4.2",
     "vite-plugin-html": "^2.0.7",

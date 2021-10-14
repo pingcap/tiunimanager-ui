@@ -12,6 +12,7 @@ import {
 } from '@ulab/mvp'
 import { LANGUAGE_IDS } from './src/i18n'
 import { vitePluginMacro } from 'vite-plugin-macro'
+import pluginDel from 'rollup-plugin-delete'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -49,7 +50,9 @@ export default defineConfig(({ mode }) => {
         ],
       }),
       pluginYaml(),
-      vitePluginMacro()
+      vitePluginMacro({
+        typesPath: './types/macros.d.ts',
+      })
         .use([
           provideI18n({
             languageWhitelist: new Set(LANGUAGE_IDS),
@@ -60,6 +63,10 @@ export default defineConfig(({ mode }) => {
           provideComponents(),
         ])
         .toPlugin(),
+      pluginDel({
+        targets: 'dist/mock*',
+        hook: 'generateBundle',
+      }),
     ],
     css: {
       modules: {

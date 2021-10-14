@@ -1,0 +1,7 @@
+patterns:
+  - glob: apps/**/translations/*.yaml
+    path: (apps/.+?)/translations/
+    lang: ([^/]+?)\.ya?ml$
+languages:
+  zh: Chinese
+  en: English
