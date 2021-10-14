@@ -21,8 +21,10 @@ import { useQueryClient } from 'react-query'
 import Header from '@/components/Header'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { errToMsg } from '@/utils/error'
-import { ImportPanel } from '@apps/main/[3]cluster/[-2]_clusterId/components/ImportPanel'
-import { ExportPanel } from '../ExportPanel'
+import {
+  ImportPanel,
+  ExportPanel,
+} from '@apps/main/[3]cluster/[-2]_clusterId/components/TransportPanel'
 import { DeleteConfirm } from '@/components/DeleteConfirm'
 
 loadI18n()
