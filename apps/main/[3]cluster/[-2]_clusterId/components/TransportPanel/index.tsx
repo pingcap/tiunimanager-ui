@@ -7,6 +7,7 @@ import { loadI18n, useI18n } from '@i18n-macro'
 import { CodeInput } from '@/components/CodeEditor'
 import { DatabaseapiDataExportReq, DatabaseapiDataImportReq } from '#/api'
 import { useStateWithDefault } from '@hooks/useStateWithDefault'
+import { TFunction } from 'react-i18next'
 
 loadI18n()
 
@@ -24,7 +25,11 @@ export function ExportPanel({
   const [form] = Form.useForm()
   const exportCluster = useExportCluster()
   const { t, i18n } = useI18n()
-  const storageForm = useStorageForm()
+  const storageForm = useStorageForm({
+    mode: 'export',
+    t,
+    lang: i18n.language,
+  })
   const [fileType, setFileType, resetFileType] = useStateWithDefault<
     'sql' | 'csv'
   >('csv')
@@ -114,7 +119,7 @@ export function ExportPanel({
           >
             <Radio value="none">{t('enum.filterType.none')}</Radio>
             <Radio value="db">{t('enum.filterType.db')}</Radio>
-            <Radio value="sql" disabled={filterType === 'sql'}>
+            <Radio value="sql" disabled={fileType === 'sql'}>
               {t('enum.filterType.sql')}
             </Radio>
           </Radio.Group>
@@ -201,7 +206,11 @@ export function ImportPanel({
   const [form] = Form.useForm()
   const importCluster = useImportCluster()
   const { t, i18n } = useI18n()
-  const storageForm = useStorageForm()
+  const storageForm = useStorageForm({
+    mode: 'import',
+    t,
+    lang: i18n.language,
+  })
   const onClose = () => {
     storageForm.reset()
     close?.()
@@ -296,8 +305,13 @@ export function ImportPanel({
   )
 }
 
-function useStorageForm() {
-  const { t, i18n } = useI18n()
+type StorageFormProps = {
+  t: TFunction<''>
+  lang: string
+  mode: 'import' | 'export'
+}
+
+function useStorageForm({ t, lang, mode }: StorageFormProps) {
   const [storageType, setStorageType, resetStorageType] = useStateWithDefault<
     'nfs' | 's3'
   >('s3')
@@ -338,21 +352,31 @@ function useStorageForm() {
         >
           <Input addonBefore={httpProtocolSelector} />
         </Form.Item>
-        <Form.Item label={t('form.s3.bucket')}>
-          <Form.Item name="bucketUrl" rules={[{ required: true }]} noStyle>
-            <Input
-              placeholder={t('form.s3.bucketUrl')}
-              addonBefore="s3://"
-              style={{ width: '70%' }}
-            />
+        {mode === 'export' ? (
+          <Form.Item label={t('form.s3.bucket')}>
+            <Form.Item name="bucketUrl" rules={[{ required: true }]} noStyle>
+              <Input
+                placeholder={t('form.s3.bucketUrl')}
+                addonBefore="s3://"
+                style={{ width: '70%' }}
+              />
+            </Form.Item>
+            <Form.Item name="bucketRegion" noStyle>
+              <Input
+                placeholder={t('form.s3.bucketRegion')}
+                style={{ width: '30%' }}
+              />
+            </Form.Item>
           </Form.Item>
-          <Form.Item name="bucketRegion" noStyle>
-            <Input
-              placeholder={t('form.s3.bucketRegion')}
-              style={{ width: '30%' }}
-            />
+        ) : (
+          <Form.Item
+            name="bucketUrl"
+            label={t('form.s3.bucket')}
+            rules={[{ required: true }]}
+          >
+            <Input addonBefore="s3://" />
           </Form.Item>
-        </Form.Item>
+        )}
 
         <Form.Item
           name="accessKey"
@@ -396,7 +420,7 @@ function useStorageForm() {
         {storageType === 's3' ? s3Options : localOptions}
       </>
     )
-  }, [storageType, s3Protocol, i18n.language])
+  }, [storageType, s3Protocol, lang])
   return {
     form,
     reset,
