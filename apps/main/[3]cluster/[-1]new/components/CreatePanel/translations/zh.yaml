@@ -1,12 +1,3 @@
-create:
+message:
   success: '集群 {{ msg }} 创建成功'
   fail: '集群创建失败: {{ msg }}'
-restore:
-  title: 源配置
-  fields:
-    clusterId: 源集群 ID
-    backupId: 源备份 ID
-  tips:
-    not-editable: 这项配置无法手动修改
-  success: '恢复备份 {{ msg }} 成功'
-  fail: '恢复备份失败: {{ msg }}'

@@ -6,18 +6,14 @@ import {
   RouteProps,
   Switch,
 } from 'react-router-dom'
+import { Location } from 'history'
 import { ComponentType, ElementType, Suspense } from 'react'
 import useProgress from '@hooks/useProgress'
 import { IRoute } from '@pages-macro'
 import { IPageMeta } from '@/model/page'
 import { Role } from '@/model/role'
 import { useAuthState } from '@store/auth'
-import {
-  LocationWithState,
-  Redirector,
-  RouteState,
-  useLocationWithState,
-} from '@/router/helper'
+import { Redirector, RouteState, useLocationWithState } from '@/router/helper'
 
 const Router: ComponentType = import.meta.env.DEV ? HashRouter : BrowserRouter
 
@@ -122,7 +118,7 @@ function genRouteProp(
   }
 }
 
-function useSessionLocation(): [string, LocationWithState] {
+function useSessionLocation(): [string, Location<RouteState>] {
   return [useSession(), useLocationWithState()]
 }
 
@@ -145,7 +141,7 @@ function checkRole(role: Role[], guard: RoleGuard, session: string) {
 function checkRedirect(
   redirect: Redirector,
   session: string,
-  location: LocationWithState
+  location: Location<RouteState>
 ) {
   const res = redirect(session, location)
   if (res)

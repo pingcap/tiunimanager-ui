@@ -34,7 +34,9 @@ footer:
   reset:
     title: Reset
     confirm: Are you sure to reset the form?
-  create: Create
+  submit:
+    title: Submit
+    confirm: Are you sure to submit the form?
 create:
   validation:
     miss: 'The {{ name }} node cannot be missing！'
