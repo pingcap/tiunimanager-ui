@@ -59,7 +59,7 @@ export function ExportPanel({
         {
           onSuccess() {
             message.success(t('export.message.success'))
-            close()
+            onClose()
           },
           onError(e: any) {
             message.error(t('export.message.fail', { msg: errToMsg(e) }))
@@ -229,7 +229,7 @@ export function ImportPanel({
         {
           onSuccess() {
             message.success(t('import.message.success'))
-            close()
+            onClose()
           },
           onError(e: any) {
             message.error(t('import.message.fail', { msg: errToMsg(e) }))
