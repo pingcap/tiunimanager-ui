@@ -1,12 +1,3 @@
-create:
+message:
   success: 'Create cluster {{ msg }} successfully'
-  fail: 'Fail: {{ msg }}'
-restore:
-  title: Restore Source
-  fields:
-    clusterId: Source Cluster ID
-    backupId: Source Backup ID
-  tips:
-    not-editable: You can not change this manually.
-  success: 'Restore backup {{ msg }} successfully'
   fail: 'Fail: {{ msg }}'

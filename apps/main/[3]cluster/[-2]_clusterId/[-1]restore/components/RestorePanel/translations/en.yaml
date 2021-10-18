@@ -1,0 +1,12 @@
+restore-info:
+  title: Restore Source
+  fields:
+    clusterId: Cluster ID
+    clusterName: Cluster Name
+    backupId: Backup ID
+    backupPath: Backup Path
+  tips:
+    not-editable: You can not change this manually.
+message:
+  success: 'Restore backup {{ msg }} successfully'
+  fail: 'Fail: {{ msg }}'

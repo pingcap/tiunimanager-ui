@@ -1,0 +1,12 @@
+restore-info:
+  title: 源配置
+  fields:
+    clusterId: 源集群 ID
+    clusterName: 源集群名
+    backupId: 源备份 ID
+    backupPath: 源备份路径
+  tips:
+    not-editable: 这项配置无法手动修改
+message:
+  success: '恢复备份 {{ msg }} 成功'
+  fail: '恢复备份失败: {{ msg }}'
