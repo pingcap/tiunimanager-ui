@@ -591,12 +591,9 @@ export function CreateClusterSubmitter({
       <IntlPopConfirm title={t('footer.reset.confirm')} onConfirm={onReset}>
         <Button size="large">{t('footer.reset.title')}</Button>
       </IntlPopConfirm>
-      <IntlPopConfirm
-        title="An overview screen has not been completed."
-        onConfirm={onConfirm}
-      >
+      <IntlPopConfirm title={t('footer.submit.confirm')} onConfirm={onConfirm}>
         <Button size="large" type="primary">
-          {t('footer.create')}
+          {t('footer.submit')}
         </Button>
       </IntlPopConfirm>
     </div>

@@ -22,8 +22,8 @@ import { TFunction } from 'react-i18next'
 import { getTimestamp } from '@/utils/time'
 import { usePagination } from '@hooks/usePagination'
 import { DeleteConfirm } from '@/components/DeleteConfirm'
-import { useHistoryWithState } from '@/router/helper'
 import { resolveRoute } from '@pages-macro'
+import { useHistory } from 'react-router-dom'
 
 loadI18n()
 
@@ -54,7 +54,9 @@ export default function BackupTable({ cluster }: BackupTableProps) {
     setFilter,
   } = useFetchBackupData(cluster.clusterId!)
 
-  const { columns, columnsSetting, setColumnSetting } = useTableColumn()
+  const { columns, columnsSetting, setColumnSetting } = useTableColumn({
+    clusterId: cluster.clusterId!,
+  })
 
   return (
     <HeavyTable
@@ -124,18 +126,18 @@ function useFetchBackupData(clusterId: string) {
   }
 }
 
-function useTableColumn() {
+function useTableColumn({ clusterId }: { clusterId: string }) {
   const { t, i18n } = useI18n()
   const [columnsSetting, setColumnSetting] = useLocalStorage(
     'cluster-backup-table-show',
     defaultColumnsSetting
   )
-  const history = useHistoryWithState()
+  const history = useHistory()
 
   const deleteBackup = useDeleteClusterBackup()
   const queryClient = useQueryClient()
   const deleteAction = useCallback(
-    (clusterId, backupId) =>
+    (backupId) =>
       deleteBackup.mutateAsync(
         { backupId, clusterId },
         {
@@ -156,18 +158,17 @@ function useTableColumn() {
           },
         }
       ),
-    [queryClient, deleteBackup.mutateAsync]
+    [queryClient, deleteBackup.mutateAsync, clusterId]
   )
 
   const restoreAction = useCallback(
-    (clusterId: string, backupId: number) => {
+    (backup: InstanceapiBackupRecord) => {
       history.push({
-        pathname: `${resolveRoute('../../new')}`,
-        search: `?clusterId=${clusterId}&backupId=${backupId}`,
-        state: { from: resolveRoute('.', clusterId) },
+        pathname: resolveRoute('../restore', clusterId),
+        state: { backup },
       })
     },
-    [history]
+    [history, clusterId]
   )
 
   const columns = useMemo(
@@ -186,8 +187,8 @@ function useTableColumn() {
 
 function getColumns(
   t: TFunction<''>,
-  restoreAction: (clusterId: string, backupId: number) => any,
-  deleteAction: (clusterId: string, backupId: number) => any
+  restoreAction: (backup: InstanceapiBackupRecord) => any,
+  deleteAction: (backupId: number) => any
 ): ProColumns<InstanceapiBackupRecord>[] {
   return [
     {
@@ -272,7 +273,7 @@ function getColumns(
             title={t('restore.confirm')}
             icon={<QuestionCircleOutlined />}
             onConfirm={async () => {
-              restoreAction(record.clusterId!, record.id!)
+              restoreAction(record)
             }}
           >
             <a>{t('actions.restore')}</a>
@@ -285,7 +286,7 @@ function getColumns(
               expect: 'delete',
             }}
             onConfirm={async (close) => {
-              await deleteAction(record.clusterId!, record.id!)
+              await deleteAction(record.id!)
               close()
             }}
           >

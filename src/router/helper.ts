@@ -1,34 +1,33 @@
 import { History, Location } from 'history'
 import { useHistory, useLocation } from 'react-router-dom'
 
-export type RouteState = {
+export type IntrinsicRouteState = {
   from: string
 }
 
-export type HistoryWithState = History<RouteState>
-export type LocationWithState = Location<RouteState>
+export type RouteState<S = {}> = S & IntrinsicRouteState
+
 export type Redirector = (
   session: string,
-  location: LocationWithState
+  location: Location<RouteState>
 ) => string | false | null | undefined
 
-export function useHistoryWithState(
-  defaultState: RouteState = {
+export function useHistoryWithState<S extends object = {}>(
+  defaultState = {
     from: '/',
-  }
-): HistoryWithState {
-  const history = useHistory<RouteState>()
-  if (!history.location.state || !history.location.state.from)
-    history.location.state = defaultState
+  } as RouteState<S>
+): History<RouteState<S>> {
+  const history = useHistory<RouteState<S>>()
+  if (!history.location.state) history.location.state = defaultState
   return history
 }
 
-export function useLocationWithState(
-  defaultState: RouteState = {
+export function useLocationWithState<S extends object = {}>(
+  defaultState = {
     from: '/',
-  }
-): LocationWithState {
-  const location = useLocation<RouteState>()
-  if (!location.state || !location.state.from) location.state = defaultState
+  } as RouteState<S>
+): Location<RouteState<S>> {
+  const location = useLocation<RouteState<S>>()
+  if (!location.state) location.state = defaultState
   return location
 }

@@ -7,6 +7,7 @@ import { resolveRoute } from '@pages-macro'
 import { useQueryClusterDetail } from '@/api/cluster'
 import HeaderBar from './components/HeaderBar'
 import { useI18n } from '@i18n-macro'
+import { trimTrailingSlash } from '@/utils/path'
 
 const Layout: FC = ({ children }) => {
   const { clusterId } = useParams<{ clusterId: string }>()
@@ -19,7 +20,7 @@ const Layout: FC = ({ children }) => {
 
   const menuItems: CardTabListType[] = useMemo(
     () => [
-      { key: resolveRoute('.', clusterId), tab: t('pages.profile') },
+      { key: resolveRoute('profile', clusterId), tab: t('pages.profile') },
       { key: resolveRoute('perf', clusterId), tab: t('pages.perf') },
       { key: resolveRoute('logs', clusterId), tab: t('pages.logs') },
       { key: resolveRoute('monitor', clusterId), tab: t('pages.monitor') },
@@ -30,8 +31,9 @@ const Layout: FC = ({ children }) => {
     [clusterId, i18n.language]
   )
 
-  const currentItem = useMemo(() => {
-    return menuItems.find((i) => i.key === history.location.pathname)?.key
+  const currentTab = useMemo(() => {
+    const currentPath = trimTrailingSlash(history.location.pathname)
+    return menuItems.find((i) => i.key === currentPath)?.key
   }, [history.location.pathname])
 
   return (
@@ -42,18 +44,24 @@ const Layout: FC = ({ children }) => {
         <>{JSON.stringify(error)}</>
       ) : (
         <ClusterProvider value={data!.data.data!}>
-          <HeaderBar />
-          <Card
-            style={{ width: '100%' }}
-            tabList={menuItems}
-            activeTabKey={currentItem}
-            onTabChange={(key) => {
-              history.push(key)
-            }}
-            bordered={false}
-          >
-            {children}
-          </Card>
+          {currentTab ? (
+            <>
+              <HeaderBar />
+              <Card
+                style={{ width: '100%' }}
+                tabList={menuItems}
+                activeTabKey={currentTab}
+                onTabChange={(key) => {
+                  history.push(key)
+                }}
+                bordered={false}
+              >
+                {children}
+              </Card>
+            </>
+          ) : (
+            children
+          )}
         </ClusterProvider>
       )}
     </div>

@@ -33,7 +33,9 @@ footer:
   reset:
     title: 重置
     confirm: 确认重置表单吗?
-  create: 创建
+  submit:
+    title: 提交
+    confirm: 确认提交表单吗?
 create:
   validation:
     miss: '不能缺失 {{ name }} 节点！'
