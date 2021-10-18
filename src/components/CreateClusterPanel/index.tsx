@@ -157,21 +157,38 @@ export interface CreateClusterFormProps {
 
   additionalOptions?: ReactNode
   formClassName?: string
+
+  onSubmit: (data: ClusterapiCreateReq) => void
+  footerClassName?: string
 }
 
 export function CreateClusterForm({
   form,
   additionalOptions,
   formClassName,
+  onSubmit,
+  footerClassName,
 }: CreateClusterFormProps) {
   const knowledgeMap = useKnowledgeMap()
 
-  useEffect(() => {
+  const setDefaultTypeAndVersion = () => {
     const defaultClusterType = knowledgeMap.types[0]?.code
     if (defaultClusterType) {
       setClusterType(defaultClusterType)
-      setClusterVersion(knowledgeMap.map[defaultClusterType].versions[0].code)
+      const defaultVersion =
+        knowledgeMap.map[defaultClusterType].versions[0].code
+      setClusterVersion(defaultVersion)
+      form.setFields([
+        {
+          name: 'clusterVersion',
+          value: defaultVersion,
+        },
+      ])
     }
+  }
+
+  useEffect(() => {
+    setDefaultTypeAndVersion()
   }, [knowledgeMap])
 
   const availableStocksMap = useAvailableStocks()
@@ -241,28 +258,41 @@ export function CreateClusterForm({
     ]
   )
 
+  const onReset = useCallback(() => {
+    form.resetFields()
+    setDefaultTypeAndVersion()
+  }, [form])
+
   return (
-    <Form
-      layout="horizontal"
-      hideRequiredMark
-      labelCol={{
-        span: 5,
-      }}
-      colon={false}
-      form={form}
-      name="create"
-      className={`${styles.form} ${formClassName || ''}`}
-    >
-      <Row>
-        <Col span={10}>
-          {basicOptions}
-          {additionalOptions}
-        </Col>
-        <Col span={11} offset={2}>
-          {nodeOptions}
-        </Col>
-      </Row>
-    </Form>
+    <>
+      <Form
+        layout="horizontal"
+        hideRequiredMark
+        labelCol={{
+          span: 5,
+        }}
+        colon={false}
+        form={form}
+        name="create"
+        className={`${styles.form} ${formClassName || ''}`}
+      >
+        <Row>
+          <Col span={10}>
+            {basicOptions}
+            {additionalOptions}
+          </Col>
+          <Col span={11} offset={2}>
+            {nodeOptions}
+          </Col>
+        </Row>
+      </Form>
+      <CreateClusterSubmitter
+        onSubmit={onSubmit}
+        onReset={onReset}
+        form={form}
+        wrapperClassName={footerClassName}
+      />
+    </>
   )
 }
 
@@ -503,16 +533,16 @@ function NodeOptions({
   )
 }
 
-export interface CreateClusterSubmitterProps {
+interface CreateClusterSubmitterProps {
   form: FormInstance
-  onCreate: (data: ClusterapiCreateReq) => void
+  onSubmit: (data: ClusterapiCreateReq) => void
   onReset: () => void
   wrapperClassName?: string
 }
 
-export function CreateClusterSubmitter({
+function CreateClusterSubmitter({
   form,
-  onCreate,
+  onSubmit,
   onReset,
   wrapperClassName,
   children,
@@ -520,7 +550,7 @@ export function CreateClusterSubmitter({
   const { t, i18n } = useI18n()
   const knowledgeMap = useKnowledgeMap()
 
-  const handleCreate = useCallback(
+  const handleSubmit = useCallback(
     (value: ClusterapiCreateReq) => {
       {
         // normalize
@@ -571,7 +601,7 @@ export function CreateClusterSubmitter({
           }
         }
       }
-      onCreate(value)
+      onSubmit(value)
     },
     [knowledgeMap, i18n.language]
   )
@@ -579,7 +609,7 @@ export function CreateClusterSubmitter({
   const onConfirm = async () => {
     try {
       const fields = await form.validateFields()
-      await handleCreate(fields)
+      await handleSubmit(fields)
     } catch (e) {
       // TODO: show err message
     }
@@ -593,7 +623,7 @@ export function CreateClusterSubmitter({
       </IntlPopConfirm>
       <IntlPopConfirm title={t('footer.submit.confirm')} onConfirm={onConfirm}>
         <Button size="large" type="primary">
-          {t('footer.submit')}
+          {t('footer.submit.title')}
         </Button>
       </IntlPopConfirm>
     </div>

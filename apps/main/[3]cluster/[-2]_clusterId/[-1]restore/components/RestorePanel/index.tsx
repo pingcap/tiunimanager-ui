@@ -11,10 +11,7 @@ import { useRestoreClusterBackup } from '@/api/cluster'
 import { useQueryClient } from 'react-query'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { errToMsg } from '@/utils/error'
-import {
-  CreateClusterForm,
-  CreateClusterSubmitter,
-} from '@/components/CreateClusterPanel'
+import { CreateClusterForm } from '@/components/CreateClusterPanel'
 
 loadI18n()
 
@@ -90,22 +87,14 @@ export function RestorePanel({ back, cluster, backup }: CreatePanelProps) {
     )
   }, [cluster, backup, i18n.language])
 
-  const footer = useMemo(
-    () => (
-      <CreateClusterSubmitter
-        form={form}
-        onReset={() => form.resetFields()}
-        onCreate={handleSubmit}
-        wrapperClassName={styles.footer}
-      />
-    ),
-    [form, handleSubmit, i18n.language]
-  )
-
   return (
     <Layout className={styles.panel}>
-      <CreateClusterForm form={form} additionalOptions={restoreInfo} />
-      {footer}
+      <CreateClusterForm
+        form={form}
+        additionalOptions={restoreInfo}
+        onSubmit={handleSubmit}
+        footerClassName={styles.footer}
+      />
     </Layout>
   )
 }
