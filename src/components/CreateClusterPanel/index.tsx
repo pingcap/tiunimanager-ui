@@ -171,30 +171,33 @@ export function CreateClusterForm({
 }: CreateClusterFormProps) {
   const knowledgeMap = useKnowledgeMap()
 
-  const setDefaultTypeAndVersion = () => {
-    const defaultClusterType = knowledgeMap.types[0]?.code
-    if (defaultClusterType) {
-      setClusterType(defaultClusterType)
-      const defaultVersion =
-        knowledgeMap.map[defaultClusterType].versions[0].code
-      setClusterVersion(defaultVersion)
-      form.setFields([
-        {
-          name: 'clusterVersion',
-          value: defaultVersion,
-        },
-      ])
-    }
-  }
-
-  useEffect(() => {
-    setDefaultTypeAndVersion()
-  }, [knowledgeMap])
-
   const availableStocksMap = useAvailableStocks()
 
   const [clusterType, setClusterType] = useState<string>()
   const [clusterVersion, setClusterVersion] = useState<string>()
+
+  const setDefaultTypeAndVersion = useCallback(
+    (clusterType?: string) => {
+      const defaultClusterType = clusterType || knowledgeMap.types[0]?.code
+      if (defaultClusterType) {
+        setClusterType(defaultClusterType)
+        const defaultVersion =
+          knowledgeMap.map[defaultClusterType].versions[0].code
+        setClusterVersion(defaultVersion)
+        form.setFields([
+          {
+            name: 'clusterVersion',
+            value: defaultVersion,
+          },
+        ])
+      }
+    },
+    [knowledgeMap, form]
+  )
+
+  useEffect(() => {
+    setDefaultTypeAndVersion()
+  }, [setDefaultTypeAndVersion])
 
   const { t, i18n } = useI18n()
 
@@ -204,20 +207,7 @@ export function CreateClusterForm({
       !!clusterVersion && (
         <BasicOptions
           t={t}
-          onSelectType={(key) => {
-            setClusterType(key as string)
-            const defaultVersion =
-              knowledgeMap.map[key as string].versions[0].code
-            // for reset
-            setClusterVersion(defaultVersion)
-            // refresh
-            form.setFields([
-              {
-                name: 'clusterVersion',
-                value: defaultVersion,
-              },
-            ])
-          }}
+          onSelectType={setDefaultTypeAndVersion}
           onSelectVersion={(key) => setClusterVersion(key)}
           type={clusterType}
           version={clusterVersion}
@@ -261,7 +251,7 @@ export function CreateClusterForm({
   const onReset = useCallback(() => {
     form.resetFields()
     setDefaultTypeAndVersion()
-  }, [form])
+  }, [form, setDefaultTypeAndVersion])
 
   return (
     <>
