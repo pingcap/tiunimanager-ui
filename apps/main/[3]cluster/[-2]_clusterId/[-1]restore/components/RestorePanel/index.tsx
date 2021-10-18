@@ -75,7 +75,7 @@ export function RestorePanel({ back, cluster, backup }: CreatePanelProps) {
           label={t('restore-info.fields.backupId')}
           tooltip={t('restore-info.tips.not-editable')}
         >
-          <Input disabled={true} value={backup!.clusterId} />
+          <Input disabled={true} value={backup!.id} />
         </Form.Item>
         <Form.Item
           label={t('restore-info.fields.backupPath')}
