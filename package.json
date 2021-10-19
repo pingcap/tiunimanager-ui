@@ -5,7 +5,7 @@
     "dev:mock": "cross-env VITE_MOCK=1 vite",
     "dev:wdyr": "cross-env VITE_WDYR=1 vite",
     "dev:mock:wdyr": "cross-env VITE_MOCK=1 VITE_WDYR=1 vite",
-    "build": "vite build",
+    "build": "tsc && vite build",
     "serve": "vite preview",
     "lint": "eslint . --cache",
     "prepare": "is-ci || husky install",

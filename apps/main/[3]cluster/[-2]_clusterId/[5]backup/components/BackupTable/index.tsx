@@ -1,11 +1,7 @@
 import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import { useCallback, useMemo, useState } from 'react'
 import useLocalStorage from '@hooks/useLocalstorage'
-import {
-  ClusterapiClusterDisplayInfo,
-  ControllerResultWithPage,
-  InstanceapiBackupRecord,
-} from '#/api'
+import { ClusterInfo, PagedResult, ClusterBackupItem } from '@/api/model'
 import HeavyTable from '@/components/HeavyTable'
 import { message, Popconfirm } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
@@ -13,7 +9,7 @@ import {
   invalidateClusterBackups,
   useDeleteClusterBackup,
   useQueryClusterBackups,
-} from '@/api/cluster'
+} from '@/api/hooks/cluster'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { useQueryClient } from 'react-query'
 import styles from './index.module.less'
@@ -40,7 +36,7 @@ const defaultColumnsSetting: Record<string, ColumnsState> = {
 }
 
 export interface BackupTableProps {
-  cluster: ClusterapiClusterDisplayInfo
+  cluster: ClusterInfo
 }
 
 export default function BackupTable({ cluster }: BackupTableProps) {
@@ -79,7 +75,7 @@ export default function BackupTable({ cluster }: BackupTableProps) {
       pagination={{
         pageSize: pagination.pageSize,
         current: pagination.page,
-        total: (data?.data as ControllerResultWithPage)?.page?.total || 0,
+        total: (data?.data as PagedResult)?.page?.total || 0,
         onChange(page, pageSize) {
           if (!isPreviousData)
             setPagination({ page, pageSize: pageSize || pagination.pageSize })
@@ -162,7 +158,7 @@ function useTableColumn({ clusterId }: { clusterId: string }) {
   )
 
   const restoreAction = useCallback(
-    (backup: InstanceapiBackupRecord) => {
+    (backup: ClusterBackupItem) => {
       history.push({
         pathname: resolveRoute('../restore', clusterId),
         state: { backup },
@@ -187,9 +183,9 @@ function useTableColumn({ clusterId }: { clusterId: string }) {
 
 function getColumns(
   t: TFunction<''>,
-  restoreAction: (backup: InstanceapiBackupRecord) => any,
+  restoreAction: (backup: ClusterBackupItem) => any,
   deleteAction: (backupId: number) => any
-): ProColumns<InstanceapiBackupRecord>[] {
+): ProColumns<ClusterBackupItem>[] {
   return [
     {
       title: 'ID',

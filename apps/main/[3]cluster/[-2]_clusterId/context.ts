@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react'
-import { ClusterapiDetailClusterRsp } from '#/api'
+import { ResponseClusterDetail } from '@/api/model'
 
-const ClusterContext = createContext<ClusterapiDetailClusterRsp>({})
+const ClusterContext = createContext<ResponseClusterDetail>({})
 
 export const ClusterProvider = ClusterContext.Provider
 export function useClusterContext() {

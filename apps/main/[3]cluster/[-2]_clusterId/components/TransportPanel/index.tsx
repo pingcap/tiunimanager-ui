@@ -1,11 +1,11 @@
 import { Button, Drawer, Form, Input, message, Radio, Select } from 'antd'
 import styles from './index.module.less'
-import { useExportCluster, useImportCluster } from '@/api/cluster'
+import { useExportCluster, useImportCluster } from '@/api/hooks/cluster'
 import { errToMsg } from '@/utils/error'
 import { useMemo } from 'react'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { CodeInput } from '@/components/CodeEditor'
-import { DatabaseapiDataExportReq, DatabaseapiDataImportReq } from '#/api'
+import { RequestTransportExport, RequestTransportImport } from '@/api/model'
 import { useStateWithDefault } from '@hooks/useStateWithDefault'
 import { TFunction } from 'react-i18next'
 
@@ -45,7 +45,7 @@ export function ExportPanel({
 
   const formDom = useMemo(() => {
     async function onConfirm() {
-      const value = (await form.validateFields()) as DatabaseapiDataExportReq
+      const value = (await form.validateFields()) as RequestTransportExport
       storageForm.processValues(value)
       if (value.filter && Array.isArray(value.filter)) {
         value.filter = value.filter.join(';')
@@ -218,7 +218,7 @@ export function ImportPanel({
 
   const formDom = useMemo(() => {
     async function onConfirm() {
-      const value = (await form.validateFields()) as DatabaseapiDataImportReq
+      const value = (await form.validateFields()) as RequestTransportImport
       storageForm.processValues(value)
       value.clusterId = clusterId
       await importCluster.mutateAsync(
@@ -322,7 +322,7 @@ function useStorageForm({ t, lang, mode }: StorageFormProps) {
     resetStorageType()
     resetS3Protocol()
   }
-  const processValues = (value: DatabaseapiDataExportReq) => {
+  const processValues = (value: RequestTransportExport) => {
     if (value.endpointUrl) {
       if (!/^https?:\/\//.test(value.endpointUrl))
         value.endpointUrl = s3Protocol + value.endpointUrl

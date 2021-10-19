@@ -1,12 +1,11 @@
 import HeavyTable from '@/components/HeavyTable'
 import { useMemo, useState } from 'react'
 import { ColumnsState, ProColumns } from '@ant-design/pro-table'
+import { ClusterInfo, ClusterLogItem, PagedResult } from '@/api/model'
 import {
-  ClusterapiClusterDisplayInfo,
-  ControllerResultWithPage,
-  LogapiSearchTiDBLogDetail,
-} from '#/api'
-import { useQueryClusterLogs, UseQueryClusterLogsParams } from '@/api/cluster'
+  useQueryClusterLogs,
+  UseQueryClusterLogsParams,
+} from '@/api/hooks/cluster'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction } from 'react-i18next'
 import { usePagination } from '@hooks/usePagination'
@@ -17,7 +16,7 @@ import moment from 'moment'
 loadI18n()
 
 export interface LogsTableProps {
-  cluster: ClusterapiClusterDisplayInfo
+  cluster: ClusterInfo
 }
 
 export function LogsTable({ cluster }: LogsTableProps) {
@@ -47,7 +46,7 @@ export function LogsTable({ cluster }: LogsTableProps) {
       pagination={{
         pageSize: pagination.pageSize,
         current: pagination.page,
-        total: (data?.data as ControllerResultWithPage)?.page?.total || 0,
+        total: (data?.data as PagedResult)?.page?.total || 0,
         onChange(page, pageSize) {
           setPagination({ page, pageSize: pageSize || pagination.pageSize })
         },
@@ -74,7 +73,7 @@ function useTableColumns() {
 }
 
 function getColumns(t: TFunction<''>) {
-  const columns: ProColumns<LogapiSearchTiDBLogDetail>[] = [
+  const columns: ProColumns<ClusterLogItem>[] = [
     {
       title: t('fields.startTime'),
       width: 120,

@@ -1,12 +1,12 @@
 import { ProColumns } from '@ant-design/pro-table'
 import { useMemo, useState } from 'react'
-import { ControllerResultWithPage, TaskapiFlowWorkDisplayInfo } from '#/api'
+import { PagedResult, TaskWorkflowInfo } from '@/api/model'
 import HeavyTable from '@/components/HeavyTable'
 import { loadI18n, useI18n } from '@i18n-macro'
 import styles from './index.module.less'
 import { TFunction } from 'react-i18next'
 import { usePagination } from '@hooks/usePagination'
-import { useQueryTasks } from '@/api/task'
+import { useQueryTasks } from '@/api/hooks/task'
 
 loadI18n()
 
@@ -38,7 +38,7 @@ export default function TaskTable() {
       pagination={{
         pageSize: pagination.pageSize,
         current: pagination.page,
-        total: (data?.data as ControllerResultWithPage)?.page?.total || 0,
+        total: (data?.data as PagedResult)?.page?.total || 0,
         onChange(page, pageSize) {
           if (!isPreviousData)
             setPagination({ page, pageSize: pageSize || pagination.pageSize })
@@ -90,9 +90,7 @@ function useTableColumn() {
   return useMemo(() => getColumns(t), [i18n.language])
 }
 
-function getColumns(
-  t: TFunction<''>
-): ProColumns<TaskapiFlowWorkDisplayInfo>[] {
+function getColumns(t: TFunction<''>): ProColumns<TaskWorkflowInfo>[] {
   return [
     {
       title: t('fields.id'),

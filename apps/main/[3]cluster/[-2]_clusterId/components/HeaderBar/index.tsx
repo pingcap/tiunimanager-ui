@@ -15,7 +15,7 @@ import {
   invalidateClusterDetail,
   useCreateClusterBackup,
   useDeleteCluster,
-} from '@/api/cluster'
+} from '@/api/hooks/cluster'
 import { resolveRoute } from '@pages-macro'
 import { useQueryClient } from 'react-query'
 import Header from '@/components/Header'

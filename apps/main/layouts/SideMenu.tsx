@@ -15,7 +15,7 @@ import { IMenuItem } from '@pages-macro'
 import { useTranslation } from 'react-i18next'
 import useToggle from '@hooks/useToggle'
 import { useAuthState } from '@store/auth'
-import { doUserLogout } from '@/api/platform'
+import { doUserLogout } from '@/api/hooks/platform'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { Logo } from '@/components/Logo'
 

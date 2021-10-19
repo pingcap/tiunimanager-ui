@@ -1,6 +1,6 @@
 import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import HeavyTable from '@/components/HeavyTable'
-import { ControllerResultWithPage, HostapiHostInfo } from '#/api'
+import { PagedResult, HostInfo } from '@/api/model'
 import { useCallback, useMemo, useState } from 'react'
 import { message } from 'antd'
 import useLocalStorage from '@hooks/useLocalstorage'
@@ -9,7 +9,7 @@ import {
   invalidateHostsList,
   useDeleteHosts,
   useQueryHostsList,
-} from '@/api/resources'
+} from '@/api/hooks/resources'
 import { useQueryClient } from 'react-query'
 import styles from './index.module.less'
 import { loadI18n, useI18n } from '@i18n-macro'
@@ -45,7 +45,7 @@ export default function HostTable() {
       pagination={{
         pageSize: pagination.pageSize,
         current: pagination.page,
-        total: (data?.data as ControllerResultWithPage)?.page?.total || 0,
+        total: (data?.data as PagedResult)?.page?.total || 0,
         onChange(page, pageSize) {
           if (!isPreviousData)
             setPagination({ page, pageSize: pageSize || pagination.pageSize })
@@ -140,7 +140,7 @@ function useTableColumn() {
 function getHostColumns(
   t: TFunction<''>,
   deleteAction: (hostId: string) => void
-): ProColumns<HostapiHostInfo>[] {
+): ProColumns<HostInfo>[] {
   return [
     {
       title: t('columns.id'),

@@ -2,17 +2,13 @@ import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import { Fragment, useMemo, useState } from 'react'
 import styles from './index.module.less'
 import HeavyTable from '@/components/HeavyTable'
-import {
-  ClusterapiClusterDisplayInfo,
-  ControllerResultWithPage,
-  KnowledgeClusterTypeSpec,
-} from '#/api'
+import { ClusterInfo, PagedResult, KnowledgeOfClusterType } from '@/api/model'
 import { CopyIconButton } from '@/components/CopyToClipboard'
 import useLocalStorage from '@hooks/useLocalstorage'
 import { Link } from 'react-router-dom'
 import { resolveRoute } from '@pages-macro'
-import { useQueryKnowledge } from '@/api/knowledge'
-import { useQueryClustersList } from '@/api/cluster'
+import { useQueryKnowledge } from '@/api/hooks/knowledge'
+import { useQueryClustersList } from '@/api/hooks/cluster'
 import { ProSchemaValueEnumObj } from '@ant-design/pro-utils/lib/typing'
 import { TFunction } from 'react-i18next'
 import { loadI18n, useI18n } from '@i18n-macro'
@@ -51,7 +47,7 @@ export default function ClusterTable() {
       pagination={{
         pageSize: pagination.pageSize,
         current: pagination.page,
-        total: (data?.data as ControllerResultWithPage)?.page?.total || 0,
+        total: (data?.data as PagedResult)?.page?.total || 0,
         onChange(page, pageSize) {
           if (!isPreviousData)
             setPagination({ page, pageSize: pageSize || pagination.pageSize })
@@ -127,7 +123,7 @@ function useTableColumn() {
   }
 }
 
-function getClusterTypes(raw: KnowledgeClusterTypeSpec[]) {
+function getClusterTypes(raw: KnowledgeOfClusterType[]) {
   const result = {} as ProSchemaValueEnumObj
   raw.forEach(
     (r) =>
@@ -141,7 +137,7 @@ function getClusterTypes(raw: KnowledgeClusterTypeSpec[]) {
 function getColumns(
   t: TFunction<''>,
   clusterTypes: ProColumns['valueEnum']
-): ProColumns<ClusterapiClusterDisplayInfo>[] {
+): ProColumns<ClusterInfo>[] {
   return [
     {
       title: 'ID',

@@ -1,7 +1,7 @@
 import { Badge, Descriptions } from 'antd'
 import { CopyIconButton } from '@/components/CopyToClipboard'
 import { formatTimeString } from '@/utils/time'
-import { ClusterapiDetailClusterRsp } from '#/api'
+import { ResponseClusterDetail } from '@/api/model'
 import { loadI18n, useI18n } from '@i18n-macro'
 import styles from './index.module.less'
 import { TFunction } from 'react-i18next'
@@ -9,7 +9,7 @@ import { TFunction } from 'react-i18next'
 loadI18n()
 
 export type DescProps = {
-  cluster: ClusterapiDetailClusterRsp
+  cluster: ResponseClusterDetail
 }
 
 export function Desc({ cluster }: DescProps) {

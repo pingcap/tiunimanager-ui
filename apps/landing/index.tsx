@@ -7,8 +7,8 @@ import { useHistoryWithState } from '@/router/helper'
 import styles from './index.module.less'
 import { DownOutlined, KeyOutlined, UserOutlined } from '@ant-design/icons'
 import LanguageDropdown from '@/components/LanguageDropdown'
-import { ControllerCommonResult, UserapiUserIdentity } from '#/api'
-import { doUserLogin } from '@/api/platform'
+import { CommonResult, UserInfo } from '@/api/model'
+import { doUserLogin } from '@/api/hooks/platform'
 import IntlForm from '@/components/IntlForm'
 import { Logo } from '@/components/Logo'
 
@@ -100,7 +100,7 @@ export default function Login() {
 }
 
 function useLogin(
-  onSuccess: (data: UserapiUserIdentity) => void,
+  onSuccess: (data: UserInfo) => void,
   onFailure: (msg: string) => void
 ) {
   const { t } = useI18n()
@@ -125,7 +125,7 @@ function useLogin(
     } else {
       const errMsg =
         (result.type === 'AxiosError'
-          ? (result.err.response!.data as ControllerCommonResult).message
+          ? (result.err.response!.data as CommonResult).message
           : result.type === 'Error' && result.err.message) || 'unknown reason'
       setErrorMsg(
         t('message.error', {

@@ -1,5 +1,5 @@
 import { APIS } from '@/api/client'
-import { UserapiLoginInfo } from '#/api'
+import { UserLoginRequest } from '@/api/model'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 
 type DoRequestResult<T> =
@@ -26,7 +26,7 @@ export async function doRequestWithError<T>(
   }
 }
 
-export async function doUserLogin(payload: UserapiLoginInfo) {
+export async function doUserLogin(payload: UserLoginRequest) {
   return doRequestWithError(() => APIS.Platform.userLoginPost(payload))
 }
 

@@ -1,13 +1,13 @@
 import { Card, Col, Row } from 'antd'
 import { BigUsageCircle } from '@/components/UsageCircle'
-import { ClusterapiDetailClusterRsp } from '#/api'
+import { ResponseClusterDetail } from '@/api/model'
 import styles from './index.module.less'
 import { loadI18n, useI18n } from '@i18n-macro'
 
 loadI18n()
 
 export type UsageProps = {
-  cluster: ClusterapiDetailClusterRsp
+  cluster: ResponseClusterDetail
 }
 
 export function Usage({ cluster }: UsageProps) {

@@ -57,6 +57,7 @@ export default defineConfig(({ mode }) => {
           provideI18n({
             languageWhitelist: new Set(LANGUAGE_IDS),
             defaultLoadGlob: './translations/*.{yaml,yml}',
+            globalNamespaces: new Set('model'),
           }),
           provideAssets(),
           providePages(),

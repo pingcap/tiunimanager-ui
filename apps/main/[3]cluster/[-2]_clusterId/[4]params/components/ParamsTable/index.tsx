@@ -18,16 +18,12 @@ import {
   RollbackOutlined,
   SaveOutlined,
 } from '@ant-design/icons'
-import {
-  ClusterapiClusterDisplayInfo,
-  ControllerResultWithPage,
-  InstanceapiParamItem,
-} from '#/api'
+import { ClusterInfo, PagedResult, ClusterParamItem } from '@/api/model'
 import {
   invalidateClusterParams,
   useQueryClusterParams,
   useUpdateClusterParams,
-} from '@/api/cluster'
+} from '@/api/hooks/cluster'
 import IntlPopConfirm from '@/components/IntlPopConfirm'
 import { useQueryClient } from 'react-query'
 import { loadI18n, useI18n } from '@i18n-macro'
@@ -38,7 +34,7 @@ import { usePagination } from '@hooks/usePagination'
 loadI18n()
 
 export interface ParamsTableProps {
-  cluster: ClusterapiClusterDisplayInfo
+  cluster: ClusterInfo
 }
 
 const TableOptions = {
@@ -48,7 +44,7 @@ const TableOptions = {
   reload: false,
 }
 
-const getRowKey = (record: InstanceapiParamItem) => record.definition!.name!
+const getRowKey = (record: ClusterParamItem) => record.definition!.name!
 
 export function ParamsTable({ cluster }: ParamsTableProps) {
   const { t, i18n } = useI18n()
@@ -60,7 +56,7 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
     pagination,
   } = useFetchParamsData(cluster.clusterId!)
 
-  const [tableData, setTableData] = useState<InstanceapiParamItem[]>([])
+  const [tableData, setTableData] = useState<ClusterParamItem[]>([])
 
   useEffect(() => {
     !isLoading && setTableData(originalData!.data.data!)
@@ -145,8 +141,7 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
       pagination={{
         pageSize: pagination.pageSize,
         current: pagination.page,
-        total:
-          (originalData?.data as ControllerResultWithPage)?.page?.total || 0,
+        total: (originalData?.data as PagedResult)?.page?.total || 0,
         onChange(page, pageSize) {
           setPagination({ page, pageSize: pageSize || pagination.pageSize })
         },
@@ -180,7 +175,7 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
 }
 
 function getColumns(t: TFunction<''>, form: FormInstance) {
-  const columns: ProColumns<InstanceapiParamItem>[] = [
+  const columns: ProColumns<ClusterParamItem>[] = [
     {
       title: t('fields.name'),
       width: 160,
@@ -286,8 +281,8 @@ type Change = {
 }
 
 function findParamsChanges(
-  origin: InstanceapiParamItem[],
-  table: InstanceapiParamItem[]
+  origin: ClusterParamItem[],
+  table: ClusterParamItem[]
 ) {
   const changes: Change[] = []
   origin.forEach((raw, i) => {

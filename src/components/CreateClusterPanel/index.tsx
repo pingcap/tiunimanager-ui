@@ -25,15 +25,15 @@ import {
 import styles from './index.module.less'
 import { DownOutlined } from '@ant-design/icons'
 import {
-  ClusterapiCreateReq,
-  HostapiDomainResource,
-  KnowledgeClusterComponentSpec,
-  KnowledgeClusterType,
-  KnowledgeClusterTypeSpec,
-  KnowledgeClusterVersion,
-} from '#/api'
-import { useQueryKnowledge } from '@/api/knowledge'
-import { useQueryFailureDomains } from '@/api/resources'
+  RequestClusterCreate,
+  DomainResourceInfo,
+  KnowledgeOfClusterType,
+  KnowledgeOfClusterComponent,
+  ClusterType,
+  ClusterVersion,
+} from '@/api/model'
+import { useQueryKnowledge } from '@/api/hooks/knowledge'
+import { useQueryFailureDomains } from '@/api/hooks/resources'
 import { FormInstance } from '@ant-design/pro-form'
 import IntlPopConfirm from '@/components/IntlPopConfirm'
 import { loadI18n, useI18n } from '@i18n-macro'
@@ -42,12 +42,12 @@ import { TFunction } from 'react-i18next'
 loadI18n()
 
 type KnowledgeMap = {
-  types: KnowledgeClusterType[]
+  types: ClusterType[]
   map: {
     [typeCode: string]: {
-      versions: KnowledgeClusterVersion[]
+      versions: ClusterVersion[]
       map: {
-        [versionCode: string]: KnowledgeClusterComponentSpec[]
+        [versionCode: string]: KnowledgeOfClusterComponent[]
       }
     }
   }
@@ -56,7 +56,7 @@ type KnowledgeMap = {
 const EmptyKnowledgeMap = { map: {}, types: [] }
 
 function transformKnowledgeMap(
-  knowledge: KnowledgeClusterTypeSpec[]
+  knowledge: KnowledgeOfClusterType[]
 ): KnowledgeMap {
   const typeMapToVersions: KnowledgeMap['map'] = Object.create(null)
   knowledge.forEach((t) => {
@@ -103,7 +103,7 @@ type AvailableStocksMap = {
 const EmptyAvailableStocksMap = { zones: [], map: {} }
 
 function transformAvailableStocksMap(
-  domainResources: HostapiDomainResource[]
+  domainResources: DomainResourceInfo[]
 ): AvailableStocksMap {
   const result: AvailableStocksMap = Object.create(null)
   result.zones = []
@@ -158,7 +158,7 @@ export interface CreateClusterFormProps {
   additionalOptions?: ReactNode
   formClassName?: string
 
-  onSubmit: (data: ClusterapiCreateReq) => void
+  onSubmit: (data: RequestClusterCreate) => void
   footerClassName?: string
 }
 
@@ -392,7 +392,7 @@ function NodeOptions({
   form,
 }: {
   t: TFunction<''>
-  spec: KnowledgeClusterComponentSpec
+  spec: KnowledgeOfClusterComponent
   idx: number
   availableStocksMap: AvailableStocksMap
   form: FormInstance
@@ -525,7 +525,7 @@ function NodeOptions({
 
 interface CreateClusterSubmitterProps {
   form: FormInstance
-  onSubmit: (data: ClusterapiCreateReq) => void
+  onSubmit: (data: RequestClusterCreate) => void
   onReset: () => void
   wrapperClassName?: string
 }
@@ -541,7 +541,7 @@ function CreateClusterSubmitter({
   const knowledgeMap = useKnowledgeMap()
 
   const handleSubmit = useCallback(
-    (value: ClusterapiCreateReq) => {
+    (value: RequestClusterCreate) => {
       {
         // normalize
         value.nodeDemandList?.forEach((comp) => {

@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import {
   useQueryClusterBackupStrategy,
   useUpdateClusterBackupStrategy,
-} from '@/api/cluster'
+} from '@/api/hooks/cluster'
 import { errToMsg } from '@/utils/error'
 
 loadI18n()

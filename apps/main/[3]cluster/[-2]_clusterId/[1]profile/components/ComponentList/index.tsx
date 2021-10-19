@@ -1,8 +1,5 @@
 import { Space, Table } from 'antd'
-import {
-  ClusterapiComponentNodeDisplayInfo,
-  ClusterapiDetailClusterRsp,
-} from '#/api'
+import { ResponseClusterDetail, ClusterComponentNodeInfo } from '@/api/model'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction } from 'react-i18next'
 import styles from './index.module.less'
@@ -13,7 +10,7 @@ import { ColumnsType } from 'antd/es/table'
 loadI18n()
 
 export type ComponentListProps = {
-  cluster: ClusterapiDetailClusterRsp
+  cluster: ResponseClusterDetail
 }
 
 export function ComponentList({ cluster }: ComponentListProps) {
@@ -35,7 +32,7 @@ export function ComponentList({ cluster }: ComponentListProps) {
 }
 
 type NodeTableProps = {
-  nodes?: ClusterapiComponentNodeDisplayInfo[]
+  nodes?: ClusterComponentNodeInfo[]
   title: string
 }
 
@@ -60,9 +57,7 @@ function useColumns() {
   return useMemo(() => getColumns(t), [i18n.language])
 }
 
-function getColumns(
-  t: TFunction<''>
-): ColumnsType<ClusterapiComponentNodeDisplayInfo> {
+function getColumns(t: TFunction<''>): ColumnsType<ClusterComponentNodeInfo> {
   return [
     // Note: hide some fields now
     // {
