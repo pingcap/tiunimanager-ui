@@ -1,4 +1,3 @@
-import { loadTranslations } from '@/i18n'
 import axios, { AxiosInstance } from 'axios'
 import {
   ClusterApi,
@@ -16,10 +15,9 @@ import {
 import { readonly } from '@/utils/obj'
 import { createElement, FC } from 'react'
 import { QueryClient, QueryClientProvider, UseQueryOptions } from 'react-query'
+import { initModelTranslations } from './model'
 
 function initAxios() {
-  loadTranslations(import.meta.globEager('./translations/*.yaml'), 'api')
-
   const instance = axios.create()
   // TODO: add interceptors
   return instance
@@ -32,6 +30,8 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
     apiKey: '',
     baseOptions: {},
   })
+
+  initModelTranslations()
 
   return readonly({
     Platform: new PlatformApi(configuration, undefined, axiosInstance),

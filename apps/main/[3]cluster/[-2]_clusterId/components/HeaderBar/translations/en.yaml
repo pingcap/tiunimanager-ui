@@ -15,6 +15,3 @@ backup:
   confirm: 'Are you sure to create backup task for cluster {{ name }} now?'
   success: 'Create backup task for cluster {{ msg }} successfully'
   fail: 'Fail: {{ msg }}'
-id:
-  copy: copy cluster id
-  success: copy cluster id successfully

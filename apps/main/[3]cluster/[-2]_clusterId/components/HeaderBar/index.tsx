@@ -148,8 +148,7 @@ export default function HeaderBar() {
           <>
             <CopyIconButton
               text={clusterId!}
-              tip={t('id.copy')}
-              message={t('id.success')}
+              label={t('model:cluster.property.id')}
             />{' '}
             ID: {clusterId}
           </>

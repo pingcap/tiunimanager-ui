@@ -67,7 +67,7 @@ function getColumns(t: TFunction<''>): ColumnsType<ClusterComponentNodeInfo> {
     //   key: 'id',
     // },
     {
-      title: t('columns.hostId'),
+      title: t('model:clusterNode.property.hostId'),
       width: 140,
       dataIndex: 'hostId',
       key: 'hostId',
@@ -85,38 +85,38 @@ function getColumns(t: TFunction<''>): ColumnsType<ClusterComponentNodeInfo> {
     //   key: 'spec',
     // },
     {
-      title: t('columns.status'),
+      title: t('model:clusterNode.property.status'),
       width: 80,
       dataIndex: 'status',
       key: 'status',
     },
     {
-      title: t('columns.version'),
+      title: t('model:clusterNode.property.version'),
       width: 80,
       dataIndex: 'version',
       key: 'version',
     },
     {
-      title: t('columns.port'),
+      title: t('model:clusterNode.property.port'),
       width: 80,
       dataIndex: 'port',
       key: 'port',
     },
     {
-      title: t('columns.iops'),
+      title: t('model:clusterNode.property.iops'),
       width: 80,
       key: 'iops',
       render: (_, record) =>
         record.iops && `${record.iops[0]} / ${record.iops[1]}`,
     },
     {
-      title: t('columns.ioutil'),
+      title: t('model:clusterNode.property.ioutil'),
       width: 80,
       dataIndex: 'ioUtil',
       key: 'ioUtil',
     },
     {
-      title: t('columns.usage'),
+      title: t('model:clusterNode.property.usage'),
       key: 'usage',
       width: 180,
       render(dom, record) {

@@ -2,18 +2,6 @@ title: Components
 list:
   title: '{{ name }} List'
 
-columns:
-  id: ID
-  hostId: Host ID
-  status: Status
-  port: Port
-  version: Version
-  spec: Spec
-  usage: Usage
-  ioutil: IOUtil
-  iops: IOPS
-  zone: Available Zone
-
 usage:
   mem: MEM
   storage: STO

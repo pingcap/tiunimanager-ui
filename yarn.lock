@@ -737,10 +737,10 @@
     "@typescript-eslint/types" "4.31.2"
     eslint-visitor-keys "^2.0.0"
 
-"@ulab/mvp@^0.0.19":
-  version "0.0.19"
-  resolved "https://registry.yarnpkg.com/@ulab/mvp/-/mvp-0.0.19.tgz#cee166a0b647a5d9205e86e6dc08d41ef8dd6f3d"
-  integrity sha512-MXFoTSsRkPTp83tv30DbHlueSWXO/XgLz8O69ZYMw5+zI6D4rUY+Gaamnem44bfVu6nGD7HU3oR4gC6SxK2JCg==
+"@ulab/mvp@^0.0.20":
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/@ulab/mvp/-/mvp-0.0.20.tgz#277d22b2203e409eb30ac49953a865b69c1f54dd"
+  integrity sha512-AbE1DGNwbIcdN0nWhYJjQxNOgdh2uprKqc2Zia7kU6jUkq/eQ+HmxdWVS/VdZeqDD8snxOJdCcYWcBlnp1PX+g==
 
 "@umijs/use-params@^1.0.2":
   version "1.0.6"

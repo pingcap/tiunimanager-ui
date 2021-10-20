@@ -1,9 +1,3 @@
-fields:
-  time: 时间
-  component: 组件
-  level: 日志级别
-  message: 日志内容
-  ip: IP
-  source: 源文件
+filter:
   startTime: 起始时间
   endTime: 截至时间

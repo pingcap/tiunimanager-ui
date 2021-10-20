@@ -2,13 +2,10 @@ import { ProColumns } from '@ant-design/pro-table'
 import { useMemo, useState } from 'react'
 import { PagedResult, TaskWorkflowInfo } from '@/api/model'
 import HeavyTable from '@/components/HeavyTable'
-import { loadI18n, useI18n } from '@i18n-macro'
 import styles from './index.module.less'
-import { TFunction } from 'react-i18next'
+import { TFunction, useTranslation } from 'react-i18next'
 import { usePagination } from '@hooks/usePagination'
 import { useQueryTasks } from '@/api/hooks/task'
-
-loadI18n()
 
 export default function TaskTable() {
   const {
@@ -85,47 +82,47 @@ function useFetchTaskData() {
 }
 
 function useTableColumn() {
-  const { t, i18n } = useI18n()
+  const { t, i18n } = useTranslation('model')
 
   return useMemo(() => getColumns(t), [i18n.language])
 }
 
-function getColumns(t: TFunction<''>): ProColumns<TaskWorkflowInfo>[] {
+function getColumns(t: TFunction<'model'>): ProColumns<TaskWorkflowInfo>[] {
   return [
     {
-      title: t('fields.id'),
+      title: t('model:task.property.id'),
       width: 120,
       dataIndex: 'id',
       key: 'id',
       hideInSearch: true,
     },
     {
-      title: t('fields.name'),
+      title: t('model:task.property.name'),
       width: 120,
       dataIndex: 'flowWorkName',
       key: 'keyword',
     },
     {
-      title: t('fields.status'),
+      title: t('model:task.property.status'),
       width: 100,
       dataIndex: 'statusCode',
       key: 'status',
       valueType: 'select',
       valueEnum: {
-        '0': { text: t('status.init'), status: 'Default' },
-        '1': { text: t('status.processing'), status: 'Processing' },
-        '2': { text: t('status.finished'), status: 'Success' },
-        '3': { text: t('status.error'), status: 'Error' },
+        '0': { text: t('model:task.status.init'), status: 'Default' },
+        '1': { text: t('model:task.status.processing'), status: 'Processing' },
+        '2': { text: t('model:task.status.finished'), status: 'Success' },
+        '3': { text: t('model:task.status.error'), status: 'Error' },
       },
     },
     {
-      title: t('fields.clusterId'),
+      title: t('model:task.property.clusterId'),
       width: 140,
       dataIndex: 'clusterId',
       key: 'clusterId',
     },
     {
-      title: t('fields.startTime'),
+      title: t('model:task.property.startTime'),
       width: 100,
       dataIndex: 'createTime',
       key: 'startTime',
@@ -133,7 +130,7 @@ function getColumns(t: TFunction<''>): ProColumns<TaskWorkflowInfo>[] {
       valueType: 'dateTime',
     },
     {
-      title: t('fields.endTime'),
+      title: t('model:task.property.endTime'),
       width: 100,
       dataIndex: 'updateTime',
       key: 'endTime',
@@ -141,7 +138,7 @@ function getColumns(t: TFunction<''>): ProColumns<TaskWorkflowInfo>[] {
       valueType: 'dateTime',
     },
     {
-      title: t('fields.operator'),
+      title: t('model:task.property.operator'),
       width: 80,
       dataIndex: 'operatorName',
       key: 'operator',

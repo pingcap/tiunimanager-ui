@@ -15,6 +15,3 @@ backup:
   confirm: '确认立即备份集群 {{ name }} 吗?'
   success: '集群 {{ msg }} 创建备份任务成功'
   fail: '创建备份任务失败: {{ msg }}'
-id:
-  copy: 复制集群ID
-  success: 复制集群ID成功

@@ -75,21 +75,21 @@ function useTableColumns() {
 function getColumns(t: TFunction<''>) {
   const columns: ProColumns<ClusterLogItem>[] = [
     {
-      title: t('fields.startTime'),
+      title: t('filter.startTime'),
       width: 120,
       key: 'startTime',
       valueType: 'dateTime',
       hideInTable: true,
     },
     {
-      title: t('fields.endTime'),
+      title: t('filter.endTime'),
       width: 120,
       key: 'endTime',
       valueType: 'dateTime',
       hideInTable: true,
     },
     {
-      title: t('fields.time'),
+      title: t('model:clusterLog.property.time'),
       width: 180,
       key: 'time',
       dataIndex: 'timestamp',
@@ -97,7 +97,7 @@ function getColumns(t: TFunction<''>) {
       hideInSearch: true,
     },
     {
-      title: t('fields.component'),
+      title: t('model:clusterLog.property.component'),
       width: 80,
       key: 'module',
       dataIndex: 'module',
@@ -109,7 +109,7 @@ function getColumns(t: TFunction<''>) {
       },
     },
     {
-      title: t('fields.level'),
+      title: t('model:clusterLog.property.level'),
       width: 80,
       key: 'level',
       dataIndex: 'level',
@@ -123,19 +123,19 @@ function getColumns(t: TFunction<''>) {
       },
     },
     {
-      title: t('fields.message'),
+      title: t('model:clusterLog.property.message'),
       key: 'message',
       dataIndex: 'message',
       ellipsis: true,
     },
     {
-      title: t('fields.ip'),
+      title: t('model:clusterLog.property.ip'),
       width: 140,
       dataIndex: 'ip',
       key: 'ip',
     },
     {
-      title: t('fields.source'),
+      title: t('model:clusterLog.property.source'),
       width: 160,
       key: 'source',
       dataIndex: 'sourceLine',

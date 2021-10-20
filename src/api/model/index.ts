@@ -43,6 +43,8 @@ export type ClusterType = KnowledgeClusterType
 export type ClusterVersion = KnowledgeClusterVersion
 export type ClusterComponent = KnowledgeClusterComponent
 
+export type ClusterLogLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'FATAL'
+
 export type HostInfo = HostresourceHostInfo
 export type DomainResourceInfo = WarehouseDomainResource
 
@@ -64,3 +66,10 @@ export type RequestClusterCreate = ManagementCreateReq
 export type RequestClusterParamsUpdate = ParameterParamUpdateReq
 
 export type ResponseClusterDetail = ManagementDetailClusterRsp
+
+import { loadI18nWithNS } from '@i18n-macro'
+
+export function initModelTranslations() {
+  // load translations
+  loadI18nWithNS('model')
+}

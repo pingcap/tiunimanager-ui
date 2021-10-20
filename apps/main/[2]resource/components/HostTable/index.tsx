@@ -143,38 +143,38 @@ function getHostColumns(
 ): ProColumns<HostInfo>[] {
   return [
     {
-      title: t('columns.id'),
+      title: t('model:host.property.id'),
       width: 140,
       dataIndex: 'hostId',
       key: 'id',
       hideInSearch: true,
     },
     {
-      title: t('columns.hostName'),
+      title: t('model:host.property.hostName'),
       width: 120,
       dataIndex: 'hostName',
       key: 'hostName',
       hideInSearch: true,
     },
     {
-      title: t('columns.ip'),
+      title: t('model:host.property.ip'),
       width: 140,
       dataIndex: 'ip',
       key: 'ip',
       hideInSearch: true,
     },
     {
-      title: t('columns.status'),
+      title: t('model:host.property.status'),
       width: 80,
       dataIndex: 'status',
       key: 'status',
       valueType: 'select',
       valueEnum: {
-        0: { text: t('status.idle'), status: 'Success' },
-        1: { text: t('status.offline'), status: 'Default' },
-        2: { text: t('status.using'), status: 'Processing' },
-        3: { text: t('status.full'), status: 'Warning' },
-        4: { text: t('status.deleted'), status: 'Error' },
+        0: { text: t('model:host.status.idle'), status: 'Success' },
+        1: { text: t('model:host.status.offline'), status: 'Default' },
+        2: { text: t('model:host.status.using'), status: 'Processing' },
+        3: { text: t('model:host.status.full'), status: 'Warning' },
+        4: { text: t('model:host.status.deleted'), status: 'Error' },
       },
     },
     {
@@ -188,18 +188,20 @@ function getHostColumns(
       },
     },
     {
-      title: t('columns.nic'),
+      title: t('model:host.property.nic'),
       width: 120,
       dataIndex: 'nic',
       key: 'nic',
       hideInSearch: true,
     },
     {
-      title: t('columns.purpose'),
+      title: t('model:host.property.purpose'),
       width: 80,
       dataIndex: 'purpose',
       key: 'purpose',
       hideInSearch: true,
+      render: (_, record) =>
+        t(`model:host.purpose.${record.purpose!.toLowerCase()}`),
     },
     {
       title: t('columns.system'),
