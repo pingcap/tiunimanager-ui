@@ -33,6 +33,7 @@ export default function ClusterTable() {
 
   const isLoading = isDataLoading || isKnowledgeLoading
 
+  console.log(columns)
   return (
     <HeavyTable
       headerTitle={null}
@@ -109,6 +110,7 @@ function useTableColumn() {
   )
 
   const columns = useMemo(
+    // FIXME: Filter not updated in time
     () => getColumns(t, getClusterTypes(data?.data?.data || [])),
     [i18n.language, isLoading]
   )
@@ -374,7 +376,7 @@ function getColumns(
       width: 100,
       key: 'actions',
       valueType: 'option',
-      render(_) {
+      render() {
         return [
           // TODO: implement actions in cluster list
           <a key="edit">{t('actions.edit')}</a>,

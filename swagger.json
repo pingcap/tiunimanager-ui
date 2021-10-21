@@ -1556,6 +1556,11 @@
         "parameters": [
           {
             "type": "integer",
+            "name": "loadStat",
+            "in": "query"
+          },
+          {
+            "type": "integer",
             "name": "page",
             "in": "query"
           },
@@ -1611,6 +1616,14 @@
         "tags": ["resource"],
         "summary": "Import a batch of hosts to TiEM",
         "parameters": [
+          {
+            "type": "string",
+            "default": "false",
+            "description": "whether hosts are reserved(won't be allocated) after import",
+            "name": "hostReserved",
+            "in": "formData",
+            "required": true
+          },
           {
             "type": "file",
             "description": "hosts information in a xlsx file",
@@ -1994,7 +2007,7 @@
           "$ref": "#/definitions/controller.Operator"
         },
         "size": {
-          "type": "integer"
+          "type": "number"
         },
         "startTime": {
           "type": "string"
@@ -2461,6 +2474,10 @@
         "kernel": {
           "type": "string"
         },
+        "loadStat": {
+          "description": "Host Resource Stat, 0 for loadless, 1 for inused, 2 for exhaust",
+          "type": "integer"
+        },
         "memory": {
           "description": "Host memroy, init while importing",
           "type": "integer"
@@ -2492,10 +2509,6 @@
         "spec": {
           "description": "Host Spec, init while importing",
           "type": "string"
-        },
-        "stat": {
-          "description": "Host Resource Stat, 0 for loadless, 1 for inused, 2 for exhaust",
-          "type": "integer"
         },
         "status": {
           "description": "Host Status, 0 for Online, 1 for offline",

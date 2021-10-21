@@ -129,7 +129,7 @@ host:
     rack: 机架
 
     status: 状态
-    stat: 状态
+    load: 负载
     purpose: 类型
 
     hostName: 主机名
@@ -145,11 +145,12 @@ host:
     cpuCores: CPU 核心
     memory: 内存
   status:
+    online: 在线
+    offline: 离线
+  load:
     idle: 空闲中
-    offline: 已下线
-    using: 使用中
+    used: 使用中
     full: 已满载
-    deleted: 已删除
   purpose:
     compute: 计算
     storage: 存储

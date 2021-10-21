@@ -127,7 +127,7 @@ host:
     rack: Rack
 
     status: Status
-    stat: Stat
+    load: Load
     purpose: Purpose
 
     hostName: Host Name
@@ -143,11 +143,12 @@ host:
     cpuCores: CPU Cores
     memory: Memory
   status:
+    online: Online
+    offline: Offline
+  load:
     idle: Free
-    offline: Offlined
-    using: In Use
-    full: Full Load
-    deleted: Deleted
+    used: In Use
+    full: Full
   purpose:
     compute: Compute
     storage: Storage

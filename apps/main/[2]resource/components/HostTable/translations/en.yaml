@@ -9,8 +9,6 @@ actions:
   offline: Offline
   monitor: Monitor
   delete: Delete
-tips:
-  location: Availabile Zone / Region / Rack
 delete:
   confirm: Are you sure to delete this host?
   success: 'Delete {{ msg }} successfully'

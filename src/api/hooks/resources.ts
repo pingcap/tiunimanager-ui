@@ -11,13 +11,21 @@ export function useQueryHostsList(
     pageSize?: number
     purpose?: string
     status?: number
+    loadStat?: number
   },
   options?: PartialUseQueryOptions
 ) {
-  const { page, pageSize, purpose, status } = query
+  const { page, pageSize, purpose, status, loadStat } = query
   return useQuery(
     [CACHE_HOSTS_LIST_KEY, status, purpose, page, pageSize],
-    () => APIS.Resources.resourcesHostsGet(page, pageSize, purpose, status),
+    () =>
+      APIS.Resources.resourcesHostsGet(
+        loadStat,
+        page,
+        pageSize,
+        purpose,
+        status
+      ),
     options
   )
 }

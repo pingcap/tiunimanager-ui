@@ -67,9 +67,7 @@ export default function HostTable() {
 
 function useFetchHostData() {
   const [pagination, setPagination] = usePagination()
-  const [filters, setFilter] = useState<{ status?: number }>({
-    status: undefined,
-  })
+  const [filters, setFilter] = useState({})
   const { data, isLoading, isPreviousData, refetch } = useQueryHostsList(
     {
       ...pagination,
@@ -170,18 +168,29 @@ function getHostColumns(
       key: 'status',
       valueType: 'select',
       valueEnum: {
-        0: { text: t('model:host.status.idle'), status: 'Success' },
+        0: { text: t('model:host.status.online'), status: 'Success' },
         1: { text: t('model:host.status.offline'), status: 'Default' },
-        2: { text: t('model:host.status.using'), status: 'Processing' },
-        3: { text: t('model:host.status.full'), status: 'Warning' },
-        4: { text: t('model:host.status.deleted'), status: 'Error' },
+      },
+    },
+    {
+      title: t('model:host.property.load'),
+      width: 80,
+      dataIndex: 'loadStat',
+      key: 'load',
+      valueType: 'select',
+      valueEnum: {
+        0: { text: t('model:host.load.idle'), status: 'Default' },
+        1: { text: t('model:host.load.used'), status: 'Processing' },
+        2: { text: t('model:host.load.full'), status: 'Warning' },
       },
     },
     {
       title: t('columns.location'),
       width: 200,
       key: 'location',
-      tooltip: t('tips.location'),
+      tooltip: `${t('model:host.property.az')}, ${t(
+        'model:host.property.region'
+      )}, ${t('model:host.property.rack')}`,
       hideInSearch: true,
       render(_, record) {
         return `${record.az}, ${record.region}, ${record.rack}`
@@ -199,9 +208,12 @@ function getHostColumns(
       width: 80,
       dataIndex: 'purpose',
       key: 'purpose',
-      hideInSearch: true,
-      render: (_, record) =>
-        t(`model:host.purpose.${record.purpose!.toLowerCase()}`),
+      valueType: 'select',
+      valueEnum: {
+        Compute: { text: t('model:host.purpose.compute') },
+        Storage: { text: t('model:host.purpose.storage') },
+        General: { text: t('model:host.purpose.general') },
+      },
     },
     {
       title: t('columns.system'),
@@ -217,7 +229,7 @@ function getHostColumns(
       width: 130,
       key: 'availableSpec',
       render(_, record) {
-        return `${record.cpuCores} Core ${record.memory} GB`
+        return `${record.cpuCores}C ${record.memory}G`
       },
       hideInSearch: true,
     },
