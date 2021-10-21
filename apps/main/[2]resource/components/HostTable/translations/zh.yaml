@@ -1,11 +1,5 @@
 columns:
-  id: ID
-  hostName: 主机名
-  ip: IP
-  status: 状态
   location: 位置
-  nic: 网卡
-  purpose: 类型
   system: OS版本
   availableSpec: 可用规格
   spec: 总规格
@@ -15,14 +9,6 @@ actions:
   offline: 下线
   monitor: 监控
   delete: 删除
-tips:
-  location: 可用区 区域 机架
-status:
-  idle: 空闲中
-  offline: 已下线
-  using: 使用中
-  full: 已满载
-  deleted: 已删除
 delete:
   confirm: 确认删除该主机吗?
   success: '删除主机 {{ msg }} 成功'

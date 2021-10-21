@@ -1,12 +1,11 @@
 import HeavyTable from '@/components/HeavyTable'
 import { useMemo, useState } from 'react'
 import { ColumnsState, ProColumns } from '@ant-design/pro-table'
+import { ClusterInfo, ClusterLogItem, PagedResult } from '@/api/model'
 import {
-  ClusterapiClusterDisplayInfo,
-  ControllerResultWithPage,
-  LogapiSearchTiDBLogDetail,
-} from '#/api'
-import { useQueryClusterLogs, UseQueryClusterLogsParams } from '@/api/cluster'
+  useQueryClusterLogs,
+  UseQueryClusterLogsParams,
+} from '@/api/hooks/cluster'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction } from 'react-i18next'
 import { usePagination } from '@hooks/usePagination'
@@ -17,7 +16,7 @@ import moment from 'moment'
 loadI18n()
 
 export interface LogsTableProps {
-  cluster: ClusterapiClusterDisplayInfo
+  cluster: ClusterInfo
 }
 
 export function LogsTable({ cluster }: LogsTableProps) {
@@ -47,7 +46,7 @@ export function LogsTable({ cluster }: LogsTableProps) {
       pagination={{
         pageSize: pagination.pageSize,
         current: pagination.page,
-        total: (data?.data as ControllerResultWithPage)?.page?.total || 0,
+        total: (data?.data as PagedResult)?.page?.total || 0,
         onChange(page, pageSize) {
           setPagination({ page, pageSize: pageSize || pagination.pageSize })
         },
@@ -74,23 +73,23 @@ function useTableColumns() {
 }
 
 function getColumns(t: TFunction<''>) {
-  const columns: ProColumns<LogapiSearchTiDBLogDetail>[] = [
+  const columns: ProColumns<ClusterLogItem>[] = [
     {
-      title: t('fields.startTime'),
+      title: t('filter.startTime'),
       width: 120,
       key: 'startTime',
       valueType: 'dateTime',
       hideInTable: true,
     },
     {
-      title: t('fields.endTime'),
+      title: t('filter.endTime'),
       width: 120,
       key: 'endTime',
       valueType: 'dateTime',
       hideInTable: true,
     },
     {
-      title: t('fields.time'),
+      title: t('model:clusterLog.property.time'),
       width: 180,
       key: 'time',
       dataIndex: 'timestamp',
@@ -98,7 +97,7 @@ function getColumns(t: TFunction<''>) {
       hideInSearch: true,
     },
     {
-      title: t('fields.component'),
+      title: t('model:clusterLog.property.component'),
       width: 80,
       key: 'module',
       dataIndex: 'module',
@@ -110,7 +109,7 @@ function getColumns(t: TFunction<''>) {
       },
     },
     {
-      title: t('fields.level'),
+      title: t('model:clusterLog.property.level'),
       width: 80,
       key: 'level',
       dataIndex: 'level',
@@ -124,19 +123,19 @@ function getColumns(t: TFunction<''>) {
       },
     },
     {
-      title: t('fields.message'),
+      title: t('model:clusterLog.property.message'),
       key: 'message',
       dataIndex: 'message',
       ellipsis: true,
     },
     {
-      title: t('fields.ip'),
+      title: t('model:clusterLog.property.ip'),
       width: 140,
       dataIndex: 'ip',
       key: 'ip',
     },
     {
-      title: t('fields.source'),
+      title: t('model:clusterLog.property.source'),
       width: 160,
       key: 'source',
       dataIndex: 'sourceLine',

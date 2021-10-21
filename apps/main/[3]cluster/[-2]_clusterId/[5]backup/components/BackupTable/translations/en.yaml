@@ -4,26 +4,7 @@ delete:
   fail: 'Fail: {{ msg }}'
 restore:
   confirm: Are you sure to restore cluster from this backup?
-enum:
-  type:
-    full: Full
-    incr: Incremental
-  method:
-    logic: Logical
-    physical: Physical
-  mode:
-    manual: Manual
-    auto: Plan
-fields:
-  startTime: Start Time
-  endTime: End Time
-  mode: Mode
-  type: Type
-  method: Method
-  operator: Operator
-  size: Size
-  status: Status
-  filepath: File Path
+columns:
   actions: Actions
 actions:
   restore: Restore

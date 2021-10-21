@@ -2,8 +2,8 @@ import { Form, Layout, message } from 'antd'
 import { useCallback } from 'react'
 
 import styles from './index.module.less'
-import { ClusterapiCreateReq } from '#/api'
-import { invalidateClustersList, useCreateCluster } from '@/api/cluster'
+import { RequestClusterCreate } from '@/api/model'
+import { invalidateClustersList, useCreateCluster } from '@/api/hooks/cluster'
 import { useQueryClient } from 'react-query'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { errToMsg } from '@/utils/error'
@@ -23,7 +23,7 @@ export function CreatePanel({ back }: CreatePanelProps) {
   const createCluster = useCreateCluster()
 
   const handleSubmit = useCallback(
-    (value: ClusterapiCreateReq) => {
+    (value: RequestClusterCreate) => {
       // create
       createCluster.mutateAsync(value, {
         onSuccess(data) {

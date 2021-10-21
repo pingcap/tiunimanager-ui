@@ -1,9 +1,3 @@
-fields:
-  time: Time
-  component: Component
-  level: Level
-  message: Message
-  ip: IP
-  source: Source
+filter:
   startTime: Start Time
   endTime: End Time

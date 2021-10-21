@@ -1,9 +1,9 @@
 import { rest } from 'msw'
 import { basePath } from '@/api/client'
-import { InstanceapiBackupRecord } from '#/api'
+import { ClusterBackupItem } from '@/api/model'
 import { datatype, name, system } from 'faker'
 
-const fakeBackups: InstanceapiBackupRecord[] = Array.from(
+const fakeBackups: ClusterBackupItem[] = Array.from(
   {
     length: 50,
   },

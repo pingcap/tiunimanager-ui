@@ -1,26 +1,33 @@
 import { CopyOutlined } from '@ant-design/icons'
 import copyToClipboard from 'copy-to-clipboard'
-import { message as _message, Tooltip } from 'antd'
+import { message, Tooltip } from 'antd'
 import styles from './index.module.less'
+import { loadI18n, useI18n } from '@i18n-macro'
+
+loadI18n()
 
 export function CopyIconButton({
   text,
-  message,
-  tip,
+  label,
 }: {
   text: string
-  message?: string
-  tip?: string
+  label: string
 }) {
-  let dom = (
-    <CopyOutlined
-      className={styles.copyIcon}
-      onClick={() => {
-        copyToClipboard(text)
-        message && _message.success(message)
-      }}
-    />
+  const { t } = useI18n()
+  return (
+    <Tooltip title={t('tip', { label })}>
+      <CopyOutlined
+        className={styles.copyIcon}
+        onClick={() => {
+          copyToClipboard(text)
+          message.success(
+            t('success', {
+              label,
+              text,
+            })
+          )
+        }}
+      />
+    </Tooltip>
   )
-  if (tip) dom = <Tooltip title={tip}>{dom}</Tooltip>
-  return <a>{dom}</a>
 }

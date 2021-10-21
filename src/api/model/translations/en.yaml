@@ -1,0 +1,197 @@
+cluster:
+  property:
+    id: ID
+    name: Name
+    type: Type
+    version: Version
+    status: Status
+    address: Address
+    extranetAddress: Extranet Address
+    intranetAddress: Intranet Address
+    password: Password
+    tag: Tag
+    port: Port
+    createTime: Create Time
+    updateTime: Update Time
+    deleteTime: Delete Time
+    tls: TLS
+    usage: Usage
+  tls:
+    on: ON
+    off: OFF
+  usage:
+    cpu: CPU
+    memory: Memory
+    disk: Disk
+    storage: Storage
+    backup: Backup
+  status:
+    idle: Idle
+    online: Online
+    offline: Offline
+    deleted: Deleted
+    CreateCluster: Creating
+    DeleteCluster: Deleting
+    BackupCluster: Backuping
+    RecoverCluster: Recovering
+    ModifyParameters: Modifying
+    ExportData: Exporting
+    ImportData: Importing
+clusterLog:
+  property:
+    id: ID
+    clusterId: Cluster ID
+    index: Index
+    ip: IP
+    level: Level
+    message: Message
+    module: Component
+    sourceLine: Source Line
+    time: Time
+    took: Took
+clusterBackup:
+  property:
+    id: ID
+    mode: Mode
+    method: Method
+    type: Type
+    clusterId: Cluster ID
+    startTime: Start Time
+    endTime: End Time
+    operator: Operator
+    size: Size
+    status: Status
+    filepath: File Path
+  type:
+    full: Full
+    incr: Incremental
+  method:
+    logic: Logical
+    physical: Physical
+  mode:
+    manual: Manual
+    auto: Plan
+clusterBackupStrategy:
+  property:
+    clusterId: Cluster ID
+    backupDate: Date
+    period: Time Period
+    nextBackupTime: Next Backup Time
+  week:
+    Monday: Monday
+    Tuesday: Tuesday
+    Wednesday: Wednesday
+    Thursday: Thursday
+    Friday: Friday
+    Saturday: Saturday
+    Sunday: Sunday
+clusterParam:
+  property:
+    name: Param Name
+    reboot: Reboot
+    desc: Description
+    range: Value Range
+    default: Default Value
+    current: Current Value
+    unit: Unit
+    type: Type
+  reboot:
+    true: Need
+    false: No
+clusterComponent:
+  property:
+    name: Name
+    type: Type
+    nodes: Nodes
+clusterNode:
+  property:
+    id: ID
+    status: Status
+    hostId: Host ID
+    ioutil: IOUtil
+    iops: IO/s
+    port: Port
+    role: Role
+    spec: Spec
+    version: Version
+    zone: Zone
+    usage: Usage
+host:
+  property:
+    id: ID
+    reserved: Reserved
+
+    ip: IP
+    az: Zone
+    region: Region
+    rack: Rack
+
+    status: Status
+    load: Load
+    purpose: Purpose
+
+    hostName: Host Name
+    username: Username
+    password: Password
+
+    os: OS System
+    arch: OS Arch
+    kernel: OS Kernel
+
+    nic: NIC
+    diskType: Disk Type
+    cpuCores: CPU Cores
+    memory: Memory
+  status:
+    online: Online
+    offline: Offline
+  load:
+    idle: Free
+    used: In Use
+    full: Full
+  purpose:
+    compute: Compute
+    storage: Storage
+    general: General
+  disk:
+    property:
+      id: ID
+      name: Name
+      hostId: Host ID
+      capacity: Capacity
+      path: Mount Path
+      status: Status
+      type: Type
+      usedBy: Used By
+    status:
+      available: Available
+      used: Used
+    type:
+      nvme-ssd: NVME SSD
+      ssd: SSD
+      sata: SATA
+domain:
+  property:
+    count: Count
+    purpose: Purpose
+    spec: Spec
+    zone: Zone
+task:
+  property:
+    id: ID
+    name: Name
+    inProcessFlowId: In Process Flow ID
+    clusterId: Cluster ID
+    clusterName: Cluster Name
+    startTime: Start Time
+    updateTime: Update Time
+    endTime: End Time
+    operator: Operator
+    manual: Manual
+    status: Status
+    tenantId: Tenant ID
+  status:
+    init: Init
+    processing: Processing
+    finished: Finished
+    error: Error

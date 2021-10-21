@@ -1,0 +1,2 @@
+tip: 'Copy {{ label }}'
+success: 'Copy {{ label }} {{ text }} successfully'

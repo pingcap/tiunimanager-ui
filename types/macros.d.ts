@@ -1,6 +1,8 @@
 declare module '@i18n-macro' {
   /* load i18n resources by glob pattern. */
   export function loadI18n(glob?: string): void
+  /* load i18n resources by glob pattern. */
+  export function loadI18nWithNS(ns: string, glob?: string): void
   import { UseTranslationResponse } from 'react-i18next'
   /* a wrapper of useTranslation(), with auto namespace management. */
   export function useI18n(): UseTranslationResponse<''>

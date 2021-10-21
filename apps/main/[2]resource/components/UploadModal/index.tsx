@@ -1,7 +1,7 @@
 import { InboxOutlined } from '@ant-design/icons'
 import { Button, message, Modal, Upload, UploadProps } from 'antd'
 import { useAuthState } from '@store/auth'
-import { getHostsTemplateURL, getHostsUploadURL } from '@/api/resources'
+import { getHostsTemplateURL, getHostsUploadURL } from '@/api/hooks/resources'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { useMemo } from 'react'
 import { useDownload } from '@hooks/useDownload'

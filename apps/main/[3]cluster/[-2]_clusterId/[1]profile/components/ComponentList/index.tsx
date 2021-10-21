@@ -1,8 +1,5 @@
 import { Space, Table } from 'antd'
-import {
-  ClusterapiComponentNodeDisplayInfo,
-  ClusterapiDetailClusterRsp,
-} from '#/api'
+import { ResponseClusterDetail, ClusterComponentNodeInfo } from '@/api/model'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction } from 'react-i18next'
 import styles from './index.module.less'
@@ -13,7 +10,7 @@ import { ColumnsType } from 'antd/es/table'
 loadI18n()
 
 export type ComponentListProps = {
-  cluster: ClusterapiDetailClusterRsp
+  cluster: ResponseClusterDetail
 }
 
 export function ComponentList({ cluster }: ComponentListProps) {
@@ -35,7 +32,7 @@ export function ComponentList({ cluster }: ComponentListProps) {
 }
 
 type NodeTableProps = {
-  nodes?: ClusterapiComponentNodeDisplayInfo[]
+  nodes?: ClusterComponentNodeInfo[]
   title: string
 }
 
@@ -60,9 +57,7 @@ function useColumns() {
   return useMemo(() => getColumns(t), [i18n.language])
 }
 
-function getColumns(
-  t: TFunction<''>
-): ColumnsType<ClusterapiComponentNodeDisplayInfo> {
+function getColumns(t: TFunction<''>): ColumnsType<ClusterComponentNodeInfo> {
   return [
     // Note: hide some fields now
     // {
@@ -72,7 +67,7 @@ function getColumns(
     //   key: 'id',
     // },
     {
-      title: t('columns.hostId'),
+      title: t('model:clusterNode.property.hostId'),
       width: 140,
       dataIndex: 'hostId',
       key: 'hostId',
@@ -90,38 +85,38 @@ function getColumns(
     //   key: 'spec',
     // },
     {
-      title: t('columns.status'),
+      title: t('model:clusterNode.property.status'),
       width: 80,
       dataIndex: 'status',
       key: 'status',
     },
     {
-      title: t('columns.version'),
+      title: t('model:clusterNode.property.version'),
       width: 80,
       dataIndex: 'version',
       key: 'version',
     },
     {
-      title: t('columns.port'),
+      title: t('model:clusterNode.property.port'),
       width: 80,
       dataIndex: 'port',
       key: 'port',
     },
     {
-      title: t('columns.iops'),
+      title: t('model:clusterNode.property.iops'),
       width: 80,
       key: 'iops',
       render: (_, record) =>
         record.iops && `${record.iops[0]} / ${record.iops[1]}`,
     },
     {
-      title: t('columns.ioutil'),
+      title: t('model:clusterNode.property.ioutil'),
       width: 80,
       dataIndex: 'ioUtil',
       key: 'ioUtil',
     },
     {
-      title: t('columns.usage'),
+      title: t('model:clusterNode.property.usage'),
       key: 'usage',
       width: 180,
       render(dom, record) {

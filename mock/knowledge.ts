@@ -1,8 +1,8 @@
 import { rest } from 'msw'
 import { basePath } from '@/api/client'
-import { KnowledgeClusterTypeSpec } from '#/api'
+import { KnowledgeOfClusterType } from '@/api/model'
 
-const fakeKnowledge: KnowledgeClusterTypeSpec[] = [
+const fakeKnowledge: KnowledgeOfClusterType[] = [
   {
     clusterType: {
       code: 'tidb',

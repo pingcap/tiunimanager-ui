@@ -1,9 +1,9 @@
-import { ClusterapiClusterDisplayInfo, ClusterapiDetailClusterRsp } from '#/api'
+import { ClusterInfo, ResponseClusterDetail } from '@/api/model'
 import { datatype, name, time } from 'faker'
 import { rest } from 'msw'
 import { basePath } from '@/api/client'
 
-const fakeClusters: ClusterapiClusterDisplayInfo[] = Array.from(
+const fakeClusters: ClusterInfo[] = Array.from(
   {
     length: 13,
   },
@@ -53,7 +53,7 @@ const fakeClusters: ClusterapiClusterDisplayInfo[] = Array.from(
   })
 )
 
-const fakeCluster: ClusterapiDetailClusterRsp = {
+const fakeCluster: ResponseClusterDetail = {
   ...fakeClusters[10],
   components: ['TiDB', 'PD', 'TiKV'].map((comp) => ({
     componentName: comp,

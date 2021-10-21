@@ -3,11 +3,11 @@ import { useCallback, useMemo } from 'react'
 
 import styles from './index.module.less'
 import {
-  ClusterapiClusterDisplayInfo,
-  ClusterapiCreateReq,
-  InstanceapiBackupRecord,
-} from '#/api'
-import { useRestoreClusterBackup } from '@/api/cluster'
+  ClusterInfo,
+  RequestClusterCreate,
+  ClusterBackupItem,
+} from '@/api/model'
+import { useRestoreClusterBackup } from '@/api/hooks/cluster'
 import { useQueryClient } from 'react-query'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { errToMsg } from '@/utils/error'
@@ -16,8 +16,8 @@ import { CreateClusterForm } from '@/components/CreateClusterPanel'
 loadI18n()
 
 export interface CreatePanelProps {
-  cluster: ClusterapiClusterDisplayInfo
-  backup: InstanceapiBackupRecord
+  cluster: ClusterInfo
+  backup: ClusterBackupItem
   back: () => void
 }
 
@@ -29,7 +29,7 @@ export function RestorePanel({ back, cluster, backup }: CreatePanelProps) {
   const restoreCluster = useRestoreClusterBackup()
 
   const handleSubmit = useCallback(
-    (value: ClusterapiCreateReq) => {
+    (value: RequestClusterCreate) => {
       const { id, clusterId } = backup
       restoreCluster.mutateAsync(
         {

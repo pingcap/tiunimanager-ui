@@ -5,7 +5,7 @@ import { Card } from 'antd'
 import { DashboardPages, EmbedDashboard } from '@/components/EmbedDashboard'
 import styles from './index.module.less'
 import { useClusterContext } from '@apps/main/[3]cluster/[-2]_clusterId/context'
-import { useQueryClusterDashboard } from '@/api/cluster'
+import { useQueryClusterDashboard } from '@/api/hooks/cluster'
 import { FullScreen } from '@/components/FullScreen'
 
 loadI18n()

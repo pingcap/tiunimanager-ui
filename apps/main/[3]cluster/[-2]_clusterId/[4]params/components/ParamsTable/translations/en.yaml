@@ -2,6 +2,7 @@ actions:
   refresh: Refresh
   reset: Reset
   save: Save
+  edit: Edit
 reset:
   confirm: Are you sure to reset edited params?
 save:
@@ -13,16 +14,5 @@ save:
     name: Param Name
     before: Before
     after: After
-fields:
-  name: Param Name
-  reboot:
-    title: Reboot
-    true: Need
-    false: No
-  desc: Description
-  range: Value Range
-  default: Default Value
-  current: Current Value
-  actions:
-    title: Actions
-    edit: Edit
+columns:
+  actions: Actions

@@ -1,8 +1,8 @@
 import { rest } from 'msw'
 import { basePath } from '@/api/client'
-import { InstanceapiParamItem } from '#/api'
+import { ClusterParamItem } from '@/api/model'
 
-const fakeParams: InstanceapiParamItem[] = [
+const fakeParams: ClusterParamItem[] = [
   {
     currentValue: {
       name: 'binlog_cache_size',

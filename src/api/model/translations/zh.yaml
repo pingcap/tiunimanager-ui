@@ -1,0 +1,199 @@
+cluster:
+  property:
+    id: 集群ID
+    name: 集群名称
+    status: 状态
+    address: 连接地址
+    extranetAddress: 外网地址
+    intranetAddress: 内网地址
+    password: 密码
+    tag: 标签
+    port: 端口
+    version: 版本
+    type: 类型
+    createTime: 创建时间
+    updateTime: 更新时间
+    deleteTime: 删除时间
+    tls: TLS
+    usage: 资源使用率
+  tls:
+    on: 启用
+    off: 无
+  usage:
+    cpu: CPU
+    memory: 内存
+    disk: 硬盘
+    storage: 存储
+    backup: 备份
+  status:
+    idle: 空闲中
+    online: 运行中
+    offline: 已下线
+    deleted: 已删除
+    CreateCluster: 创建中
+    DeleteCluster: 删除中
+    BackupCluster: 备份中
+    RecoverCluster: 备份恢复中
+    ModifyParameters: 修改参数中
+    ExportData: 数据导出中
+    ImportData: 数据导入中
+clusterLog:
+  property:
+    id: ID
+    ip: IP
+    clusterId: 集群ID
+    index: 索引
+    time: 时间
+    component: 组件
+    level: 日志级别
+    message: 日志内容
+    source: 源文件
+    startTime: 起始时间
+    endTime: 截至时间
+    took: 耗时
+clusterBackup:
+  property:
+    id: ID
+    clusterId: 集群ID
+    startTime: 起始时间
+    endTime: 截止时间
+    mode: 触发模式
+    type: 类型
+    method: 方式
+    operator: 操作者
+    size: 大小
+    status: 状态
+    filepath: 备份文件路径
+  type:
+    full: 全量
+    incr: 增量
+  method:
+    logic: 逻辑
+    physical: 物理
+  mode:
+    manual: 手动
+    auto: 自动
+clusterBackupStrategy:
+  property:
+    clusterId: 集群ID
+    nextBackupTime: 下次备份时间
+    backupDate: 备份日期
+    period: 备份时间
+  week:
+    Monday: 周一
+    Tuesday: 周二
+    Wednesday: 周三
+    Thursday: 周四
+    Friday: 周五
+    Saturday: 周六
+    Sunday: 周日
+clusterParam:
+  property:
+    name: 参数名称
+    reboot: 重启
+    desc: 参数描述
+    range: 值范围
+    default: 默认值
+    current: 运行值
+    unit: 单位
+    type: 类型
+  reboot:
+    true: 需要
+    false: 不需要
+clusterComponent:
+  property:
+    name: 名称
+    type: 类型
+    nodes: 节点
+clusterNode:
+  property:
+    id: ID
+    hostId: 主机ID
+    status: 状态
+    port: 端口
+    version: 版本
+    spec: 规格
+    usage: 资源占用
+    ioutil: IOUtil
+    iops: IO/s
+    zone: Zone
+    role: 用途
+host:
+  property:
+    id: ID
+    reserved: 保留
+
+    ip: IP
+    az: Zone
+    region: Region
+    rack: 机架
+
+    status: 状态
+    load: 负载
+    purpose: 类型
+
+    hostName: 主机名
+    username: 用户名
+    password: 密码
+
+    os: 操作系统
+    arch: 系统架构
+    kernel: 系统内核
+
+    nic: 网卡
+    diskType: 磁盘类型
+    cpuCores: CPU 核心
+    memory: 内存
+  status:
+    online: 在线
+    offline: 离线
+  load:
+    idle: 空闲中
+    used: 使用中
+    full: 已满载
+  purpose:
+    compute: 计算
+    storage: 存储
+    general: 通用
+  disk:
+    property:
+      id: ID
+      name: 名称
+      hostId: 主机ID
+      capacity: 容量
+      path: 挂载路径
+      status: 状态
+      type: 类型
+      usedBy: 使用者
+    status:
+      available: 可用
+      used: 使用中
+    type:
+      nvme-ssd: NVME SSD
+      ssd: SSD
+      sata: SATA
+domain:
+  property:
+    count: 数量
+    purpose: 类型
+    spec: 规格
+    zone: Zone
+task:
+  property:
+    id: ID
+    name: 名称
+    inProcessFlowId: 任务流内部ID
+    clusterId: 集群ID
+    clusterName: 集群名称
+    startTime: 创建时间
+    updateTime: 更新时间
+    endTime: 结束时间
+    operator: 操作者
+    manual: 触发模式
+    status: 状态
+    tenantId: 租户ID
+  status:
+    init: 初始化
+    processing: 进行中
+    finished: 完成
+    error: 失败

@@ -1,13 +1,13 @@
 import { Card, Col, Row } from 'antd'
 import { BigUsageCircle } from '@/components/UsageCircle'
-import { ClusterapiDetailClusterRsp } from '#/api'
+import { ResponseClusterDetail } from '@/api/model'
 import styles from './index.module.less'
 import { loadI18n, useI18n } from '@i18n-macro'
 
 loadI18n()
 
 export type UsageProps = {
-  cluster: ClusterapiDetailClusterRsp
+  cluster: ResponseClusterDetail
 }
 
 export function Usage({ cluster }: UsageProps) {
@@ -21,7 +21,7 @@ export function Usage({ cluster }: UsageProps) {
             usageRate={cluster.cpuUsage?.usageRate}
             used={cluster.cpuUsage?.used}
             total={cluster.cpuUsage?.total}
-            name={t('item.cpu')}
+            name={t('model:cluster.usage.cpu')}
             unit=""
           />
         </Col>
@@ -31,7 +31,7 @@ export function Usage({ cluster }: UsageProps) {
             usageRate={cluster.memoryUsage?.usageRate}
             used={cluster.memoryUsage?.used}
             total={cluster.memoryUsage?.total}
-            name={t('item.mem')}
+            name={t('model:cluster.usage.memory')}
             unit="MB"
           />
         </Col>
@@ -41,7 +41,7 @@ export function Usage({ cluster }: UsageProps) {
             usageRate={cluster.diskUsage?.usageRate}
             used={cluster.diskUsage?.used}
             total={cluster.diskUsage?.total}
-            name={t('item.disk')}
+            name={t('model:cluster.usage.disk')}
             unit="MB"
           />
         </Col>
@@ -51,7 +51,7 @@ export function Usage({ cluster }: UsageProps) {
             usageRate={cluster.storageUsage?.usageRate}
             used={cluster.storageUsage?.used}
             total={cluster.storageUsage?.total}
-            name={t('item.storage')}
+            name={t('model:cluster.usage.storage')}
             unit="MB"
           />
         </Col>
@@ -61,7 +61,7 @@ export function Usage({ cluster }: UsageProps) {
             usageRate={cluster.backupFileUsage?.usageRate}
             used={cluster.backupFileUsage?.used}
             total={cluster.backupFileUsage?.total}
-            name={t('item.backup')}
+            name={t('model:cluster.usage.backup')}
             unit="MB"
           />
         </Col>

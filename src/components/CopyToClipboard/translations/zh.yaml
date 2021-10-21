@@ -1,0 +1,2 @@
+tip: '复制{{ label }}'
+success: '复制{{ label }} {{ text }} 成功'

@@ -1,11 +1,7 @@
 import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import { useCallback, useMemo, useState } from 'react'
 import useLocalStorage from '@hooks/useLocalstorage'
-import {
-  ClusterapiClusterDisplayInfo,
-  ControllerResultWithPage,
-  InstanceapiBackupRecord,
-} from '#/api'
+import { ClusterInfo, PagedResult, ClusterBackupItem } from '@/api/model'
 import HeavyTable from '@/components/HeavyTable'
 import { message, Popconfirm } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
@@ -13,7 +9,7 @@ import {
   invalidateClusterBackups,
   useDeleteClusterBackup,
   useQueryClusterBackups,
-} from '@/api/cluster'
+} from '@/api/hooks/cluster'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { useQueryClient } from 'react-query'
 import styles from './index.module.less'
@@ -40,7 +36,7 @@ const defaultColumnsSetting: Record<string, ColumnsState> = {
 }
 
 export interface BackupTableProps {
-  cluster: ClusterapiClusterDisplayInfo
+  cluster: ClusterInfo
 }
 
 export default function BackupTable({ cluster }: BackupTableProps) {
@@ -79,7 +75,7 @@ export default function BackupTable({ cluster }: BackupTableProps) {
       pagination={{
         pageSize: pagination.pageSize,
         current: pagination.page,
-        total: (data?.data as ControllerResultWithPage)?.page?.total || 0,
+        total: (data?.data as PagedResult)?.page?.total || 0,
         onChange(page, pageSize) {
           if (!isPreviousData)
             setPagination({ page, pageSize: pageSize || pagination.pageSize })
@@ -162,7 +158,7 @@ function useTableColumn({ clusterId }: { clusterId: string }) {
   )
 
   const restoreAction = useCallback(
-    (backup: InstanceapiBackupRecord) => {
+    (backup: ClusterBackupItem) => {
       history.push({
         pathname: resolveRoute('../restore', clusterId),
         state: { backup },
@@ -187,9 +183,9 @@ function useTableColumn({ clusterId }: { clusterId: string }) {
 
 function getColumns(
   t: TFunction<''>,
-  restoreAction: (backup: InstanceapiBackupRecord) => any,
+  restoreAction: (backup: ClusterBackupItem) => any,
   deleteAction: (backupId: number) => any
-): ProColumns<InstanceapiBackupRecord>[] {
+): ProColumns<ClusterBackupItem>[] {
   return [
     {
       title: 'ID',
@@ -199,70 +195,72 @@ function getColumns(
       hideInSearch: true,
     },
     {
-      title: t('fields.startTime'),
+      title: t('model:clusterBackup.property.startTime'),
       width: 120,
       dataIndex: 'startTime',
       key: 'startTime',
       valueType: 'dateTime',
     },
     {
-      title: t('fields.endTime'),
+      title: t('model:clusterBackup.property.endTime'),
       width: 120,
       dataIndex: 'endTime',
       key: 'endTime',
       valueType: 'dateTime',
     },
     {
-      title: t('fields.type'),
+      title: t('model:clusterBackup.property.type'),
       width: 60,
       key: 'type',
       hideInSearch: true,
-      render: (_, record) => t(`enum.type.${record.backupType!}`),
+      render: (_, record) =>
+        t(`model:clusterBackup.type.${record.backupType!}`),
     },
     {
-      title: t('fields.method'),
+      title: t('model:clusterBackup.property.method'),
       width: 60,
       key: 'method',
       hideInSearch: true,
-      render: (_, record) => t(`enum.method.${record.backupMethod!}`),
+      render: (_, record) =>
+        t(`model:clusterBackup.method.${record.backupMethod!}`),
     },
     {
-      title: t('fields.mode'),
+      title: t('model:clusterBackup.property.mode'),
       width: 60,
       key: 'mode',
       hideInSearch: true,
-      render: (_, record) => t(`enum.mode.${record.backupMode}`),
+      render: (_, record) => t(`model:clusterBackup.mode.${record.backupMode}`),
     },
     {
-      title: t('fields.operator'),
+      title: t('model:clusterBackup.property.operator'),
       width: 80,
       dataIndex: ['operator', 'operatorName'],
       key: 'operator',
       hideInSearch: true,
     },
     {
-      title: t('fields.size'),
+      title: t('model:clusterBackup.property.size'),
       width: 100,
       key: 'size',
       hideInSearch: true,
       render: (_, record) => (record.size === 0 ? '-' : `${record.size} MB`),
     },
     {
-      title: t('fields.status'),
+      title: t('model:clusterBackup.property.status'),
       width: 80,
       dataIndex: ['status', 'statusName'],
       key: 'status',
       hideInSearch: true,
     },
     {
-      title: t('fields.filepath'),
+      title: t('model:clusterBackup.property.filepath'),
       width: 180,
       dataIndex: 'filePath',
       key: 'filepath',
       hideInSearch: true,
     },
     {
-      title: t('fields.actions'),
+      title: t('columns.actions'),
       width: 80,
       key: 'actions',
       valueType: 'option',

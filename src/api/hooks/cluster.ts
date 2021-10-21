@@ -1,14 +1,14 @@
 import { QueryClient, useMutation, useQuery } from 'react-query'
 import { APIS, PartialUseQueryOptions } from '@/api/client'
 import {
-  ClusterapiCreateReq,
-  ClusterapiRestoreReq,
-  DatabaseapiDataExportReq,
-  DatabaseapiDataImportReq,
-  InstanceapiBackupReq,
-  InstanceapiBackupStrategyUpdateReq,
-  InstanceapiParamUpdateReq,
-} from '#/api'
+  RequestBackupCreate,
+  RequestBackupRestore,
+  RequestBackupStrategyUpdate,
+  RequestTransportExport,
+  RequestTransportImport,
+  RequestClusterCreate,
+  RequestClusterParamsUpdate,
+} from '@/api/model'
 
 /**
  * Clusters
@@ -65,7 +65,7 @@ export function useDeleteCluster() {
   return useMutation(deleteCluster)
 }
 
-const createCluster = (payload: ClusterapiCreateReq) =>
+const createCluster = (payload: RequestClusterCreate) =>
   APIS.Clusters.clustersPost(payload)
 
 export function useCreateCluster() {
@@ -104,7 +104,7 @@ export async function invalidateClusterParams(
 const updateClusterParams = ({
   clusterId,
   ...payload
-}: InstanceapiParamUpdateReq & { clusterId: string }) =>
+}: RequestClusterParamsUpdate & { clusterId: string }) =>
   APIS.ClusterParams.clustersClusterIdParamsPost(clusterId, payload)
 
 export function useUpdateClusterParams() {
@@ -204,7 +204,7 @@ export async function invalidateClusterBackupStrategy(
 const updateClusterBackupStrategy = ({
   clusterId,
   ...payload
-}: InstanceapiBackupStrategyUpdateReq & { clusterId: string }) =>
+}: RequestBackupStrategyUpdate & { clusterId: string }) =>
   APIS.ClusterBackups.clustersClusterIdStrategyPut(clusterId, payload)
 
 export function useUpdateClusterBackupStrategy() {
@@ -249,14 +249,14 @@ export function useDeleteClusterBackup() {
   return useMutation(deleteClusterBackup)
 }
 
-const createClusterBackup = (payload: InstanceapiBackupReq) =>
+const createClusterBackup = (payload: RequestBackupCreate) =>
   APIS.ClusterBackups.backupsPost(payload)
 
 export function useCreateClusterBackup() {
   return useMutation(createClusterBackup)
 }
 
-const restoreClusterBackup = (payload: ClusterapiRestoreReq) =>
+const restoreClusterBackup = (payload: RequestBackupRestore) =>
   APIS.Clusters.clustersRestorePost(payload)
 
 export function useRestoreClusterBackup() {
@@ -287,14 +287,14 @@ export function useQueryClusterDashboard(
  * Cluster Import/Export
  */
 
-const importCluster = (payload: DatabaseapiDataImportReq) =>
+const importCluster = (payload: RequestTransportImport) =>
   APIS.ClustersImport.clustersImportPost(payload)
 
 export function useImportCluster() {
   return useMutation(importCluster)
 }
 
-const exportCluster = (payload: DatabaseapiDataExportReq) =>
+const exportCluster = (payload: RequestTransportExport) =>
   APIS.ClustersExport.clustersExportPost(payload)
 
 export function useExportCluster() {

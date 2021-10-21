@@ -1,9 +1,9 @@
 import { rest } from 'msw'
 import { basePath } from '@/api/client'
-import { HostapiDomainResource, HostapiHostInfo } from '#/api'
+import { DomainResourceInfo, HostInfo } from '@/api/model'
 import { internet, system, datatype, name } from 'faker'
 
-const fakeHosts: HostapiHostInfo[] = Array.from(
+const fakeHosts: HostInfo[] = Array.from(
   {
     length: 30,
   },
@@ -37,7 +37,7 @@ const fakeHosts: HostapiHostInfo[] = Array.from(
   })
 )
 
-const fakeStocks: HostapiDomainResource[] = [
+const fakeStocks: DomainResourceInfo[] = [
   {
     count: 2,
     specCode: 'large',

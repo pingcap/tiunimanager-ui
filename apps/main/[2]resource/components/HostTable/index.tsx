@@ -1,6 +1,6 @@
 import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import HeavyTable from '@/components/HeavyTable'
-import { ControllerResultWithPage, HostapiHostInfo } from '#/api'
+import { PagedResult, HostInfo } from '@/api/model'
 import { useCallback, useMemo, useState } from 'react'
 import { message } from 'antd'
 import useLocalStorage from '@hooks/useLocalstorage'
@@ -9,7 +9,7 @@ import {
   invalidateHostsList,
   useDeleteHosts,
   useQueryHostsList,
-} from '@/api/resources'
+} from '@/api/hooks/resources'
 import { useQueryClient } from 'react-query'
 import styles from './index.module.less'
 import { loadI18n, useI18n } from '@i18n-macro'
@@ -45,7 +45,7 @@ export default function HostTable() {
       pagination={{
         pageSize: pagination.pageSize,
         current: pagination.page,
-        total: (data?.data as ControllerResultWithPage)?.page?.total || 0,
+        total: (data?.data as PagedResult)?.page?.total || 0,
         onChange(page, pageSize) {
           if (!isPreviousData)
             setPagination({ page, pageSize: pageSize || pagination.pageSize })
@@ -67,9 +67,7 @@ export default function HostTable() {
 
 function useFetchHostData() {
   const [pagination, setPagination] = usePagination()
-  const [filters, setFilter] = useState<{ status?: number }>({
-    status: undefined,
-  })
+  const [filters, setFilter] = useState({})
   const { data, isLoading, isPreviousData, refetch } = useQueryHostsList(
     {
       ...pagination,
@@ -140,66 +138,82 @@ function useTableColumn() {
 function getHostColumns(
   t: TFunction<''>,
   deleteAction: (hostId: string) => void
-): ProColumns<HostapiHostInfo>[] {
+): ProColumns<HostInfo>[] {
   return [
     {
-      title: t('columns.id'),
+      title: t('model:host.property.id'),
       width: 140,
       dataIndex: 'hostId',
       key: 'id',
       hideInSearch: true,
     },
     {
-      title: t('columns.hostName'),
+      title: t('model:host.property.hostName'),
       width: 120,
       dataIndex: 'hostName',
       key: 'hostName',
       hideInSearch: true,
     },
     {
-      title: t('columns.ip'),
+      title: t('model:host.property.ip'),
       width: 140,
       dataIndex: 'ip',
       key: 'ip',
       hideInSearch: true,
     },
     {
-      title: t('columns.status'),
+      title: t('model:host.property.status'),
       width: 80,
       dataIndex: 'status',
       key: 'status',
       valueType: 'select',
       valueEnum: {
-        0: { text: t('status.idle'), status: 'Success' },
-        1: { text: t('status.offline'), status: 'Default' },
-        2: { text: t('status.using'), status: 'Processing' },
-        3: { text: t('status.full'), status: 'Warning' },
-        4: { text: t('status.deleted'), status: 'Error' },
+        0: { text: t('model:host.status.online'), status: 'Success' },
+        1: { text: t('model:host.status.offline'), status: 'Default' },
+      },
+    },
+    {
+      title: t('model:host.property.load'),
+      width: 80,
+      dataIndex: 'loadStat',
+      key: 'load',
+      valueType: 'select',
+      valueEnum: {
+        0: { text: t('model:host.load.idle'), status: 'Default' },
+        1: { text: t('model:host.load.used'), status: 'Processing' },
+        2: { text: t('model:host.load.full'), status: 'Warning' },
       },
     },
     {
       title: t('columns.location'),
       width: 200,
       key: 'location',
-      tooltip: t('tips.location'),
+      tooltip: `${t('model:host.property.az')}, ${t(
+        'model:host.property.region'
+      )}, ${t('model:host.property.rack')}`,
       hideInSearch: true,
       render(_, record) {
         return `${record.az}, ${record.region}, ${record.rack}`
       },
     },
     {
-      title: t('columns.nic'),
+      title: t('model:host.property.nic'),
       width: 120,
       dataIndex: 'nic',
       key: 'nic',
       hideInSearch: true,
     },
     {
-      title: t('columns.purpose'),
+      title: t('model:host.property.purpose'),
       width: 80,
       dataIndex: 'purpose',
       key: 'purpose',
-      hideInSearch: true,
+      valueType: 'select',
+      valueEnum: {
+        Compute: { text: t('model:host.purpose.compute') },
+        Storage: { text: t('model:host.purpose.storage') },
+        General: { text: t('model:host.purpose.general') },
+      },
     },
     {
       title: t('columns.system'),
@@ -215,7 +229,7 @@ function getHostColumns(
       width: 130,
       key: 'availableSpec',
       render(_, record) {
-        return `${record.cpuCores} Core ${record.memory} GB`
+        return `${record.cpuCores}C ${record.memory}G`
       },
       hideInSearch: true,
     },

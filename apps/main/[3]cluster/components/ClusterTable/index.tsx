@@ -2,17 +2,13 @@ import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import { Fragment, useMemo, useState } from 'react'
 import styles from './index.module.less'
 import HeavyTable from '@/components/HeavyTable'
-import {
-  ClusterapiClusterDisplayInfo,
-  ControllerResultWithPage,
-  KnowledgeClusterTypeSpec,
-} from '#/api'
+import { ClusterInfo, PagedResult, KnowledgeOfClusterType } from '@/api/model'
 import { CopyIconButton } from '@/components/CopyToClipboard'
 import useLocalStorage from '@hooks/useLocalstorage'
 import { Link } from 'react-router-dom'
 import { resolveRoute } from '@pages-macro'
-import { useQueryKnowledge } from '@/api/knowledge'
-import { useQueryClustersList } from '@/api/cluster'
+import { useQueryKnowledge } from '@/api/hooks/knowledge'
+import { useQueryClustersList } from '@/api/hooks/cluster'
 import { ProSchemaValueEnumObj } from '@ant-design/pro-utils/lib/typing'
 import { TFunction } from 'react-i18next'
 import { loadI18n, useI18n } from '@i18n-macro'
@@ -37,6 +33,7 @@ export default function ClusterTable() {
 
   const isLoading = isDataLoading || isKnowledgeLoading
 
+  console.log(columns)
   return (
     <HeavyTable
       headerTitle={null}
@@ -51,7 +48,7 @@ export default function ClusterTable() {
       pagination={{
         pageSize: pagination.pageSize,
         current: pagination.page,
-        total: (data?.data as ControllerResultWithPage)?.page?.total || 0,
+        total: (data?.data as PagedResult)?.page?.total || 0,
         onChange(page, pageSize) {
           if (!isPreviousData)
             setPagination({ page, pageSize: pageSize || pagination.pageSize })
@@ -113,6 +110,7 @@ function useTableColumn() {
   )
 
   const columns = useMemo(
+    // FIXME: Filter not updated in time
     () => getColumns(t, getClusterTypes(data?.data?.data || [])),
     [i18n.language, isLoading]
   )
@@ -127,7 +125,7 @@ function useTableColumn() {
   }
 }
 
-function getClusterTypes(raw: KnowledgeClusterTypeSpec[]) {
+function getClusterTypes(raw: KnowledgeOfClusterType[]) {
   const result = {} as ProSchemaValueEnumObj
   raw.forEach(
     (r) =>
@@ -141,7 +139,7 @@ function getClusterTypes(raw: KnowledgeClusterTypeSpec[]) {
 function getColumns(
   t: TFunction<''>,
   clusterTypes: ProColumns['valueEnum']
-): ProColumns<ClusterapiClusterDisplayInfo>[] {
+): ProColumns<ClusterInfo>[] {
   return [
     {
       title: 'ID',
@@ -155,13 +153,13 @@ function getColumns(
       ),
     },
     {
-      title: t('columns.name'),
+      title: t('model:cluster.property.name'),
       width: 120,
       dataIndex: 'clusterName',
       key: 'name',
     },
     {
-      title: t('columns.type'),
+      title: t('model:cluster.property.type'),
       width: 60,
       dataIndex: 'clusterType',
       key: 'type',
@@ -169,49 +167,55 @@ function getColumns(
       valueEnum: clusterTypes,
     },
     {
-      title: t('columns.version'),
+      title: t('model:cluster.property.version'),
       width: 60,
       dataIndex: 'clusterVersion',
       key: 'version',
       hideInSearch: true,
     },
     {
-      title: t('columns.status'),
+      title: t('model:cluster.property.status'),
       width: 100,
       dataIndex: 'statusCode',
       key: 'status',
       valueType: 'select',
       valueEnum: {
-        '0': { text: t('status.idle'), status: 'Default' },
-        '1': { text: t('status.online'), status: 'Success' },
-        '2': { text: t('status.offline'), status: 'Warning' },
-        '3': { text: t('status.deleted'), status: 'Error' },
+        '0': { text: t('model:cluster.status.idle'), status: 'Default' },
+        '1': { text: t('model:cluster.status.online'), status: 'Success' },
+        '2': { text: t('model:cluster.status.offline'), status: 'Warning' },
+        '3': { text: t('model:cluster.status.deleted'), status: 'Error' },
         CreateCluster: {
-          text: t('status.CreateCluster'),
+          text: t('model:cluster.status.CreateCluster'),
           status: 'Processing',
         },
         DeleteCluster: {
-          text: t('status.DeleteCluster'),
+          text: t('model:cluster.status.DeleteCluster'),
           status: 'Processing',
         },
         BackupCluster: {
-          text: t('status.BackupCluster'),
+          text: t('model:cluster.status.BackupCluster'),
           status: 'Processing',
         },
         RecoverCluster: {
-          text: t('status.RecoverCluster'),
+          text: t('model:cluster.status.RecoverCluster'),
           status: 'Processing',
         },
         ModifyParameters: {
-          text: t('status.ModifyParameters'),
+          text: t('model:cluster.status.ModifyParameters'),
           status: 'Processing',
         },
-        ExportData: { text: t('status.ExportData'), status: 'Processing' },
-        ImportData: { text: t('status.ImportData'), status: 'Processing' },
+        ExportData: {
+          text: t('model:cluster.status.ExportData'),
+          status: 'Processing',
+        },
+        ImportData: {
+          text: t('model:cluster.status.ImportData'),
+          status: 'Processing',
+        },
       },
     },
     {
-      title: t('columns.addresses'),
+      title: t('model:cluster.property.address'),
       width: 160,
       key: 'addresses',
       hideInSearch: true,
@@ -222,8 +226,7 @@ function getColumns(
               <span key={a}>
                 <CopyIconButton
                   text={a}
-                  tip={t('addresses.copy')}
-                  message={t('addresses.success')}
+                  label={t('model:cluster.property.address')}
                 />{' '}
                 {a}
               </span>
@@ -233,7 +236,7 @@ function getColumns(
       },
     },
     {
-      title: t('columns.password'),
+      title: t('model:cluster.property.password'),
       width: 60,
       dataIndex: 'dbPassword',
       key: 'password',
@@ -243,8 +246,7 @@ function getColumns(
           <span>
             <CopyIconButton
               text={record.dbPassword}
-              tip={t('password.copy')}
-              message={t('password.success')}
+              label={t('model:cluster.property.password')}
             />
           </span>
         ) : (
@@ -253,7 +255,7 @@ function getColumns(
       },
     },
     {
-      title: t('columns.tag'),
+      title: t('model:cluster.property.tag'),
       width: 120,
       key: 'tag',
       render(_, record) {
@@ -270,24 +272,26 @@ function getColumns(
       },
     },
     {
-      title: t('columns.port'),
+      title: t('model:cluster.property.port'),
       width: 60,
       key: 'port',
       hideInSearch: true,
       render: (_, record) => record.portList?.join(', '),
     },
     {
-      title: t('columns.tls'),
+      title: t('model:cluster.property.tls'),
       width: 60,
       dataIndex: 'tls',
       key: 'tls',
       hideInSearch: true,
       render(_, record) {
-        return record.tls ? t('tls.on') : t('tls.off')
+        return record.tls
+          ? t('model:cluster.tls.on')
+          : t('model:cluster.tls.off')
       },
     },
     {
-      title: t('columns.usage'),
+      title: t('model:cluster.property.usage'),
       key: 'usage',
       width: 300,
       hideInSearch: true,
@@ -344,7 +348,7 @@ function getColumns(
       },
     },
     {
-      title: t('columns.createTime'),
+      title: t('model:cluster.property.createTime'),
       width: 180,
       dataIndex: 'createTime',
       key: 'createTime',
@@ -352,7 +356,7 @@ function getColumns(
       valueType: 'dateTime',
     },
     {
-      title: t('columns.updateTime'),
+      title: t('model:cluster.property.updateTime'),
       width: 180,
       dataIndex: 'updateTime',
       key: 'updateTime',
@@ -360,7 +364,7 @@ function getColumns(
       valueType: 'dateTime',
     },
     {
-      title: t('columns.deleteTime'),
+      title: t('model:cluster.property.deleteTime'),
       width: 180,
       dataIndex: 'deleteTime',
       key: 'deleteTime',
@@ -372,7 +376,7 @@ function getColumns(
       width: 100,
       key: 'actions',
       valueType: 'option',
-      render(_) {
+      render() {
         return [
           // TODO: implement actions in cluster list
           <a key="edit">{t('actions.edit')}</a>,
