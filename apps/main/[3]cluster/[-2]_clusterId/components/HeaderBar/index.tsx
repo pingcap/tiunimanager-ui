@@ -106,8 +106,7 @@ export default function HeaderBar() {
         key="delete"
         title={t('delete.confirm')}
         confirmInput={{
-          tip: t('delete.confirm-tip'),
-          expect: clusterId!.slice(-8),
+          expect: 'delete',
         }}
         onConfirm={handleDelete}
       >
