@@ -12,7 +12,6 @@ export interface DeleteConfirmProps {
   disabled?: boolean
   onConfirm: (close: () => void) => void
   confirmInput?: {
-    tip: string
     expect: string
   }
 }
@@ -31,6 +30,9 @@ export function DeleteConfirm({
 
   const [visible, setVisible] = useState(false)
   const [input, setInput] = useState('')
+
+  const confirmDisabled = confirmInput && input !== confirmInput.expect
+
   const popConfirmModal = () => {
     if (disabled) return
     setVisible(true)
@@ -76,7 +78,7 @@ export function DeleteConfirm({
       <Button
         className={styles.confirmButton}
         onClick={handleConfirm}
-        disabled={confirmInput && input !== confirmInput.expect}
+        disabled={confirmDisabled}
         danger
         type="primary"
       >

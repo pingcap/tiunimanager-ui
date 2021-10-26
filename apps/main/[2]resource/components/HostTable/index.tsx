@@ -255,8 +255,7 @@ function getHostColumns(
             key="delete"
             title={t('delete.confirm')}
             confirmInput={{
-              tip: t('delete.confirm-tip'),
-              expect: record.hostName!,
+              expect: 'delete',
             }}
             onConfirm={async (close) => {
               await deleteAction(record.hostId!)

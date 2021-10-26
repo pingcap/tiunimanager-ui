@@ -8,7 +8,6 @@ actions:
   delete: 删除
 delete:
   confirm: 确认删除该集群吗?
-  confirm-tip: 集群 ID 末尾部分
   success: '删除集群 {{ msg }} 成功'
   fail: '删除失败: {{ msg }}'
 backup:

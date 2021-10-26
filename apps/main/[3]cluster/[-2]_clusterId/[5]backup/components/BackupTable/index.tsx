@@ -280,7 +280,6 @@ function getColumns(
             key="delete"
             title={t('delete.confirm')}
             confirmInput={{
-              tip: '',
               expect: 'delete',
             }}
             onConfirm={async (close) => {
