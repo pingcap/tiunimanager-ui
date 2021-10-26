@@ -1,4 +1,4 @@
-import { PropsWithChildren, ReactNode, useMemo, useState } from 'react'
+import { PropsWithChildren, ReactNode, useState } from 'react'
 import { Button, Input, Modal } from 'antd'
 import styles from './index.module.less'
 import { loadI18n, useI18n } from '@i18n-macro'
@@ -31,10 +31,7 @@ export function DeleteConfirm({
   const [visible, setVisible] = useState(false)
   const [input, setInput] = useState('')
 
-  const confirmDisabled = useMemo(
-    () => confirmInput && input !== confirmInput.expect,
-    [confirmInput, input]
-  )
+  const confirmDisabled = confirmInput && input !== confirmInput.expect
 
   const popConfirmModal = () => {
     if (disabled) return
