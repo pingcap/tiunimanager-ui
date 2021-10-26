@@ -1,4 +1,4 @@
-import { PropsWithChildren, ReactNode, useState } from 'react'
+import { PropsWithChildren, ReactNode, useMemo, useState } from 'react'
 import { Button, Input, Modal } from 'antd'
 import styles from './index.module.less'
 import { loadI18n, useI18n } from '@i18n-macro'
@@ -12,7 +12,6 @@ export interface DeleteConfirmProps {
   disabled?: boolean
   onConfirm: (close: () => void) => void
   confirmInput?: {
-    tip: string
     expect: string
   }
 }
@@ -31,6 +30,12 @@ export function DeleteConfirm({
 
   const [visible, setVisible] = useState(false)
   const [input, setInput] = useState('')
+
+  const confirmDisabled = useMemo(
+    () => confirmInput && input.trim().toLowerCase() !== confirmInput.expect,
+    [confirmInput, input]
+  )
+
   const popConfirmModal = () => {
     if (disabled) return
     setVisible(true)
@@ -76,7 +81,7 @@ export function DeleteConfirm({
       <Button
         className={styles.confirmButton}
         onClick={handleConfirm}
-        disabled={confirmInput && input !== confirmInput.expect}
+        disabled={confirmDisabled}
         danger
         type="primary"
       >
