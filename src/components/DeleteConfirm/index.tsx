@@ -32,7 +32,7 @@ export function DeleteConfirm({
   const [input, setInput] = useState('')
 
   const confirmDisabled = useMemo(
-    () => confirmInput && input.trim().toLowerCase() !== confirmInput.expect,
+    () => confirmInput && input !== confirmInput.expect,
     [confirmInput, input]
   )
 
