@@ -47,8 +47,6 @@ clusterLog:
     level: 日志级别
     message: 日志内容
     source: 源文件
-    startTime: 起始时间
-    endTime: 截至时间
     took: 耗时
 clusterBackup:
   property:
