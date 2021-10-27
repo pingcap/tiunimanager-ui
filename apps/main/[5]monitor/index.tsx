@@ -1,5 +1,6 @@
 import { ExternalService } from '@/components/ExternalService'
+import { getEnvState } from '@store/env'
 
 export default function () {
-  return <ExternalService src={import.meta.env.VITE_MONITOR_URL} />
+  return <ExternalService src={getEnvState().service.grafana || ''} />
 }
