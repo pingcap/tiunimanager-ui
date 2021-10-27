@@ -10,7 +10,6 @@ cluster:
     intranetAddress: Intranet Address
     password: Password
     tag: Tag
-    port: Port
     createTime: Create Time
     updateTime: Update Time
     deleteTime: Delete Time
