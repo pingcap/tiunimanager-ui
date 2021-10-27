@@ -16,6 +16,7 @@ import { readonly } from '@/utils/obj'
 import { createElement, FC } from 'react'
 import { QueryClient, QueryClientProvider, UseQueryOptions } from 'react-query'
 import { initModelTranslations } from './model'
+import { getEnvState, subscribeEnv } from '@store/env'
 
 function initAxios() {
   const instance = axios.create()
@@ -23,12 +24,23 @@ function initAxios() {
   return instance
 }
 
+function buildBasePath(
+  basePath: string,
+  protocol: 'http' | 'https',
+  tlsPort: number
+) {
+  return protocol === 'https'
+    ? `https://${location.hostname}:${tlsPort}${basePath}`
+    : basePath
+}
+
 function initApis(basePath: string, axiosInstance: AxiosInstance) {
+  const { tlsPort, protocol } = getEnvState()
   const configuration = new Configuration({
-    basePath,
-    // TODO: use API Key
-    apiKey: '',
-    baseOptions: {},
+    basePath: buildBasePath(basePath, protocol, tlsPort),
+  })
+  subscribeEnv((env) => {
+    configuration.basePath = buildBasePath(basePath, env.protocol, env.tlsPort)
   })
 
   initModelTranslations()
