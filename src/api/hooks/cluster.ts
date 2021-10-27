@@ -300,3 +300,28 @@ const exportCluster = (payload: RequestTransportExport) =>
 export function useExportCluster() {
   return useMutation(exportCluster)
 }
+
+/**
+ * Cluster External Services
+ */
+
+const CACHE_CLUSTER_EXTERNAL_SERVICE = 'cluster-external-service'
+
+export function useQueryClusterExternalService(
+  query: {
+    id: string
+  },
+  options?: PartialUseQueryOptions
+) {
+  const { id } = query
+  return useQuery(
+    [CACHE_CLUSTER_EXTERNAL_SERVICE, id],
+    () => APIS.Clusters.clustersClusterIdMonitorGet(id),
+    {
+      cacheTime: 1000 * 60 * 60,
+      staleTime: 1000 * 60 * 60,
+      refetchOnWindowFocus: false,
+      ...options,
+    }
+  )
+}

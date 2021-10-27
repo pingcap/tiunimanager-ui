@@ -98,7 +98,7 @@ function getColumns(t: TFunction<''>) {
     },
     {
       title: t('model:clusterLog.property.component'),
-      width: 80,
+      width: 120,
       key: 'module',
       dataIndex: 'module',
       valueType: 'select',

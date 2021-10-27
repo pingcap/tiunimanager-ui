@@ -44,8 +44,8 @@ clusterLog:
     ip: IP
     level: Level
     message: Message
-    module: Component
-    sourceLine: Source Line
+    component: Component
+    source: Source
     time: Time
     took: Took
 clusterBackup:
