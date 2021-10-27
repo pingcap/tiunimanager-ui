@@ -17,7 +17,7 @@ export function useQueryHostsList(
 ) {
   const { page, pageSize, purpose, status, loadStat } = query
   return useQuery(
-    [CACHE_HOSTS_LIST_KEY, status, purpose, page, pageSize],
+    [CACHE_HOSTS_LIST_KEY, status, loadStat, purpose, page, pageSize],
     () =>
       APIS.Resources.resourcesHostsGet(
         loadStat,

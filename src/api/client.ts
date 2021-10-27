@@ -38,9 +38,6 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
   const { tlsPort, protocol } = getEnvState()
   const configuration = new Configuration({
     basePath: buildBasePath(basePath, protocol, tlsPort),
-    // TODO: use API Key
-    apiKey: '',
-    baseOptions: {},
   })
   subscribeEnv((env) => {
     configuration.basePath = buildBasePath(basePath, env.protocol, env.tlsPort)

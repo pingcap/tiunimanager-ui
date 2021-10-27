@@ -176,7 +176,7 @@ function getHostColumns(
       title: t('model:host.property.load'),
       width: 80,
       dataIndex: 'loadStat',
-      key: 'load',
+      key: 'loadStat',
       valueType: 'select',
       valueEnum: {
         0: { text: t('model:host.load.idle'), status: 'Default' },
