@@ -51,9 +51,6 @@ export function Desc({ cluster }: DescProps) {
           </span>
         ))}
       </Descriptions.Item>
-      <Descriptions.Item label={t('cluster.property.port')}>
-        {cluster.portList?.join(', ')}
-      </Descriptions.Item>
       <Descriptions.Item label={t('cluster.property.status')}>
         {getStatus(t, cluster.statusCode!)}
       </Descriptions.Item>

@@ -272,13 +272,6 @@ function getColumns(
       },
     },
     {
-      title: t('model:cluster.property.port'),
-      width: 60,
-      key: 'port',
-      hideInSearch: true,
-      render: (_, record) => record.portList?.join(', '),
-    },
-    {
       title: t('model:cluster.property.tls'),
       width: 60,
       dataIndex: 'tls',
@@ -395,6 +388,5 @@ const defaultColumnsSetting: Record<string, ColumnsState> = {
   updateTime: { show: false },
   password: { show: false },
   tag: { show: false },
-  port: { show: false },
   tls: { show: false },
 }

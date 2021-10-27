@@ -8,7 +8,6 @@ cluster:
     intranetAddress: 内网地址
     password: 密码
     tag: 标签
-    port: 端口
     version: 版本
     type: 类型
     createTime: 创建时间
