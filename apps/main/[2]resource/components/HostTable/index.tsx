@@ -229,7 +229,7 @@ function getHostColumns(
       width: 130,
       key: 'availableSpec',
       render(_, record) {
-        return `${record.cpuCores}C ${record.memory}G`
+        return `${record.freeCpuCores}C ${record.freeMemory}G`
       },
       hideInSearch: true,
     },
