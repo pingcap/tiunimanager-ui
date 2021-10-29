@@ -247,10 +247,11 @@ function getHostColumns(
       valueType: 'option',
       render(_, record) {
         return [
-          <a key="edit">
-            {record.status === 1 ? t('actions.offline') : t('actions.online')}
-          </a>,
-          <a key="monitor">{t('actions.monitor')}</a>,
+          // TODO: wait for edit support and monitor support
+          // <a key="edit">
+          //   {record.status === 1 ? t('actions.offline') : t('actions.online')}
+          // </a>,
+          // <a key="monitor">{t('actions.monitor')}</a>,
           <DeleteConfirm
             key="delete"
             title={t('delete.confirm')}
