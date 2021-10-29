@@ -1,4 +1,5 @@
 name: 集群管理
 header:
   title: 集群列表
+  takeover: 接管集群
   new: 创建集群

@@ -32,7 +32,6 @@ export default function ClusterTable() {
 
   const isLoading = isDataLoading || isKnowledgeLoading
 
-  console.log(columns)
   return (
     <HeavyTable
       headerTitle={null}

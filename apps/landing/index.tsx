@@ -9,7 +9,6 @@ import { DownOutlined, KeyOutlined, UserOutlined } from '@ant-design/icons'
 import LanguageDropdown from '@/components/LanguageDropdown'
 import { CommonResult, UserInfo } from '@/api/model'
 import { doUserLogin } from '@/api/hooks/platform'
-import IntlForm from '@/components/IntlForm'
 import { Logo } from '@/components/Logo'
 
 export default function Login() {
@@ -43,7 +42,7 @@ export default function Login() {
       }}
     >
       <Card className={styles.container} bordered={false}>
-        <IntlForm
+        <Form
           className={styles.form}
           onFinish={handleSubmit}
           layout="vertical"
@@ -86,7 +85,7 @@ export default function Login() {
               {t('form.submit')}
             </Button>
           </Form.Item>
-        </IntlForm>
+        </Form>
         <div className={styles.toolbar}>
           <LanguageDropdown className={styles.switchLanguage}>
             <a>

@@ -1,4 +1,5 @@
 name: Cluster
 header:
   title: Clusters List
+  takeover: Take Over
   new: New Cluster
