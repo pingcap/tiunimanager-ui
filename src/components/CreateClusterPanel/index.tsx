@@ -372,14 +372,15 @@ function BasicOptions({
           </Form.Item>
         </Input.Group>
       </Form.Item>
-      <Form.Item
+      {/* TODO: wait for TLS support */}
+      {/* <Form.Item
         name="tls"
         label={t('basic.fields.tls')}
         valuePropName="checked"
         initialValue={false}
       >
         <Switch />
-      </Form.Item>
+      </Form.Item> */}
     </Card>
   )
 }
