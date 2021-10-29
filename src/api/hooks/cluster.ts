@@ -8,6 +8,7 @@ import {
   RequestTransportImport,
   RequestClusterCreate,
   RequestClusterParamsUpdate,
+  RequestClusterTakeover,
 } from '@/api/model'
 
 /**
@@ -324,4 +325,23 @@ export function useQueryClusterExternalService(
       ...options,
     }
   )
+}
+
+/**
+ * Cluster Takeover
+ */
+
+const takeoverCluster = (payload: RequestClusterTakeover) => {
+  return APIS.Clusters.clustersTakeoverPost({
+    tiupIp: payload.host,
+    tiupPort: payload.port,
+    tiupPath: payload.tiupPath,
+    tiupUserName: payload.user,
+    tiupUserPassword: payload.password,
+    clusterNames: payload.clusterNames,
+  })
+}
+
+export function useTakeoverCluster() {
+  return useMutation(takeoverCluster)
 }

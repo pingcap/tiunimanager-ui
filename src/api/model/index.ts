@@ -1,32 +1,33 @@
 import {
+  BackuprestoreBackupRecord,
   BackuprestoreBackupReq,
   BackuprestoreBackupStrategyUpdateReq,
   BackuprestoreRestoreReq,
-  ImportexportDataExportReq,
-  ImportexportDataImportReq,
-  ManagementCreateReq,
-  ParameterParamUpdateReq,
-  IdentificationLoginInfo,
-  ParameterParamItem,
-  ManagementClusterDisplayInfo,
-  LogSearchTiDBLogDetail,
-  ControllerResultWithPage,
   ControllerCommonResult,
-  IdentificationUserIdentity,
-  HostresourceHostInfo,
-  BackuprestoreBackupRecord,
-  ManagementComponentNodeDisplayInfo,
-  ManagementDetailClusterRsp,
-  WarehouseDomainResource,
-  KnowledgeClusterTypeSpec,
-  KnowledgeClusterComponentSpec,
-  KnowledgeClusterVersionSpec,
+  ControllerResultWithPage,
   FlowtaskFlowWorkDetailInfo,
   FlowtaskFlowWorkDisplayInfo,
-  KnowledgeClusterType,
-  KnowledgeClusterVersion,
+  HostresourceHostInfo,
+  IdentificationLoginInfo,
+  IdentificationUserIdentity,
+  ImportexportDataExportReq,
+  ImportexportDataImportReq,
   KnowledgeClusterComponent,
+  KnowledgeClusterComponentSpec,
+  KnowledgeClusterType,
+  KnowledgeClusterTypeSpec,
+  KnowledgeClusterVersion,
+  KnowledgeClusterVersionSpec,
+  LogSearchTiDBLogDetail,
+  ManagementClusterDisplayInfo,
+  ManagementComponentNodeDisplayInfo,
+  ManagementCreateReq,
+  ManagementDetailClusterRsp,
+  ParameterParamItem,
+  ParameterParamUpdateReq,
+  WarehouseDomainResource,
 } from '#/api'
+import { loadI18nWithNS } from '@i18n-macro'
 
 export type PagedResult = ControllerResultWithPage
 export type CommonResult = ControllerCommonResult
@@ -64,10 +65,16 @@ export type RequestTransportExport = ImportexportDataExportReq
 export type RequestTransportImport = ImportexportDataImportReq
 export type RequestClusterCreate = ManagementCreateReq
 export type RequestClusterParamsUpdate = ParameterParamUpdateReq
+export type RequestClusterTakeover = {
+  clusterNames: string[]
+  host: string
+  port: string
+  user: string
+  password: string
+  tiupPath: string
+}
 
 export type ResponseClusterDetail = ManagementDetailClusterRsp
-
-import { loadI18nWithNS } from '@i18n-macro'
 
 export function initModelTranslations() {
   // load translations

@@ -243,7 +243,7 @@ function getColumns(
       width: 100,
       key: 'size',
       hideInSearch: true,
-      render: (_, record) => (record.size === 0 ? '-' : `${record.size} MB`),
+      render: (_, record) => (record.size! < 0 ? '-' : `${record.size} MB`),
     },
     {
       title: t('model:clusterBackup.property.status'),

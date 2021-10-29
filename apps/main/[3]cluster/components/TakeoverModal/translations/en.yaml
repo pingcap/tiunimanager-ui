@@ -1,0 +1,18 @@
+title: Takeover Cluster
+fields:
+  host: Host
+  port: Port
+  user: User
+  password: Password
+  tiupPath: TiUP Path
+  clusterNames: Clusters
+tooltip:
+  host: The host which TiUP is installed on.
+  user: The user which has TiUP execution permission.
+  clusterNames: Names of the clusters to be takeovered, separated by commas. Use asterisk '*' to indicates all clusters.
+actions:
+  submit: Submit
+  cancel: Cancel
+message:
+  success: Success to takeover clusters
+  fail: 'Fail: {{ msg }}'

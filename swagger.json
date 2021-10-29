@@ -1,4 +1,5 @@
 {
+  "schemes": [],
   "swagger": "2.0",
   "info": {
     "description": "TiEM UI API",
@@ -994,6 +995,67 @@
                   "properties": {
                     "data": {
                       "$ref": "#/definitions/parameter.ParamUpdateRsp"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/{clusterId}/restart": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "restart a cluster",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
+        "summary": "restart a cluster",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "cluster id",
+            "name": "clusterId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/management.RestartClusterRsp"
                     }
                   }
                 }
@@ -3519,34 +3581,29 @@
         }
       }
     },
-    "management.TakeoverReq": {
+    "management.RestartClusterRsp": {
       "type": "object",
       "properties": {
-        "clusterNames": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "clusterId": {
+          "type": "string"
         },
-        "tiupIp": {
-          "type": "string",
-          "example": "172.16.4.147"
+        "createTime": {
+          "type": "string"
         },
-        "tiupPath": {
-          "type": "string",
-          "example": ".tiup/"
+        "deleteTime": {
+          "type": "string"
         },
-        "tiupPort": {
-          "type": "string",
-          "example": "22"
+        "inProcessFlowId": {
+          "type": "integer"
         },
-        "tiupUserName": {
-          "type": "string",
-          "example": "root"
+        "statusCode": {
+          "type": "string"
         },
-        "tiupUserPassword": {
-          "type": "string",
-          "example": "password"
+        "statusName": {
+          "type": "string"
+        },
+        "updateTime": {
+          "type": "string"
         }
       }
     },

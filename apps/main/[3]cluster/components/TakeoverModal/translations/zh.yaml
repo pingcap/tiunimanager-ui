@@ -1,0 +1,18 @@
+title: 接管集群
+fields:
+  host: 中控机 IP
+  port: 中控及 SSH 端口
+  user: 用户
+  password: 密码
+  tiupPath: TiUP 路径
+  clusterNames: 待接管集群
+tooltip:
+  host: TiUP 所在的主机
+  user: 拥有 TiUP 执行权限的用户
+  clusterNames: 待接管的集群名称，用逗号分隔，用星号'*'表示所有集群
+actions:
+  submit: 提交
+  cancel: 取消
+message:
+  success: 创建接管集群任务成功
+  fail: '创建接管集群任务失败 {{ msg }}'
