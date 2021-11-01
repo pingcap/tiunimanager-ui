@@ -3,7 +3,6 @@ import { ResponseClusterDetail, ClusterComponentNodeInfo } from '@/api/model'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction } from 'react-i18next'
 import styles from './index.module.less'
-import { SmallUsageCircle } from '@/components/UsageCircle'
 import { useMemo } from 'react'
 import { ColumnsType } from 'antd/es/table'
 
@@ -102,47 +101,48 @@ function getColumns(t: TFunction<''>): ColumnsType<ClusterComponentNodeInfo> {
       dataIndex: 'port',
       key: 'port',
     },
-    {
-      title: t('model:clusterNode.property.iops'),
-      width: 80,
-      key: 'iops',
-      render: (_, record) =>
-        record.iops && `${record.iops[0]} / ${record.iops[1]}`,
-    },
-    {
-      title: t('model:clusterNode.property.ioutil'),
-      width: 80,
-      dataIndex: 'ioUtil',
-      key: 'ioUtil',
-    },
-    {
-      title: t('model:clusterNode.property.usage'),
-      key: 'usage',
-      width: 180,
-      render(dom, record) {
-        return (
-          <span className={styles.usageCircleContainer}>
-            {record.memoryUsage && (
-              <SmallUsageCircle
-                total={record.memoryUsage.total!}
-                usageRate={record.memoryUsage.usageRate!}
-                used={record.memoryUsage.used!}
-                name={t('usage.mem')}
-                unit="MB"
-              />
-            )}
-            {record.storageUsage && (
-              <SmallUsageCircle
-                total={record.storageUsage.total!}
-                usageRate={record.storageUsage.usageRate!}
-                used={record.storageUsage.used!}
-                name={t('usage.storage')}
-                unit="MB"
-              />
-            )}
-          </span>
-        )
-      },
-    },
+    // TODO: wait for the features beblow implement
+    // {
+    //   title: t('model:clusterNode.property.iops'),
+    //   width: 80,
+    //   key: 'iops',
+    //   render: (_, record) =>
+    //     record.iops && `${record.iops[0]} / ${record.iops[1]}`,
+    // },
+    // {
+    //   title: t('model:clusterNode.property.ioutil'),
+    //   width: 80,
+    //   dataIndex: 'ioUtil',
+    //   key: 'ioUtil',
+    // },
+    // {
+    //   title: t('model:clusterNode.property.usage'),
+    //   key: 'usage',
+    //   width: 180,
+    //   render(dom, record) {
+    //     return (
+    //       <span className={styles.usageCircleContainer}>
+    //         {record.memoryUsage && (
+    //           <SmallUsageCircle
+    //             total={record.memoryUsage.total!}
+    //             usageRate={record.memoryUsage.usageRate!}
+    //             used={record.memoryUsage.used!}
+    //             name={t('usage.mem')}
+    //             unit="MB"
+    //           />
+    //         )}
+    //         {record.storageUsage && (
+    //           <SmallUsageCircle
+    //             total={record.storageUsage.total!}
+    //             usageRate={record.storageUsage.usageRate!}
+    //             used={record.storageUsage.used!}
+    //             name={t('usage.storage')}
+    //             unit="MB"
+    //           />
+    //         )}
+    //       </span>
+    //     )
+    //   },
+    // },
   ]
 }
