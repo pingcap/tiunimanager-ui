@@ -1,4 +1,4 @@
-src/generated/*.ts
+generated/**/*
 
 # User-specific stuff
 .idea/
