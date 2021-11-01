@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react'
 import MainLayout from '@apps/main/layouts'
 import { loadMenus } from '@pages-macro'
-import { IPageMeta, definePage } from '@/model/page'
+import { IPageMeta } from '@/model/page'
 
 const menuItems = loadMenus<IPageMeta>('.')
 
