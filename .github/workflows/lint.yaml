@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - id: changed_files
-        uses: trilom/file-changes-action@v1
+        uses: trilom/file-changes-action@v1.2.3
         with:
           output: ' '
       - uses: actions/setup-node@v2
