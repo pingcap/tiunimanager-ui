@@ -9,6 +9,7 @@
     "release": "cross-env VITE_RELEASE=1 yarn build",
     "serve": "vite preview",
     "lint": "eslint . --cache",
+    "lint:ci": "eslint . --max-warnings 0",
     "prepare": "is-ci || husky install",
     "api:gen": "yarn openapi-generator-cli generate"
   },
@@ -70,7 +71,7 @@
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
-      "eslint --fix",
+      "eslint --fix --max-warnings 0",
       "prettier --write --ignore-unknown"
     ],
     "*.+(json|css|md)": [
