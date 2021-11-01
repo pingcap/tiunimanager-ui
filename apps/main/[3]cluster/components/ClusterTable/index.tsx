@@ -12,7 +12,6 @@ import { useQueryClustersList } from '@/api/hooks/cluster'
 import { ProSchemaValueEnumObj } from '@ant-design/pro-utils/lib/typing'
 import { TFunction } from 'react-i18next'
 import { loadI18n, useI18n } from '@i18n-macro'
-import { SmallUsageCircle } from '@/components/UsageCircle'
 import { usePagination } from '@hooks/usePagination'
 
 loadI18n()

@@ -3,7 +3,6 @@ import { ResponseClusterDetail, ClusterComponentNodeInfo } from '@/api/model'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction } from 'react-i18next'
 import styles from './index.module.less'
-import { SmallUsageCircle } from '@/components/UsageCircle'
 import { useMemo } from 'react'
 import { ColumnsType } from 'antd/es/table'
 
