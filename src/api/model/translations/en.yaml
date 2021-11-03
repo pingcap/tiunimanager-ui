@@ -194,3 +194,5 @@ task:
     processing: Processing
     finished: Finished
     error: Error
+  operator:
+    system: System Automation

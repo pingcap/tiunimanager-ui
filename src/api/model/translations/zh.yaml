@@ -194,3 +194,5 @@ task:
     processing: 进行中
     finished: 完成
     error: 失败
+  operator:
+    system: 系统自动
