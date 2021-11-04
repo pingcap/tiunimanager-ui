@@ -188,12 +188,12 @@ function getHostColumns(
       title: t('columns.location'),
       width: 200,
       key: 'location',
-      tooltip: `${t('model:host.property.az')}, ${t(
-        'model:host.property.region'
+      tooltip: `${t('model:host.property.region')}, ${t(
+        'model:host.property.az'
       )}, ${t('model:host.property.rack')}`,
       hideInSearch: true,
       render(_, record) {
-        return `${record.az}, ${record.region}, ${record.rack}`
+        return `${record.region}, ${record.az}, ${record.rack}`
       },
     },
     {
