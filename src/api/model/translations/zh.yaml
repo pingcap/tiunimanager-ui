@@ -185,7 +185,7 @@ task:
     startTime: 创建时间
     updateTime: 更新时间
     endTime: 结束时间
-    operator: 操作者
+    operator: 发起者
     manual: 触发模式
     status: 状态
     tenantId: 租户ID
@@ -194,3 +194,5 @@ task:
     processing: 进行中
     finished: 完成
     error: 失败
+  operator:
+    system: 系统自动

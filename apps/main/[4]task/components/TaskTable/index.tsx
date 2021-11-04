@@ -143,6 +143,9 @@ function getColumns(t: TFunction<'model'>): ProColumns<TaskWorkflowInfo>[] {
       dataIndex: 'operatorName',
       key: 'operator',
       hideInSearch: true,
+      renderText: (text) => {
+        return text === 'System' ? t('model:task.operator.system') : text
+      },
     },
   ]
 }
