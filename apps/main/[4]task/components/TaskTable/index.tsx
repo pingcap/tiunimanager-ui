@@ -6,6 +6,7 @@ import styles from './index.module.less'
 import { TFunction, useTranslation } from 'react-i18next'
 import { usePagination } from '@hooks/usePagination'
 import { useQueryTasks } from '@/api/hooks/task'
+import TaskSteps from '@apps/main/[4]task/components/TaskSteps'
 
 export default function TaskTable() {
   const {
@@ -51,6 +52,11 @@ export default function TaskTable() {
       }}
       options={{
         reload: () => refetch(),
+      }}
+      expandable={{
+        expandedRowRender: (record) => <TaskSteps id={record?.id || 0} />,
+        expandIconColumnIndex: -1,
+        expandRowByClick: true,
       }}
     />
   )
