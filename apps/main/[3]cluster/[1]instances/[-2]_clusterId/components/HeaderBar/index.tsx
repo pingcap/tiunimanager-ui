@@ -9,7 +9,7 @@ import {
 } from '@ant-design/icons'
 import { CopyIconButton } from '@/components/CopyToClipboard'
 import styles from './index.module.less'
-import { useClusterContext } from '@apps/main/[3]cluster/[-2]_clusterId/context'
+import { useClusterContext } from '@apps/main/[3]cluster/[1]instances/[-2]_clusterId/context'
 import {
   invalidateClusterBackups,
   invalidateClusterDetail,
@@ -24,7 +24,7 @@ import { errToMsg } from '@/utils/error'
 import {
   ImportPanel,
   ExportPanel,
-} from '@apps/main/[3]cluster/[-2]_clusterId/components/TransportPanel'
+} from '@apps/main/[3]cluster/[1]instances/[-2]_clusterId/components/TransportPanel'
 import { DeleteConfirm } from '@/components/DeleteConfirm'
 
 loadI18n()

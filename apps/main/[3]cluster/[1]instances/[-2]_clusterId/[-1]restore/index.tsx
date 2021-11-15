@@ -4,7 +4,7 @@ import { useCallback } from 'react'
 import HeaderBar from './components/HeaderBar'
 import { RestorePanel } from './components/RestorePanel'
 import { ClusterBackupItem } from '@/api/model'
-import { useClusterContext } from '@apps/main/[3]cluster/[-2]_clusterId/context'
+import { useClusterContext } from '@apps/main/[3]cluster/[1]instances/[-2]_clusterId/context'
 import { Redirect } from 'react-router-dom'
 
 export default function () {
