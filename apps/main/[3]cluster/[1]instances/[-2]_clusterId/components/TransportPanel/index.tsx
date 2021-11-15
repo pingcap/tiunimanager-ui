@@ -1,6 +1,6 @@
 import { Button, Drawer, Form, Input, message, Radio, Select } from 'antd'
 import styles from './index.module.less'
-import { useExportCluster, useImportCluster } from '@/api/hooks/cluster'
+import { useExportCluster, useImportCluster } from '@/api/hooks/transport'
 import { errToMsg } from '@/utils/error'
 import { useMemo } from 'react'
 import { loadI18n, useI18n } from '@i18n-macro'

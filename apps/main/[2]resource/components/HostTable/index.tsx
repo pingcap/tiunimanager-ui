@@ -1,9 +1,8 @@
 import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import HeavyTable from '@/components/HeavyTable'
-import { PagedResult, HostInfo } from '@/api/model'
+import { HostInfo, PagedResult } from '@/api/model'
 import { useCallback, useMemo, useState } from 'react'
 import { message } from 'antd'
-import useLocalStorage from '@hooks/useLocalstorage'
 import {
   invalidateHostDetail,
   invalidateHostsList,
@@ -30,7 +29,7 @@ export default function HostTable() {
     setPagination,
     pagination,
   } = useFetchHostData()
-  const { columns, columnsSetting, setColumnSetting } = useTableColumn()
+  const columns = useTableColumn()
 
   return (
     <HeavyTable
@@ -52,11 +51,13 @@ export default function HostTable() {
         },
       }}
       rowKey="hostId"
-      columnsState={columnsSetting}
+      columnsState={{
+        persistenceKey: 'host-table-show',
+        defaultValue: defaultColumnsSetting,
+      }}
       search={{
         filterType: 'light',
       }}
-      onColumnsStateChange={(m) => setColumnSetting(m)}
       className={styles.hostTable}
       options={{
         reload: () => refetch(),
@@ -117,22 +118,11 @@ function useTableColumn() {
       ),
     [queryClient, deleteHosts.mutateAsync]
   )
-  const columns = useMemo(
+
+  return useMemo(
     () => getHostColumns(t, deleteAction),
     [deleteAction, i18n.language]
   )
-
-  const [columnsSetting, setColumnSetting] = useLocalStorage(
-    'host-table-show',
-    defaultColumnsSetting
-  )
-  return {
-    columns,
-    columnsSetting: {
-      value: columnsSetting,
-    },
-    setColumnSetting,
-  }
 }
 
 function getHostColumns(

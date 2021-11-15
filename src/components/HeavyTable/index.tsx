@@ -11,6 +11,7 @@ const defaultTableProps = {
 export default function HeavyTable<T, U, R>({
   pagination,
   options,
+  columnsState,
   ...props
 }: PropsWithChildren<ProTableProps<T, U, R>>) {
   return (
@@ -32,6 +33,10 @@ export default function HeavyTable<T, U, R>({
       }}
       locale={{
         emptyText: '',
+      }}
+      columnsState={{
+        persistenceType: 'localStorage',
+        ...columnsState,
       }}
       {...props}
       toolBarRender={props.toolBarRender}

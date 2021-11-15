@@ -9,7 +9,6 @@ import {
 import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction } from 'react-i18next'
 import { usePagination } from '@hooks/usePagination'
-import useLocalStorage from '@hooks/useLocalstorage'
 import styles from './index.module.less'
 import moment from 'moment'
 
@@ -23,7 +22,7 @@ export function LogsTable({ cluster }: LogsTableProps) {
   const { data, refetch, isLoading, setPagination, pagination, setFilter } =
     useFetchLogsData(cluster.clusterId!)
 
-  const { columns, columnsSetting, setColumnSetting } = useTableColumns()
+  const columns = useTableColumns()
 
   return (
     <HeavyTable
@@ -41,8 +40,10 @@ export function LogsTable({ cluster }: LogsTableProps) {
         reload: () => refetch(),
       }}
       columns={columns}
-      onColumnsStateChange={setColumnSetting}
-      columnsState={columnsSetting}
+      columnsState={{
+        persistenceKey: 'log-table-show',
+        defaultValue: defaultColumnsSetting,
+      }}
       pagination={{
         pageSize: pagination.pageSize,
         current: pagination.page,
@@ -59,17 +60,7 @@ export function LogsTable({ cluster }: LogsTableProps) {
 function useTableColumns() {
   const { t, i18n } = useI18n()
 
-  const [columnsSetting, setColumnSetting] = useLocalStorage(
-    'cluster-logs-table-show',
-    defaultColumnsSetting
-  )
-  const columns = useMemo(() => getColumns(t), [i18n.language])
-
-  return {
-    columnsSetting: { value: columnsSetting },
-    columns,
-    setColumnSetting,
-  }
+  return useMemo(() => getColumns(t), [i18n.language])
 }
 
 function getColumns(t: TFunction<''>) {
