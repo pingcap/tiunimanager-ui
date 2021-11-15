@@ -16,6 +16,7 @@ import { useQueryClient } from 'react-query'
 import { message, Tooltip } from 'antd'
 import { errToMsg } from '@/utils/error'
 import moment from 'moment'
+import { CopyIconButton } from '@/components/CopyToClipboard'
 
 loadI18n()
 
@@ -199,6 +200,12 @@ function getColumns(
       dataIndex: 'filePath',
       key: 'filePath',
       hideInSearch: true,
+      render: (_, record) => (
+        <span>
+          <CopyIconButton text={record.filePath!} label={t('copy.filePath')} />
+          {record.filePath}
+        </span>
+      ),
     },
     {
       title: t('model:transport.property.comment'),

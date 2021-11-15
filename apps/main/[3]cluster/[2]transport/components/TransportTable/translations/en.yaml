@@ -9,3 +9,5 @@ delete:
   fail: 'Fail to delete: {{ msg }}'
 download:
   notSupport: Downloading from AWS S3 is not currently supported.
+copy:
+  filePath: Copy file path.
