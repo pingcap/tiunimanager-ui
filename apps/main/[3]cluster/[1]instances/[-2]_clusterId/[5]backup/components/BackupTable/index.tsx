@@ -1,7 +1,6 @@
 import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import { useCallback, useMemo, useState } from 'react'
-import useLocalStorage from '@hooks/useLocalstorage'
-import { ClusterInfo, PagedResult, ClusterBackupItem } from '@/api/model'
+import { ClusterBackupItem, ClusterInfo, PagedResult } from '@/api/model'
 import HeavyTable from '@/components/HeavyTable'
 import { message, Popconfirm } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
@@ -50,7 +49,7 @@ export default function BackupTable({ cluster }: BackupTableProps) {
     setFilter,
   } = useFetchBackupData(cluster.clusterId!)
 
-  const { columns, columnsSetting, setColumnSetting } = useTableColumn({
+  const columns = useTableColumn({
     cluster,
   })
 
@@ -81,8 +80,10 @@ export default function BackupTable({ cluster }: BackupTableProps) {
             setPagination({ page, pageSize: pageSize || pagination.pageSize })
         },
       }}
-      columnsState={columnsSetting}
-      onColumnsStateChange={(m) => setColumnSetting(m)}
+      columnsState={{
+        persistenceKey: 'backup-table-show',
+        defaultValue: defaultColumnsSetting,
+      }}
       rowKey="id"
       search={{
         filterType: 'light',
@@ -125,10 +126,6 @@ function useFetchBackupData(clusterId: string) {
 function useTableColumn({ cluster }: { cluster: ClusterInfo }) {
   const clusterId = cluster.clusterId!
   const { t, i18n } = useI18n()
-  const [columnsSetting, setColumnSetting] = useLocalStorage(
-    'cluster-backup-table-show',
-    defaultColumnsSetting
-  )
   const history = useHistory()
 
   const deleteBackup = useDeleteClusterBackup()
@@ -168,18 +165,10 @@ function useTableColumn({ cluster }: { cluster: ClusterInfo }) {
     [history, cluster]
   )
 
-  const columns = useMemo(
+  return useMemo(
     () => getColumns(t, restoreAction, deleteAction),
     [i18n.language, deleteAction]
   )
-
-  return {
-    columns,
-    columnsSetting: {
-      value: columnsSetting,
-    },
-    setColumnSetting,
-  }
 }
 
 function getColumns(
