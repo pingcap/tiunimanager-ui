@@ -1,13 +1,37 @@
-import { Button, Drawer, Form, Input, message, Radio, Select } from 'antd'
+import {
+  Button,
+  Drawer,
+  Form,
+  Input,
+  message,
+  Radio,
+  Select,
+  Table,
+  Tooltip,
+  Upload,
+  UploadProps,
+} from 'antd'
 import styles from './index.module.less'
-import { useExportCluster, useImportCluster } from '@/api/hooks/transport'
+import {
+  useExportCluster,
+  useImportCluster,
+  useQueryTransportRecords,
+} from '@/api/hooks/transport'
 import { errToMsg } from '@/utils/error'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { CodeInput } from '@/components/CodeEditor'
-import { RequestTransportExport, RequestTransportImport } from '@/api/model'
+import {
+  PagedResult,
+  RequestTransportExport,
+  TransportRecord,
+} from '@/api/model'
 import { useStateWithDefault } from '@hooks/useStateWithDefault'
-import { TFunction } from 'react-i18next'
+import { UploadOutlined } from '@ant-design/icons'
+import { getFsUploadURL } from '@/api/hooks/fs'
+import { useAuthState } from '@store/auth'
+import { usePagination } from '@hooks/usePagination'
+import { formatTimeString } from '@/utils/time'
 
 loadI18n()
 
@@ -25,28 +49,59 @@ export function ExportPanel({
   const [form] = Form.useForm()
   const exportCluster = useExportCluster()
   const { t, i18n } = useI18n()
-  const storageForm = useStorageForm({
-    mode: 'export',
-    t,
-    lang: i18n.language,
-  })
+
+  const [targetType, setTargetType, resetTargetType] = useStateWithDefault<
+    'nfs' | 's3'
+  >('nfs')
   const [fileType, setFileType, resetFileType] = useStateWithDefault<
     'sql' | 'csv'
   >('csv')
   const [filterType, setFilterType, resetFilterType] = useStateWithDefault<
     'sql' | 'db' | 'none'
   >('none')
+
   const onClose = () => {
-    storageForm.reset()
+    resetTargetType()
     resetFileType()
     resetFilterType()
     close?.()
   }
 
+  const { s3Options, processS3Options } = useS3Options()
+
+  const targetOptions = useMemo(
+    () => (
+      <>
+        <Form.Item
+          name="storageType"
+          label={t('form.storageType')}
+          initialValue="nfs"
+        >
+          <Radio.Group onChange={(e) => setTargetType(e.target.value)}>
+            <Radio value="nfs">{t('enum.storageType.nfs')}</Radio>
+            <Radio value="s3">{t('enum.storageType.s3')}</Radio>
+          </Radio.Group>
+        </Form.Item>
+        {targetType === 's3' ? (
+          s3Options
+        ) : (
+          <Form.Item
+            name="zipName"
+            label={t('form.nfs.fileName')}
+            tooltip={t('tips.nfs.fileName')}
+          >
+            <Input suffix=".zip" />
+          </Form.Item>
+        )}
+      </>
+    ),
+    [targetType, i18n.language, s3Options]
+  )
+
   const formDom = useMemo(() => {
     async function onConfirm() {
-      const value = (await form.validateFields()) as RequestTransportExport
-      storageForm.processValues(value)
+      const value = await form.validateFields()
+      processS3Options(value)
       if (value.filter && Array.isArray(value.filter)) {
         value.filter = value.filter.join(';')
       }
@@ -71,7 +126,7 @@ export function ExportPanel({
     const target = (
       <section>
         <h3>{t('export.target')}</h3>
-        {storageForm.form}
+        {targetOptions}
       </section>
     )
 
@@ -125,7 +180,11 @@ export function ExportPanel({
           </Radio.Group>
         </Form.Item>
         {filterType === 'db' && (
-          <Form.Item name="filter" label={' '} tooltip={t('tips.filter.db')}>
+          <Form.Item
+            name="filter"
+            label={t('form.condition')}
+            tooltip={t('tips.filter.db')}
+          >
             <Select
               mode="tags"
               tokenSeparators={[';']}
@@ -137,12 +196,15 @@ export function ExportPanel({
           <Form.Item
             name="sql"
             className={styles.sqlEditor}
-            label={' '}
+            label={t('form.condition')}
             tooltip={t('tips.filter.sql')}
           >
             <CodeInput />
           </Form.Item>
         )}
+        <Form.Item name="comment" label={t('form.comment')}>
+          <Input.TextArea />
+        </Form.Item>
       </section>
     )
 
@@ -164,7 +226,8 @@ export function ExportPanel({
       </Form>
     )
   }, [
-    storageForm.form,
+    targetOptions,
+    processS3Options,
     fileType,
     filterType,
     i18n.language,
@@ -180,7 +243,7 @@ export function ExportPanel({
       width={720}
       onClose={onClose}
       visible={visible}
-      bodyStyle={{ paddingBottom: 80 }}
+      bodyStyle={{ padding: 60, paddingTop: 20 }}
       destroyOnClose={true}
       footer={
         <Button
@@ -203,24 +266,195 @@ export function ImportPanel({
   close,
   visible,
 }: TransportPanelProps) {
+  const token = useAuthState((state) => state.token)
   const [form] = Form.useForm()
   const importCluster = useImportCluster()
   const { t, i18n } = useI18n()
-  const storageForm = useStorageForm({
-    mode: 'import',
-    t,
-    lang: i18n.language,
-  })
+  const [sourceType, setSourceType, resetSourceType] = useStateWithDefault<
+    'local' | 'nfs' | 's3'
+  >('local')
+  const [uploaded, setUploaded] = useState(false)
+  const [selectedImportable, setSelectedImportable] = useState<
+    TransportRecord | undefined
+  >(undefined)
+
+  const clearSourceOptions = () => {
+    setUploaded(false)
+    setSelectedImportable(undefined)
+  }
+
   const onClose = () => {
-    storageForm.reset()
+    resetSourceType()
+    clearSourceOptions()
     close?.()
   }
 
+  const submitEnabled =
+    sourceType === 's3' ||
+    (sourceType === 'nfs' && !!selectedImportable) ||
+    (sourceType === 'local' && uploaded)
+
+  const { importableRecords, isLoading, pagination, setPagination } =
+    useImportableRecords(sourceType === 'nfs')
+
+  const { s3Options, processS3Options } = useS3Options()
+
+  const sourceOptions = useMemo(() => {
+    const checkFileFormat: UploadProps['beforeUpload'] = (file) => {
+      // see https://www.iana.org/assignments/media-types/media-types.xhtml
+      if (file.type.includes('zip')) {
+        setUploaded(false)
+        return true
+      }
+      message.error(t('upload.error.format'))
+      return Upload.LIST_IGNORE
+    }
+
+    const localOptions = (
+      <Form.Item label={' '}>
+        <Upload
+          name="file"
+          action={getFsUploadURL()}
+          data={{
+            clusterId,
+          }}
+          headers={{
+            Authorization: `Bearer ${token}`,
+          }}
+          showUploadList={{
+            showRemoveIcon: false,
+          }}
+          beforeUpload={checkFileFormat}
+          maxCount={1}
+          onChange={(info) => {
+            switch (info.file.status) {
+              case 'done':
+                message.success(t('upload.status.success'), 2)
+                setUploaded(true)
+                return
+              case 'error':
+                message.error(
+                  t('upload.status.fail', {
+                    msg: info.file.response.message || 'unknown',
+                  })
+                )
+                return
+            }
+          }}
+        >
+          <Button icon={<UploadOutlined />}>{t('upload.button')}</Button>
+        </Upload>
+      </Form.Item>
+    )
+
+    const nfsOptions = (
+      <Table
+        columns={[
+          {
+            title: t('importable.time'),
+            width: 100,
+            key: 'time',
+            render: (_, record) => formatTimeString(record.startTime!),
+          },
+          {
+            title: t('model:transport.property.clusterId'),
+            width: 100,
+            dataIndex: 'clusterId',
+            key: 'clusterId',
+            render: (_, record) => (
+              <Tooltip placement="top" title={record.clusterId}>
+                {record.clusterId}
+              </Tooltip>
+            ),
+            ellipsis: {
+              showTitle: false,
+            },
+          },
+          {
+            title: t('model:transport.property.comment'),
+            width: 120,
+            dataIndex: 'comment',
+            key: 'comment',
+            render: (_, record) => (
+              <Tooltip placement="top" title={record.comment}>
+                {record.comment}
+              </Tooltip>
+            ),
+            ellipsis: {
+              showTitle: false,
+            },
+          },
+        ]}
+        rowSelection={{
+          type: 'radio',
+          hideSelectAll: true,
+          selectedRowKeys: selectedImportable
+            ? [selectedImportable.recordId!]
+            : [],
+          onChange: (_, records) => {
+            if (records.length) setSelectedImportable(records[0])
+            else setSelectedImportable(undefined)
+          },
+        }}
+        dataSource={importableRecords?.data.data?.transportRecords || []}
+        loading={isLoading}
+        pagination={{
+          showSizeChanger: false,
+          pageSize: pagination.pageSize,
+          current: pagination.page,
+          total: (importableRecords?.data as PagedResult)?.page?.total || 0,
+          onChange(page) {
+            setSelectedImportable(undefined)
+            setPagination({ page, pageSize: pagination.pageSize })
+          },
+        }}
+        rowKey="recordId"
+        size="small"
+      />
+    )
+
+    return (
+      <>
+        <Form.Item
+          name="storageType"
+          label={t('form.storageType')}
+          initialValue="local"
+        >
+          <Radio.Group
+            onChange={(e) => {
+              setSourceType(e.target.value)
+              clearSourceOptions()
+            }}
+          >
+            <Radio value="local">{t('enum.storageType.local')}</Radio>
+            <Radio value="nfs">{t('enum.storageType.nfs')}</Radio>
+            <Radio value="s3">{t('enum.storageType.s3')}</Radio>
+          </Radio.Group>
+        </Form.Item>
+        {sourceType === 'local'
+          ? localOptions
+          : sourceType === 's3'
+          ? s3Options
+          : nfsOptions}
+      </>
+    )
+  }, [
+    sourceType,
+    i18n.language,
+    s3Options,
+    token,
+    isLoading,
+    importableRecords,
+    selectedImportable,
+  ])
+
   const formDom = useMemo(() => {
     async function onConfirm() {
-      const value = (await form.validateFields()) as RequestTransportImport
-      storageForm.processValues(value)
+      const value = await form.validateFields()
+      processS3Options(value)
       value.clusterId = clusterId
+      if (value.storageType === 'nfs')
+        value.recordId = selectedImportable!.recordId!
       await importCluster.mutateAsync(
         {
           clusterId,
@@ -241,7 +475,7 @@ export function ImportPanel({
     const source = (
       <section>
         <h3>{t('import.source')}</h3>
-        {storageForm.form}
+        {sourceOptions}
       </section>
     )
 
@@ -277,7 +511,13 @@ export function ImportPanel({
         {target}
       </Form>
     )
-  }, [storageForm.form, i18n.language, form, importCluster.mutateAsync])
+  }, [
+    sourceOptions,
+    i18n.language,
+    form,
+    importCluster.mutateAsync,
+    sourceType === 'nfs' ? selectedImportable : undefined,
+  ])
 
   return (
     <Drawer
@@ -287,7 +527,7 @@ export function ImportPanel({
       width={720}
       onClose={onClose}
       visible={visible}
-      bodyStyle={{ paddingBottom: 80 }}
+      bodyStyle={{ padding: 60, paddingTop: 20 }}
       destroyOnClose={true}
       footer={
         <Button
@@ -295,6 +535,7 @@ export function ImportPanel({
           size="large"
           type="primary"
           onClick={() => form.submit()}
+          disabled={!submitEnabled}
         >
           {t('form.submit')}
         </Button>
@@ -305,44 +546,38 @@ export function ImportPanel({
   )
 }
 
-type StorageFormProps = {
-  t: TFunction<''>
-  lang: string
-  mode: 'import' | 'export'
+function useImportableRecords(enabled: boolean) {
+  const [pagination, setPagination] = usePagination(6)
+  const { data, isLoading } = useQueryTransportRecords(
+    { ...pagination, reImport: true },
+    { keepPreviousData: true, enabled }
+  )
+  return {
+    importableRecords: data,
+    isLoading,
+    pagination,
+    setPagination,
+  }
 }
 
-function useStorageForm({ t, lang, mode }: StorageFormProps) {
-  const [storageType, setStorageType, resetStorageType] = useStateWithDefault<
-    'nfs' | 's3'
-  >('s3')
-  const [s3Protocol, setS3Protocol, resetS3Protocol] = useStateWithDefault<
-    'http://' | 'https://'
-  >('http://')
-  const reset = () => {
-    resetStorageType()
-    resetS3Protocol()
-  }
-  const processValues = (value: RequestTransportExport) => {
-    if (value.endpointUrl) {
-      if (!/^https?:\/\//.test(value.endpointUrl))
-        value.endpointUrl = s3Protocol + value.endpointUrl
+function useS3Options() {
+  const { t, i18n } = useI18n()
+  return useMemo(() => {
+    const processS3Options = (
+      value: RequestTransportExport & {
+        endpointProtocol?: string
+      }
+    ) => {
+      if (value.endpointUrl) {
+        if (!/^https?:\/\//.test(value.endpointUrl))
+          value.endpointUrl = value.endpointProtocol + value.endpointUrl
+      }
+      if (value.bucketUrl) {
+        if (!/^s3:\/\//.test(value.bucketUrl))
+          value.bucketUrl = 's3://' + value.bucketUrl
+      }
+      value.endpointProtocol = undefined
     }
-    if (value.bucketUrl) {
-      if (!/^s3:\/\//.test(value.bucketUrl))
-        value.bucketUrl = 's3://' + value.bucketUrl
-    }
-  }
-  const form = useMemo(() => {
-    const httpProtocolSelector = (
-      <Select
-        defaultValue="http://"
-        className="select-before"
-        onChange={(v) => setS3Protocol(v)}
-      >
-        <Select.Option value="http://">http://</Select.Option>
-        <Select.Option value="https://">https://</Select.Option>
-      </Select>
-    )
     const s3Options = (
       <>
         <Form.Item
@@ -350,34 +585,29 @@ function useStorageForm({ t, lang, mode }: StorageFormProps) {
           label={t('form.s3.endpointUrl')}
           rules={[{ required: true }]}
         >
-          <Input addonBefore={httpProtocolSelector} />
+          <Input
+            addonBefore={
+              <Form.Item
+                name="endpointProtocol"
+                rules={[{ required: true }]}
+                noStyle
+                initialValue="http://"
+              >
+                <Select className="select-before">
+                  <Select.Option value="http://">http://</Select.Option>
+                  <Select.Option value="https://">https://</Select.Option>
+                </Select>
+              </Form.Item>
+            }
+          />
         </Form.Item>
-        {mode === 'export' ? (
-          <Form.Item label={t('form.s3.bucket')}>
-            <Form.Item name="bucketUrl" rules={[{ required: true }]} noStyle>
-              <Input
-                placeholder={t('form.s3.bucketUrl')}
-                addonBefore="s3://"
-                style={{ width: '70%' }}
-              />
-            </Form.Item>
-            <Form.Item name="bucketRegion" noStyle>
-              <Input
-                placeholder={t('form.s3.bucketRegion')}
-                style={{ width: '30%' }}
-              />
-            </Form.Item>
-          </Form.Item>
-        ) : (
-          <Form.Item
-            name="bucketUrl"
-            label={t('form.s3.bucket')}
-            rules={[{ required: true }]}
-          >
-            <Input addonBefore="s3://" />
-          </Form.Item>
-        )}
-
+        <Form.Item
+          name="bucketUrl"
+          label={t('form.s3.bucket')}
+          rules={[{ required: true }]}
+        >
+          <Input addonBefore="s3://" />
+        </Form.Item>
         <Form.Item
           name="accessKey"
           label={t('form.s3.accessKey')}
@@ -394,36 +624,9 @@ function useStorageForm({ t, lang, mode }: StorageFormProps) {
         </Form.Item>
       </>
     )
-
-    const localOptions = (
-      <Form.Item
-        name="filePath"
-        label={t('form.nfs.filepath')}
-        rules={[{ required: true }]}
-      >
-        <Input />
-      </Form.Item>
-    )
-
-    return (
-      <>
-        <Form.Item
-          name="storageType"
-          label={t('form.storageType')}
-          initialValue="s3"
-        >
-          <Radio.Group onChange={(e) => setStorageType(e.target.value)}>
-            <Radio value="s3">{t('enum.storageType.s3')}</Radio>
-            <Radio value="nfs">{t('enum.storageType.nfs')}</Radio>
-          </Radio.Group>
-        </Form.Item>
-        {storageType === 's3' ? s3Options : localOptions}
-      </>
-    )
-  }, [storageType, s3Protocol, lang])
-  return {
-    form,
-    reset,
-    processValues,
-  }
+    return {
+      s3Options,
+      processS3Options,
+    }
+  }, [i18n.language])
 }

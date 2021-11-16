@@ -23,9 +23,11 @@ form:
     accessKey: Access Key
     secretAccessKey: Secret Key
   nfs:
-    filepath: 文件路径
+    fileName: 文件名
   filetype: 文件类型
   filterType: 数据筛选
+  condition: 筛选条件
+  comment: 备注
   username: 用户名
   password: 密码
   submit: 确认
@@ -39,8 +41,21 @@ enum:
     sql: SQL
   storageType:
     s3: AWS S3
-    nfs: 本地文件
+    nfs: TiEM 共享存储
+    local: 本地文件
 tips:
   filter:
     db: 指定库表，多个库表用分号分开，例如 dba.tb1; dbB.tb2;
     sql: 指定用于筛选的 SQL 语句
+  nfs:
+    fileName: 可空，若留空，则文件名将按特定规则自动生成
+upload:
+  button: 上传本地文件
+  error:
+    format: 只能上传 .zip 文件
+  status:
+    uploading: 上传中...
+    success: 上传成功
+    fail: '上传失败: {{ msg }}'
+importable:
+  time: 时间
