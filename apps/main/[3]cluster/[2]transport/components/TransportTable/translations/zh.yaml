@@ -10,4 +10,4 @@ delete:
 download:
   notSupport: 暂不支持从 AWS S3 下载
 copy:
-  filePath: 复制文件路径
+  filePath: 文件路径

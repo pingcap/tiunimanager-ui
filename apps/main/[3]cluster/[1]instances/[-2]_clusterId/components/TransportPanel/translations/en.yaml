@@ -23,9 +23,11 @@ form:
     accessKey: Access Key
     secretAccessKey: Secret Key
   nfs:
-    filepath: File Path
+    fileName: File Name
   filetype: File Type
   filterType: Filter
+  condition: Condition
+  comment: Comment
   username: Username
   password: Password
   submit: Confirm
@@ -39,10 +41,23 @@ enum:
     sql: SQL
   storageType:
     s3: AWS S3
-    nfs: Local
+    nfs: Shared NFS
+    local: Local
 tips:
   filter:
     db: >-
       Specify databases and/or tables. Multiple are separated by semicolons,
       such as dba.tb1; dbB.tb2;
     sql: Specify the SQL statement to use for filtering
+  nfs:
+    fileName: Optional. If it's blank, the file name will be automatically generated according to the rules.
+upload:
+  button: Upload Local File
+  error:
+    format: Only .zip files are allowed!
+  status:
+    uploading: Uploading...
+    success: Upload successfully
+    fail: 'Fail to upload: {{ msg }}'
+importable:
+  time: Time
