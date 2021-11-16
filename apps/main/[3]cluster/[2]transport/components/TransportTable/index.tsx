@@ -17,6 +17,8 @@ import { message, Tooltip } from 'antd'
 import { errToMsg } from '@/utils/error'
 import moment from 'moment'
 import { CopyIconButton } from '@/components/CopyToClipboard'
+import { useDownload } from '@hooks/useDownload'
+import { getFsDownloadURL } from '@/api/hooks/fs'
 
 loadI18n()
 
@@ -225,7 +227,12 @@ function getColumns(
               <span className={styles.disabled}>{t('actions.download')}</span>
             </Tooltip>
           ) : (
-            <a key="download">{t('actions.download')}</a>
+            <a
+              key="download"
+              onClick={() => useDownload(getFsDownloadURL(record.recordId!))}
+            >
+              {t('actions.download')}
+            </a>
           ),
           <DeleteConfirm
             key="delete"
