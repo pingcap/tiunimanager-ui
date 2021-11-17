@@ -1,0 +1,5 @@
+description:
+  unexecuted: 未开始
+  executed: 开始时间：{{ startTime }}，耗时：{{ duration }} 秒
+result:
+  empty: 无执行结果
