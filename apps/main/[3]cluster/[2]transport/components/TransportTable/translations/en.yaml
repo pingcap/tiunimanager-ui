@@ -8,6 +8,6 @@ delete:
   success: Delete successfullt!
   fail: 'Fail to delete: {{ msg }}'
 download:
-  notSupport: Downloading from AWS S3 is not currently supported.
+  notSupport: Only exported file in shared storage can be downloaded.
 copy:
   filePath: file path

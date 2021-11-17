@@ -222,7 +222,7 @@ function getColumns(
       width: 100,
       render: (_, record) => {
         return [
-          record.storageType === 's3' ? (
+          record.storageType !== 'nfs' || record.transportType !== 'export' ? (
             <Tooltip title={t('download.notSupport')} key="download">
               <span className={styles.disabled}>{t('actions.download')}</span>
             </Tooltip>
