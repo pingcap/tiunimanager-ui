@@ -189,11 +189,6 @@ function useTableColumn() {
     [queryClient, stopCluster.mutateAsync]
   )
 
-  const [columnsSetting, setColumnSetting] = useLocalStorage(
-    'cluster-table-show',
-    defaultColumnsSetting
-  )
-
   const columns = useMemo(
     // FIXME: Filter not updated in time
     () =>
