@@ -241,6 +241,28 @@ function getHostColumns(
       hideInSearch: true,
     },
     {
+      title: t('model:host.property.createTime'),
+      width: 180,
+      dataIndex: 'createTime',
+      key: 'createTime',
+      hideInSearch: true,
+      valueType: 'dateTime',
+      renderText: (text) => {
+        return typeof text === 'number' ? text * 1000 : null
+      },
+    },
+    {
+      title: t('model:host.property.updateTime'),
+      width: 180,
+      dataIndex: 'updateTime',
+      key: 'updateTime',
+      hideInSearch: true,
+      valueType: 'dateTime',
+      renderText: (text) => {
+        return typeof text === 'number' ? text * 1000 : null
+      },
+    },
+    {
       title: t('columns.actions'),
       width: 120,
       key: 'actions',
