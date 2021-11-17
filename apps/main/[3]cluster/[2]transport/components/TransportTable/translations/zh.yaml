@@ -8,6 +8,6 @@ delete:
   success: 删除成功
   fail: '删除失败: {{ msg }}'
 download:
-  notSupport: 暂不支持从 AWS S3 下载
+  notSupport: 只有导出在共享存储上的文件可以被下载
 copy:
   filePath: 文件路径
