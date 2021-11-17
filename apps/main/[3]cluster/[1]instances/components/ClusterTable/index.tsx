@@ -13,6 +13,7 @@ import {
   invalidateClustersList,
   invalidateClusterDetail,
   useRebootCluster,
+  useStopCluster,
 } from '@/api/hooks/cluster'
 import { ProSchemaValueEnumObj } from '@ant-design/pro-utils/lib/typing'
 import { TFunction } from 'react-i18next'
@@ -113,8 +114,10 @@ type BootType = 'boot' | 'reboot'
 function useTableColumn() {
   const { t, i18n } = useI18n()
   const { data, isLoading } = useQueryKnowledge()
-  const rebootCluster = useRebootCluster()
+
   const queryClient = useQueryClient()
+  const rebootCluster = useRebootCluster()
+  const stopCluster = useStopCluster()
 
   const bootAction = useCallback(
     (bootType: BootType, clusterId: string) =>
@@ -151,6 +154,41 @@ function useTableColumn() {
     [queryClient, rebootCluster.mutateAsync]
   )
 
+  const stopAction = useCallback(
+    (clusterId: string) =>
+      stopCluster.mutateAsync(
+        { id: clusterId },
+        {
+          onSuccess(data) {
+            message
+              .success(
+                t('stop.success', {
+                  msg: data.data.data?.inProcessFlowId,
+                }),
+                5
+              )
+              .then()
+          },
+          onSettled() {
+            return Promise.allSettled([
+              invalidateClustersList(queryClient),
+              invalidateClusterDetail(queryClient, clusterId),
+            ])
+          },
+          onError(e: any) {
+            message
+              .error(
+                t('stop.fail', {
+                  msg: errToMsg(e),
+                })
+              )
+              .then()
+          },
+        }
+      ),
+    [queryClient, stopCluster.mutateAsync]
+  )
+
   const [columnsSetting, setColumnSetting] = useLocalStorage(
     'cluster-table-show',
     defaultColumnsSetting
@@ -158,8 +196,14 @@ function useTableColumn() {
 
   const columns = useMemo(
     // FIXME: Filter not updated in time
-    () => getColumns(t, getClusterTypes(data?.data?.data || []), bootAction),
-    [i18n.language, isLoading, bootAction]
+    () =>
+      getColumns(
+        t,
+        getClusterTypes(data?.data?.data || []),
+        bootAction,
+        stopAction
+      ),
+    [i18n.language, isLoading, bootAction, stopAction]
   )
 
   return {
@@ -186,7 +230,8 @@ function getClusterTypes(raw: KnowledgeOfClusterType[]) {
 function getColumns(
   t: TFunction<''>,
   clusterTypes: ProColumns['valueEnum'],
-  bootAction: (type: BootType, id: string) => Promise<unknown>
+  bootAction: (type: BootType, id: string) => Promise<unknown>,
+  stopAction: (id: string) => Promise<unknown>
 ): ProColumns<ClusterInfo>[] {
   return [
     {
@@ -427,6 +472,7 @@ function getColumns(
         const { statusCode = '' } = record
         const bootEnabled = statusCode === '2'
         const rebootDisabled = ['0', '1'].indexOf(statusCode) === -1
+        const stopDisabled = rebootDisabled
 
         return [
           // TODO: implement actions in cluster list
@@ -471,6 +517,27 @@ function getColumns(
               </Button>
             </IntlPopConfirm>
           ),
+          <IntlPopConfirm
+            key="stop"
+            title={t('stop.confirm')}
+            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+            disabled={stopDisabled}
+            onConfirm={async () => {
+              const hide = message.loading(t('stop.loading'), 0)
+
+              await stopAction(record.clusterId!)
+
+              hide()
+            }}
+          >
+            <Button
+              className={styles.actionBtn}
+              type="link"
+              disabled={stopDisabled}
+            >
+              {t('actions.stop')}
+            </Button>
+          </IntlPopConfirm>,
         ]
       },
     },
