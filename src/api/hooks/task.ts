@@ -31,7 +31,7 @@ export function useQueryTaskDetail(
 ) {
   const { id } = query
   return useQuery(
-    [CACHE_TASK, id],
+    [CACHE_TASK_DETAIL, id],
     () => APIS.Task.flowworksFlowWorkIdGet(id),
     options
   )
