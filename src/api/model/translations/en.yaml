@@ -143,6 +143,9 @@ host:
     diskType: Disk Type
     cpuCores: CPU Cores
     memory: Memory
+
+    createTime: Create Time
+    updateTime: Update Time
   status:
     online: Online
     offline: Offline
