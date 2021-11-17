@@ -72,6 +72,13 @@ export function useCreateCluster() {
   return useMutation(createCluster)
 }
 
+const rebootCluster = (payload: { id: string }) =>
+  APIS.Clusters.clustersClusterIdRestartPost(payload.id)
+
+export function useRebootCluster() {
+  return useMutation(rebootCluster)
+}
+
 /**
  * Cluster Params
  */
