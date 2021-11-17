@@ -19,6 +19,8 @@ import moment from 'moment'
 import { CopyIconButton } from '@/components/CopyToClipboard'
 import { useDownload } from '@hooks/useDownload'
 import { getFsDownloadURL } from '@/api/hooks/fs'
+import { Link } from 'react-router-dom'
+import { resolveRoute } from '@pages-macro'
 
 loadI18n()
 
@@ -195,6 +197,11 @@ function getColumns(
       width: 160,
       dataIndex: 'clusterId',
       key: 'clusterId',
+      render: (_, record) => (
+        <Link to={`${resolveRoute('../instances/')}/${record.clusterId}`}>
+          {record.clusterId}
+        </Link>
+      ),
     },
     {
       title: t('model:transport.property.fileName'),

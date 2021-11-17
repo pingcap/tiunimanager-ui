@@ -10,6 +10,7 @@ import:
   title: Import Cluster Data
   source: Data Source
   target: Target Database
+  options: Import Options
   message:
     success: Import successfully!
     fail: 'Fail: {{ msg }}'
