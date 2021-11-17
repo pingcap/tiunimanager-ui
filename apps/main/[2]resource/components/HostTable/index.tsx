@@ -174,7 +174,7 @@ function getHostColumns(
     },
     {
       title: t('model:host.property.load'),
-      width: 80,
+      width: 160,
       dataIndex: 'loadStat',
       key: 'loadStat',
       valueType: 'select',
@@ -182,6 +182,9 @@ function getHostColumns(
         0: { text: t('model:host.load.idle'), status: 'Default' },
         1: { text: t('model:host.load.used'), status: 'Processing' },
         2: { text: t('model:host.load.full'), status: 'Warning' },
+        3: { text: t('model:host.load.computeExhausted'), status: 'Warning' },
+        4: { text: t('model:host.load.storageExhausted'), status: 'Warning' },
+        5: { text: t('model:host.load.exclusive'), status: 'Processing' },
       },
     },
     {
