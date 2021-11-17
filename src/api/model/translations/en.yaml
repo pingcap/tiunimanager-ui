@@ -208,6 +208,7 @@ transport:
     endTime: End Time
     type: Type
     storageType: Storage
+    fileName: File Name
     filePath: File Path
     fileSize: File Size
     comment: Comment
