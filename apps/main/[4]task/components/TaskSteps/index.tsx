@@ -1,23 +1,32 @@
-import { useMemo, useState, FC } from 'react'
-import { Steps, Card } from 'antd'
+import { FC, useMemo, useState, useEffect, useCallback } from 'react'
+import { Steps, Card, Spin } from 'antd'
+import type { StepProps } from 'antd'
 import moment from 'moment'
 import { formatTimeString } from '@/utils/time'
 import { TaskWorkflowSubTaskInfo } from '@/api/model'
 import { useQueryTaskDetail } from '@/api/hooks/task'
 import styles from './index.module.less'
+import { loadI18n, useI18n } from '@i18n-macro'
+
+loadI18n()
 
 const { Step } = Steps
 
 const useFetchTaskDetailData = (id: number) => {
-  const { data, isLoading, isPreviousData, refetch } = useQueryTaskDetail({
-    id,
-  })
+  const { data, isLoading, isPreviousData } = useQueryTaskDetail(
+    {
+      id,
+    },
+    {
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+    }
+  )
 
   return {
-    data,
+    data: data?.data.data || {},
     isPreviousData,
     isLoading,
-    refetch,
   }
 }
 
@@ -29,72 +38,126 @@ interface StepMap {
   [k: string]: TaskWorkflowSubTaskInfo
 }
 
-const TaskSteps: FC<TaskStepsProps> = (props) => {
-  const { data, isLoading } = useFetchTaskDetailData(props.id)
+const stepStatusMap: { [k: number]: StepProps['status'] } = {
+  0: 'wait',
+  1: 'process',
+  2: 'finish',
+  3: 'error',
+}
 
-  const { taskName: stepNames = [], tasks = [] } = data?.data.data || {}
-  const exactSteps = tasks.filter((step) => step.taskName !== 'end')
-  const stepMap: StepMap = exactSteps.reduce((prev, step) => {
-    const stepName = step.taskName as string
-    return {
-      ...prev,
-      [stepName]: step,
-    }
-  }, {} as StepMap)
+const useActiveStep = (stepLen: number) => {
+  const [activeIndex, setActiveIndex] = useState(0)
 
-  const [actStepIndex, setActStepIndex] = useState(
-    Math.max(0, exactSteps.length - 1)
-  )
+  const onStepChange = useCallback((current: number) => {
+    setActiveIndex(current)
+  }, [])
 
-  const onChange = (current: number) => {
-    setActStepIndex(current)
+  useEffect(() => {
+    onStepChange(stepLen ? stepLen - 1 : 0)
+  }, [stepLen, onStepChange])
+
+  return {
+    activeIndex,
+    onStepChange,
   }
+}
 
-  const stepContent = useMemo(() => {
-    const { taskName = '', result = '' } = exactSteps[actStepIndex] || {}
+const TaskSteps: FC<TaskStepsProps> = ({ id }) => {
+  const { t, i18n } = useI18n()
+  const { data, isLoading } = useFetchTaskDetailData(id)
+
+  const { excutedSteps, excutedStepMap } = useMemo(() => {
+    const { tasks: steps = [] } = data
+    const excutedSteps = steps.filter(
+      (step) => ['end', 'fail'].indexOf(step.taskName!) === -1
+    )
+    const excutedStepMap: StepMap = excutedSteps.reduce((prev, step) => {
+      return {
+        ...prev,
+        [step.taskName!]: step,
+      }
+    }, {} as StepMap)
+
+    return {
+      excutedSteps,
+      excutedStepMap,
+    }
+  }, [data])
+
+  const { activeIndex, onStepChange } = useActiveStep(excutedSteps.length)
+
+  const { taskName: allStepNames = [] } = data
+
+  const stepResult = useMemo(() => {
+    const stepName = allStepNames[activeIndex]
+    const { taskName = '', result } = excutedStepMap[stepName] || {}
 
     return {
       title: taskName,
-      result: result || '结果：无',
+      content: result || t('result.empty'),
     }
-  }, [exactSteps, actStepIndex])
+  }, [i18n.language, allStepNames, activeIndex, excutedStepMap])
 
   if (isLoading) {
-    return null
+    return (
+      <div className={styles.taskStepContainer}>
+        <Spin />
+      </div>
+    )
   }
 
   return (
     <div className={styles.taskStepContainer}>
       <Steps
         className={styles.steps}
-        current={Math.max(0, exactSteps.length - 1)}
-        onChange={onChange}
+        current={activeIndex}
+        onChange={onStepChange}
         direction="vertical"
       >
-        {stepNames.map((stepName) => {
-          const { startTime = '', endTime, taskName } = stepMap[stepName]
+        {allStepNames.map((stepName, stepIndex) => {
+          const {
+            startTime,
+            endTime,
+            taskName,
+            taskStatus = 0,
+          } = excutedStepMap[stepName] || {}
           const disabled = !taskName
-          const startTimeStr = formatTimeString(startTime, 'HH:mm:ss')
+
+          if (disabled) {
+            return (
+              <Step
+                key={stepName}
+                title={stepName}
+                disabled={disabled}
+                status={stepStatusMap[0]}
+                description={t('description.unexecuted')}
+              />
+            )
+          }
+
+          const startTimeDisplay = formatTimeString(startTime!, 'HH:mm:ss')
           const timeDiff = moment(endTime).diff(startTime)
-          const timeDiffDisplay = timeDiff
-            ? moment.duration(timeDiff, 's')
-            : timeDiff
-          const desc = taskName
-            ? `开始时间：${startTimeStr} 耗时：${timeDiffDisplay}`
-            : '未开始'
+          const duration =
+            timeDiff > 0 ? moment.duration(timeDiff).as('seconds') : 0
+          const desc = t('description.executed', {
+            startTime: startTimeDisplay,
+            duration,
+          })
+          const isActive = stepIndex === activeIndex
 
           return (
             <Step
-              key={taskName}
-              title={stepName}
+              key={stepName}
+              status={stepStatusMap[taskStatus]}
+              title={isActive ? <strong>{stepName}</strong> : stepName}
               description={desc}
               disabled={disabled}
             />
           )
         })}
       </Steps>
-      <Card className={styles.content} title={stepContent.title}>
-        {stepContent.result}
+      <Card className={styles.content} title={stepResult.title}>
+        {stepResult.content}
       </Card>
     </div>
   )
