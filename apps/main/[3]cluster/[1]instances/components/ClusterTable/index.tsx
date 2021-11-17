@@ -173,6 +173,11 @@ function getColumns(
         '1': { text: t('model:cluster.status.online'), status: 'Success' },
         '2': { text: t('model:cluster.status.offline'), status: 'Warning' },
         '3': { text: t('model:cluster.status.deleted'), status: 'Error' },
+        '4': {
+          text: t('model:cluster.status.Restarting'),
+          status: 'Processing',
+        },
+        '5': { text: t('model:cluster.status.Stopping'), status: 'Processing' },
         CreateCluster: {
           text: t('model:cluster.status.CreateCluster'),
           status: 'Processing',

@@ -36,6 +36,8 @@ cluster:
     ModifyParameters: Modifying
     ExportData: Exporting
     ImportData: Importing
+    Restarting: Restarting
+    Stopping: Stopping
 clusterLog:
   property:
     id: ID

@@ -36,6 +36,8 @@ cluster:
     ModifyParameters: 修改参数中
     ExportData: 数据导出中
     ImportData: 数据导入中
+    Restarting: 重启中
+    Stopping: 停止中
 clusterLog:
   property:
     id: ID
