@@ -453,8 +453,8 @@ export function ImportPanel({
       const value = await form.validateFields()
       processS3Options(value)
       value.clusterId = clusterId
-      if (value.storageType === 'nfs')
-        value.recordId = selectedImportable!.recordId!
+      if (sourceType === 'nfs') value.recordId = selectedImportable!.recordId!
+      if (sourceType === 'local') value.storageType = 'nfs'
       await importCluster.mutateAsync(
         {
           clusterId,
@@ -516,7 +516,8 @@ export function ImportPanel({
     i18n.language,
     form,
     importCluster.mutateAsync,
-    sourceType === 'nfs' ? selectedImportable : undefined,
+    sourceType,
+    selectedImportable,
   ])
 
   return (
