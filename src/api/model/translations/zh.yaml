@@ -221,6 +221,7 @@ transport:
     endTime: 截至时间
     type: 类型
     storageType: 存储
+    fileName: 文件名
     filePath: 文件路径
     fileSize: 文件大小
     comment: 备注
