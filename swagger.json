@@ -715,14 +715,12 @@
         "parameters": [
           {
             "type": "string",
-            "description": "cluster id",
             "name": "clusterId",
-            "in": "path",
-            "required": true
+            "in": "query"
           },
           {
-            "type": "string",
-            "name": "clusterId",
+            "type": "integer",
+            "name": "endTime",
             "in": "query"
           },
           {
@@ -743,6 +741,11 @@
           {
             "type": "integer",
             "name": "recordId",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "startTime",
             "in": "query"
           }
         ],
@@ -3042,6 +3045,10 @@
         "az": {
           "type": "string"
         },
+        "clusterType": {
+          "description": "What cluster is the host used for? [database/datamigration]",
+          "type": "string"
+        },
         "cpuCores": {
           "description": "Host cpu cores spec, init while importing",
           "type": "integer"
@@ -3117,6 +3124,16 @@
         },
         "status": {
           "description": "Host Status, 0 for Online, 1 for offline",
+          "type": "integer"
+        },
+        "sysLabels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "traits": {
+          "description": "Traits of labels",
           "type": "integer"
         },
         "updateTime": {
@@ -3273,6 +3290,9 @@
       "type": "object",
       "properties": {
         "clusterId": {
+          "type": "string"
+        },
+        "comment": {
           "type": "string"
         },
         "endTime": {
