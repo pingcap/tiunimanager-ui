@@ -2,9 +2,8 @@ import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import { Fragment, useMemo, useState } from 'react'
 import styles from './index.module.less'
 import HeavyTable from '@/components/HeavyTable'
-import { ClusterInfo, PagedResult, KnowledgeOfClusterType } from '@/api/model'
+import { ClusterInfo, KnowledgeOfClusterType, PagedResult } from '@/api/model'
 import { CopyIconButton } from '@/components/CopyToClipboard'
-import useLocalStorage from '@hooks/useLocalstorage'
 import { Link } from 'react-router-dom'
 import { resolveRoute } from '@pages-macro'
 import { useQueryKnowledge } from '@/api/hooks/knowledge'
@@ -17,8 +16,7 @@ import { usePagination } from '@hooks/usePagination'
 loadI18n()
 
 export default function ClusterTable() {
-  const { columns, isKnowledgeLoading, columnsSetting, setColumnSetting } =
-    useTableColumn()
+  const { columns, isKnowledgeLoading } = useTableColumn()
 
   const {
     data,
@@ -52,8 +50,10 @@ export default function ClusterTable() {
             setPagination({ page, pageSize: pageSize || pagination.pageSize })
         },
       }}
-      columnsState={columnsSetting}
-      onColumnsStateChange={setColumnSetting}
+      columnsState={{
+        persistenceKey: 'cluster-table-show',
+        defaultValue: defaultColumnsSetting,
+      }}
       rowKey="clusterId"
       search={{
         filterType: 'light',
@@ -102,11 +102,6 @@ function useTableColumn() {
   const { t, i18n } = useI18n()
   const { data, isLoading } = useQueryKnowledge()
 
-  const [columnsSetting, setColumnSetting] = useLocalStorage(
-    'cluster-table-show',
-    defaultColumnsSetting
-  )
-
   const columns = useMemo(
     // FIXME: Filter not updated in time
     () => getColumns(t, getClusterTypes(data?.data?.data || [])),
@@ -116,10 +111,6 @@ function useTableColumn() {
   return {
     columns,
     isKnowledgeLoading: isLoading,
-    columnsSetting: {
-      value: columnsSetting,
-    },
-    setColumnSetting,
   }
 }
 

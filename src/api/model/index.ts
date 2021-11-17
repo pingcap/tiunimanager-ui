@@ -26,6 +26,7 @@ import {
   KnowledgeClusterType,
   KnowledgeClusterVersion,
   KnowledgeClusterComponent,
+  ImportexportDataTransportInfo,
 } from '#/api'
 
 export type PagedResult = ControllerResultWithPage
@@ -42,6 +43,8 @@ export type ClusterBackupItem = BackuprestoreBackupRecord
 export type ClusterType = KnowledgeClusterType
 export type ClusterVersion = KnowledgeClusterVersion
 export type ClusterComponent = KnowledgeClusterComponent
+
+export type TransportRecord = ImportexportDataTransportInfo
 
 export type ClusterLogLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'FATAL'
 
