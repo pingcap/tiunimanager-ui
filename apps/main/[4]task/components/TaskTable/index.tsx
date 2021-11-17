@@ -50,9 +50,10 @@ export default function TaskTable() {
         reload: () => refetch(),
       }}
       expandable={{
-        expandedRowRender: (record) => <TaskSteps id={record?.id || 0} />,
+        expandedRowRender: (record) => <TaskSteps id={record.id!} />,
         expandIconColumnIndex: -1,
         expandRowByClick: true,
+        rowExpandable: (record) => typeof record.id === 'number',
       }}
     />
   )
@@ -74,7 +75,10 @@ function useFetchTaskData() {
       ...pagination,
       ...filters,
     },
-    { keepPreviousData: true }
+    {
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+    }
   )
   return {
     pagination,
