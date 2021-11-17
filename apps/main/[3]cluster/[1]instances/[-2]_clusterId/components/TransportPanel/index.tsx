@@ -495,6 +495,15 @@ export function ImportPanel({
       </section>
     )
 
+    const options = (
+      <section>
+        <h3>{t('import.options')}</h3>
+        <Form.Item name="comment" label={t('form.comment')}>
+          <Input.TextArea />
+        </Form.Item>
+      </section>
+    )
+
     return (
       <Form
         className={styles.panel}
@@ -509,6 +518,7 @@ export function ImportPanel({
       >
         {source}
         {target}
+        {options}
       </Form>
     )
   }, [
