@@ -148,6 +148,9 @@ host:
     idle: Free
     used: In Use
     full: Full
+    computeExhausted: Compute resources exhausted
+    storageExhausted: Storage resources exhausted
+    exclusive: Exclusive to a cluster
   purpose:
     compute: Compute
     storage: Storage
