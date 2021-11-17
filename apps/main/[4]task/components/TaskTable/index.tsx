@@ -45,6 +45,10 @@ export default function TaskTable() {
       search={{
         filterType: 'light',
       }}
+      columnsState={{
+        persistenceKey: 'task-table-show',
+        defaultValue: {},
+      }}
       options={{
         reload: () => refetch(),
       }}

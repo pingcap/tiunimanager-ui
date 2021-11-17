@@ -4,8 +4,6 @@ import {
   RequestBackupCreate,
   RequestBackupRestore,
   RequestBackupStrategyUpdate,
-  RequestTransportExport,
-  RequestTransportImport,
   RequestClusterCreate,
   RequestClusterParamsUpdate,
 } from '@/api/model'
@@ -295,24 +293,6 @@ export function useQueryClusterDashboard(
     () => APIS.Clusters.clustersClusterIdDashboardGet(id),
     options
   )
-}
-
-/**
- * Cluster Import/Export
- */
-
-const importCluster = (payload: RequestTransportImport) =>
-  APIS.ClustersImport.clustersImportPost(payload)
-
-export function useImportCluster() {
-  return useMutation(importCluster)
-}
-
-const exportCluster = (payload: RequestTransportExport) =>
-  APIS.ClustersExport.clustersExportPost(payload)
-
-export function useExportCluster() {
-  return useMutation(exportCluster)
 }
 
 /**

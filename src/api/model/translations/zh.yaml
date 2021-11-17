@@ -36,6 +36,8 @@ cluster:
     ModifyParameters: 修改参数中
     ExportData: 数据导出中
     ImportData: 数据导入中
+    Restarting: 重启中
+    Stopping: 停止中
 clusterLog:
   property:
     id: ID
@@ -148,6 +150,9 @@ host:
     idle: 空闲中
     used: 使用中
     full: 已满载
+    computeExhausted: 计算资源耗尽
+    storageExhausted: 存储资源耗尽
+    exclusive: 独占
   purpose:
     compute: 计算
     storage: 存储
@@ -196,3 +201,22 @@ task:
     error: 失败
   operator:
     system: 系统自动
+transport:
+  property:
+    id: ID
+    status: 状态 # the same as task.status
+    clusterId: 集群 ID
+    startTime: 开始时间
+    endTime: 截至时间
+    type: 类型
+    storageType: 存储
+    fileName: 文件名
+    filePath: 文件路径
+    fileSize: 文件大小
+    comment: 备注
+  type:
+    import: 导入
+    export: 导出
+  storageType:
+    nfs: 本地存储
+    s3: AWS S3

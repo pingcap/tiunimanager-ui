@@ -2,9 +2,8 @@ import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import { Fragment, useMemo, useState, useCallback } from 'react'
 import styles from './index.module.less'
 import HeavyTable from '@/components/HeavyTable'
-import { ClusterInfo, PagedResult, KnowledgeOfClusterType } from '@/api/model'
+import { ClusterInfo, KnowledgeOfClusterType, PagedResult } from '@/api/model'
 import { CopyIconButton } from '@/components/CopyToClipboard'
-import useLocalStorage from '@hooks/useLocalstorage'
 import { Link } from 'react-router-dom'
 import { resolveRoute } from '@pages-macro'
 import { useQueryKnowledge } from '@/api/hooks/knowledge'
@@ -28,8 +27,7 @@ import { errToMsg } from '@/utils/error'
 loadI18n()
 
 export default function ClusterTable() {
-  const { columns, isKnowledgeLoading, columnsSetting, setColumnSetting } =
-    useTableColumn()
+  const { columns, isKnowledgeLoading } = useTableColumn()
 
   const {
     data,
@@ -63,8 +61,10 @@ export default function ClusterTable() {
             setPagination({ page, pageSize: pageSize || pagination.pageSize })
         },
       }}
-      columnsState={columnsSetting}
-      onColumnsStateChange={setColumnSetting}
+      columnsState={{
+        persistenceKey: 'cluster-table-show',
+        defaultValue: defaultColumnsSetting,
+      }}
       rowKey="clusterId"
       search={{
         filterType: 'light',
@@ -209,10 +209,6 @@ function useTableColumn() {
   return {
     columns,
     isKnowledgeLoading: isLoading,
-    columnsSetting: {
-      value: columnsSetting,
-    },
-    setColumnSetting,
   }
 }
 
@@ -277,6 +273,11 @@ function getColumns(
         '1': { text: t('model:cluster.status.online'), status: 'Success' },
         '2': { text: t('model:cluster.status.offline'), status: 'Warning' },
         '3': { text: t('model:cluster.status.deleted'), status: 'Error' },
+        '4': {
+          text: t('model:cluster.status.Restarting'),
+          status: 'Processing',
+        },
+        '5': { text: t('model:cluster.status.Stopping'), status: 'Processing' },
         CreateCluster: {
           text: t('model:cluster.status.CreateCluster'),
           status: 'Processing',
