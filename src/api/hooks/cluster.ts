@@ -79,6 +79,13 @@ export function useRebootCluster() {
   return useMutation(rebootCluster)
 }
 
+const stopCluster = (payload: { id: string }) =>
+  APIS.Clusters.clustersClusterIdStopPost(payload.id)
+
+export function useStopCluster() {
+  return useMutation(stopCluster)
+}
+
 /**
  * Cluster Params
  */
