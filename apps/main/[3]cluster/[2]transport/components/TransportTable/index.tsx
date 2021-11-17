@@ -192,14 +192,20 @@ function getColumns(
     },
     {
       title: t('model:transport.property.clusterId'),
-      width: 140,
+      width: 160,
       dataIndex: 'clusterId',
       key: 'clusterId',
     },
     {
+      title: t('model:transport.property.fileName'),
+      width: 160,
+      dataIndex: 'zipName',
+      key: 'fileName',
+      hideInSearch: true,
+    },
+    {
       title: t('model:transport.property.filePath'),
       width: 180,
-      dataIndex: 'filePath',
       key: 'filePath',
       hideInSearch: true,
       render: (_, record) => (
