@@ -3,6 +3,8 @@ import { useQuery } from 'react-query'
 
 export const CACHE_TASK = 'tasks'
 
+export const CACHE_TASK_DETAIL = 'task-detail'
+
 export function useQueryTasks(
   query: {
     clusterId?: string
@@ -17,6 +19,20 @@ export function useQueryTasks(
   return useQuery(
     [CACHE_TASK, clusterId, page, pageSize, status, keyword],
     () => APIS.Task.flowworksGet(clusterId, keyword, page, pageSize, status),
+    options
+  )
+}
+
+export function useQueryTaskDetail(
+  query: {
+    id: number
+  },
+  options?: PartialUseQueryOptions
+) {
+  const { id } = query
+  return useQuery(
+    [CACHE_TASK_DETAIL, id],
+    () => APIS.Task.flowworksFlowWorkIdGet(id),
     options
   )
 }
