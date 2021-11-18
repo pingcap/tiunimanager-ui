@@ -465,7 +465,7 @@ function getColumns(
     },
     {
       title: t('columns.actions'),
-      width: 200,
+      width: 120,
       key: 'actions',
       valueType: 'option',
       render(_, record) {
@@ -485,7 +485,7 @@ function getColumns(
               onConfirm={async () => {
                 const hide = message.loading(t('boot.loading'), 0)
 
-                return await bootAction('boot', record.clusterId!)
+                await bootAction('boot', record.clusterId!)
 
                 hide()
               }}
