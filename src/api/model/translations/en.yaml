@@ -202,6 +202,7 @@ task:
     processing: Processing
     finished: Finished
     error: Error
+    cancelled: Cancelled
   operator:
     system: System Automation
 transport:
