@@ -113,6 +113,7 @@ function getColumns(t: TFunction<'model'>): ProColumns<TaskWorkflowInfo>[] {
         '1': { text: t('model:task.status.processing'), status: 'Processing' },
         '2': { text: t('model:task.status.finished'), status: 'Success' },
         '3': { text: t('model:task.status.error'), status: 'Error' },
+        '4': { text: t('model:task.status.cancelled'), status: 'Default' },
       },
     },
     {
