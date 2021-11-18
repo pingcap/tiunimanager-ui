@@ -156,9 +156,11 @@ const TaskSteps: FC<TaskStepsProps> = ({ id }) => {
           )
         })}
       </Steps>
-      <Card className={styles.content} title={stepResult.title}>
-        {stepResult.content}
-      </Card>
+      {excutedSteps.length ? (
+        <Card className={styles.content} title={stepResult.title}>
+          {stepResult.content}
+        </Card>
+      ) : null}
     </div>
   )
 }
