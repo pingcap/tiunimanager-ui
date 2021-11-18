@@ -51,7 +51,6 @@ export default function TaskTable() {
       }}
       expandable={{
         expandedRowRender: (record) => <TaskSteps id={record.id!} />,
-        expandIconColumnIndex: -1,
         expandRowByClick: true,
         rowExpandable: (record) => typeof record.id === 'number',
       }}
@@ -101,7 +100,7 @@ function getColumns(t: TFunction<'model'>): ProColumns<TaskWorkflowInfo>[] {
   return [
     {
       title: t('model:task.property.id'),
-      width: 120,
+      width: 60,
       dataIndex: 'id',
       key: 'id',
       hideInSearch: true,
