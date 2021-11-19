@@ -30,15 +30,7 @@ const useFetchTaskDetailData = (id: number) => {
   }
 }
 
-interface TaskStepsProps {
-  id: number
-}
-
-interface StepMap {
-  [k: string]: TaskWorkflowSubTaskInfo
-}
-
-const stepStatusMap: { [k: number]: StepProps['status'] } = {
+const stepStatusMap: Record<number, StepProps['status']> = {
   0: 'wait',
   1: 'process',
   2: 'finish',
@@ -62,27 +54,34 @@ const useActiveStep = (stepLen: number) => {
   }
 }
 
+type StepMap = Record<string, TaskWorkflowSubTaskInfo>
+
+const getExcutedStepData = (steps: TaskWorkflowSubTaskInfo[]) => {
+  const excutedSteps = steps.filter(
+    (step) => ['end', 'fail'].indexOf(step.taskName!) === -1
+  )
+  const excutedStepMap: StepMap = excutedSteps.reduce((prev, step) => {
+    return {
+      ...prev,
+      [step.taskName!]: step,
+    }
+  }, {} as StepMap)
+
+  return {
+    excutedSteps,
+    excutedStepMap,
+  }
+}
+
+interface TaskStepsProps {
+  id: number
+}
+
 const TaskSteps: FC<TaskStepsProps> = ({ id }) => {
   const { t, i18n } = useI18n()
   const { data, isLoading } = useFetchTaskDetailData(id)
 
-  const { excutedSteps, excutedStepMap } = useMemo(() => {
-    const { tasks: steps = [] } = data
-    const excutedSteps = steps.filter(
-      (step) => ['end', 'fail'].indexOf(step.taskName!) === -1
-    )
-    const excutedStepMap: StepMap = excutedSteps.reduce((prev, step) => {
-      return {
-        ...prev,
-        [step.taskName!]: step,
-      }
-    }, {} as StepMap)
-
-    return {
-      excutedSteps,
-      excutedStepMap,
-    }
-  }, [data])
+  const { excutedSteps, excutedStepMap } = getExcutedStepData(data.tasks || [])
 
   const { activeIndex, onStepChange } = useActiveStep(excutedSteps.length)
 
