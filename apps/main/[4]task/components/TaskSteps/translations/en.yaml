@@ -2,4 +2,6 @@ description:
   unexecuted: Waiting to run
   executed: 'Start time: {{ startTime }}, duration: {{ duration }} seconds'
 result:
-  empty: 'No result output'
+  title: 'Step {{ stepIndex }}: {{ stepName }}'
+  content:
+    empty: 'No result output'
