@@ -90,11 +90,11 @@ const TaskSteps: FC<TaskStepsProps> = ({ id }) => {
 
   const stepResult = useMemo(() => {
     const stepName = allStepNames[activeIndex]
-    const { taskName = '', result } = excutedStepMap[stepName] || {}
+    const { result } = excutedStepMap[stepName] || {}
 
     return {
-      title: taskName,
-      content: result || t('result.empty'),
+      title: t('result.title', { stepIndex: activeIndex + 1, stepName }),
+      content: result || t('result.content.empty'),
     }
   }, [i18n.language, allStepNames, activeIndex, excutedStepMap])
 
