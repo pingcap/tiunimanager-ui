@@ -70,6 +70,12 @@ export function useCreateCluster() {
   return useMutation(createCluster)
 }
 
+const previewCreateCluster = (payload: RequestClusterCreate) =>
+  APIS.Clusters.clustersPreviewPost(payload)
+
+export function usePreviewCreateCluster() {
+  return useMutation(previewCreateCluster)
+
 const rebootCluster = (payload: { id: string }) =>
   APIS.Clusters.clustersClusterIdRestartPost(payload.id)
 
@@ -82,6 +88,7 @@ const stopCluster = (payload: { id: string }) =>
 
 export function useStopCluster() {
   return useMutation(stopCluster)
+
 }
 
 /**

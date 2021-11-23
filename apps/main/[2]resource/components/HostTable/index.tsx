@@ -16,6 +16,7 @@ import { TFunction } from 'react-i18next'
 import { errToMsg } from '@/utils/error'
 import { usePagination } from '@hooks/usePagination'
 import { DeleteConfirm } from '@/components/DeleteConfirm'
+import { isNumber } from '@/utils/types'
 
 loadI18n()
 
@@ -232,6 +233,26 @@ function getHostColumns(
       dataIndex: 'spec',
       key: 'spec',
       hideInSearch: true,
+    },
+    {
+      title: t('model:host.property.createTime'),
+      width: 180,
+      dataIndex: 'createTime',
+      key: 'createTime',
+      hideInSearch: true,
+      valueType: 'dateTime',
+      renderText: (_, record) =>
+        isNumber(record.createTime) ? record.createTime * 1000 : null,
+    },
+    {
+      title: t('model:host.property.updateTime'),
+      width: 180,
+      dataIndex: 'updateTime',
+      key: 'updateTime',
+      hideInSearch: true,
+      valueType: 'dateTime',
+      renderText: (_, record) =>
+        isNumber(record.updateTime) ? record.updateTime * 1000 : null,
     },
     {
       title: t('columns.actions'),

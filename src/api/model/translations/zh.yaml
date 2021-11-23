@@ -143,6 +143,9 @@ host:
     diskType: 磁盘类型
     cpuCores: CPU 核心
     memory: 内存
+
+    createTime: 创建时间
+    updateTime: 更新时间
   status:
     online: 在线
     offline: 离线

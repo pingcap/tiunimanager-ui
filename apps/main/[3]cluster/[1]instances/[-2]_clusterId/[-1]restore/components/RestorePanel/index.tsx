@@ -1,4 +1,4 @@
-import { Card, Form, Input, Layout, message } from 'antd'
+import { Card, Col, Form, Input, Layout, message, Row } from 'antd'
 import { useCallback, useMemo } from 'react'
 
 import styles from './index.module.less'
@@ -11,7 +11,8 @@ import { useRestoreClusterBackup } from '@/api/hooks/cluster'
 import { useQueryClient } from 'react-query'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { errToMsg } from '@/utils/error'
-import { CreateClusterForm } from '@/components/CreateClusterPanel'
+import { SimpleForm } from '@/components/CreateClusterPanel'
+import { SimpleFormProps } from '@/components/CreateClusterPanel/SimpleForm'
 
 loadI18n()
 
@@ -28,30 +29,32 @@ export function RestorePanel({ back, cluster, backup }: CreatePanelProps) {
   const queryClient = useQueryClient()
   const restoreCluster = useRestoreClusterBackup()
 
+  const processValue: SimpleFormProps['processValue'] = useCallback(
+    (value) => {
+      const { id, clusterId } = backup
+      ;(value as any).recoverInfo = {
+        backupRecordId: id,
+        sourceClusterId: clusterId,
+      }
+      return true
+    },
+    [backup]
+  )
+
   const handleSubmit = useCallback(
     (value: RequestClusterCreate) => {
-      const { id, clusterId } = backup
-      restoreCluster.mutateAsync(
-        {
-          recoverInfo: {
-            backupRecordId: id,
-            sourceClusterId: clusterId,
-          },
-          ...value,
+      restoreCluster.mutateAsync(value, {
+        onSuccess() {
+          message.success(t('message.success'), 0.8).then(back)
         },
-        {
-          onSuccess() {
-            message.success(t('message.success'), 0.8).then(back)
-          },
-          onError(e: any) {
-            message.error(
-              t('message.fail', {
-                msg: errToMsg(e),
-              })
-            )
-          },
-        }
-      )
+        onError(e: any) {
+          message.error(
+            t('message.fail', {
+              msg: errToMsg(e),
+            })
+          )
+        },
+      })
     },
     [back, restoreCluster.mutateAsync, queryClient, i18n.language]
   )
@@ -59,41 +62,44 @@ export function RestorePanel({ back, cluster, backup }: CreatePanelProps) {
   const restoreInfo = useMemo(() => {
     return (
       <Card title={t('restore-info.title')}>
-        <Form.Item
-          label={t('restore-info.fields.clusterId')}
-          tooltip={t('restore-info.tips.not-editable')}
-        >
-          <Input disabled={true} value={backup!.clusterId} />
-        </Form.Item>
-        <Form.Item
-          label={t('restore-info.fields.clusterName')}
-          tooltip={t('restore-info.tips.not-editable')}
-        >
-          <Input disabled={true} value={cluster.clusterName} />
-        </Form.Item>
-        <Form.Item
-          label={t('restore-info.fields.backupId')}
-          tooltip={t('restore-info.tips.not-editable')}
-        >
-          <Input disabled={true} value={backup!.id} />
-        </Form.Item>
-        <Form.Item
-          label={t('restore-info.fields.backupPath')}
-          tooltip={t('restore-info.tips.not-editable')}
-        >
-          <Input disabled={true} value={backup!.filePath} />
-        </Form.Item>
+        <Row>
+          <Col span={8}>
+            <Form.Item
+              label={t('restore-info.fields.clusterId')}
+              tooltip={t('restore-info.tips.not-editable')}
+            >
+              <Input disabled={true} value={backup!.clusterId} />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item
+              label={t('restore-info.fields.clusterName')}
+              tooltip={t('restore-info.tips.not-editable')}
+            >
+              <Input disabled={true} value={cluster.clusterName} />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item
+              label={t('restore-info.fields.backupId')}
+              tooltip={t('restore-info.tips.not-editable')}
+            >
+              <Input disabled={true} value={backup!.id} />
+            </Form.Item>
+          </Col>
+        </Row>
       </Card>
     )
   }, [cluster, backup, i18n.language])
 
   return (
     <Layout className={styles.panel}>
-      <CreateClusterForm
+      <SimpleForm
         form={form}
         additionalOptions={restoreInfo}
         onSubmit={handleSubmit}
         footerClassName={styles.footer}
+        processValue={processValue}
       />
     </Layout>
   )

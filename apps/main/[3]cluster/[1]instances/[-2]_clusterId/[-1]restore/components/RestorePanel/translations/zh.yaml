@@ -1,5 +1,5 @@
 restore-info:
-  title: 源配置
+  title: 备份源配置
   fields:
     clusterId: 源集群 ID
     clusterName: 源集群名
