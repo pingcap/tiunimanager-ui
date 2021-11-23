@@ -153,6 +153,9 @@ host:
     idle: 空闲中
     used: 使用中
     full: 已满载
+    computeExhausted: 计算资源耗尽
+    storageExhausted: 存储资源耗尽
+    exclusive: 独占
   purpose:
     compute: 计算
     storage: 存储
