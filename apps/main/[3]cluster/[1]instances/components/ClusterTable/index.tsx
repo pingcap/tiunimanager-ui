@@ -264,7 +264,7 @@ function getColumns(
       key: 'status',
       valueType: 'select',
       valueEnum: {
-        '0': { text: t('model:cluster.status.idle'), status: 'Default' },
+        '0': { text: t('model:cluster.status.init'), status: 'Default' },
         '1': { text: t('model:cluster.status.online'), status: 'Success' },
         '2': { text: t('model:cluster.status.offline'), status: 'Warning' },
         '3': { text: t('model:cluster.status.deleted'), status: 'Error' },

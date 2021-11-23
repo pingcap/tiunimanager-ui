@@ -75,7 +75,7 @@ export function Desc({ cluster }: DescProps) {
 function getStatus(t: TFunction<'model'>, statusCode: string) {
   switch (statusCode) {
     case '0':
-      return t('cluster.status.idle')
+      return t('cluster.status.init')
     case '1':
       return t('cluster.status.online')
     case '2':
