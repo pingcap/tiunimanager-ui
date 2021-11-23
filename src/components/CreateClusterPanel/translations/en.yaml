@@ -6,6 +6,9 @@ basic:
     password: DB Password
     type: Cluster Type
     tls: Enable TLS
+    region: Region
+    arch: Arch
+    exclusive: Exclusive
   tooltip:
     name: Upper and lower case letters, numbers and hyphens, starting with a letter, and with length between 8-32
     password: Upper and lower case letters, visible special characters !@#$%^&*()_+=, numbers, with length between 8-32
@@ -23,6 +26,7 @@ basic:
       require: Please select the cluster version
 nodes:
   title: '{{ name }} Options'
+  optional: Optional
   allocator:
     title: Quick Allocate
     items: '{{ count }} Nodes'
@@ -43,3 +47,29 @@ create:
     zone: '{{ name }} requires at least {{ count }} nodes in different zones!'
   success: 'Create cluster {{ msg }} successfully'
   fail: 'Fail: {{ msg }}'
+
+message:
+  needRegion: Please select a region first!
+
+modeSelector:
+  title: Select Create Mode
+  simple:
+    title: Simple Mode
+    description: Using the recommended best configuration, and the configuration can be modified after the cluster is created.
+  standard:
+    title: Standard Mode
+    description: Set all configuration options manually, including the rack, host, specification and quantity of the instances.
+
+preview:
+  title: Cluster Preview
+  description: 'Creating cluster <strong>{{ name }}</strong> of <strong>{{ type }}</strong> <strong>{{ version }}</strong> on <strong>{{ arch }}</strong> hardware in <strong>{{ region }}</strong>.'
+  restoreInfo: 'Restore from backup <strong>#{{ backupId }}</strong> of cluster <strong>{{ clusterId }}</strong>'
+  columns:
+    component: Component
+    zone: Zone
+    spec: Spec
+    amount: Amount
+    status: Status
+  status:
+    normal: Normal
+    notEnough: Insufficient inventory, please adjust the configuration.
