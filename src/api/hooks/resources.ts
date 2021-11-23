@@ -1,9 +1,11 @@
 import { APIS, basePath, PartialUseQueryOptions } from '@/api/client'
 import { QueryClient, useMutation, useQuery } from 'react-query'
+import { HardwareArch, ResourceUnitType } from '@/api/model'
 
 export const CACHE_HOSTS_LIST_KEY = 'resources-hosts-list'
 export const CACHE_HOST_DETAIL_KEY = 'resources-host-detail'
 export const CACHE_FAILURE_DOMAIN_KEY = 'resources-failure-domains'
+export const CACHE_HIERARCHY_KEY = 'resources-hierarchy'
 
 export function useQueryHostsList(
   query: {
@@ -89,4 +91,20 @@ export function getHostsTemplateURL() {
 
 export function getHostsUploadURL() {
   return basePath + '/resources/hosts'
+}
+
+export function useQueryResourceHierarchy(
+  query: {
+    type: ResourceUnitType
+    depth: number
+    arch?: HardwareArch
+  },
+  options?: PartialUseQueryOptions
+) {
+  const { type, depth, arch } = query
+  return useQuery(
+    [CACHE_HIERARCHY_KEY, type, depth, arch],
+    () => APIS.Resources.resourcesHierarchyGet(type, depth, arch),
+    options
+  )
 }
