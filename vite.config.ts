@@ -19,16 +19,20 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())
   const proxy =
     !env.VITE_MOCK &&
-    !!env.VITE_PROXY_TARGET &&
+    !!env.VITE_PROXY_API_TARGET &&
     ({
       proxy: {
         '/api': {
-          target: env.VITE_PROXY_TARGET,
+          target: env.VITE_PROXY_API_TARGET,
           changeOrigin: true,
+        },
+        '/fs': {
+          target: env.VITE_PROXY_FS_TARGET,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/fs/, ''),
         },
       },
     } as ServerOptions)
-
   return {
     plugins: [
       reactRefresh(),

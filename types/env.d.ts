@@ -5,7 +5,9 @@ interface ImportMetaEnv {
   VITE_DESCRIPTION: string
 
   // dev server proxy
-  VITE_PROXY_TARGET: string
+  VITE_PROXY_API_TARGET: string
+  VITE_PROXY_FS_TARGET: string
+
   // api base url, e.g. /api/v1
   VITE_API_BASE_URL: string
 

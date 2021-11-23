@@ -4,8 +4,6 @@ import {
   RequestBackupCreate,
   RequestBackupRestore,
   RequestBackupStrategyUpdate,
-  RequestTransportExport,
-  RequestTransportImport,
   RequestClusterCreate,
   RequestClusterParamsUpdate,
 } from '@/api/model'
@@ -77,6 +75,20 @@ const previewCreateCluster = (payload: RequestClusterCreate) =>
 
 export function usePreviewCreateCluster() {
   return useMutation(previewCreateCluster)
+
+const rebootCluster = (payload: { id: string }) =>
+  APIS.Clusters.clustersClusterIdRestartPost(payload.id)
+
+export function useRebootCluster() {
+  return useMutation(rebootCluster)
+}
+
+const stopCluster = (payload: { id: string }) =>
+  APIS.Clusters.clustersClusterIdStopPost(payload.id)
+
+export function useStopCluster() {
+  return useMutation(stopCluster)
+
 }
 
 /**
@@ -288,24 +300,6 @@ export function useQueryClusterDashboard(
     () => APIS.Clusters.clustersClusterIdDashboardGet(id),
     options
   )
-}
-
-/**
- * Cluster Import/Export
- */
-
-const importCluster = (payload: RequestTransportImport) =>
-  APIS.ClustersImport.clustersImportPost(payload)
-
-export function useImportCluster() {
-  return useMutation(importCluster)
-}
-
-const exportCluster = (payload: RequestTransportExport) =>
-  APIS.ClustersExport.clustersExportPost(payload)
-
-export function useExportCluster() {
-  return useMutation(exportCluster)
 }
 
 /**

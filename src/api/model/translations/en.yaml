@@ -153,6 +153,9 @@ host:
     idle: Free
     used: In Use
     full: Full
+    computeExhausted: Compute resources exhausted
+    storageExhausted: Storage resources exhausted
+    exclusive: Exclusive to a cluster
   purpose:
     compute: Compute
     storage: Storage
@@ -201,3 +204,23 @@ task:
     error: Error
   operator:
     system: System Automation
+transport:
+  property:
+    id: ID
+    status: Status # the same as task.status
+    clusterId: Cluster
+    startTime: Start Time
+    endTime: End Time
+    type: Type
+    storageType: Storage
+    fileName: File Name
+    filePath: File Path
+    fileSize: File Size
+    comment: Comment
+  type:
+    import: Import
+    export: Export
+  storageType:
+    nfs: Local
+    s3: AWS S3
+
