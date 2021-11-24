@@ -16,17 +16,17 @@ boot:
   confirm: 确认启动此集群吗？
   loading: 正在创建启动任务
   success: 创建启动集群任务成功，任务ID：{{ msg }}
-  fail: 创建启动集群任务失败
+  fail: 创建启动集群任务失败：{{ msg }}
 reboot:
   confirm: 确认重启此集群吗？
   loading: 正在创建重启任务
   success: 创建重启集群任务成功，任务ID：{{ msg }}
-  fail: 创建重启集群任务失败
+  fail: 创建重启集群任务失败：{{ msg }}
 stop:
   confirm: 确认停止此集群吗？
   loading: 正在创建停止任务
   success: 创建停止集群任务成功，任务ID：{{ msg }}
-  fail: 创建停止集群任务失败
+  fail: 创建停止集群任务失败：{{ msg }}
 delete:
   confirm: 确认删除此集群吗?
   success: '删除集群 {{ msg }} 成功'
