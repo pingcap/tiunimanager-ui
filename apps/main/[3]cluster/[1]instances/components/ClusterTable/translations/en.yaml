@@ -2,7 +2,9 @@ columns:
   actions: Actions
 actions:
   edit: Edit
+  boot: Boot
   reboot: Reboot
+  stop: Stop
   delete: Delete
 usage:
   cpu: CPU
@@ -10,6 +12,21 @@ usage:
   disk: DIS
   backup: BAK
   storage: STO
+boot:
+  confirm: Are you sure to boot this cluster?
+  loading: Creating a boot task...
+  success: 'Successfully create a boot task, task id: {{ msg }}'
+  fail: 'Fail to create a boot task: {{ msg }}'
+reboot:
+  confirm: Are you sure to reboot this cluster?
+  loading: Creating a reboot task...
+  success: 'Successfully create a reboot task, task id: {{ msg }}'
+  fail: 'Fail to create a reboot task: {{ msg }}'
+stop:
+  confirm: Are you sure to stop this cluster?
+  loading: Creating a stop task...
+  success: 'Successfully create a stop task, task id: {{ msg }}'
+  fail: 'Fail to create a stop task: {{ msg }}'
 delete:
   confirm: Are you sure to delete this cluster?
   success: 'Delete cluster {{ msg }} successfully'

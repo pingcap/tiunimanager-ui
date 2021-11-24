@@ -1,5 +1,5 @@
 import { ColumnsState, ProColumns } from '@ant-design/pro-table'
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment, useMemo, useState, useCallback } from 'react'
 import styles from './index.module.less'
 import HeavyTable from '@/components/HeavyTable'
 import { ClusterInfo, PagedResult, KnowledgeOfClusterType } from '@/api/model'
@@ -8,11 +8,22 @@ import useLocalStorage from '@hooks/useLocalstorage'
 import { Link } from 'react-router-dom'
 import { resolveRoute } from '@pages-macro'
 import { useQueryKnowledge } from '@/api/hooks/knowledge'
-import { useQueryClustersList } from '@/api/hooks/cluster'
+import {
+  useQueryClustersList,
+  invalidateClustersList,
+  invalidateClusterDetail,
+  useRebootCluster,
+  useStopCluster,
+} from '@/api/hooks/cluster'
 import { ProSchemaValueEnumObj } from '@ant-design/pro-utils/lib/typing'
 import { TFunction } from 'react-i18next'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { usePagination } from '@hooks/usePagination'
+import IntlPopConfirm from '@/components/IntlPopConfirm'
+import { Button, message } from 'antd'
+import { QuestionCircleOutlined } from '@ant-design/icons'
+import { useQueryClient } from 'react-query'
+import { errToMsg } from '@/utils/error'
 
 loadI18n()
 
@@ -98,9 +109,85 @@ function useFetchClustersData() {
   }
 }
 
+type BootType = 'boot' | 'reboot'
+
 function useTableColumn() {
   const { t, i18n } = useI18n()
   const { data, isLoading } = useQueryKnowledge()
+
+  const queryClient = useQueryClient()
+  const rebootCluster = useRebootCluster()
+  const stopCluster = useStopCluster()
+
+  const bootAction = useCallback(
+    (bootType: BootType, clusterId: string) =>
+      rebootCluster.mutateAsync(
+        { id: clusterId },
+        {
+          onSuccess(data) {
+            message
+              .success(
+                t(`${bootType}.success`, {
+                  msg: data.data.data?.inProcessFlowId,
+                }),
+                5
+              )
+              .then()
+          },
+          onSettled() {
+            return Promise.allSettled([
+              invalidateClustersList(queryClient),
+              invalidateClusterDetail(queryClient, clusterId),
+            ])
+          },
+          onError(e: any) {
+            message
+              .error(
+                t(`${bootType}.fail`, {
+                  msg: errToMsg(e),
+                })
+              )
+              .then()
+          },
+        }
+      ),
+    [queryClient, rebootCluster.mutateAsync]
+  )
+
+  const stopAction = useCallback(
+    (clusterId: string) =>
+      stopCluster.mutateAsync(
+        { id: clusterId },
+        {
+          onSuccess(data) {
+            message
+              .success(
+                t('stop.success', {
+                  msg: data.data.data?.inProcessFlowId,
+                }),
+                5
+              )
+              .then()
+          },
+          onSettled() {
+            return Promise.allSettled([
+              invalidateClustersList(queryClient),
+              invalidateClusterDetail(queryClient, clusterId),
+            ])
+          },
+          onError(e: any) {
+            message
+              .error(
+                t('stop.fail', {
+                  msg: errToMsg(e),
+                })
+              )
+              .then()
+          },
+        }
+      ),
+    [queryClient, stopCluster.mutateAsync]
+  )
 
   const [columnsSetting, setColumnSetting] = useLocalStorage(
     'cluster-table-show',
@@ -109,8 +196,14 @@ function useTableColumn() {
 
   const columns = useMemo(
     // FIXME: Filter not updated in time
-    () => getColumns(t, getClusterTypes(data?.data?.data || [])),
-    [i18n.language, isLoading]
+    () =>
+      getColumns(
+        t,
+        getClusterTypes(data?.data?.data || []),
+        bootAction,
+        stopAction
+      ),
+    [i18n.language, isLoading, bootAction, stopAction]
   )
 
   return {
@@ -136,7 +229,9 @@ function getClusterTypes(raw: KnowledgeOfClusterType[]) {
 
 function getColumns(
   t: TFunction<''>,
-  clusterTypes: ProColumns['valueEnum']
+  clusterTypes: ProColumns['valueEnum'],
+  bootAction: (type: BootType, id: string) => Promise<unknown>,
+  stopAction: (id: string) => Promise<unknown>
 ): ProColumns<ClusterInfo>[] {
   return [
     {
@@ -370,14 +465,79 @@ function getColumns(
     },
     {
       title: t('columns.actions'),
-      width: 100,
+      width: 120,
       key: 'actions',
       valueType: 'option',
-      render() {
+      render(_, record) {
+        const { statusCode = '' } = record
+        const bootEnabled = statusCode === '2'
+        const rebootDisabled = ['0', '1'].indexOf(statusCode) === -1
+        const stopDisabled = rebootDisabled
+
         return [
           // TODO: implement actions in cluster list
-          <a key="edit">{t('actions.edit')}</a>,
-          <a key="reboot">{t('actions.reboot')}</a>,
+          // <a key="edit">{t('actions.edit')}</a>,
+          bootEnabled ? (
+            <IntlPopConfirm
+              key="boot"
+              title={t('boot.confirm')}
+              icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+              onConfirm={async () => {
+                const hide = message.loading(t('boot.loading'), 0)
+
+                await bootAction('boot', record.clusterId!)
+
+                hide()
+              }}
+            >
+              <Button className={styles.actionBtn} type="link">
+                {t('actions.boot')}
+              </Button>
+            </IntlPopConfirm>
+          ) : (
+            <IntlPopConfirm
+              key="reboot"
+              title={t('reboot.confirm')}
+              icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+              disabled={rebootDisabled}
+              onConfirm={async () => {
+                const hide = message.loading(t('reboot.loading'), 0)
+
+                await bootAction('reboot', record.clusterId!)
+
+                hide()
+              }}
+            >
+              <Button
+                className={styles.actionBtn}
+                type="link"
+                disabled={rebootDisabled}
+              >
+                {t('actions.reboot')}
+              </Button>
+            </IntlPopConfirm>
+          ),
+          <IntlPopConfirm
+            key="stop"
+            title={t('stop.confirm')}
+            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+            disabled={stopDisabled}
+            onConfirm={async () => {
+              const hide = message.loading(t('stop.loading'), 0)
+
+              await stopAction(record.clusterId!)
+
+              hide()
+            }}
+          >
+            <Button
+              className={styles.actionBtn}
+              type="link"
+              disabled={stopDisabled}
+            >
+              {t('actions.stop')}
+            </Button>
+          </IntlPopConfirm>,
         ]
       },
     },
