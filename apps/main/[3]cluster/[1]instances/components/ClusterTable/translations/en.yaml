@@ -14,17 +14,17 @@ usage:
   storage: STO
 boot:
   confirm: Are you sure to boot this cluster?
-  loading: Creating a boot cask...
+  loading: Creating a boot task...
   success: 'Successfully create a boot task, task id: {{ msg }}'
   fail: 'Fail to create a boot task'
 reboot:
   confirm: Are you sure to reboot this cluster?
-  loading: Creating a reboot cask...
+  loading: Creating a reboot task...
   success: 'Successfully create a reboot task, task id: {{ msg }}'
   fail: 'Fail to create a reboot task'
 stop:
   confirm: Are you sure to stop this cluster?
-  loading: Creating a stop cask...
+  loading: Creating a stop task...
   success: 'Successfully create a stop task, task id: {{ msg }}'
   fail: 'Fail to create a stop task'
 delete:
