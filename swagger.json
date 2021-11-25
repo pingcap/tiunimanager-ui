@@ -229,6 +229,495 @@
         }
       }
     },
+    "/changefeeds/": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "query change feed tasks of a cluster",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["change feed"],
+        "summary": "query change feed tasks of a cluster",
+        "parameters": [
+          {
+            "type": "string",
+            "example": "CLUSTER_ID_IN_TIEM__22",
+            "name": "clusterId",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "total",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.ResultWithPage"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/changefeed.ChangeFeedTaskDetail"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "create a change feed task",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["change feed"],
+        "summary": "create a change feed task",
+        "parameters": [
+          {
+            "description": "change feed task request",
+            "name": "changeFeedTask",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/changefeed.ChangeFeedTask"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "allOf": [
+                        {
+                          "$ref": "#/definitions/changefeed.ChangeFeedTask"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "downstream": {
+                              "$ref": "#/definitions/changefeed.MysqlDownstream"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/changefeeds/{changeFeedTaskId}": {
+      "delete": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "delete a change feed task",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["change feed"],
+        "summary": "delete a change feed task",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "changeFeedTaskId",
+            "name": "changeFeedTaskId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/changefeed.ChangeFeedTaskDetail"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/changefeeds/{changeFeedTaskId}/": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "get change feed detail",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["change feed"],
+        "summary": "get change feed detail",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "changeFeedTaskId",
+            "name": "changeFeedTaskId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/changefeed.ChangeFeedTaskDetail"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/changefeeds/{changeFeedTaskId}/pause": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "pause a change feed task",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["change feed"],
+        "summary": "pause a change feed task",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "changeFeedTaskId",
+            "name": "changeFeedTaskId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/changefeed.ChangeFeedTaskDetail"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/changefeeds/{changeFeedTaskId}/resume": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "resume a change feed task",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["change feed"],
+        "summary": "resume a change feed task",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "changeFeedTaskId",
+            "name": "changeFeedTaskId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "allOf": [
+                        {
+                          "$ref": "#/definitions/changefeed.ChangeFeedTaskDetail"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "downstream": {
+                              "$ref": "#/definitions/changefeed.TiDBDownstream"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/changefeeds/{changeFeedTaskId}/update": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "resume a change feed",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["change feed"],
+        "summary": "resume a change feed",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "changeFeedTaskId",
+            "name": "changeFeedTaskId",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "change feed task",
+            "name": "task",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/changefeed.ChangeFeedTask"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "allOf": [
+                        {
+                          "$ref": "#/definitions/changefeed.ChangeFeedTaskDetail"
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "downstream": {
+                              "$ref": "#/definitions/changefeed.KafkaDownstream"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
     "/clusters/": {
       "get": {
         "security": [
@@ -937,6 +1426,14 @@
             "name": "clusterId",
             "in": "path",
             "required": true
+          },
+          {
+            "description": "delete request",
+            "name": "deleteReq",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/management.DeleteReq"
+            }
           }
         ],
         "responses": {
@@ -1277,6 +1774,146 @@
                   "properties": {
                     "data": {
                       "$ref": "#/definitions/management.RestartClusterRsp"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/{clusterId}/scale-in": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "scale in a cluster",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
+        "summary": "scale in a cluster",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "cluster id",
+            "name": "clusterId",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "scale in request",
+            "name": "scaleInReq",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/management.ScaleInReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/management.ScaleInClusterRsp"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/clusters/{clusterId}/scale-out": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "scale out a cluster",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
+        "summary": "scale out a cluster",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "cluster id",
+            "name": "clusterId",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "scale out request",
+            "name": "scaleOutReq",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/management.ScaleOutReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/management.ScaleOutClusterRsp"
                     }
                   }
                 }
@@ -1784,6 +2421,477 @@
           },
           "401": {
             "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/param-groups/": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "query param group",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["param group"],
+        "summary": "query param group",
+        "parameters": [
+          {
+            "type": "integer",
+            "example": 0,
+            "name": "dbType",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "example": 0,
+            "name": "hasDefault",
+            "in": "query"
+          },
+          {
+            "type": "boolean",
+            "example": false,
+            "name": "hasDetail",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "example": "default",
+            "name": "name",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "example": "8C16G",
+            "name": "spec",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "example": "v5.0",
+            "name": "version",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.ResultWithPage"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/definitions/paramgroup.QueryParamGroupResp"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "create a param group",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["param group"],
+        "summary": "create a param group",
+        "parameters": [
+          {
+            "description": "create request",
+            "name": "createReq",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/paramgroup.CreateParamGroupReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/paramgroup.CommonParamGroupResp"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/param-groups/{paramGroupId}": {
+      "get": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "show details of a param group",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["param group"],
+        "summary": "show details of a param group",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "param group id",
+            "name": "paramGroupId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/paramgroup.QueryParamGroupResp"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "update a param group",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["param group"],
+        "summary": "update a param group",
+        "parameters": [
+          {
+            "description": "update param group request",
+            "name": "updateReq",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/paramgroup.UpdateParamGroupReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/paramgroup.CommonParamGroupResp"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "delete a param group",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["param group"],
+        "summary": "delete a param group",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "param group id",
+            "name": "paramGroupId",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/paramgroup.CommonParamGroupResp"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/param-groups/{paramGroupId}/apply": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "apply a param group",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["param group"],
+        "summary": "apply a param group",
+        "parameters": [
+          {
+            "description": "apply param group request",
+            "name": "applyReq",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/paramgroup.ApplyParamGroupReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/paramgroup.ApplyParamGroupResp"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          }
+        }
+      }
+    },
+    "/param-groups/{paramGroupId}/copy": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "copy a param group",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["param group"],
+        "summary": "copy a param group",
+        "parameters": [
+          {
+            "description": "copy param group request",
+            "name": "copyReq",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/paramgroup.CopyParamGroupReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/controller.CommonResult"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/paramgroup.CommonParamGroupResp"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/controller.CommonResult"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
             "schema": {
               "$ref": "#/definitions/controller.CommonResult"
             }
@@ -2567,15 +3675,15 @@
       "type": "object",
       "properties": {
         "backupMethod": {
-          "description": "物理/逻辑",
           "type": "string"
         },
         "backupMode": {
-          "description": "手动/自动",
           "type": "string"
         },
+        "backupTso": {
+          "type": "integer"
+        },
         "backupType": {
-          "description": "全量/增量",
           "type": "string"
         },
         "clusterId": {
@@ -2658,8 +3766,14 @@
         "clusterVersion": {
           "type": "string"
         },
+        "cpuArchitecture": {
+          "type": "string"
+        },
         "dbPassword": {
           "type": "string"
+        },
+        "exclusive": {
+          "type": "boolean"
         },
         "nodeDemandList": {
           "type": "array",
@@ -2670,6 +3784,9 @@
         "recoverInfo": {
           "$ref": "#/definitions/management.RecoverInfo"
         },
+        "region": {
+          "type": "string"
+        },
         "tags": {
           "type": "array",
           "items": {
@@ -2678,6 +3795,250 @@
         },
         "tls": {
           "type": "boolean"
+        }
+      }
+    },
+    "changefeed.ChangeFeedTask": {
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "example": "CLUSTER_ID_IN_TIEM__22"
+        },
+        "createTime": {
+          "type": "string"
+        },
+        "downstream": {
+          "type": "object"
+        },
+        "downstreamType": {
+          "type": "string",
+          "enum": ["tidb", "kafka", "mysql"],
+          "example": "tidb"
+        },
+        "id": {
+          "type": "string",
+          "example": "CLUSTER_ID_IN_TIEM__22"
+        },
+        "name": {
+          "type": "string",
+          "example": "my_sync_name"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": ["*.*"]
+        },
+        "startTS": {
+          "type": "integer",
+          "example": 415241823337054209
+        },
+        "status": {
+          "type": "integer",
+          "enum": [0, 1, 2, 3, 4, 5],
+          "example": 1
+        },
+        "updateTime": {
+          "type": "string"
+        }
+      }
+    },
+    "changefeed.ChangeFeedTaskDetail": {
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "example": "CLUSTER_ID_IN_TIEM__22"
+        },
+        "createTime": {
+          "type": "string"
+        },
+        "downstream": {
+          "type": "object"
+        },
+        "downstreamFetchTs": {
+          "type": "integer",
+          "example": 415241823337054209
+        },
+        "downstreamSyncTs": {
+          "type": "integer",
+          "example": 415241823337054209
+        },
+        "downstreamType": {
+          "type": "string",
+          "enum": ["tidb", "kafka", "mysql"],
+          "example": "tidb"
+        },
+        "id": {
+          "type": "string",
+          "example": "CLUSTER_ID_IN_TIEM__22"
+        },
+        "name": {
+          "type": "string",
+          "example": "my_sync_name"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": ["*.*"]
+        },
+        "startTS": {
+          "type": "integer",
+          "example": 415241823337054209
+        },
+        "status": {
+          "type": "integer",
+          "enum": [0, 1, 2, 3, 4, 5],
+          "example": 1
+        },
+        "unsteady": {
+          "type": "boolean",
+          "example": false
+        },
+        "updateTime": {
+          "type": "string"
+        },
+        "upstreamUpdateTs": {
+          "type": "integer",
+          "example": 415241823337054209
+        }
+      }
+    },
+    "changefeed.KafkaDownstream": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "example": "213"
+        },
+        "dispatchers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ip": {
+          "type": "string",
+          "example": "127.0.0.1"
+        },
+        "maxBatchSize": {
+          "type": "integer",
+          "example": 5
+        },
+        "maxMessageBytes": {
+          "type": "integer",
+          "example": 16
+        },
+        "partitions": {
+          "type": "integer",
+          "example": 1
+        },
+        "port": {
+          "type": "integer",
+          "example": 9001
+        },
+        "protocol": {
+          "type": "string",
+          "enum": ["default", "canal", "avro", "maxwell"],
+          "example": "default"
+        },
+        "replicationFactor": {
+          "type": "integer",
+          "example": 1
+        },
+        "tls": {
+          "type": "boolean",
+          "example": false
+        },
+        "topicName": {
+          "type": "string",
+          "example": "my_topic"
+        },
+        "version": {
+          "type": "string",
+          "example": "2.4.0"
+        }
+      }
+    },
+    "changefeed.MysqlDownstream": {
+      "type": "object",
+      "properties": {
+        "concurrentThreads": {
+          "type": "integer",
+          "example": 7
+        },
+        "ip": {
+          "type": "string",
+          "example": "127.0.0.1"
+        },
+        "maxTxnRow": {
+          "type": "integer",
+          "example": 5
+        },
+        "password": {
+          "type": "string",
+          "example": "my_password"
+        },
+        "port": {
+          "type": "integer",
+          "example": 8001
+        },
+        "tls": {
+          "type": "boolean",
+          "example": false
+        },
+        "username": {
+          "type": "string",
+          "example": "root"
+        },
+        "workerCount": {
+          "type": "integer",
+          "example": 2
+        }
+      }
+    },
+    "changefeed.TiDBDownstream": {
+      "type": "object",
+      "properties": {
+        "concurrentThreads": {
+          "type": "integer",
+          "example": 5
+        },
+        "ip": {
+          "type": "string",
+          "example": "127.0.0.1"
+        },
+        "maxTxnRow": {
+          "type": "integer",
+          "example": 4
+        },
+        "password": {
+          "type": "string",
+          "example": "my_password"
+        },
+        "port": {
+          "type": "integer",
+          "example": 4534
+        },
+        "targetClusterId": {
+          "type": "string",
+          "example": "CLUSTER_ID_IN_TIEM__22"
+        },
+        "tls": {
+          "type": "boolean",
+          "example": false
+        },
+        "username": {
+          "type": "string",
+          "example": "tidb"
+        },
+        "workerCount": {
+          "type": "integer",
+          "example": 2
         }
       }
     },
@@ -3315,6 +4676,9 @@
         },
         "transportType": {
           "type": "string"
+        },
+        "zipName": {
+          "type": "string"
         }
       }
     },
@@ -3335,6 +4699,9 @@
         "componentName": {
           "type": "string"
         },
+        "componentPurpose": {
+          "type": "string"
+        },
         "componentType": {
           "type": "string"
         }
@@ -3346,11 +4713,11 @@
         "clusterComponent": {
           "$ref": "#/definitions/knowledge.ClusterComponent"
         },
-        "compentPortConstraint": {
-          "$ref": "#/definitions/knowledge.ComponentPortConstraint"
-        },
         "componentConstraint": {
           "$ref": "#/definitions/knowledge.ComponentConstraint"
+        },
+        "componentPortConstraint": {
+          "$ref": "#/definitions/knowledge.ComponentPortConstraint"
         }
       }
     },
@@ -3393,6 +4760,12 @@
     "knowledge.ClusterVersionSpec": {
       "type": "object",
       "properties": {
+        "archTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "clusterVersion": {
           "$ref": "#/definitions/knowledge.ClusterVersion"
         },
@@ -3418,6 +4791,9 @@
         },
         "minZoneQuantity": {
           "type": "integer"
+        },
+        "parasite": {
+          "type": "boolean"
         },
         "suggestedNodeQuantities": {
           "type": "array",
@@ -3842,6 +5218,17 @@
         }
       }
     },
+    "management.DeleteReq": {
+      "type": "object",
+      "properties": {
+        "autoBackup": {
+          "type": "boolean"
+        },
+        "clearBackupData": {
+          "type": "boolean"
+        }
+      }
+    },
     "management.DescribeDashboardRsp": {
       "type": "object",
       "properties": {
@@ -4003,11 +5390,20 @@
         "clusterVersion": {
           "type": "string"
         },
+        "cpuArchitecture": {
+          "type": "string"
+        },
         "dbPassword": {
           "type": "string"
         },
+        "exclusive": {
+          "type": "boolean"
+        },
         "recoverInfo": {
           "$ref": "#/definitions/management.RecoverInfo"
+        },
+        "region": {
+          "type": "string"
         },
         "stockCheckResult": {
           "type": "array",
@@ -4063,6 +5459,74 @@
         }
       }
     },
+    "management.ScaleInClusterRsp": {
+      "type": "object",
+      "properties": {
+        "createTime": {
+          "type": "string"
+        },
+        "deleteTime": {
+          "type": "string"
+        },
+        "inProcessFlowId": {
+          "type": "integer"
+        },
+        "statusCode": {
+          "type": "string"
+        },
+        "statusName": {
+          "type": "string"
+        },
+        "updateTime": {
+          "type": "string"
+        }
+      }
+    },
+    "management.ScaleInReq": {
+      "type": "object",
+      "properties": {
+        "componentType": {
+          "type": "string"
+        },
+        "nodeId": {
+          "type": "string"
+        }
+      }
+    },
+    "management.ScaleOutClusterRsp": {
+      "type": "object",
+      "properties": {
+        "createTime": {
+          "type": "string"
+        },
+        "deleteTime": {
+          "type": "string"
+        },
+        "inProcessFlowId": {
+          "type": "integer"
+        },
+        "statusCode": {
+          "type": "string"
+        },
+        "statusName": {
+          "type": "string"
+        },
+        "updateTime": {
+          "type": "string"
+        }
+      }
+    },
+    "management.ScaleOutReq": {
+      "type": "object",
+      "properties": {
+        "nodeDemandList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/management.ClusterNodeDemand"
+          }
+        }
+      }
+    },
     "management.ServiceCapabilityIndex": {
       "type": "object",
       "properties": {
@@ -4083,8 +5547,8 @@
     "management.StockCheckItem": {
       "type": "object",
       "properties": {
-        "componentType": {
-          "type": "string"
+        "component": {
+          "$ref": "#/definitions/knowledge.ClusterComponent"
         },
         "count": {
           "type": "integer"
@@ -4207,6 +5671,240 @@
         },
         "taskId": {
           "type": "integer"
+        }
+      }
+    },
+    "paramgroup.ApplyParamGroupReq": {
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "example": "123"
+        }
+      }
+    },
+    "paramgroup.ApplyParamGroupResp": {
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "example": "123"
+        },
+        "id": {
+          "type": "string",
+          "example": "abc"
+        }
+      }
+    },
+    "paramgroup.CommonParamGroupResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "abc"
+        }
+      }
+    },
+    "paramgroup.CopyParamGroupReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "8C16GV4_default"
+        },
+        "note": {
+          "type": "string",
+          "example": "default param group"
+        }
+      }
+    },
+    "paramgroup.CreateAndUpdateParam": {
+      "type": "object",
+      "properties": {
+        "defaultValue": {
+          "type": "string",
+          "example": "1"
+        },
+        "description": {
+          "type": "string",
+          "example": "binlog cache size"
+        },
+        "id": {
+          "type": "string",
+          "example": "123"
+        }
+      }
+    },
+    "paramgroup.CreateParamGroupReq": {
+      "type": "object",
+      "properties": {
+        "dbType": {
+          "type": "integer",
+          "example": 0
+        },
+        "groupType": {
+          "type": "integer",
+          "example": 0
+        },
+        "hasDefault": {
+          "type": "boolean",
+          "example": true
+        },
+        "name": {
+          "type": "string",
+          "example": "8C16GV4_default"
+        },
+        "note": {
+          "type": "string",
+          "example": "default param group"
+        },
+        "params": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/paramgroup.CreateAndUpdateParam"
+          }
+        },
+        "spec": {
+          "type": "string",
+          "example": "8C16G"
+        },
+        "version": {
+          "type": "string",
+          "example": "v5.0"
+        }
+      }
+    },
+    "paramgroup.ParamDetail": {
+      "type": "object",
+      "properties": {
+        "componentType": {
+          "type": "string",
+          "example": "tidb"
+        },
+        "createTime": {
+          "type": "integer",
+          "example": 1636698675
+        },
+        "defaultValue": {
+          "type": "string",
+          "example": "1"
+        },
+        "description": {
+          "type": "string",
+          "example": "binlog cache size"
+        },
+        "hasReboot": {
+          "type": "integer",
+          "example": 0
+        },
+        "id": {
+          "type": "string",
+          "example": "123"
+        },
+        "name": {
+          "type": "string",
+          "example": "binlog_size"
+        },
+        "note": {
+          "type": "string",
+          "example": "binlog cache size"
+        },
+        "range": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": ["1", " 1000"]
+        },
+        "type": {
+          "type": "integer",
+          "example": 0
+        },
+        "unit": {
+          "type": "string",
+          "example": "mb"
+        },
+        "updateTime": {
+          "type": "integer",
+          "example": 1636698675
+        }
+      }
+    },
+    "paramgroup.QueryParamGroupResp": {
+      "type": "object",
+      "properties": {
+        "createTime": {
+          "type": "integer",
+          "example": 1636698675
+        },
+        "dbType": {
+          "type": "integer",
+          "example": 0
+        },
+        "groupType": {
+          "type": "integer",
+          "example": 0
+        },
+        "hasDefault": {
+          "type": "boolean",
+          "example": true
+        },
+        "id": {
+          "type": "string",
+          "example": "abc"
+        },
+        "name": {
+          "type": "string",
+          "example": "default"
+        },
+        "note": {
+          "type": "string",
+          "example": "default param group"
+        },
+        "params": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/paramgroup.ParamDetail"
+          }
+        },
+        "spec": {
+          "type": "string",
+          "example": "8C16G"
+        },
+        "updateTime": {
+          "type": "integer",
+          "example": 1636698675
+        },
+        "version": {
+          "type": "string",
+          "example": "v5.0"
+        }
+      }
+    },
+    "paramgroup.UpdateParamGroupReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "8C16GV4_default"
+        },
+        "note": {
+          "type": "string",
+          "example": "default param group"
+        },
+        "params": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/paramgroup.CreateAndUpdateParam"
+          }
+        },
+        "spec": {
+          "type": "string",
+          "example": "8C16G"
+        },
+        "version": {
+          "type": "string",
+          "example": "v5.0"
         }
       }
     },
