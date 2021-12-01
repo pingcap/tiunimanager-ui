@@ -126,7 +126,7 @@ const updateClusterParams = ({
   clusterId,
   ...payload
 }: RequestClusterParamsUpdate & { clusterId: string }) =>
-  APIS.ClusterParams.clustersClusterIdParamsPost(clusterId, payload)
+  APIS.ClusterParams.clustersClusterIdParamsPut(clusterId, payload)
 
 export function useUpdateClusterParams() {
   return useMutation(updateClusterParams)

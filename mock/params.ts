@@ -4,38 +4,32 @@ import { ClusterParamItem } from '@/api/model'
 
 const fakeParams: ClusterParamItem[] = [
   {
-    currentValue: {
-      name: 'binlog_cache_size',
-      value: 1048576 as any,
+    paramId: 1,
+    componentType: 'tidb',
+    name: 'binlog_cache_size',
+    realValue: {
+      cluster: '1048576',
     },
-    definition: {
-      constraints: [
-        { contrastValue: 0 as any },
-        { contrastValue: (2 * 1024 * 1024) as any },
-      ],
-      defaultValue: 1048576 as any,
-      desc: '111',
-      name: 'binlog_cache_size',
-      needRestart: false,
-      unit: 'B',
-    },
+    type: 1,
+    hasReboot: 0,
+    range: ['0', '2 * 1024 * 1024'],
+    defaultValue: '1048576',
+    description: '111',
+    unit: 'B',
   },
   {
-    currentValue: {
-      name: 'query_cache_limit',
-      value: 1048576 as any,
+    paramId: 2,
+    componentType: 'tidb',
+    name: 'query_cache_limit',
+    realValue: {
+      cluster: '1048576',
     },
-    definition: {
-      constraints: [
-        { contrastValue: (1024 * 1024) as any },
-        { contrastValue: (5 * 1024 * 1024) as any },
-      ],
-      defaultValue: 1048576 as any,
-      desc: '222',
-      name: 'query_cache_limit',
-      needRestart: true,
-      unit: 'B',
-    },
+    type: 1,
+    hasReboot: 1,
+    range: ['1024 * 1024', '5 * 1024 * 1024'],
+    defaultValue: '1048576',
+    description: '222',
+    unit: 'B',
   },
 ]
 

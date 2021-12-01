@@ -5,9 +5,9 @@ import {
   ImportexportDataExportReq,
   ImportexportDataImportReq,
   ManagementCreateReq,
-  ParameterParamUpdateReq,
+  ParameterUpdateParamsReq,
   IdentificationLoginInfo,
-  ParameterParamItem,
+  ParameterListParamsResp,
   ManagementClusterDisplayInfo,
   LogSearchTiDBLogDetail,
   ControllerResultWithPage,
@@ -37,7 +37,7 @@ export type UserInfo = IdentificationUserIdentity
 
 export type ClusterInfo = ManagementClusterDisplayInfo
 export type ClusterComponentNodeInfo = ManagementComponentNodeDisplayInfo
-export type ClusterParamItem = ParameterParamItem
+export type ClusterParamItem = ParameterListParamsResp
 export type ClusterLogItem = LogSearchTiDBLogDetail
 export type ClusterBackupItem = BackuprestoreBackupRecord
 
@@ -78,7 +78,7 @@ export type RequestBackupRestore = BackuprestoreRestoreReq
 export type RequestTransportExport = ImportexportDataExportReq
 export type RequestTransportImport = ImportexportDataImportReq
 export type RequestClusterCreate = ManagementCreateReq
-export type RequestClusterParamsUpdate = ParameterParamUpdateReq
+export type RequestClusterParamsUpdate = ParameterUpdateParamsReq
 
 export type ResponseClusterDetail = ManagementDetailClusterRsp
 
