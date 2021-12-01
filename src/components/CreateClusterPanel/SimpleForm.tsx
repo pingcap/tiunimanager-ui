@@ -69,7 +69,7 @@ export function SimpleForm({
 
   const [clusterType, setClusterType] = useState<string>()
   const [clusterVersion, setClusterVersion] = useState<string>()
-  const [arch, setArch] = useState<HardwareArch>('X86')
+  const [arch, setArch] = useState<HardwareArch>('X86_64')
   const [region, setRegion] = useState<string | undefined>()
 
   const availableStocksMap = useAvailableStocks(arch)
@@ -96,8 +96,8 @@ export function SimpleForm({
   )
 
   const resetArch = () => {
-    setArch('X86')
-    form.setFields([{ name: 'cpuArchitecture', value: 'X86' }])
+    setArch('X86_64')
+    form.setFields([{ name: 'cpuArchitecture', value: 'X86_64' }])
   }
   const resetRegion = () => {
     setRegion(undefined)
@@ -185,8 +185,8 @@ export function SimpleForm({
         name="create"
         className={`${styles.form} ${styles.simpleForm} ${formClassName || ''}`}
       >
-        <Row>{basicOptions}</Row>
         <Row>{additionalOptions}</Row>
+        <Row>{basicOptions}</Row>
         {nodeOptions}
       </Form>
       <Submitter
@@ -329,10 +329,10 @@ function BasicOptions({
             name="cpuArchitecture"
             label={t('basic.fields.arch')}
             rules={[{ required: true }]}
-            initialValue={'X86'}
+            initialValue={'X86_64'}
           >
             <Radio.Group onChange={(v) => onSelectArch(v.target.value)}>
-              <Radio.Button value="X86">x86</Radio.Button>
+              <Radio.Button value="X86_64">x86_64</Radio.Button>
               <Radio.Button value="ARM64">amd64</Radio.Button>
             </Radio.Group>
           </Form.Item>

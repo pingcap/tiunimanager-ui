@@ -41,7 +41,7 @@ export type ClusterParamItem = ParameterListParamsResp
 export type ClusterLogItem = LogSearchTiDBLogDetail
 export type ClusterBackupItem = BackuprestoreBackupRecord
 
-export type HardwareArch = 'X86' | 'AMD64'
+export type HardwareArch = 'X86_64' | 'AMD64'
 
 export type ClusterType = KnowledgeClusterType
 export type ClusterVersion = KnowledgeClusterVersion
