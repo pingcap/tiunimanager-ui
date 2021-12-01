@@ -44,7 +44,7 @@ const TableOptions = {
   reload: false,
 }
 
-const getRowKey = (record: ClusterParamItem) => record.definition!.name!
+const getRowKey = (record: ClusterParamItem) => record.paramId!
 
 export function ParamsTable({ cluster }: ParamsTableProps) {
   const { t, i18n } = useI18n()
@@ -81,9 +81,11 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
           updateParams.mutateAsync(
             {
               clusterId: cluster.clusterId!,
-              values: changes.map((change) => ({
-                name: change.name,
-                value: change.change[1],
+              params: changes.map((change) => ({
+                paramId: change.paramId,
+                realValue: {
+                  cluster: change.change[1],
+                },
               })),
             },
             {
@@ -153,18 +155,17 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
         type: 'single',
         form,
         actionRender: (_, __, dom) => [dom.save, dom.cancel],
-        onSave: async (name, editedRow) => {
+        onSave: async (paramId, editedRow) => {
           setTableData((prev) =>
-            prev.map((r) => {
-              if (r.definition!.name !== name) return r
+            prev.map((row) => {
+              if (row.paramId !== paramId) return row
+
               return {
-                currentValue: {
-                  name: r.currentValue?.name,
-                  value:
-                    (editedRow.currentValue!.value! as any) ||
-                    r.definition?.defaultValue,
+                ...row,
+                realValue: {
+                  ...row.realValue,
+                  cluster: editedRow.realValue?.cluster || row.defaultValue,
                 },
-                definition: r.definition,
               }
             })
           )
@@ -179,15 +180,15 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
     {
       title: t('model:clusterParam.property.name'),
       width: 160,
-      dataIndex: ['definition', 'name'],
+      dataIndex: 'name',
       editable: false,
     },
     {
       title: t('model:clusterParam.property.reboot'),
       width: 80,
-      key: 'reboot',
+      key: 'hasReboot',
       render(_, record) {
-        return record.definition!.needRestart!
+        return record.hasReboot!
           ? t('model:clusterParam.reboot.true')
           : t('model:clusterParam.reboot.false')
       },
@@ -195,7 +196,7 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
     },
     {
       title: t('model:clusterParam.property.desc'),
-      dataIndex: ['definition', 'desc'],
+      dataIndex: 'description',
       editable: false,
       ellipsis: true,
     },
@@ -204,33 +205,33 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
       width: 200,
       key: 'range',
       render(_, record) {
-        const constraints = record.definition!.constraints!
-        const unit = record.definition!.unit!
+        const range = record.range!
+        const unit = record.unit!
         // TODO: handle different types
-        return constraints.map((c) => `${c.contrastValue} ${unit}`).join(', ')
+        return range.map((rangeValue) => `${rangeValue} ${unit}`).join(', ')
       },
       editable: false,
     },
     {
       title: t('model:clusterParam.property.default'),
       width: 160,
-      dataIndex: ['definition', 'defaultValue'],
+      dataIndex: 'defaultValue',
       editable: false,
     },
     {
       title: t('model:clusterParam.property.current'),
       width: 180,
-      dataIndex: ['currentValue', 'value'],
+      dataIndex: ['realValue', 'cluster'],
       render(_, record, __, action) {
         return (
           <span
             onClick={() => {
               form.resetFields()
-              action?.startEditable(record.definition!.name!)
+              action?.startEditable(record.paramId!)
             }}
             style={{ cursor: 'pointer' }}
           >
-            <EditOutlined /> {record.currentValue!.value!}
+            <EditOutlined /> {record.realValue?.cluster}
           </span>
         )
       },
@@ -245,7 +246,7 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
             key="editable"
             onClick={() => {
               form.resetFields()
-              action?.startEditable?.(record.definition!.name!)
+              action?.startEditable?.(record.paramId!)
             }}
           >
             {t('actions.edit')}
@@ -276,8 +277,9 @@ function useFetchParamsData(id: string) {
 }
 
 type Change = {
+  paramId: number
   name: string
-  change: [any, any]
+  change: [string, string]
 }
 
 function findParamsChanges(
@@ -286,10 +288,11 @@ function findParamsChanges(
 ) {
   const changes: Change[] = []
   origin.forEach((raw, i) => {
-    if (raw.currentValue!.value !== table[i].currentValue!.value) {
+    if (raw.realValue?.cluster !== table[i].realValue?.cluster) {
       changes.push({
-        name: raw.definition!.name!,
-        change: [raw.currentValue!.value!, table[i].currentValue!.value!],
+        paramId: raw.paramId!,
+        name: raw.name!,
+        change: [raw.realValue!.cluster!, table[i].realValue!.cluster!],
       })
     }
   })
