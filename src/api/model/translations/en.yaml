@@ -59,6 +59,7 @@ clusterBackup:
     clusterId: Cluster ID
     startTime: Start Time
     endTime: End Time
+    tso: TSO
     operator: Operator
     size: Size
     status: Status
