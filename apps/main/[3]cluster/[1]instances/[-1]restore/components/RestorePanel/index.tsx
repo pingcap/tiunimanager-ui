@@ -1,11 +1,11 @@
-import { Card, Col, Form, Input, Layout, message, Row } from 'antd'
+import { Card, Form, Input, Layout, message } from 'antd'
 import { useCallback, useMemo } from 'react'
 
 import styles from './index.module.less'
 import {
+  ClusterBackupItem,
   ClusterInfo,
   RequestClusterCreate,
-  ClusterBackupItem,
 } from '@/api/model'
 import { useRestoreClusterBackup } from '@/api/hooks/cluster'
 import { useQueryClient } from 'react-query'
@@ -62,32 +62,24 @@ export function RestorePanel({ back, cluster, backup }: CreatePanelProps) {
   const restoreInfo = useMemo(() => {
     return (
       <Card title={t('restore-info.title')}>
-        <Row>
-          <Col span={8}>
-            <Form.Item
-              label={t('restore-info.fields.clusterId')}
-              tooltip={t('restore-info.tips.not-editable')}
-            >
-              <Input disabled={true} value={backup!.clusterId} />
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item
-              label={t('restore-info.fields.clusterName')}
-              tooltip={t('restore-info.tips.not-editable')}
-            >
-              <Input disabled={true} value={cluster.clusterName} />
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item
-              label={t('restore-info.fields.backupId')}
-              tooltip={t('restore-info.tips.not-editable')}
-            >
-              <Input disabled={true} value={backup!.id} />
-            </Form.Item>
-          </Col>
-        </Row>
+        <Form.Item
+          label={t('restore-info.fields.clusterId')}
+          tooltip={t('restore-info.tips.not-editable')}
+        >
+          <Input disabled={true} value={backup!.clusterId} />
+        </Form.Item>
+        <Form.Item
+          label={t('restore-info.fields.clusterName')}
+          tooltip={t('restore-info.tips.not-editable')}
+        >
+          <Input disabled={true} value={cluster.clusterName} />
+        </Form.Item>
+        <Form.Item
+          label={t('restore-info.fields.backupId')}
+          tooltip={t('restore-info.tips.not-editable')}
+        >
+          <Input disabled={true} value={backup!.id} />
+        </Form.Item>
       </Card>
     )
   }, [cluster, backup, i18n.language])

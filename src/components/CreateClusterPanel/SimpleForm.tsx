@@ -177,9 +177,6 @@ export function SimpleForm({
       <Form
         layout="horizontal"
         hideRequiredMark
-        labelCol={{
-          span: 6,
-        }}
         colon={false}
         form={form}
         name="create"
@@ -226,130 +223,108 @@ function BasicOptions({
 }) {
   return (
     <Card title={t('basic.title')}>
-      <Row>
-        <Col span={8}>
+      <Form.Item
+        name="clusterName"
+        label={t('basic.fields.name')}
+        tooltip={t('basic.tooltip.name')}
+        rules={[
+          { required: true, message: t('basic.rules.name.require') },
+          { min: 8, max: 32, message: t('basic.rules.name.length') },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        name="tags"
+        label={t('basic.fields.tags')}
+        tooltip={t('basic.tooltip.tags')}
+        initialValue={[]}
+      >
+        <Select
+          mode="tags"
+          tokenSeparators={[',', ' ']}
+          dropdownStyle={{ display: 'none' }}
+        />
+      </Form.Item>
+      <Form.Item
+        name="dbPassword"
+        label={t('basic.fields.password')}
+        tooltip={t('basic.tooltip.password')}
+        rules={[
+          { required: true, message: t('basic.rules.password.require') },
+          { min: 8, max: 32, message: t('basic.rules.password.length') },
+        ]}
+      >
+        <Input.Password />
+      </Form.Item>
+      <Form.Item label={t('basic.fields.type')}>
+        <Input.Group compact>
           <Form.Item
-            name="clusterName"
-            label={t('basic.fields.name')}
-            tooltip={t('basic.tooltip.name')}
-            rules={[
-              { required: true, message: t('basic.rules.name.require') },
-              { min: 8, max: 32, message: t('basic.rules.name.length') },
-            ]}
+            name="clusterType"
+            noStyle
+            rules={[{ required: true, message: t('basic.rules.type.require') }]}
+            initialValue={type}
           >
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col span={8}>
-          <Form.Item
-            name="tags"
-            label={t('basic.fields.tags')}
-            tooltip={t('basic.tooltip.tags')}
-            initialValue={[]}
-          >
-            <Select
-              mode="tags"
-              tokenSeparators={[',', ' ']}
-              dropdownStyle={{ display: 'none' }}
-            />
-          </Form.Item>
-        </Col>
-        <Col span={8}>
-          <Form.Item
-            name="dbPassword"
-            label={t('basic.fields.password')}
-            tooltip={t('basic.tooltip.password')}
-            rules={[
-              { required: true, message: t('basic.rules.password.require') },
-              { min: 8, max: 32, message: t('basic.rules.password.length') },
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row>
-        <Col span={8}>
-          <Form.Item label={t('basic.fields.type')}>
-            <Input.Group compact>
-              <Form.Item
-                name="clusterType"
-                noStyle
-                rules={[
-                  { required: true, message: t('basic.rules.type.require') },
-                ]}
-                initialValue={type}
-              >
-                <Select onSelect={(key) => onSelectType(key as any)}>
-                  {knowledgeMap.types.map((t) => (
-                    <Select.Option value={t.code!} key={t.code!}>
-                      {t.name!}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item
-                name="clusterVersion"
-                noStyle
-                rules={[
-                  { required: true, message: t('basic.rules.version.require') },
-                ]}
-                initialValue={version}
-              >
-                <Select onSelect={(key) => onSelectVersion(key as string)}>
-                  {!!type &&
-                    knowledgeMap.map[type].versions.map((v) => (
-                      <Select.Option value={v.code!} key={v.code!}>
-                        {v.name!}
-                      </Select.Option>
-                    ))}
-                </Select>
-              </Form.Item>
-            </Input.Group>
-          </Form.Item>
-        </Col>
-        <Col span={8}>
-          <Form.Item
-            name="region"
-            label={t('basic.fields.region')}
-            rules={[{ required: true }]}
-            initialValue={region}
-          >
-            <Select onChange={onSelectRegion}>
-              {availableStocksMap.regions.map((r) => (
-                <Select.Option value={r} key={r}>
-                  {availableStocksMap.map[r].name}
+            <Select onSelect={(key) => onSelectType(key as any)}>
+              {knowledgeMap.types.map((t) => (
+                <Select.Option value={t.code!} key={t.code!}>
+                  {t.name!}
                 </Select.Option>
               ))}
             </Select>
           </Form.Item>
-        </Col>
-        <Col span={8}>
           <Form.Item
-            name="cpuArchitecture"
-            label={t('basic.fields.arch')}
-            rules={[{ required: true }]}
-            initialValue={'X86_64'}
+            name="clusterVersion"
+            noStyle
+            rules={[
+              { required: true, message: t('basic.rules.version.require') },
+            ]}
+            initialValue={version}
           >
-            <Radio.Group onChange={(v) => onSelectArch(v.target.value)}>
-              <Radio.Button value="X86_64">x86_64</Radio.Button>
-              <Radio.Button value="ARM64">amd64</Radio.Button>
-            </Radio.Group>
+            <Select onSelect={(key) => onSelectVersion(key as string)}>
+              {!!type &&
+                knowledgeMap.map[type].versions.map((v) => (
+                  <Select.Option value={v.code!} key={v.code!}>
+                    {v.name!}
+                  </Select.Option>
+                ))}
+            </Select>
           </Form.Item>
-        </Col>
-      </Row>
-      <Row>
-        <Col span={8}>
-          <Form.Item
-            name="exclusive"
-            label={t('basic.fields.exclusive')}
-            initialValue={true}
-            valuePropName="checked"
-          >
-            <Switch />
-          </Form.Item>
-        </Col>
-      </Row>
+        </Input.Group>
+      </Form.Item>
+      <Form.Item
+        name="cpuArchitecture"
+        label={t('basic.fields.arch')}
+        rules={[{ required: true }]}
+        initialValue={'X86_64'}
+      >
+        <Radio.Group onChange={(v) => onSelectArch(v.target.value)}>
+          <Radio.Button value="X86_64">x86_64</Radio.Button>
+          <Radio.Button value="ARM64">amd64</Radio.Button>
+        </Radio.Group>
+      </Form.Item>
+      <Form.Item
+        name="region"
+        label={t('basic.fields.region')}
+        rules={[{ required: true }]}
+        initialValue={region}
+      >
+        <Select onChange={onSelectRegion}>
+          {availableStocksMap.regions.map((r) => (
+            <Select.Option value={r} key={r}>
+              {availableStocksMap.map[r].name}
+            </Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
+      <Form.Item
+        name="exclusive"
+        label={t('basic.fields.exclusive')}
+        initialValue={true}
+        valuePropName="checked"
+      >
+        <Switch />
+      </Form.Item>
       {/* TODO: wait for TLS support */}
       {/* <Form.Item
         name="tls"
@@ -394,7 +369,9 @@ function NodeOptions({
         key={1}
         header={
           <span>
-            {t('nodes.title', { name: componentName })}
+            {t('nodes.title', {
+              name: t(`model:knowledge.component.${componentName}`),
+            })}
             {!componentRequired && (
               <Tag color="default" className={styles.optionalBadge}>
                 {t('nodes.optional')}

@@ -1,8 +1,19 @@
+.thin {
+  width: 50%;
+  min-width: 720px;
+}
+
 .form {
   padding: 20px;
+  .thin();
+
 
   :global(.ant-divider) {
     margin: 20px 0;
+  }
+
+  :global(.ant-form-item-label) {
+    width: 120px;
   }
 
   :global(.ant-card), :global(.ant-collapse) {
@@ -69,6 +80,8 @@
 }
 
 .mode-selector {
+  .thin();
+
   :global(.ant-card-head-title) {
     font-weight: bold;
     user-select: none;

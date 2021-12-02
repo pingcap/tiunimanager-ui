@@ -16,7 +16,13 @@ export function ModeSelector({ mode, onChange }: ModeSelectorProps) {
   const { t } = useI18n()
   return (
     <div className={styles.modeSelector}>
-      <Card title={t('modeSelector.title')}>
+      <Card
+        title={t('modeSelector.title')}
+        bodyStyle={{
+          display: 'flex',
+          justifyContent: 'space-around',
+        }}
+      >
         <RadioCard
           checked={mode === 'simple'}
           title={t('modeSelector.simple.title')}
