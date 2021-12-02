@@ -204,3 +204,9 @@ task:
     error: Error
   operator:
     system: System Automation
+knowledge:
+  component:
+    dispatch: Dispatch Component
+    compute: Compute Component
+    storage: Storage Component
+    column-based-storage: Column Storage Component

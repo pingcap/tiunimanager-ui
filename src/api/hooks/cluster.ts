@@ -86,6 +86,13 @@ export function useStopCluster() {
   return useMutation(stopCluster)
 }
 
+const previewCreateCluster = (payload: RequestClusterCreate) =>
+  APIS.Clusters.clustersPreviewPost(payload)
+
+export function usePreviewCreateCluster() {
+  return useMutation(previewCreateCluster)
+}
+
 /**
  * Cluster Params
  */

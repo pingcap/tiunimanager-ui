@@ -51,7 +51,7 @@ export default function BackupTable({ cluster }: BackupTableProps) {
   } = useFetchBackupData(cluster.clusterId!)
 
   const { columns, columnsSetting, setColumnSetting } = useTableColumn({
-    clusterId: cluster.clusterId!,
+    cluster,
   })
 
   return (
@@ -122,7 +122,8 @@ function useFetchBackupData(clusterId: string) {
   }
 }
 
-function useTableColumn({ clusterId }: { clusterId: string }) {
+function useTableColumn({ cluster }: { cluster: ClusterInfo }) {
+  const clusterId = cluster.clusterId!
   const { t, i18n } = useI18n()
   const [columnsSetting, setColumnSetting] = useLocalStorage(
     'cluster-backup-table-show',
@@ -160,11 +161,11 @@ function useTableColumn({ clusterId }: { clusterId: string }) {
   const restoreAction = useCallback(
     (backup: ClusterBackupItem) => {
       history.push({
-        pathname: resolveRoute('../restore', clusterId),
-        state: { backup },
+        pathname: resolveRoute('../../restore'),
+        state: { backup, cluster },
       })
     },
-    [history, clusterId]
+    [history, cluster]
   )
 
   const columns = useMemo(

@@ -3,15 +3,16 @@ import { useCallback, useMemo } from 'react'
 
 import styles from './index.module.less'
 import {
+  ClusterBackupItem,
   ClusterInfo,
   RequestClusterCreate,
-  ClusterBackupItem,
 } from '@/api/model'
 import { useRestoreClusterBackup } from '@/api/hooks/cluster'
 import { useQueryClient } from 'react-query'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { errToMsg } from '@/utils/error'
-import { CreateClusterForm } from '@/components/CreateClusterPanel'
+import { SimpleForm } from '@/components/CreateClusterPanel'
+import { SimpleFormProps } from '@/components/CreateClusterPanel/SimpleForm'
 
 loadI18n()
 
@@ -28,30 +29,32 @@ export function RestorePanel({ back, cluster, backup }: CreatePanelProps) {
   const queryClient = useQueryClient()
   const restoreCluster = useRestoreClusterBackup()
 
+  const processValue: SimpleFormProps['processValue'] = useCallback(
+    (value) => {
+      const { id, clusterId } = backup
+      ;(value as any).recoverInfo = {
+        backupRecordId: id,
+        sourceClusterId: clusterId,
+      }
+      return true
+    },
+    [backup]
+  )
+
   const handleSubmit = useCallback(
     (value: RequestClusterCreate) => {
-      const { id, clusterId } = backup
-      restoreCluster.mutateAsync(
-        {
-          recoverInfo: {
-            backupRecordId: id,
-            sourceClusterId: clusterId,
-          },
-          ...value,
+      restoreCluster.mutateAsync(value, {
+        onSuccess() {
+          message.success(t('message.success'), 0.8).then(back)
         },
-        {
-          onSuccess() {
-            message.success(t('message.success'), 0.8).then(back)
-          },
-          onError(e: any) {
-            message.error(
-              t('message.fail', {
-                msg: errToMsg(e),
-              })
-            )
-          },
-        }
-      )
+        onError(e: any) {
+          message.error(
+            t('message.fail', {
+              msg: errToMsg(e),
+            })
+          )
+        },
+      })
     },
     [back, restoreCluster.mutateAsync, queryClient, i18n.language]
   )
@@ -77,23 +80,18 @@ export function RestorePanel({ back, cluster, backup }: CreatePanelProps) {
         >
           <Input disabled={true} value={backup!.id} />
         </Form.Item>
-        <Form.Item
-          label={t('restore-info.fields.backupPath')}
-          tooltip={t('restore-info.tips.not-editable')}
-        >
-          <Input disabled={true} value={backup!.filePath} />
-        </Form.Item>
       </Card>
     )
   }, [cluster, backup, i18n.language])
 
   return (
     <Layout className={styles.panel}>
-      <CreateClusterForm
+      <SimpleForm
         form={form}
         additionalOptions={restoreInfo}
         onSubmit={handleSubmit}
         footerClassName={styles.footer}
+        processValue={processValue}
       />
     </Layout>
   )

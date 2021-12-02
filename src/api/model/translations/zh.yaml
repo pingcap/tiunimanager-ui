@@ -204,3 +204,9 @@ task:
     error: 失败
   operator:
     system: 系统自动
+knowledge:
+  component:
+    dispatch: 调度组件
+    compute: 计算组件
+    storage: 存储组件
+    column-based-storage: 列存组件

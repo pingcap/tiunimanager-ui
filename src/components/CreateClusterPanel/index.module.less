@@ -1,16 +1,48 @@
+.thin {
+  width: 50%;
+  min-width: 720px;
+}
+
 .form {
   padding: 20px;
+  .thin();
+
 
   :global(.ant-divider) {
     margin: 20px 0;
   }
 
-  :global(.ant-card) {
-    margin-bottom: 50px;
+  :global(.ant-form-item-label) {
+    width: 120px;
+  }
+
+  :global(.ant-card), :global(.ant-collapse) {
+    margin-bottom: 30px;
   }
 
   :global(.ant-input-group) > div {
     width: 50% !important;
+  }
+
+  :global(.ant-card-head-title), :global(.ant-collapse-header-text) {
+    font-weight: bold;
+    user-select: none;
+  }
+
+  .component-form {
+    background-color: #fff;
+
+    :global(.ant-collapse-content-box) {
+      padding: 20px;
+    }
+
+    :global(.ant-collapse-content) {
+      border-top: none;
+    }
+
+    :global(.ant-col) {
+      text-align: center;
+    }
   }
 }
 
@@ -25,10 +57,35 @@
   min-height: 48px;
 }
 
-.buttons > button {
-  width: 100px;
+.submitter {
+  border-top: 1px solid #eaeaea;
 
-  &:not(:last-child) {
-    margin-right: 32px;
+  button {
+    width: 100px;
+
+    &:not(:last-child) {
+      margin-right: 32px;
+    }
   }
+}
+
+.simple-form {
+  :global(.ant-card), :global(.ant-collapse) {
+    width: 100%;
+  }
+}
+
+.optional-badge {
+  margin-left: 10px;
+}
+
+.mode-selector {
+  .thin();
+
+  :global(.ant-card-head-title) {
+    font-weight: bold;
+    user-select: none;
+  }
+
+  padding: 10px 20px;
 }

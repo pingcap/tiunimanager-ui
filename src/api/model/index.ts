@@ -26,6 +26,8 @@ import {
   KnowledgeClusterType,
   KnowledgeClusterVersion,
   KnowledgeClusterComponent,
+  WarehouseNode,
+  ManagementPreviewClusterRsp,
 } from '#/api'
 
 export type PagedResult = ControllerResultWithPage
@@ -39,6 +41,8 @@ export type ClusterParamItem = ParameterListParamsResp
 export type ClusterLogItem = LogSearchTiDBLogDetail
 export type ClusterBackupItem = BackuprestoreBackupRecord
 
+export type HardwareArch = 'X86_64' | 'AMD64'
+
 export type ClusterType = KnowledgeClusterType
 export type ClusterVersion = KnowledgeClusterVersion
 export type ClusterComponent = KnowledgeClusterComponent
@@ -47,6 +51,17 @@ export type ClusterLogLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'FATAL'
 
 export type HostInfo = HostresourceHostInfo
 export type DomainResourceInfo = WarehouseDomainResource
+
+export enum ResourceUnitType {
+  region = 1,
+  zone,
+  rack,
+  host,
+}
+
+export type ResourceTreeNode = WarehouseNode
+
+export type ClusterPreview = ManagementPreviewClusterRsp
 
 export type TaskWorkflowInfo = FlowtaskFlowWorkDisplayInfo
 export type TaskWorkflowDetailInfo = FlowtaskFlowWorkDetailInfo
