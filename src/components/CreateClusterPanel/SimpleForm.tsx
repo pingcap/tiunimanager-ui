@@ -514,6 +514,7 @@ function Submitter({
               okButtonProps: {
                 disabled: !isSubmittable,
               },
+              okText: t('preview.actions.confirm'),
               content: (
                 <div>
                   <p>
@@ -530,7 +531,7 @@ function Submitter({
                       components={{ strong: <strong /> }}
                     />
                   </p>
-                  {recoverInfo && (
+                  {recoverInfo && fields.recoverInfo && (
                     <p>
                       <Trans
                         t={t}

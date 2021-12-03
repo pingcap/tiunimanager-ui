@@ -73,3 +73,5 @@ preview:
   status:
     normal: Normal
     notEnough: Insufficient inventory, please adjust the configuration.
+  actions:
+    confirm: Confirm
