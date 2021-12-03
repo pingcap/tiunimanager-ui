@@ -210,6 +210,13 @@ function getColumns(
       valueType: 'dateTime',
     },
     {
+      title: t('model:clusterBackup.property.tso'),
+      width: 140,
+      dataIndex: 'backupTso',
+      key: 'backupTso',
+      hideInSearch: true,
+    },
+    {
       title: t('model:clusterBackup.property.type'),
       width: 60,
       key: 'type',

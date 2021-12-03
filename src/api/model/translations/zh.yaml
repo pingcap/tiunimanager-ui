@@ -56,6 +56,7 @@ clusterBackup:
     clusterId: 集群ID
     startTime: 起始时间
     endTime: 截止时间
+    tso: TSO
     mode: 触发模式
     type: 类型
     method: 方式
