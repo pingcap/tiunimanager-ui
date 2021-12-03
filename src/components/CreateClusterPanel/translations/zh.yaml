@@ -73,3 +73,5 @@ preview:
   status:
     normal: 正常
     notEnough: 库存不足，请调整配置
+  actions:
+    confirm: 确认创建
