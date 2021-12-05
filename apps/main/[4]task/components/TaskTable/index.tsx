@@ -101,6 +101,7 @@ function getColumns(t: TFunction<'model'>): ProColumns<TaskWorkflowInfo>[] {
       width: 120,
       dataIndex: 'flowWorkName',
       key: 'keyword',
+      renderText: (text) => t(`model:task.name.${text}`, text),
     },
     {
       title: t('model:task.property.status'),
@@ -113,6 +114,7 @@ function getColumns(t: TFunction<'model'>): ProColumns<TaskWorkflowInfo>[] {
         '1': { text: t('model:task.status.processing'), status: 'Processing' },
         '2': { text: t('model:task.status.finished'), status: 'Success' },
         '3': { text: t('model:task.status.error'), status: 'Error' },
+        '4': { text: t('model:task.status.cancelled'), status: 'Default' },
       },
     },
     {
@@ -143,8 +145,8 @@ function getColumns(t: TFunction<'model'>): ProColumns<TaskWorkflowInfo>[] {
       dataIndex: 'operatorName',
       key: 'operator',
       hideInSearch: true,
-      renderText: (text) => {
-        return text === 'System' ? t('model:task.operator.system') : text
+      renderText: (text, record) => {
+        return record.manualOperator ? text : t('model:task.operator.system')
       },
     },
   ]
