@@ -89,6 +89,7 @@ clusterBackupStrategy:
     Sunday: Sunday
 clusterParam:
   property:
+    component: Component Name
     name: Param Name
     reboot: Reboot
     desc: Description
