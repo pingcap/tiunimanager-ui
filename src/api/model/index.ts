@@ -23,6 +23,7 @@ import {
   KnowledgeClusterVersionSpec,
   FlowtaskFlowWorkDetailInfo,
   FlowtaskFlowWorkDisplayInfo,
+  FlowtaskFlowWorkTaskInfo,
   KnowledgeClusterType,
   KnowledgeClusterVersion,
   KnowledgeClusterComponent,
@@ -65,6 +66,7 @@ export type ClusterPreview = ManagementPreviewClusterRsp
 
 export type TaskWorkflowInfo = FlowtaskFlowWorkDisplayInfo
 export type TaskWorkflowDetailInfo = FlowtaskFlowWorkDetailInfo
+export type TaskWorkflowSubTaskInfo = FlowtaskFlowWorkTaskInfo
 
 export type KnowledgeOfClusterType = KnowledgeClusterTypeSpec
 export type KnowledgeOfClusterVersion = KnowledgeClusterVersionSpec

@@ -6,6 +6,7 @@ import styles from './index.module.less'
 import { TFunction, useTranslation } from 'react-i18next'
 import { usePagination } from '@hooks/usePagination'
 import { useQueryTasks } from '@/api/hooks/task'
+import TaskSteps from '@apps/main/[4]task/components/TaskSteps'
 
 export default function TaskTable() {
   const {
@@ -48,6 +49,11 @@ export default function TaskTable() {
       options={{
         reload: () => refetch(),
       }}
+      expandable={{
+        expandedRowRender: (record) => <TaskSteps id={record.id!} />,
+        expandRowByClick: true,
+        rowExpandable: (record) => typeof record.id === 'number',
+      }}
     />
   )
 }
@@ -68,7 +74,10 @@ function useFetchTaskData() {
       ...pagination,
       ...filters,
     },
-    { keepPreviousData: true }
+    {
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+    }
   )
   return {
     pagination,
@@ -91,7 +100,7 @@ function getColumns(t: TFunction<'model'>): ProColumns<TaskWorkflowInfo>[] {
   return [
     {
       title: t('model:task.property.id'),
-      width: 120,
+      width: 60,
       dataIndex: 'id',
       key: 'id',
       hideInSearch: true,
