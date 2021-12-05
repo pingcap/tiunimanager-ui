@@ -178,27 +178,16 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
 function getColumns(t: TFunction<''>, form: FormInstance) {
   const columns: ProColumns<ClusterParamItem>[] = [
     {
+      title: t('model:clusterParam.property.component'),
+      width: 100,
+      dataIndex: 'componentType',
+      editable: false,
+    },
+    {
       title: t('model:clusterParam.property.name'),
       width: 160,
       dataIndex: 'name',
       editable: false,
-    },
-    {
-      title: t('model:clusterParam.property.reboot'),
-      width: 80,
-      key: 'hasReboot',
-      render(_, record) {
-        return record.hasReboot!
-          ? t('model:clusterParam.reboot.true')
-          : t('model:clusterParam.reboot.false')
-      },
-      editable: false,
-    },
-    {
-      title: t('model:clusterParam.property.desc'),
-      dataIndex: 'description',
-      editable: false,
-      ellipsis: true,
     },
     {
       title: t('model:clusterParam.property.range'),
@@ -235,6 +224,23 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
           </span>
         )
       },
+    },
+    {
+      title: t('model:clusterParam.property.reboot'),
+      width: 80,
+      key: 'hasReboot',
+      render(_, record) {
+        return record.hasReboot!
+          ? t('model:clusterParam.reboot.true')
+          : t('model:clusterParam.reboot.false')
+      },
+      editable: false,
+    },
+    {
+      title: t('model:clusterParam.property.desc'),
+      dataIndex: 'description',
+      editable: false,
+      ellipsis: true,
     },
     {
       title: t('columns.actions'),
@@ -278,8 +284,10 @@ function useFetchParamsData(id: string) {
 
 type Change = {
   paramId: number
+  component: string
   name: string
   change: [string, string]
+  reboot: number
 }
 
 function findParamsChanges(
@@ -291,8 +299,10 @@ function findParamsChanges(
     if (raw.realValue?.cluster !== table[i].realValue?.cluster) {
       changes.push({
         paramId: raw.paramId!,
+        component: raw.componentType!,
         name: raw.name!,
         change: [raw.realValue!.cluster!, table[i].realValue!.cluster!],
+        reboot: raw.hasReboot!,
       })
     }
   })
@@ -303,6 +313,11 @@ function ConfirmTable({ changes }: { changes: Change[] }) {
   const { t, i18n } = useI18n()
   const columns: TableColumnsType<Change> = useMemo(
     () => [
+      {
+        title: t('save.fields.component'),
+        dataIndex: 'component',
+        key: 'component',
+      },
       {
         title: t('save.fields.name'),
         dataIndex: 'name',
@@ -317,6 +332,15 @@ function ConfirmTable({ changes }: { changes: Change[] }) {
         title: t('save.fields.after'),
         key: 'after',
         render: (_, record) => record.change[1],
+      },
+      {
+        title: t('save.fields.reboot'),
+        key: 'reboot',
+        render(_, record) {
+          return record.reboot!
+            ? t('model:clusterParam.reboot.true')
+            : t('model:clusterParam.reboot.false')
+        },
       },
     ],
     [i18n.language]
