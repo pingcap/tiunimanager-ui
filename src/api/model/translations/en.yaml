@@ -25,7 +25,7 @@ cluster:
     storage: Storage
     backup: Backup
   status:
-    idle: Idle
+    init: Initializing
     online: Online
     offline: Offline
     deleted: Deleted
