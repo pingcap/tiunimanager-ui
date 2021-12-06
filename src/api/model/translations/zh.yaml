@@ -25,7 +25,7 @@ cluster:
     storage: 存储
     backup: 备份
   status:
-    idle: 空闲中
+    init: 初始化中
     online: 运行中
     offline: 已下线
     deleted: 已删除
