@@ -234,8 +234,12 @@ function getColumns(
       valueType: 'option',
       width: 100,
       render: (_, record) => {
+        const isError =
+          record.status === undefined || record.status.statusCode === '3'
         return [
-          record.storageType !== 'nfs' || record.transportType !== 'export' ? (
+          record.storageType !== 'nfs' ||
+          record.transportType !== 'export' ||
+          isError ? (
             <Tooltip title={t('download.notSupport')} key="download">
               <span className={styles.disabled}>{t('actions.download')}</span>
             </Tooltip>
