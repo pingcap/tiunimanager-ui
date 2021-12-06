@@ -66,10 +66,10 @@ function getColumns(t: TFunction<''>): ColumnsType<ClusterComponentNodeInfo> {
     //   key: 'id',
     // },
     {
-      title: t('model:clusterNode.property.hostId'),
+      title: t('model:clusterNode.property.hostIp'),
       width: 140,
-      dataIndex: 'hostId',
-      key: 'hostId',
+      dataIndex: 'HostIp',
+      key: 'hostIp',
     },
     // {
     //   title: t('columns.zone'),

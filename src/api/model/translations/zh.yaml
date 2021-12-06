@@ -110,6 +110,7 @@ clusterNode:
   property:
     id: ID
     hostId: 主机ID
+    hostIp: 主机IP
     status: 状态
     port: 端口
     version: 版本
