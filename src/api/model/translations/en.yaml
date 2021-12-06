@@ -110,6 +110,7 @@ clusterNode:
     id: ID
     status: Status
     hostId: Host ID
+    hostIp: Host IP
     ioutil: IOUtil
     iops: IO/s
     port: Port
