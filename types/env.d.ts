@@ -10,6 +10,7 @@ interface ImportMetaEnv {
 
   // api base url, e.g. /api/v1
   VITE_API_BASE_URL: string
+  VITE_FS_BASE_URL: string
 
   // system external services
   VITE_LOG_URL: string

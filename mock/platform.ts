@@ -1,8 +1,8 @@
 import { rest } from 'msw'
-import { basePath } from '@/api/client'
+import { apiBasePath } from '@/api/client'
 
 export default [
-  rest.post(basePath + '/user/login', (req, res, ctx) => {
+  rest.post(apiBasePath + '/user/login', (req, res, ctx) => {
     // Persist user's authentication in the session
     sessionStorage.setItem('is-authenticated', 'true')
     const { userName, userPassword } = req.body as Record<string, string>
@@ -25,7 +25,7 @@ export default [
       })
     )
   }),
-  rest.get(basePath + '/user/logout', (req, res, ctx) => {
+  rest.get(apiBasePath + '/user/logout', (req, res, ctx) => {
     sessionStorage.removeItem('is-authenticated')
     return res(
       ctx.status(200),

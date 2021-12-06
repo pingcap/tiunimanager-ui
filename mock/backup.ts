@@ -1,5 +1,5 @@
 import { rest } from 'msw'
-import { basePath } from '@/api/client'
+import { apiBasePath } from '@/api/client'
 import { ClusterBackupItem } from '@/api/model'
 import { datatype, name, system } from 'faker'
 
@@ -33,7 +33,7 @@ const fakeBackups: ClusterBackupItem[] = Array.from(
 )
 
 export default [
-  rest.post(basePath + '/backups/:backupId/recover', (req, res, ctx) => {
+  rest.post(apiBasePath + '/backups/:backupId/recover', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -42,7 +42,7 @@ export default [
       })
     )
   }),
-  rest.get(basePath + '/backups', (req, res, ctx) => {
+  rest.get(apiBasePath + '/backups', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -51,7 +51,7 @@ export default [
       })
     )
   }),
-  rest.post(basePath + '/backups', (req, res, ctx) => {
+  rest.post(apiBasePath + '/backups', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -60,7 +60,7 @@ export default [
       })
     )
   }),
-  rest.delete(basePath + '/backups/:backupId', (req, res, ctx) => {
+  rest.delete(apiBasePath + '/backups/:backupId', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({

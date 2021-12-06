@@ -81,11 +81,12 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
   })
 }
 
-export const basePath = import.meta.env.VITE_API_BASE_URL
+export const apiBasePath = import.meta.env.VITE_API_BASE_URL
+export const fsBasePath = import.meta.env.VITE_FS_BASE_URL
 
 export const axiosInstance = initAxios()
 
-export const APIS = initApis(basePath, axiosInstance)
+export const APIS = initApis(apiBasePath, axiosInstance)
 
 const TokenHeader = 'Authorization'
 

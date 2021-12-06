@@ -1,4 +1,4 @@
-import { APIS, basePath, PartialUseQueryOptions } from '@/api/client'
+import { APIS, apiBasePath, PartialUseQueryOptions } from '@/api/client'
 import { QueryClient, useMutation, useQuery } from 'react-query'
 import { HardwareArch, ResourceUnitType } from '@/api/model'
 
@@ -86,11 +86,11 @@ export function useDeleteHosts() {
 }
 
 export function getHostsTemplateURL() {
-  return basePath + '/resources/hosts-template/'
+  return apiBasePath + '/resources/hosts-template/'
 }
 
 export function getHostsUploadURL() {
-  return basePath + '/resources/hosts'
+  return apiBasePath + '/resources/hosts'
 }
 
 export function useQueryResourceHierarchy(

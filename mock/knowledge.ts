@@ -1,5 +1,5 @@
 import { rest } from 'msw'
-import { basePath } from '@/api/client'
+import { apiBasePath } from '@/api/client'
 import { KnowledgeOfClusterType } from '@/api/model'
 
 const fakeKnowledge: KnowledgeOfClusterType[] = [
@@ -154,7 +154,7 @@ const fakeKnowledge: KnowledgeOfClusterType[] = [
 ]
 
 export default [
-  rest.get(basePath + '/knowledges', (req, res, ctx) => {
+  rest.get(apiBasePath + '/knowledges', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
