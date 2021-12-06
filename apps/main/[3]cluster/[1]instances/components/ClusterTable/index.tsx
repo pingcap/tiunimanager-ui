@@ -230,11 +230,20 @@ function getColumns(
       width: 180,
       dataIndex: 'clusterId',
       key: 'id',
-      render: (_, record) => (
-        <Link to={`${resolveRoute()}/${record.clusterId}`}>
-          {record.clusterId}
-        </Link>
-      ),
+      render: (_, record) =>
+        record.statusCode === '0' ? (
+          <span
+            style={{
+              color: 'rgba(0, 0, 0, 0.5)',
+            }}
+          >
+            {record.clusterId}
+          </span>
+        ) : (
+          <Link to={`${resolveRoute()}/${record.clusterId}`}>
+            {record.clusterId}
+          </Link>
+        ),
     },
     {
       title: t('model:cluster.property.name'),
@@ -461,6 +470,32 @@ function getColumns(
       valueType: 'option',
       render(_, record) {
         const { statusCode = '' } = record
+        const forceDisabled = statusCode === '0'
+
+        if (forceDisabled)
+          return [
+            <IntlPopConfirm
+              key="reboot"
+              title={t('reboot.confirm')}
+              icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+              disabled={true}
+            >
+              <Button className={styles.actionBtn} type="link" disabled={true}>
+                {t('actions.reboot')}
+              </Button>
+            </IntlPopConfirm>,
+            <IntlPopConfirm
+              key="stop"
+              title={t('stop.confirm')}
+              icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+              disabled={true}
+            >
+              <Button className={styles.actionBtn} type="link" disabled={true}>
+                {t('actions.stop')}
+              </Button>
+            </IntlPopConfirm>,
+          ]
+
         const bootEnabled = statusCode === '2'
         const rebootDisabled = ['0', '1'].indexOf(statusCode) === -1
         const stopDisabled = rebootDisabled
