@@ -13,6 +13,9 @@ import {
   StandardForm,
 } from '@/components/CreateClusterPanel'
 import { FormMode } from '@/components/CreateClusterPanel/ModeSelector'
+import { showAsyncTaskCreatedNotification } from '@/utils/notification'
+import { useHistory } from 'react-router-dom'
+import { resolveRoute } from '@pages-macro'
 
 loadI18n()
 
@@ -23,6 +26,7 @@ export interface CreatePanelProps {
 export function CreatePanel({ back }: CreatePanelProps) {
   const [form] = Form.useForm()
   const { t, i18n } = useI18n()
+  const history = useHistory()
 
   const queryClient = useQueryClient()
   const createCluster = useCreateCluster()
@@ -32,12 +36,12 @@ export function CreatePanel({ back }: CreatePanelProps) {
       createCluster.mutateAsync(value, {
         onSuccess(data) {
           invalidateClustersList(queryClient)
-          message
-            .success(
-              t('message.success', { msg: data.data.data!.clusterName }),
-              0.8
-            )
-            .then(back)
+          showAsyncTaskCreatedNotification({
+            taskID: data.data.data?.inProcessFlowId || 0,
+            taskName: 'CreateCluster', // FIXME: replace it with translation after tasks translations are done.
+            toDetail: () => history.push(resolveRoute('../../../task')),
+          })
+          back()
         },
         onError(e: any) {
           message.error(
@@ -48,7 +52,7 @@ export function CreatePanel({ back }: CreatePanelProps) {
         },
       })
     },
-    [back, createCluster.mutateAsync, queryClient, i18n.language]
+    [back, history, createCluster.mutateAsync, queryClient, i18n.language]
   )
 
   const [mode, setMode] = useState<FormMode>('simple')
