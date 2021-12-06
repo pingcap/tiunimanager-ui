@@ -28,6 +28,7 @@ import {
   KnowledgeClusterComponent,
   WarehouseNode,
   ManagementPreviewClusterRsp,
+  ImportexportDataTransportInfo,
 } from '#/api'
 
 export type PagedResult = ControllerResultWithPage
@@ -46,6 +47,8 @@ export type HardwareArch = 'X86_64' | 'AMD64'
 export type ClusterType = KnowledgeClusterType
 export type ClusterVersion = KnowledgeClusterVersion
 export type ClusterComponent = KnowledgeClusterComponent
+
+export type TransportRecord = ImportexportDataTransportInfo
 
 export type ClusterLogLevel = 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'FATAL'
 

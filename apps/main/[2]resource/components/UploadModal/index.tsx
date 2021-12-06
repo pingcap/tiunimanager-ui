@@ -45,9 +45,6 @@ export default function UploadModal({ visible, close }: UploadModalProps) {
           maxCount={1}
           onChange={(info) => {
             switch (info.file.status) {
-              case 'uploading':
-                message.info(t('status.uploading'), 1)
-                return
               case 'done':
                 message.success(t('status.success'), 2)
                 close()

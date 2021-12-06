@@ -1,5 +1,5 @@
 import { rest } from 'msw'
-import { basePath } from '@/api/client'
+import { apiBasePath } from '@/api/client'
 import { DomainResourceInfo, HostInfo } from '@/api/model'
 import { internet, system, datatype, name } from 'faker'
 
@@ -69,7 +69,7 @@ const fakeStocks: DomainResourceInfo[] = [
 ]
 
 export default [
-  rest.get(basePath + '/resources/hosts', (req, res, ctx) => {
+  rest.get(apiBasePath + '/resources/hosts', (req, res, ctx) => {
     const page = parseInt(req.url.searchParams.get('page') || '0')
     const pageSize = parseInt(req.url.searchParams.get('pageSize') || '15')
     return res(
@@ -86,7 +86,7 @@ export default [
       })
     )
   }),
-  rest.delete(basePath + '/resources/hosts/:hostId', (req, res, ctx) => {
+  rest.delete(apiBasePath + '/resources/hosts/:hostId', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -94,7 +94,7 @@ export default [
       })
     )
   }),
-  rest.get(basePath + '/resources/failuredomains', (req, res, ctx) => {
+  rest.get(apiBasePath + '/resources/failuredomains', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({

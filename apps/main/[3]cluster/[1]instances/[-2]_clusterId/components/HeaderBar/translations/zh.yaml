@@ -1,8 +1,6 @@
 title: 集群详情
 actions:
   edit: 编辑
-  import: 导入
-  export: 导出
   reboot: 重启
   backup: 立即备份
   delete: 删除
