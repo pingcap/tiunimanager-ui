@@ -1,7 +1,7 @@
 import { ClusterInfo, ResponseClusterDetail } from '@/api/model'
 import { datatype, name, time } from 'faker'
 import { rest } from 'msw'
-import { basePath } from '@/api/client'
+import { apiBasePath } from '@/api/client'
 
 const fakeClusters: ClusterInfo[] = Array.from(
   {
@@ -100,7 +100,7 @@ const fakeCluster: ResponseClusterDetail = {
 }
 
 export default [
-  rest.post(basePath + '/clusters', (req, res, ctx) => {
+  rest.post(apiBasePath + '/clusters', (req, res, ctx) => {
     const { clusterName } = req.body as any
     return res(
       ctx.status(200),
@@ -112,7 +112,7 @@ export default [
       })
     )
   }),
-  rest.get(basePath + '/clusters', (req, res, ctx) => {
+  rest.get(apiBasePath + '/clusters', (req, res, ctx) => {
     const page = parseInt(req.url.searchParams.get('page') || '0')
     const pageSize = parseInt(req.url.searchParams.get('pageSize') || '15')
     return res(
@@ -128,7 +128,7 @@ export default [
       })
     )
   }),
-  rest.delete(basePath + '/clusters/:clusterId', (req, res, ctx) => {
+  rest.delete(apiBasePath + '/clusters/:clusterId', (req, res, ctx) => {
     const { clusterId } = req.params
     return res(
       ctx.status(200),
@@ -140,7 +140,7 @@ export default [
       })
     )
   }),
-  rest.get(basePath + '/clusters/:clusterId', (req, res, ctx) => {
+  rest.get(apiBasePath + '/clusters/:clusterId', (req, res, ctx) => {
     // const { clusterId } = req.params
     return res(
       ctx.status(200),
@@ -150,7 +150,7 @@ export default [
       })
     )
   }),
-  rest.put(basePath + '/clusters/:clusterId/strategy', (req, res, ctx) => {
+  rest.put(apiBasePath + '/clusters/:clusterId/strategy', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -159,7 +159,7 @@ export default [
       })
     )
   }),
-  rest.get(basePath + '/clusters/:clusterId/strategy', (req, res, ctx) => {
+  rest.get(apiBasePath + '/clusters/:clusterId/strategy', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -177,7 +177,7 @@ export default [
       })
     )
   }),
-  rest.get(basePath + '/clusters/:clusterId/dashboard', (req, res, ctx) => {
+  rest.get(apiBasePath + '/clusters/:clusterId/dashboard', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -190,7 +190,7 @@ export default [
       })
     )
   }),
-  rest.post(basePath + '/clusters/export', (req, res, ctx) => {
+  rest.post(apiBasePath + '/clusters/export', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -201,7 +201,7 @@ export default [
       })
     )
   }),
-  rest.post(basePath + '/clusters/import', (req, res, ctx) => {
+  rest.post(apiBasePath + '/clusters/import', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({

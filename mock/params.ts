@@ -1,5 +1,5 @@
 import { rest } from 'msw'
-import { basePath } from '@/api/client'
+import { apiBasePath } from '@/api/client'
 import { ClusterParamItem } from '@/api/model'
 
 const fakeParams: ClusterParamItem[] = [
@@ -34,7 +34,7 @@ const fakeParams: ClusterParamItem[] = [
 ]
 
 export default [
-  rest.post(basePath + '/clusters/:clusterId/params', (req, res, ctx) => {
+  rest.post(apiBasePath + '/clusters/:clusterId/params', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -45,7 +45,7 @@ export default [
       })
     )
   }),
-  rest.get(basePath + '/clusters/:clusterId/params', (req, res, ctx) => {
+  rest.get(apiBasePath + '/clusters/:clusterId/params', (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({

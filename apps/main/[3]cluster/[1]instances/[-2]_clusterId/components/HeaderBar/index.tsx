@@ -1,12 +1,7 @@
 import { useHistory } from 'react-router-dom'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { Button, message, Modal } from 'antd'
-import {
-  DeleteOutlined,
-  DownloadOutlined,
-  SaveOutlined,
-  UploadOutlined,
-} from '@ant-design/icons'
+import { DeleteOutlined, SaveOutlined } from '@ant-design/icons'
 import { CopyIconButton } from '@/components/CopyToClipboard'
 import styles from './index.module.less'
 import { useClusterContext } from '@apps/main/[3]cluster/[1]instances/[-2]_clusterId/context'
@@ -21,10 +16,6 @@ import { useQueryClient } from 'react-query'
 import Header from '@/components/Header'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { errToMsg } from '@/utils/error'
-import {
-  ImportPanel,
-  ExportPanel,
-} from '@apps/main/[3]cluster/[1]instances/[-2]_clusterId/components/TransportPanel'
 import { DeleteConfirm } from '@/components/DeleteConfirm'
 
 loadI18n()
@@ -39,10 +30,7 @@ export default function HeaderBar() {
 
   const { clusterId, statusName } = cluster
 
-  const [importPanelVisible, setImportPanelVisible] = useState(false)
-  const [exportPanelVisible, setExportPanelVisible] = useState(false)
-
-  const header = useMemo(() => {
+  return useMemo(() => {
     const backToList = () => history.push(resolveRoute('../'))
     const handleBackup = async () => {
       await createBackup.mutateAsync(
@@ -122,14 +110,6 @@ export default function HeaderBar() {
       //   <EditOutlined />
       //   {t('actions.edit')}
       // </Button>,
-      <Button key="import" onClick={() => setImportPanelVisible(true)}>
-        <UploadOutlined />
-        {t('actions.import')}
-      </Button>,
-      <Button key="export" onClick={() => setExportPanelVisible(true)}>
-        <DownloadOutlined />
-        {t('actions.export')}
-      </Button>,
       // TODO: wait for reboot support
       // <Button key="4">
       //   <RedoOutlined />
@@ -164,19 +144,4 @@ export default function HeaderBar() {
     history,
     queryClient,
   ])
-  return (
-    <>
-      {header}
-      <ImportPanel
-        clusterId={clusterId!}
-        close={() => setImportPanelVisible(false)}
-        visible={importPanelVisible}
-      />
-      <ExportPanel
-        clusterId={clusterId!}
-        close={() => setExportPanelVisible(false)}
-        visible={exportPanelVisible}
-      />
-    </>
-  )
 }

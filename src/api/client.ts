@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from 'axios'
 import {
   ClusterApi,
   ClusterBackupApi,
+  ClusterDataTransportApi,
   ClusterExportApi,
   ClusterImportApi,
   ClusterParamsApi,
@@ -72,14 +73,20 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
     Knowledge: new KnowledgeApi(configuration, undefined, axiosInstance),
     Task: new TaskApi(configuration, undefined, axiosInstance),
     Logs: new LogsApi(configuration, undefined, axiosInstance),
+    Transport: new ClusterDataTransportApi(
+      configuration,
+      undefined,
+      axiosInstance
+    ),
   })
 }
 
-export const basePath = import.meta.env.VITE_API_BASE_URL
+export const apiBasePath = import.meta.env.VITE_API_BASE_URL
+export const fsBasePath = import.meta.env.VITE_FS_BASE_URL
 
 export const axiosInstance = initAxios()
 
-export const APIS = initApis(basePath, axiosInstance)
+export const APIS = initApis(apiBasePath, axiosInstance)
 
 const TokenHeader = 'Authorization'
 

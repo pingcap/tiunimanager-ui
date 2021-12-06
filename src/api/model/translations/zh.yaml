@@ -228,3 +228,22 @@ knowledge:
     compute: 计算组件
     storage: 存储组件
     column-based-storage: 列存组件
+transport:
+  property:
+    id: ID
+    status: 状态 # the same as task.status
+    clusterId: 集群 ID
+    startTime: 开始时间
+    endTime: 截至时间
+    type: 类型
+    storageType: 存储
+    fileName: 文件名
+    filePath: 文件路径
+    fileSize: 文件大小
+    comment: 备注
+  type:
+    import: 导入
+    export: 导出
+  storageType:
+    nfs: 本地存储
+    s3: AWS S3

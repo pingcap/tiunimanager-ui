@@ -1,5 +1,5 @@
 import { rest } from 'msw'
-import { basePath } from '@/api/client'
+import { apiBasePath } from '@/api/client'
 
 const fakeTidbLog = {
   code: 0,
@@ -171,7 +171,7 @@ const fakeTidbLog = {
 }
 
 export default [
-  rest.get(basePath + '/logs/tidb/:clusterId/', (req, res, ctx) => {
+  rest.get(apiBasePath + '/logs/tidb/:clusterId/', (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(fakeTidbLog))
   }),
 ]
