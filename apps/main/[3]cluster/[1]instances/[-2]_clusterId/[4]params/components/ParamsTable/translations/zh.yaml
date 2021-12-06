@@ -11,8 +11,10 @@ save:
   success: 更改参数成功
   fail: '更改参数失败: {{ msg }}'
   fields:
+    component: 组件名称
     name: 参数名称
     before: 更改前
     after: 更改后
+    reboot: 重启
 columns:
   actions: 操作

@@ -1,20 +1,19 @@
 import { axiosInstance } from '@/api/client'
 import { message } from 'antd'
-import i18next from 'i18next'
+import { getI18n, loadI18n } from '@i18n-macro'
 
-const errorMessage: Record<string, string> = {
-  zh: `下载文件失败: `,
-  en: `Fail to download file: `,
-}
+loadI18n()
 
 export async function useDownload(url: string, defaultFilename?: string) {
+  const t = getI18n()
+
   const res = await fetch(url, {
     method: 'GET',
     headers: axiosInstance.defaults.headers,
   })
 
   if (!res.ok) {
-    message.error(errorMessage[i18next.language] + (await res.text()))
+    message.error(t('error') + (await res.text()))
     return
   }
   const blobUrl = window.URL.createObjectURL(await res.blob())

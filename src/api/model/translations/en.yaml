@@ -25,7 +25,7 @@ cluster:
     storage: Storage
     backup: Backup
   status:
-    idle: Idle
+    init: Initializing
     online: Online
     offline: Offline
     deleted: Deleted
@@ -89,6 +89,7 @@ clusterBackupStrategy:
     Sunday: Sunday
 clusterParam:
   property:
+    component: Component Name
     name: Param Name
     reboot: Reboot
     desc: Description
@@ -204,8 +205,23 @@ task:
     processing: Processing
     finished: Finished
     error: Error
+    cancelled: Cancelled
   operator:
     system: System Automation
+  name:
+    CreateCluster: CreateCluster
+    TakeoverCluster: TakeoverCluster
+    ScaleOutCluster: ScaleOutluster
+    ScaleInCluster: ScaleInCluster
+    DeleteCluster: DeleteCluster
+    RestartCluster: RestartCluster
+    StopCluster: StopCluster
+    ImportData: ImportData
+    ExportData: ExportData
+    BackupCluster: BackupCluster
+    RecoverCluster: RecoverCluster
+    ModifyParameters: ModifyParameters
+    BuildLogConfig: BuildLogConfig
 knowledge:
   component:
     dispatch: Dispatch Component

@@ -6,6 +6,7 @@ import styles from './index.module.less'
 import { TFunction, useTranslation } from 'react-i18next'
 import { usePagination } from '@hooks/usePagination'
 import { useQueryTasks } from '@/api/hooks/task'
+import TaskSteps from '@apps/main/[4]task/components/TaskSteps'
 
 export default function TaskTable() {
   const {
@@ -52,6 +53,11 @@ export default function TaskTable() {
       options={{
         reload: () => refetch(),
       }}
+      expandable={{
+        expandedRowRender: (record) => <TaskSteps id={record.id!} />,
+        expandRowByClick: true,
+        rowExpandable: (record) => typeof record.id === 'number',
+      }}
     />
   )
 }
@@ -72,7 +78,10 @@ function useFetchTaskData() {
       ...pagination,
       ...filters,
     },
-    { keepPreviousData: true }
+    {
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+    }
   )
   return {
     pagination,
@@ -95,7 +104,7 @@ function getColumns(t: TFunction<'model'>): ProColumns<TaskWorkflowInfo>[] {
   return [
     {
       title: t('model:task.property.id'),
-      width: 120,
+      width: 60,
       dataIndex: 'id',
       key: 'id',
       hideInSearch: true,
@@ -105,6 +114,7 @@ function getColumns(t: TFunction<'model'>): ProColumns<TaskWorkflowInfo>[] {
       width: 120,
       dataIndex: 'flowWorkName',
       key: 'keyword',
+      renderText: (text) => t(`model:task.name.${text}`, text),
     },
     {
       title: t('model:task.property.status'),
@@ -117,6 +127,7 @@ function getColumns(t: TFunction<'model'>): ProColumns<TaskWorkflowInfo>[] {
         '1': { text: t('model:task.status.processing'), status: 'Processing' },
         '2': { text: t('model:task.status.finished'), status: 'Success' },
         '3': { text: t('model:task.status.error'), status: 'Error' },
+        '4': { text: t('model:task.status.cancelled'), status: 'Default' },
       },
     },
     {
@@ -147,8 +158,8 @@ function getColumns(t: TFunction<'model'>): ProColumns<TaskWorkflowInfo>[] {
       dataIndex: 'operatorName',
       key: 'operator',
       hideInSearch: true,
-      renderText: (text) => {
-        return text === 'System' ? t('model:task.operator.system') : text
+      renderText: (text, record) => {
+        return record.manualOperator ? text : t('model:task.operator.system')
       },
     },
   ]
