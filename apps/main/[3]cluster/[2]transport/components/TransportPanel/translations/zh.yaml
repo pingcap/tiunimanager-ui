@@ -29,9 +29,12 @@ form:
   filterType: 数据筛选
   condition: 筛选条件
   comment: 备注
+  cluster: 集群
   username: 用户名
   password: 密码
-  submit: 确认
+  submit:
+    title: 确认
+    confirm: 确认提交表单吗?
 enum:
   filetype:
     csv: CSV

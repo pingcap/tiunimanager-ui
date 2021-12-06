@@ -29,9 +29,12 @@ form:
   filterType: Filter
   condition: Condition
   comment: Comment
+  cluster: Cluster
   username: Username
   password: Password
-  submit: Confirm
+  submit:
+    title: Submit
+    confirm: Are you sure to submit the form?
 enum:
   filetype:
     csv: CSV

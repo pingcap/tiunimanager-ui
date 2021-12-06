@@ -1,8 +1,6 @@
 title: Cluster Detail
 actions:
   edit: Edit
-  import: Import
-  export: Export
   reboot: Reboot
   backup: Backup
   delete: Delete

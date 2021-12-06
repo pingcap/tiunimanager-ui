@@ -1,6 +1,6 @@
 import {
   Button,
-  Drawer,
+  Card,
   Form,
   Input,
   message,
@@ -32,20 +32,16 @@ import { getFsUploadURL } from '@/api/hooks/fs'
 import { useAuthState } from '@store/auth'
 import { usePagination } from '@hooks/usePagination'
 import { formatTimeString } from '@/utils/time'
+import IntlPopConfirm from '@/components/IntlPopConfirm'
+import { useQueryClustersList } from '@/api/hooks/cluster'
 
 loadI18n()
 
 export type TransportPanelProps = {
-  clusterId: string
-  visible: boolean
-  close: () => void
+  back: () => unknown
 }
 
-export function ExportPanel({
-  clusterId,
-  visible,
-  close,
-}: TransportPanelProps) {
+export function ExportPanel({ back }: TransportPanelProps) {
   const [form] = Form.useForm()
   const exportCluster = useExportCluster()
   const { t, i18n } = useI18n()
@@ -60,11 +56,11 @@ export function ExportPanel({
     'sql' | 'db' | 'none'
   >('none')
 
-  const onClose = () => {
+  const onReset = () => {
     resetTargetType()
     resetFileType()
     resetFilterType()
-    close?.()
+    form.resetFields()
   }
 
   const { s3Options, processS3Options } = useS3Options()
@@ -105,34 +101,28 @@ export function ExportPanel({
       if (value.filter && Array.isArray(value.filter)) {
         value.filter = value.filter.join(';')
       }
-      value.clusterId = clusterId
-      await exportCluster.mutateAsync(
-        {
-          clusterId,
-          ...value,
+      await exportCluster.mutateAsync(value, {
+        onSuccess() {
+          message.success(t('export.message.success'))
+          back()
         },
-        {
-          onSuccess() {
-            message.success(t('export.message.success'))
-            onClose()
-          },
-          onError(e: any) {
-            message.error(t('export.message.fail', { msg: errToMsg(e) }))
-          },
-        }
-      )
+        onError(e: any) {
+          message.error(t('export.message.fail', { msg: errToMsg(e) }))
+        },
+      })
     }
 
-    const target = (
-      <section>
-        <h3>{t('export.target')}</h3>
-        {targetOptions}
-      </section>
-    )
+    const target = <Card title={t('export.target')}>{targetOptions}</Card>
 
     const source = (
-      <section>
-        <h3>{t('export.source')}</h3>
+      <Card title={t('export.source')}>
+        <Form.Item
+          name="clusterId"
+          label={t('form.cluster')}
+          rules={[{ required: true }]}
+        >
+          <ClusterSelector />
+        </Form.Item>
         <Form.Item
           name="userName"
           label={t('form.username')}
@@ -143,12 +133,11 @@ export function ExportPanel({
         <Form.Item name="password" label={t('form.password')} initialValue="">
           <Input.Password />
         </Form.Item>
-      </section>
+      </Card>
     )
 
     const options = (
-      <section>
-        <h3>{t('export.options')}</h3>
+      <Card title={t('export.options')}>
         <Form.Item
           name="fileType"
           label={t('form.filetype')}
@@ -205,7 +194,7 @@ export function ExportPanel({
         <Form.Item name="comment" label={t('form.comment')}>
           <Input.TextArea />
         </Form.Item>
-      </section>
+      </Card>
     )
 
     return (
@@ -216,12 +205,11 @@ export function ExportPanel({
         layout="horizontal"
         name="export-panel"
         requiredMark={false}
-        labelCol={{ span: 4 }}
         colon={false}
         onFinish={onConfirm}
       >
-        {target}
         {source}
+        {target}
         {options}
       </Form>
     )
@@ -236,36 +224,14 @@ export function ExportPanel({
   ])
 
   return (
-    <Drawer
-      maskClosable={false}
-      className={styles.drawer}
-      title={t('export.title')}
-      width={720}
-      onClose={onClose}
-      visible={visible}
-      bodyStyle={{ padding: 60, paddingTop: 20 }}
-      destroyOnClose={true}
-      footer={
-        <Button
-          className={styles.confirm}
-          size="large"
-          type="primary"
-          onClick={() => form.submit()}
-        >
-          {t('form.submit')}
-        </Button>
-      }
-    >
+    <>
       {formDom}
-    </Drawer>
+      <Submitter onSubmit={() => form.submit()} onReset={onReset} />
+    </>
   )
 }
 
-export function ImportPanel({
-  clusterId,
-  close,
-  visible,
-}: TransportPanelProps) {
+export function ImportPanel({ back }: TransportPanelProps) {
   const token = useAuthState((state) => state.token)
   const [form] = Form.useForm()
   const importCluster = useImportCluster()
@@ -283,21 +249,24 @@ export function ImportPanel({
     setSelectedImportable(undefined)
   }
 
-  const onClose = () => {
+  const onReset = () => {
     resetSourceType()
     clearSourceOptions()
-    close?.()
+    form.resetFields()
   }
-
-  const submitEnabled =
-    sourceType === 's3' ||
-    (sourceType === 'nfs' && !!selectedImportable) ||
-    (sourceType === 'local' && uploaded)
 
   const { importableRecords, isLoading, pagination, setPagination } =
     useImportableRecords(sourceType === 'nfs')
 
   const { s3Options, processS3Options } = useS3Options()
+
+  const [clusterId, setClusterId] = useState<string | undefined>()
+
+  const submitEnabled =
+    clusterId &&
+    (sourceType === 's3' ||
+      (sourceType === 'nfs' && !!selectedImportable) ||
+      (sourceType === 'local' && uploaded))
 
   const sourceOptions = useMemo(() => {
     const checkFileFormat: UploadProps['beforeUpload'] = (file) => {
@@ -315,6 +284,7 @@ export function ImportPanel({
         <Upload
           name="file"
           action={getFsUploadURL()}
+          disabled={!clusterId}
           data={{
             clusterId,
           }}
@@ -446,42 +416,37 @@ export function ImportPanel({
     isLoading,
     importableRecords,
     selectedImportable,
+    clusterId,
   ])
 
   const formDom = useMemo(() => {
     async function onConfirm() {
       const value = await form.validateFields()
       processS3Options(value)
-      value.clusterId = clusterId
       if (sourceType === 'nfs') value.recordId = selectedImportable!.recordId!
       if (sourceType === 'local') value.storageType = 'nfs'
-      await importCluster.mutateAsync(
-        {
-          clusterId,
-          ...value,
+      await importCluster.mutateAsync(value, {
+        onSuccess() {
+          message.success(t('import.message.success'))
+          back()
         },
-        {
-          onSuccess() {
-            message.success(t('import.message.success'))
-            onClose()
-          },
-          onError(e: any) {
-            message.error(t('import.message.fail', { msg: errToMsg(e) }))
-          },
-        }
-      )
+        onError(e: any) {
+          message.error(t('import.message.fail', { msg: errToMsg(e) }))
+        },
+      })
     }
 
-    const source = (
-      <section>
-        <h3>{t('import.source')}</h3>
-        {sourceOptions}
-      </section>
-    )
+    const source = <Card title={t('import.source')}>{sourceOptions}</Card>
 
     const target = (
-      <section>
-        <h3>{t('import.target')}</h3>
+      <Card title={t('import.target')}>
+        <Form.Item
+          name="clusterId"
+          label={t('form.cluster')}
+          rules={[{ required: true }]}
+        >
+          <ClusterSelector onChange={setClusterId} />
+        </Form.Item>
         <Form.Item
           name="userName"
           label={t('form.username')}
@@ -492,16 +457,15 @@ export function ImportPanel({
         <Form.Item name="password" label={t('form.password')} initialValue="">
           <Input.Password />
         </Form.Item>
-      </section>
+      </Card>
     )
 
     const options = (
-      <section>
-        <h3>{t('import.options')}</h3>
+      <Card title={t('import.options')}>
         <Form.Item name="comment" label={t('form.comment')}>
           <Input.TextArea />
         </Form.Item>
-      </section>
+      </Card>
     )
 
     return (
@@ -512,12 +476,11 @@ export function ImportPanel({
         layout="horizontal"
         name="import-panel"
         requiredMark={false}
-        labelCol={{ span: 4 }}
         colon={false}
         onFinish={onConfirm}
       >
-        {source}
         {target}
+        {source}
         {options}
       </Form>
     )
@@ -531,29 +494,14 @@ export function ImportPanel({
   ])
 
   return (
-    <Drawer
-      maskClosable={false}
-      className={styles.drawer}
-      title={t('import.title')}
-      width={720}
-      onClose={onClose}
-      visible={visible}
-      bodyStyle={{ padding: 60, paddingTop: 20 }}
-      destroyOnClose={true}
-      footer={
-        <Button
-          className={styles.confirm}
-          size="large"
-          type="primary"
-          onClick={() => form.submit()}
-          disabled={!submitEnabled}
-        >
-          {t('form.submit')}
-        </Button>
-      }
-    >
+    <>
       {formDom}
-    </Drawer>
+      <Submitter
+        onSubmit={() => form.submit()}
+        disabled={!submitEnabled}
+        onReset={onReset}
+      />
+    </>
   )
 }
 
@@ -640,4 +588,69 @@ function useS3Options() {
       processS3Options,
     }
   }, [i18n.language])
+}
+
+type SubmitterProps = {
+  disabled?: boolean
+  onSubmit: () => unknown
+  onReset: () => unknown
+}
+
+function Submitter({ disabled = false, onSubmit }: SubmitterProps) {
+  const { t } = useI18n()
+  return (
+    <div className={styles.submitter}>
+      <IntlPopConfirm
+        title={t('form.submit.confirm')}
+        onConfirm={onSubmit}
+        disabled={disabled}
+      >
+        <Button
+          className={styles.confirm}
+          size="large"
+          type="primary"
+          disabled={disabled}
+        >
+          {t('form.submit.title')}
+        </Button>
+      </IntlPopConfirm>
+    </div>
+  )
+}
+
+type ClusterSelectorProps = {
+  value?: string
+  onChange?: (v: string) => unknown
+}
+
+function ClusterSelector({ value, onChange }: ClusterSelectorProps) {
+  const [keyword, setKeyword] = useState('')
+  const { data, isLoading } = useQueryClustersList(
+    {
+      id: keyword,
+    },
+    { keepPreviousData: true }
+  )
+  const options =
+    isLoading || !data
+      ? []
+      : data.data.data?.map((d) => (
+          <Select.Option key={d.clusterId!} value={d.clusterId!}>
+            {d.clusterId}
+          </Select.Option>
+        ))
+  return (
+    <Select
+      showSearch
+      value={value}
+      onChange={onChange}
+      defaultActiveFirstOption={false}
+      showArrow={false}
+      filterOption={false}
+      onSearch={setKeyword}
+      notFoundContent={null}
+    >
+      {options}
+    </Select>
+  )
 }
