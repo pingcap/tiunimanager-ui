@@ -624,11 +624,8 @@ type ClusterSelectorProps = {
 }
 
 function ClusterSelector({ value, onChange }: ClusterSelectorProps) {
-  const [keyword, setKeyword] = useState('')
   const { data, isLoading } = useQueryClustersList(
-    {
-      id: keyword,
-    },
+    {},
     { keepPreviousData: true }
   )
   const options =
@@ -640,16 +637,7 @@ function ClusterSelector({ value, onChange }: ClusterSelectorProps) {
           </Select.Option>
         ))
   return (
-    <Select
-      showSearch
-      value={value}
-      onChange={onChange}
-      defaultActiveFirstOption={false}
-      showArrow={false}
-      filterOption={false}
-      onSearch={setKeyword}
-      notFoundContent={null}
-    >
+    <Select value={value} onChange={onChange}>
       {options}
     </Select>
   )
