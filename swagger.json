@@ -24,15 +24,9 @@
           }
         ],
         "description": "query backup records of a cluster",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster backup"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster backup"],
         "summary": "query backup records of a cluster",
         "parameters": [
           {
@@ -110,15 +104,9 @@
           }
         ],
         "description": "backup",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster backup"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster backup"],
         "summary": "backup",
         "parameters": [
           {
@@ -179,15 +167,9 @@
           }
         ],
         "description": "delete backup record",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster backup"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster backup"],
         "summary": "delete backup record",
         "parameters": [
           {
@@ -255,15 +237,9 @@
           }
         ],
         "description": "query change feed tasks of a cluster",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "change feed"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["change feed"],
         "summary": "query change feed tasks of a cluster",
         "parameters": [
           {
@@ -337,15 +313,9 @@
           }
         ],
         "description": "create a change feed task",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "change feed"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["change feed"],
         "summary": "create a change feed task",
         "parameters": [
           {
@@ -418,15 +388,9 @@
           }
         ],
         "description": "delete a change feed task",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "change feed"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["change feed"],
         "summary": "delete a change feed task",
         "parameters": [
           {
@@ -485,15 +449,9 @@
           }
         ],
         "description": "get change feed detail",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "change feed"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["change feed"],
         "summary": "get change feed detail",
         "parameters": [
           {
@@ -552,15 +510,9 @@
           }
         ],
         "description": "pause a change feed task",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "change feed"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["change feed"],
         "summary": "pause a change feed task",
         "parameters": [
           {
@@ -619,15 +571,9 @@
           }
         ],
         "description": "resume a change feed task",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "change feed"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["change feed"],
         "summary": "resume a change feed task",
         "parameters": [
           {
@@ -698,15 +644,9 @@
           }
         ],
         "description": "resume a change feed",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "change feed"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["change feed"],
         "summary": "resume a change feed",
         "parameters": [
           {
@@ -786,15 +726,9 @@
           }
         ],
         "description": "query clusters",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
         "summary": "query clusters",
         "parameters": [
           {
@@ -882,15 +816,9 @@
           }
         ],
         "description": "create a cluster",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
         "summary": "create a cluster",
         "parameters": [
           {
@@ -951,15 +879,9 @@
           }
         ],
         "description": "export",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster export"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster export"],
         "summary": "export data from tidb cluster",
         "parameters": [
           {
@@ -1020,15 +942,9 @@
           }
         ],
         "description": "import",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster import"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster import"],
         "summary": "import data to tidb cluster",
         "parameters": [
           {
@@ -1089,15 +1005,9 @@
           }
         ],
         "description": "preview cluster topology and capability",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
         "summary": "preview cluster topology and capability",
         "parameters": [
           {
@@ -1158,15 +1068,9 @@
           }
         ],
         "description": "restore a new cluster by backup record",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
         "summary": "restore a new cluster by backup record",
         "parameters": [
           {
@@ -1227,15 +1131,9 @@
           }
         ],
         "description": "takeover a cluster",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
         "summary": "takeover a cluster",
         "parameters": [
           {
@@ -1299,15 +1197,9 @@
           }
         ],
         "description": "query records of import and export",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster data transport"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster data transport"],
         "summary": "query records of import and export",
         "parameters": [
           {
@@ -1394,15 +1286,9 @@
           }
         ],
         "description": "delete data transport record",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster data transport"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster data transport"],
         "summary": "delete data transport record",
         "parameters": [
           {
@@ -1470,15 +1356,9 @@
           }
         ],
         "description": "show details of a cluster",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
         "summary": "show details of a cluster",
         "parameters": [
           {
@@ -1535,15 +1415,9 @@
           }
         ],
         "description": "delete cluster",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
         "summary": "delete cluster",
         "parameters": [
           {
@@ -1610,15 +1484,9 @@
           }
         ],
         "description": "dashboard",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
         "summary": "dashboard",
         "parameters": [
           {
@@ -1677,15 +1545,9 @@
           }
         ],
         "description": "monitoring link",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
         "summary": "monitoring link",
         "parameters": [
           {
@@ -1744,15 +1606,9 @@
           }
         ],
         "description": "query params of a cluster",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster params"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster params"],
         "summary": "query params of a cluster",
         "parameters": [
           {
@@ -1822,15 +1678,9 @@
           }
         ],
         "description": "submit params",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster params"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster params"],
         "summary": "submit params",
         "parameters": [
           {
@@ -1959,15 +1809,9 @@
           }
         ],
         "description": "restart a cluster",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
         "summary": "restart a cluster",
         "parameters": [
           {
@@ -2026,15 +1870,9 @@
           }
         ],
         "description": "scale in a cluster",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
         "summary": "scale in a cluster",
         "parameters": [
           {
@@ -2102,15 +1940,9 @@
           }
         ],
         "description": "scale out a cluster",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
         "summary": "scale out a cluster",
         "parameters": [
           {
@@ -2178,15 +2010,9 @@
           }
         ],
         "description": "stop a cluster",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster"],
         "summary": "stop a cluster",
         "parameters": [
           {
@@ -2245,15 +2071,9 @@
           }
         ],
         "description": "save the backup strategy of a cluster",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster backup"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster backup"],
         "summary": "save the backup strategy of a cluster",
         "parameters": [
           {
@@ -2321,15 +2141,9 @@
           }
         ],
         "description": "show the backup strategy of a cluster",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "cluster backup"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["cluster backup"],
         "summary": "show the backup strategy of a cluster",
         "parameters": [
           {
@@ -2388,15 +2202,9 @@
           }
         ],
         "description": "query flow works",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "task"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["task"],
         "summary": "query flow works",
         "parameters": [
           {
@@ -2476,15 +2284,9 @@
           }
         ],
         "description": "show details of a flow work",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "task"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["task"],
         "summary": "show details of a flow work",
         "parameters": [
           {
@@ -2543,15 +2345,9 @@
           }
         ],
         "description": "show cluster knowledge",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "knowledge"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["knowledge"],
         "summary": "show cluster knowledge",
         "responses": {
           "200": {
@@ -2604,15 +2400,9 @@
           }
         ],
         "description": "search tidb log",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "logs"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["logs"],
         "summary": "search tidb log",
         "parameters": [
           {
@@ -2713,24 +2503,20 @@
           }
         ],
         "description": "query param group",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "param group"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["param group"],
         "summary": "query param group",
         "parameters": [
           {
+            "enum": [0, 1, 2],
             "type": "integer",
             "example": 0,
             "name": "dbType",
             "in": "query"
           },
           {
+            "enum": [0, 1, 2],
             "type": "integer",
             "example": 0,
             "name": "hasDefault",
@@ -2766,7 +2552,7 @@
           },
           {
             "type": "string",
-            "example": "v5.0",
+            "example": "5.0",
             "name": "version",
             "in": "query"
           }
@@ -2820,15 +2606,9 @@
           }
         ],
         "description": "create a param group",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "param group"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["param group"],
         "summary": "create a param group",
         "parameters": [
           {
@@ -2889,15 +2669,9 @@
           }
         ],
         "description": "show details of a param group",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "param group"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["param group"],
         "summary": "show details of a param group",
         "parameters": [
           {
@@ -2954,15 +2728,9 @@
           }
         ],
         "description": "update a param group",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "param group"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["param group"],
         "summary": "update a param group",
         "parameters": [
           {
@@ -3021,15 +2789,9 @@
           }
         ],
         "description": "delete a param group",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "param group"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["param group"],
         "summary": "delete a param group",
         "parameters": [
           {
@@ -3088,15 +2850,9 @@
           }
         ],
         "description": "apply a param group",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "param group"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["param group"],
         "summary": "apply a param group",
         "parameters": [
           {
@@ -3157,15 +2913,9 @@
           }
         ],
         "description": "copy a param group",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "param group"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["param group"],
         "summary": "copy a param group",
         "parameters": [
           {
@@ -3226,15 +2976,9 @@
           }
         ],
         "description": "should be used in testing env",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "resource"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
         "summary": "Alloc host/disk resources for creating tidb cluster",
         "parameters": [
           {
@@ -3277,23 +3021,13 @@
           }
         ],
         "description": "get resource info in each failure domain",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "resource"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
         "summary": "Show the resources on failure domain view",
         "parameters": [
           {
-            "enum": [
-              1,
-              2,
-              3
-            ],
+            "enum": [1, 2, 3],
             "type": "integer",
             "description": "failure domain type of dc/zone/rack",
             "name": "failureDomainType",
@@ -3333,15 +3067,9 @@
           }
         ],
         "description": "get resource hierarchy-tree",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "resource"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
         "summary": "Show the resources hierarchy",
         "parameters": [
           {
@@ -3350,12 +3078,7 @@
             "in": "query"
           },
           {
-            "enum": [
-              1,
-              2,
-              3,
-              4
-            ],
+            "enum": [1, 2, 3, 4],
             "type": "integer",
             "description": "failure domain type of region/zone/rack/host",
             "name": "level",
@@ -3400,15 +3123,9 @@
           }
         ],
         "description": "import one host by json",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "resource"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
         "summary": "Import a host to TiEM System",
         "parameters": [
           {
@@ -3451,15 +3168,9 @@
           }
         ],
         "description": "get hosts lit",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "resource"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
         "summary": "Show all hosts list in TiEM",
         "parameters": [
           {
@@ -3519,15 +3230,9 @@
           }
         ],
         "description": "import hosts by xlsx file",
-        "consumes": [
-          "multipart/form-data"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "resource"
-        ],
+        "consumes": ["multipart/form-data"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
         "summary": "Import a batch of hosts to TiEM",
         "parameters": [
           {
@@ -3578,15 +3283,9 @@
           }
         ],
         "description": "get host template xlsx file",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/octet-stream"
-        ],
-        "tags": [
-          "resource"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/octet-stream"],
+        "tags": ["resource"],
         "summary": "Download the host information template file for importing",
         "responses": {
           "200": {
@@ -3606,15 +3305,9 @@
           }
         ],
         "description": "update host status by a list",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "resource"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
         "summary": "Update host status",
         "parameters": [
           {
@@ -3666,15 +3359,9 @@
           }
         ],
         "description": "remove hosts by a list",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "resource"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
         "summary": "Remove a batch of hosts",
         "parameters": [
           {
@@ -3720,15 +3407,9 @@
           }
         ],
         "description": "get one host by id",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "resource"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
         "summary": "Show a host",
         "parameters": [
           {
@@ -3767,15 +3448,9 @@
           }
         ],
         "description": "remove a host by id",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "resource"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
         "summary": "Remove a host",
         "parameters": [
           {
@@ -3816,15 +3491,9 @@
           }
         ],
         "description": "get resource stocks in specified conditions",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "resource"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["resource"],
         "summary": "Show the resources stocks",
         "parameters": [
           {
@@ -3903,15 +3572,9 @@
     "/user/login": {
       "post": {
         "description": "login",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "platform"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["platform"],
         "summary": "login",
         "parameters": [
           {
@@ -3966,15 +3629,9 @@
           }
         ],
         "description": "logout",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "platform"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["platform"],
         "summary": "logout",
         "responses": {
           "200": {
@@ -4018,15 +3675,9 @@
           }
         ],
         "description": "profile",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "platform"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["platform"],
         "summary": "user profile",
         "responses": {
           "200": {
@@ -4225,11 +3876,7 @@
         },
         "downstreamType": {
           "type": "string",
-          "enum": [
-            "tidb",
-            "kafka",
-            "mysql"
-          ],
+          "enum": ["tidb", "kafka", "mysql"],
           "example": "tidb"
         },
         "id": {
@@ -4245,9 +3892,7 @@
           "items": {
             "type": "string"
           },
-          "example": [
-            "*.*"
-          ]
+          "example": ["*.*"]
         },
         "startTS": {
           "type": "integer",
@@ -4255,14 +3900,7 @@
         },
         "status": {
           "type": "integer",
-          "enum": [
-            0,
-            1,
-            2,
-            3,
-            4,
-            5
-          ],
+          "enum": [0, 1, 2, 3, 4, 5],
           "example": 1
         },
         "updateTime": {
@@ -4293,11 +3931,7 @@
         },
         "downstreamType": {
           "type": "string",
-          "enum": [
-            "tidb",
-            "kafka",
-            "mysql"
-          ],
+          "enum": ["tidb", "kafka", "mysql"],
           "example": "tidb"
         },
         "id": {
@@ -4313,9 +3947,7 @@
           "items": {
             "type": "string"
           },
-          "example": [
-            "*.*"
-          ]
+          "example": ["*.*"]
         },
         "startTS": {
           "type": "integer",
@@ -4323,14 +3955,7 @@
         },
         "status": {
           "type": "integer",
-          "enum": [
-            0,
-            1,
-            2,
-            3,
-            4,
-            5
-          ],
+          "enum": [0, 1, 2, 3, 4, 5],
           "example": 1
         },
         "unsteady": {
@@ -4381,12 +4006,7 @@
         },
         "protocol": {
           "type": "string",
-          "enum": [
-            "default",
-            "canal",
-            "avro",
-            "maxwell"
-          ],
+          "enum": ["default", "canal", "avro", "maxwell"],
           "example": "default"
         },
         "replicationFactor": {
@@ -5208,6 +4828,9 @@
           "items": {
             "type": "string"
           }
+        },
+        "clusterPortConstraint": {
+          "$ref": "#/definitions/knowledge.ComponentPortConstraint"
         },
         "clusterVersion": {
           "$ref": "#/definitions/knowledge.ClusterVersion"
@@ -6079,6 +5702,7 @@
         },
         "hasReboot": {
           "type": "integer",
+          "enum": [0, 1],
           "example": 0
         },
         "name": {
@@ -6101,6 +5725,7 @@
         },
         "type": {
           "type": "integer",
+          "enum": [0, 1, 2],
           "example": 0
         },
         "unit": {
@@ -6117,10 +5742,12 @@
       "type": "object",
       "properties": {
         "instance": {
-          "type": "string"
+          "type": "string",
+          "example": "172.16.10.2"
         },
         "value": {
-          "type": "string"
+          "type": "string",
+          "example": "2"
         }
       }
     },
@@ -6128,7 +5755,8 @@
       "type": "object",
       "properties": {
         "cluster": {
-          "type": "string"
+          "type": "string",
+          "example": "1"
         },
         "instances": {
           "type": "array",
@@ -6144,29 +5772,63 @@
         "clusterId": {
           "type": "string"
         },
-        "status": {
+        "createTime": {
           "type": "string"
         },
-        "taskId": {
+        "deleteTime": {
+          "type": "string"
+        },
+        "inProcessFlowId": {
           "type": "integer"
+        },
+        "statusCode": {
+          "type": "string"
+        },
+        "statusName": {
+          "type": "string"
+        },
+        "updateTime": {
+          "type": "string"
         }
       }
     },
     "parameter.UpdateParam": {
       "type": "object",
       "properties": {
+        "componentType": {
+          "type": "string",
+          "example": "TiDB"
+        },
+        "hasReboot": {
+          "type": "integer",
+          "enum": [0, 1],
+          "example": 0
+        },
+        "name": {
+          "type": "string",
+          "example": "binlog_cache"
+        },
         "paramId": {
           "type": "integer",
           "example": 1
         },
         "realValue": {
           "$ref": "#/definitions/parameter.ParamRealValue"
+        },
+        "source": {
+          "type": "integer",
+          "enum": [0, 1, 2, 3],
+          "example": 0
         }
       }
     },
     "parameter.UpdateParamsReq": {
       "type": "object",
       "properties": {
+        "needReboot": {
+          "type": "boolean",
+          "example": false
+        },
         "params": {
           "type": "array",
           "items": {
@@ -6181,6 +5843,10 @@
         "clusterId": {
           "type": "string",
           "example": "123"
+        },
+        "needReboot": {
+          "type": "boolean",
+          "example": false
         }
       }
     },
@@ -6191,9 +5857,27 @@
           "type": "string",
           "example": "123"
         },
+        "createTime": {
+          "type": "string"
+        },
+        "deleteTime": {
+          "type": "string"
+        },
+        "inProcessFlowId": {
+          "type": "integer"
+        },
         "paramGroupId": {
           "type": "integer",
           "example": 1
+        },
+        "statusCode": {
+          "type": "string"
+        },
+        "statusName": {
+          "type": "string"
+        },
+        "updateTime": {
+          "type": "string"
         }
       }
     },
@@ -6241,14 +5925,17 @@
       "properties": {
         "dbType": {
           "type": "integer",
+          "enum": [1, 2],
           "example": 1
         },
         "groupType": {
           "type": "integer",
+          "enum": [1, 2],
           "example": 1
         },
         "hasDefault": {
           "type": "integer",
+          "enum": [1, 2],
           "example": 1
         },
         "name": {
@@ -6271,7 +5958,7 @@
         },
         "version": {
           "type": "string",
-          "example": "v5.0"
+          "example": "5.0"
         }
       }
     },
@@ -6296,6 +5983,7 @@
         },
         "hasReboot": {
           "type": "integer",
+          "enum": [0, 1],
           "example": 0
         },
         "name": {
@@ -6315,13 +6003,16 @@
           "items": {
             "type": "string"
           },
-          "example": [
-            "1",
-            " 1000"
-          ]
+          "example": ["1", " 1000"]
+        },
+        "source": {
+          "type": "integer",
+          "enum": [0, 1, 2, 3],
+          "example": 0
         },
         "type": {
           "type": "integer",
+          "enum": [0, 1, 2],
           "example": 0
         },
         "unit": {
@@ -6343,14 +6034,17 @@
         },
         "dbType": {
           "type": "integer",
-          "example": 0
+          "enum": [1, 2],
+          "example": 1
         },
         "groupType": {
           "type": "integer",
+          "enum": [1, 2],
           "example": 0
         },
         "hasDefault": {
           "type": "integer",
+          "enum": [1, 2],
           "example": 1
         },
         "name": {
@@ -6381,7 +6075,7 @@
         },
         "version": {
           "type": "string",
-          "example": "v5.0"
+          "example": "5.0"
         }
       }
     },
