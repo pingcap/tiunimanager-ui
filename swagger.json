@@ -6040,7 +6040,7 @@
         "groupType": {
           "type": "integer",
           "enum": [1, 2],
-          "example": 0
+          "example": 1
         },
         "hasDefault": {
           "type": "integer",
