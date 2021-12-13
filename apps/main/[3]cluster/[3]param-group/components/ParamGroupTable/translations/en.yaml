@@ -1,0 +1,23 @@
+columns:
+  actions: Actions
+actions:
+  apply: Apply
+  copy: Copy
+  edit: Edit
+  delete: Delete
+apply:
+  loading: Applying the parameter group to the cluster {{ msg }}...
+  success: 'Successfully apply the parameter group: {{ msg }}'
+  fail: 'Fail to apply: {{ msg }}'
+copy:
+  loading: Copying...
+  success: 'Successfully create a new parameter group: {{ msg }}'
+  fail: 'Fail to copy: {{ msg }}'
+edit:
+  disabled: Only custom parameter groups are editable
+delete:
+  disabled: Only custom parameter groups are deletable
+  confirm: Are you sure to delete this parameter group?
+  loading: Deleting...
+  success: 'Delete the parameter group {{ msg }} successfully'
+  fail: 'Fail: {{ msg }}'

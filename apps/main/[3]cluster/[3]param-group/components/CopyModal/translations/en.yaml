@@ -1,0 +1,18 @@
+modal:
+  title: Copy Parameter Group
+form:
+  fields:
+    name: Name
+    note: Note
+  rules:
+    name:
+      required: Please enter the parameter group name
+      length: The length must be between 1 ~ 22
+footer:
+  cancel:
+    text: Cancel
+  ok:
+    text: Confirm
+message:
+  success: 'Copy successfully'
+  fail: 'Failed: {{ msg }}'
