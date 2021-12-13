@@ -6,6 +6,7 @@ import {
   ClusterExportApi,
   ClusterImportApi,
   ClusterParamsApi,
+  ParamGroupApi,
   Configuration,
   KnowledgeApi,
   LogsApi,
@@ -78,6 +79,7 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
       undefined,
       axiosInstance
     ),
+    ParamGroup: new ParamGroupApi(configuration, undefined, axiosInstance),
   })
 }
 

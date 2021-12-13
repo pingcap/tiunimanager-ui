@@ -29,6 +29,12 @@ import {
   WarehouseNode,
   ManagementPreviewClusterRsp,
   ImportexportDataTransportInfo,
+  ParamgroupQueryParamGroupResp,
+  ParamgroupParamDetail,
+  ParamgroupCreateParamGroupReq,
+  ParamgroupUpdateParamGroupReq,
+  ParamgroupCopyParamGroupReq,
+  ParamgroupApplyParamGroupReq,
 } from '#/api'
 
 export type PagedResult = ControllerResultWithPage
@@ -74,6 +80,30 @@ export type KnowledgeOfClusterVersion = KnowledgeClusterVersionSpec
 export type KnowledgeOfClusterComponent = KnowledgeClusterComponentSpec
 
 export type UserLoginRequest = IdentificationLoginInfo
+
+export enum ParamGroupDBType {
+  tidb = 1,
+  dm = 2,
+}
+
+export enum ParamGroupCreationType {
+  system = 1,
+  custom = 2,
+}
+
+export enum ParamGroupScope {
+  cluster = 1,
+  instance = 2,
+}
+
+export type ParamGroupItem = ParamgroupQueryParamGroupResp
+
+export type ParamItemDetail = ParamgroupParamDetail
+
+export type RequestParamGroupCreate = ParamgroupCreateParamGroupReq
+export type RequestParamGroupUpdate = ParamgroupUpdateParamGroupReq
+export type RequestParamGroupCopy = ParamgroupCopyParamGroupReq
+export type RequestParamGroupApply = ParamgroupApplyParamGroupReq
 
 export type RequestBackupCreate = BackuprestoreBackupReq
 export type RequestBackupStrategyUpdate = BackuprestoreBackupStrategyUpdateReq
