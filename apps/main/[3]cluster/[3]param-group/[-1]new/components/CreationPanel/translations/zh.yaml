@@ -1,0 +1,26 @@
+basic:
+  fields:
+    name: 参数组名称
+    dbType: 数据库类型
+    dbVersion: 数据库版本
+    note: 描述
+  rules:
+    name:
+      required: 请输入参数组名称
+      length: 长度须在 1 ～ 22 位之间
+    dbType:
+      required: 请选择数据库类型
+    dbVersion:
+      required: 请选择数据库版本
+footer:
+  reset:
+    title: 重置
+    confirm: 确认重置表单吗?
+  submit:
+    title: 提交
+    confirm: 确认提交表单吗?
+    error:
+      param: 请保存参数后再提交
+message:
+  success: '成功创建参数组'
+  fail: '创建失败: {{ msg }}'
