@@ -119,6 +119,24 @@ clusterNode:
     version: Version
     zone: Zone
     usage: Usage
+paramGroup:
+  property:
+    id: ID
+    name: Name
+    type: Type
+    scope: Scope
+    dbType: Database
+    dbVersion: Database Version
+    desc: Description
+  type:
+    system: System Built-in
+    custom: User Custom
+  scope:
+    cluster: Cluster
+    instance: Component
+  dbType:
+    tidb: TIDB
+    dm: DM
 host:
   property:
     id: ID
