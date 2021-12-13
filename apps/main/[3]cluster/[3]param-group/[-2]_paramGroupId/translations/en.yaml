@@ -1,0 +1,9 @@
+name: Details
+header:
+  title: Details
+desc:
+  title: Basic Infomation
+  label:
+    unknown: Unknown
+card:
+  title: Parameters
