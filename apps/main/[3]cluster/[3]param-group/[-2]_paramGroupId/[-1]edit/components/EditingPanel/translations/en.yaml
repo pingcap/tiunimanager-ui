@@ -1,0 +1,22 @@
+basic:
+  fields:
+    name: Name
+    dbType: Database Type
+    dbVersion: Database Version
+    note: Note
+  rules:
+    name:
+      required: Please enter the parameter group name
+      length: The length must be between 1 ~ 22
+footer:
+  reset:
+    title: Reset
+    confirm: Are you sure to reset the form?
+  submit:
+    title: Submit
+    confirm: Are you sure to submit the form?
+    error:
+      param: Please save the editing parameter first
+message:
+  success: 'Update successfully'
+  fail: 'Fail: {{ msg }}'
