@@ -34,14 +34,16 @@ const ParamGroupCopyModal: React.FC<ParamGroupCopyModalProps> = ({
   }, [i18n.language])
 
   const onError = useCallback(
-    (msg: string) => {
-      message
-        .error(
-          t('message.fail', {
-            msg,
-          })
-        )
-        .then()
+    (msg?: string) => {
+      if (msg) {
+        message
+          .error(
+            t('message.fail', {
+              msg,
+            })
+          )
+          .then()
+      }
 
       setConfirmLoading(false)
     },
