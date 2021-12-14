@@ -205,10 +205,11 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
       width: 200,
       key: 'range',
       renderText(_, record) {
-        const range = record.range!
-        const unit = record.unit!
+        const unit = record.unit ?? ''
         // TODO: handle different types
-        return range?.map((rangeValue) => `${rangeValue} ${unit}`).join(', ')
+        return record.range
+          ?.map((rangeValue) => `${rangeValue} ${unit}`)
+          .join(', ')
       },
       editable: false,
     },
