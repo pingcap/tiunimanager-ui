@@ -204,11 +204,11 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
       title: t('model:clusterParam.property.range'),
       width: 200,
       key: 'range',
-      render(_, record) {
+      renderText(_, record) {
         const range = record.range!
         const unit = record.unit!
         // TODO: handle different types
-        return range.map((rangeValue) => `${rangeValue} ${unit}`).join(', ')
+        return range?.map((rangeValue) => `${rangeValue} ${unit}`).join(', ')
       },
       editable: false,
     },
