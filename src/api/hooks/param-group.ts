@@ -95,8 +95,11 @@ export function useUpdateParamGroup() {
   return useMutation(updateParamGroup)
 }
 
-const copyParamGroup = (payload: RequestParamGroupCopy) =>
-  APIS.ParamGroup.paramGroupsParamGroupIdCopyPost(payload)
+const copyParamGroup = ({
+  paramGroupId,
+  ...payload
+}: { paramGroupId: number } & RequestParamGroupCopy) =>
+  APIS.ParamGroup.paramGroupsParamGroupIdCopyPost(paramGroupId, payload)
 
 export function useCopyParamGroup() {
   return useMutation(copyParamGroup)
@@ -109,8 +112,11 @@ export function useDeleteParamGroup() {
   return useMutation(deleteParamGroup)
 }
 
-const applyParamGroup = (payload: RequestParamGroupApply) =>
-  APIS.ParamGroup.paramGroupsParamGroupIdApplyPost(payload)
+const applyParamGroup = ({
+  paramGroupId,
+  ...payload
+}: { paramGroupId: number } & RequestParamGroupApply) =>
+  APIS.ParamGroup.paramGroupsParamGroupIdApplyPost(paramGroupId, payload)
 
 export function useApplyParamGroup() {
   return useMutation(applyParamGroup)
