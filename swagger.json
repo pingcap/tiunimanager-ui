@@ -2856,6 +2856,13 @@
         "summary": "apply a param group",
         "parameters": [
           {
+            "type": "integer",
+            "description": "param group id",
+            "name": "paramGroupId",
+            "in": "path",
+            "required": true
+          },
+          {
             "description": "apply param group request",
             "name": "applyReq",
             "in": "body",
@@ -2918,6 +2925,13 @@
         "tags": ["param group"],
         "summary": "copy a param group",
         "parameters": [
+          {
+            "type": "integer",
+            "description": "param group id",
+            "name": "paramGroupId",
+            "in": "path",
+            "required": true
+          },
           {
             "description": "copy param group request",
             "name": "copyReq",
