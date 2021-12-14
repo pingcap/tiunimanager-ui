@@ -1,5 +1,5 @@
 modal:
-  title: Copy Parameter Group
+  title: Copy The Parameter Group
 form:
   fields:
     name: Name
