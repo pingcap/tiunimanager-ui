@@ -4,8 +4,9 @@ import {
   invalidateParamGroupList,
   useCopyParamGroup,
 } from '@/api/hooks/param-group'
-import { errToMsg } from '@/utils/error'
 import { ParamGroupItem } from '@/api/model'
+import { errToMsg } from '@/utils/error'
+import { isNumber } from '@/utils/types'
 
 export interface ParamGroupCopyPayload {
   name: string
@@ -14,7 +15,7 @@ export interface ParamGroupCopyPayload {
 
 export interface CopyActionCallbacks {
   onSuccess: (msg?: string | number) => void
-  onError: (msg: string) => void
+  onError: (msg?: string) => void
 }
 
 export function useCopyModal(data?: ParamGroupItem[]) {
@@ -23,7 +24,7 @@ export function useCopyModal(data?: ParamGroupItem[]) {
   const [copyId, setCopyId] = useState<number>()
 
   const copyDataSource = useMemo(() => {
-    return data && copyId !== undefined
+    return data && isNumber(copyId)
       ? data.filter((item) => item.paramGroupId === copyId)[0] ?? {}
       : {}
   }, [data, copyId])
@@ -41,21 +42,32 @@ export function useCopyModal(data?: ParamGroupItem[]) {
   const copyParamGroup = useCopyParamGroup()
 
   const copyAction = useCallback(
-    (payload: ParamGroupCopyPayload, callbacks: CopyActionCallbacks) =>
-      copyParamGroup.mutateAsync(payload, {
-        onSuccess(data) {
-          callbacks.onSuccess(data.data.data?.paramGroupId)
+    (payload: ParamGroupCopyPayload, callbacks: CopyActionCallbacks) => {
+      if (!isNumber(copyId)) {
+        return callbacks.onError()
+      }
 
-          onClose()
+      copyParamGroup.mutateAsync(
+        {
+          ...payload,
+          paramGroupId: copyId,
         },
-        onSettled() {
-          return Promise.allSettled([invalidateParamGroupList(queryClient)])
-        },
-        onError(e: any) {
-          callbacks.onError(errToMsg(e))
-        },
-      }),
-    [queryClient, copyParamGroup.mutateAsync, onClose]
+        {
+          onSuccess(data) {
+            callbacks.onSuccess(data.data.data?.paramGroupId)
+
+            onClose()
+          },
+          onSettled() {
+            return Promise.allSettled([invalidateParamGroupList(queryClient)])
+          },
+          onError(e: any) {
+            callbacks.onError(errToMsg(e))
+          },
+        }
+      )
+    },
+    [queryClient, copyParamGroup.mutateAsync, onClose, copyId]
   )
 
   return {
