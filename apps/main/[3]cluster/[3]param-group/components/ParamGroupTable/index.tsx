@@ -17,18 +17,26 @@ import {
 } from '@/api/model'
 import ParamGroupCopyModal from '../CopyModal'
 import { useCopyModal } from '../CopyModal/helper'
+import { useApplyingModal } from '../ApplyingModal/helper'
+import ParamGroupApplyingModal from '../ApplyingModal'
 import { useDeleteParamGroupAction, useForceUpdateSearch } from './helpers'
-
 import styles from './index.module.less'
 
 loadI18n()
 
-function getColumns(
-  t: TFunction<''>,
-  searchHidden: boolean,
-  deleteAction: (paramGroupId: number) => unknown,
+function getColumns({
+  t,
+  searchHidden,
+  deleteAction,
+  openCopyModal,
+  openApplyingModal,
+}: {
+  t: TFunction<''>
+  searchHidden: boolean
+  deleteAction: (paramGroupId: number) => unknown
   openCopyModal: (paramGroupId: number) => void
-): ProColumns<ParamGroupItem>[] {
+  openApplyingModal: (paramGroupId: number) => void
+}): ProColumns<ParamGroupItem>[] {
   return [
     {
       title: t('model:paramGroup.property.name'),
@@ -117,6 +125,14 @@ function getColumns(
           >
             {t('actions.copy')}
           </a>,
+          <a
+            key="apply"
+            onClick={() => {
+              openApplyingModal(record.paramGroupId!)
+            }}
+          >
+            {t('actions.apply')}
+          </a>,
           <DeleteConfirm
             key="delete"
             title={t('delete.confirm')}
@@ -142,8 +158,10 @@ function getColumns(
 
 function useTableColumn({
   openCopyModal,
+  openApplyingModal,
 }: {
   openCopyModal: (paramGroupId: number) => void
+  openApplyingModal: (paramGroupId: number) => void
 }) {
   const { t } = useI18n()
 
@@ -153,8 +171,15 @@ function useTableColumn({
   const searchHidden = useForceUpdateSearch()
 
   return useMemo(
-    () => getColumns(t, searchHidden, deleteAction, openCopyModal),
-    [searchHidden, deleteAction, openCopyModal]
+    () =>
+      getColumns({
+        t,
+        searchHidden,
+        deleteAction,
+        openCopyModal,
+        openApplyingModal,
+      }),
+    [searchHidden, deleteAction, openCopyModal, openApplyingModal]
   )
 }
 
@@ -216,8 +241,17 @@ export default function ParamGroupTable() {
     copyAction,
   } = useCopyModal(data)
 
+  const {
+    onOpen: openApplyingModal,
+    onClose: closeApplyingModal,
+    visible: applyingModalVisible,
+    applyingData,
+    applyingAction,
+  } = useApplyingModal(data)
+
   const columns = useTableColumn({
     openCopyModal,
+    openApplyingModal,
   })
 
   return (
@@ -258,6 +292,12 @@ export default function ParamGroupTable() {
         visible={copyModalVisible}
         onConfirm={copyAction}
         onCancel={closeCopyModal}
+      />
+      <ParamGroupApplyingModal
+        dataSource={applyingData}
+        visible={applyingModalVisible}
+        onConfirm={applyingAction}
+        onCancel={closeApplyingModal}
       />
     </>
   )
