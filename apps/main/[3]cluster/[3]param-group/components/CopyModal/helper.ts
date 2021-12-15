@@ -18,16 +18,16 @@ export interface CopyActionCallbacks {
   onError: (msg?: string) => void
 }
 
-export function useCopyModal(data?: ParamGroupItem[]) {
+export function useCopyModal(dataSource?: ParamGroupItem[]) {
   const [visible, setVisible] = useState(false)
 
   const [copyId, setCopyId] = useState<number>()
 
-  const copyDataSource = useMemo(() => {
-    return data && isNumber(copyId)
-      ? data.filter((item) => item.paramGroupId === copyId)[0] ?? {}
+  const copyData = useMemo(() => {
+    return dataSource && isNumber(copyId)
+      ? dataSource.filter((item) => item.paramGroupId === copyId)[0] ?? {}
       : {}
-  }, [data, copyId])
+  }, [dataSource, copyId])
 
   const onOpen = useCallback((paramGroupId: number) => {
     setCopyId(paramGroupId)
@@ -53,8 +53,8 @@ export function useCopyModal(data?: ParamGroupItem[]) {
           paramGroupId: copyId,
         },
         {
-          onSuccess(data) {
-            callbacks.onSuccess(data.data.data?.paramGroupId)
+          onSuccess(response) {
+            callbacks.onSuccess(response.data.data?.paramGroupId)
 
             onClose()
           },
@@ -71,7 +71,7 @@ export function useCopyModal(data?: ParamGroupItem[]) {
   )
 
   return {
-    copyDataSource,
+    copyData,
     visible,
     onOpen,
     onClose,

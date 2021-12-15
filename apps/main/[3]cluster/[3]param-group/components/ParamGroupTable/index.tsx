@@ -212,7 +212,7 @@ export default function ParamGroupTable() {
     onOpen: openCopyModal,
     onClose: closeCopyModal,
     visible: copyModalVisible,
-    copyDataSource,
+    copyData,
     copyAction,
   } = useCopyModal(data)
 
@@ -254,7 +254,7 @@ export default function ParamGroupTable() {
         }}
       />
       <ParamGroupCopyModal
-        dataSource={copyDataSource}
+        dataSource={copyData}
         visible={copyModalVisible}
         onConfirm={copyAction}
         onCancel={closeCopyModal}
