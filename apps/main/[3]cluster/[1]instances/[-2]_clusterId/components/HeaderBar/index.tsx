@@ -22,13 +22,13 @@ loadI18n()
 
 export default function HeaderBar() {
   const history = useHistory()
-  const cluster = useClusterContext()
+  const { info } = useClusterContext()
   const createBackup = useCreateClusterBackup()
   const deleteCluster = useDeleteCluster()
   const queryClient = useQueryClient()
   const { t, i18n } = useI18n()
 
-  const { clusterId, statusName } = cluster
+  const { clusterId, status } = info!
 
   return useMemo(() => {
     const backToList = () => history.push(resolveRoute('../'))
@@ -36,10 +36,8 @@ export default function HeaderBar() {
       await createBackup.mutateAsync(
         { clusterId },
         {
-          onSuccess(data) {
-            message.success(
-              t('backup.success', { msg: data.data.data!.clusterId })
-            )
+          onSuccess() {
+            message.success(t('backup.success', { msg: clusterId }))
           },
           onSettled() {
             return invalidateClusterBackups(queryClient, clusterId!)
@@ -58,10 +56,8 @@ export default function HeaderBar() {
       await deleteCluster.mutateAsync(
         { id: clusterId! },
         {
-          onSuccess(data) {
-            message.success(
-              t('delete.success', { msg: data.data.data!.clusterId })
-            )
+          onSuccess() {
+            message.success(t('delete.success', { msg: clusterId }))
           },
           onSettled() {
             return invalidateClusterDetail(queryClient, clusterId!)
@@ -81,7 +77,7 @@ export default function HeaderBar() {
         key="backup"
         onClick={() => {
           Modal.confirm({
-            content: t('backup.confirm', { name: cluster.clusterName! }),
+            content: t('backup.confirm', { name: clusterId! }),
             onOk: handleBackup,
           })
         }}
@@ -137,7 +133,7 @@ export default function HeaderBar() {
     )
   }, [
     clusterId,
-    statusName,
+    status,
     createBackup.mutateAsync,
     deleteCluster.mutateAsync,
     i18n.language,

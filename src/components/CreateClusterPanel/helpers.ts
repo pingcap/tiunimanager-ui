@@ -122,7 +122,7 @@ export function useAvailableStocks(arch: HardwareArch) {
     () =>
       isDomainsLoading
         ? EmptyAvailableStocksMap
-        : transformAvailableStocksMap(available!.data.data!),
+        : transformAvailableStocksMap(available!.data.data!.root!),
     [isDomainsLoading, available]
   )
 }
@@ -144,13 +144,11 @@ export function processCreateRequest(
   t: TFunction<''>
 ) {
   {
-    value.nodeDemandList?.forEach((comp) => {
+    value.resourceParameters?.instanceResource?.forEach((comp) => {
       // remove count=0
-      comp.distributionItems = comp.distributionItems!.filter(
-        (item) => item && item.count! > 0
-      )
+      comp.resource = comp.resource!.filter((item) => item && item.count! > 0)
       // calculate totalCount
-      comp.totalNodeCount = comp.distributionItems!.reduce(
+      comp.totalNodeCount = comp.resource!.reduce(
         (count, item) => count + item.count!,
         0
       )
@@ -161,7 +159,7 @@ export function processCreateRequest(
     const specs =
       knowledgeMap!.map[value.clusterType!].map![value.clusterVersion!]
     for (const spec of specs.components) {
-      const node = value.nodeDemandList!.find(
+      const node = value.resourceParameters!.instanceResource!.find(
         (n) => n.componentType === spec.clusterComponent!.componentType
       )!
       const required = spec.componentConstraint!.componentRequired
@@ -179,7 +177,7 @@ export function processCreateRequest(
       }
       // check min zone quantity
       if (minZone) {
-        if (node.distributionItems!.length! < minZone) {
+        if (node.resource!.length! < minZone) {
           message.error(
             t('create.validation.zone', {
               name: spec.clusterComponent!.componentName,

@@ -4,16 +4,15 @@ import { Desc } from './components/Desc'
 import { ComponentList } from '@apps/main/[3]cluster/[1]instances/[-2]_clusterId/[1]profile/components/ComponentList'
 
 export default function () {
-  const cluster = useClusterContext()
+  const { info, topology } = useClusterContext()
   return useMemo(
     () => (
       <div>
-        <Desc cluster={cluster} />
+        <Desc cluster={info!} />
         {/*TODO: display usage after monitor feature is done*/}
-        {/*<Usage cluster={cluster} />*/}
-        <ComponentList cluster={cluster} />
+        <ComponentList nodes={topology!} />
       </div>
     ),
-    [cluster]
+    [info]
   )
 }

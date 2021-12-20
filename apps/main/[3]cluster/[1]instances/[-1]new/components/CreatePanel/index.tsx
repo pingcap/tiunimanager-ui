@@ -34,7 +34,7 @@ export function CreatePanel({ back }: CreatePanelProps) {
           invalidateClustersList(queryClient)
           message
             .success(
-              t('message.success', { msg: data.data.data!.clusterName }),
+              t('message.success', { msg: data.data.data!.clusterId }),
               0.8
             )
             .then(back)

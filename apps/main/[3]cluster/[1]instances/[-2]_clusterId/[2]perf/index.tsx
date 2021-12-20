@@ -11,7 +11,8 @@ import { FullScreen } from '@/components/FullScreen'
 loadI18n()
 
 export default function () {
-  const { clusterId } = useClusterContext()
+  const { info } = useClusterContext()
+  const { clusterId } = info!
 
   const { data, isLoading } = useQueryClusterDashboard(
     { id: clusterId! },

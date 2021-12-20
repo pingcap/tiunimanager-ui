@@ -1,4 +1,4 @@
-import { useHistory, useParams } from 'react-router-dom'
+import { Redirect, useHistory, useParams } from 'react-router-dom'
 import { FC, useMemo } from 'react'
 import { Card } from 'antd'
 import type { CardTabListType } from 'antd/es/card'
@@ -42,6 +42,8 @@ const Layout: FC = ({ children }) => {
         <>Loading</>
       ) : isError ? (
         <>{JSON.stringify(error)}</>
+      ) : !data!.data.data?.info?.clusterId ? (
+        <Redirect to={resolveRoute('..')} />
       ) : (
         <ClusterProvider value={data!.data.data!}>
           {currentTab ? (

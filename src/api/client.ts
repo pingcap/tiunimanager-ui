@@ -5,7 +5,7 @@ import {
   ClusterDataTransportApi,
   ClusterExportApi,
   ClusterImportApi,
-  ClusterParamsApi,
+  ClusterParametersApi,
   Configuration,
   KnowledgeApi,
   LogsApi,
@@ -18,6 +18,7 @@ import { createElement, FC } from 'react'
 import { QueryClient, QueryClientProvider, UseQueryOptions } from 'react-query'
 import { initModelTranslations } from './model'
 import { getEnvState, subscribeEnv } from '@store/env'
+import { initTaskTranslations } from './task'
 
 function initAxios() {
   const instance = axios.create()
@@ -45,6 +46,7 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
   })
 
   initModelTranslations()
+  initTaskTranslations()
 
   return readonly({
     Platform: new PlatformApi(configuration, undefined, axiosInstance),
@@ -60,7 +62,7 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
       undefined,
       axiosInstance
     ),
-    ClusterParams: new ClusterParamsApi(
+    ClusterParams: new ClusterParametersApi(
       configuration,
       undefined,
       axiosInstance

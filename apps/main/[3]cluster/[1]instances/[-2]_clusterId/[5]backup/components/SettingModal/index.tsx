@@ -72,8 +72,8 @@ export default function SettingModal({
 
   const handleReset = () => {
     form.setFieldsValue({
-      backupDate: data?.data.data?.backupDate?.split(',') || [],
-      period: data?.data.data?.period || '00:00-01:00',
+      backupDate: data?.data.data?.strategy?.backupDate?.split(',') || [],
+      period: data?.data.data?.strategy?.period || '00:00-01:00',
     })
   }
 
