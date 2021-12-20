@@ -109,7 +109,7 @@ function getColumns(t: TFunction<'model'>): ProColumns<TaskWorkflowInfo>[] {
       width: 120,
       dataIndex: 'flowWorkName',
       key: 'keyword',
-      renderText: (text) => t(`model:task.name.${text}`, text),
+      renderText: (text) => t(`task:name.${text}`, text),
     },
     {
       title: t('model:task.property.status'),
