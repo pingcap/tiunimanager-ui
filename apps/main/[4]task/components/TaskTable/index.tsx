@@ -1,6 +1,6 @@
 import { ProColumns } from '@ant-design/pro-table'
 import { useMemo, useState } from 'react'
-import { PagedResult, TaskWorkflowInfo } from '@/api/model'
+import { PagedResult, TaskWorkflowInfo, TaskWorkflowStatus } from '@/api/model'
 import HeavyTable from '@/components/HeavyTable'
 import styles from './index.module.less'
 import { TFunction, useTranslation } from 'react-i18next'
@@ -12,6 +12,7 @@ export default function TaskTable() {
     data,
     isLoading,
     isPreviousData,
+    totalPage,
     setPagination,
     pagination,
     setFilter,
@@ -23,11 +24,10 @@ export default function TaskTable() {
   return (
     <HeavyTable
       loading={isLoading}
-      dataSource={data?.data.data || []}
+      dataSource={data || []}
       className={styles.taskTable}
       headerTitle={null}
       onSubmit={(filters: any) => {
-        if (!filters.status) filters.status = -1
         setFilter(filters as any)
       }}
       tooltip={false}
@@ -35,7 +35,7 @@ export default function TaskTable() {
       pagination={{
         pageSize: pagination.pageSize,
         current: pagination.page,
-        total: (data?.data as PagedResult)?.page?.total || 0,
+        total: totalPage,
         onChange(page, pageSize) {
           if (!isPreviousData)
             setPagination({ page, pageSize: pageSize || pagination.pageSize })
@@ -60,12 +60,12 @@ function useFetchTaskData() {
   const [pagination, setPagination] = usePagination()
   const [filters, setFilter] = useState<{
     keyword?: string
-    clusterId?: string
-    status?: number
+    bizId?: string
+    status?: TaskWorkflowStatus
   }>({
     keyword: undefined,
-    clusterId: undefined,
-    status: -1,
+    bizId: undefined,
+    status: undefined,
   })
   const { data, isLoading, isPreviousData, refetch } = useQueryTasks(
     {
@@ -74,10 +74,14 @@ function useFetchTaskData() {
     },
     { keepPreviousData: true }
   )
+
+  const result = data?.data
+
   return {
     pagination,
     setPagination,
-    data,
+    totalPage: (result as PagedResult)?.page?.total || 0,
+    data: result?.data?.workFlows,
     isPreviousData,
     setFilter,
     isLoading,
@@ -110,48 +114,53 @@ function getColumns(t: TFunction<'model'>): ProColumns<TaskWorkflowInfo>[] {
     {
       title: t('model:task.property.status'),
       width: 100,
-      dataIndex: 'statusCode',
+      dataIndex: 'status',
       key: 'status',
       valueType: 'select',
       valueEnum: {
-        '0': { text: t('model:task.status.init'), status: 'Default' },
-        '1': { text: t('model:task.status.processing'), status: 'Processing' },
-        '2': { text: t('model:task.status.finished'), status: 'Success' },
-        '3': { text: t('model:task.status.error'), status: 'Error' },
-        '4': { text: t('model:task.status.cancelled'), status: 'Default' },
+        [TaskWorkflowStatus.Initializing]: {
+          text: t('model:task.status.init'),
+          status: 'Default',
+        },
+        [TaskWorkflowStatus.Processing]: {
+          text: t('model:task.status.processing'),
+          status: 'Processing',
+        },
+        [TaskWorkflowStatus.Finished]: {
+          text: t('model:task.status.finished'),
+          status: 'Success',
+        },
+        [TaskWorkflowStatus.Error]: {
+          text: t('model:task.status.error'),
+          status: 'Error',
+        },
+        [TaskWorkflowStatus.Canceled]: {
+          text: t('model:task.status.cancelled'),
+          status: 'Default',
+        },
       },
     },
     {
-      title: t('model:task.property.clusterId'),
+      title: t('model:task.property.bizId'),
       width: 140,
-      dataIndex: 'clusterId',
-      key: 'clusterId',
+      dataIndex: 'BizId',
+      key: 'bizId',
     },
     {
-      title: t('model:task.property.startTime'),
+      title: t('model:task.property.creationTime'),
       width: 100,
-      dataIndex: 'createTime',
-      key: 'startTime',
+      dataIndex: 'creationTime',
+      key: 'creationTime',
       hideInSearch: true,
       valueType: 'dateTime',
     },
     {
-      title: t('model:task.property.endTime'),
+      title: t('model:task.property.updateTime'),
       width: 100,
       dataIndex: 'updateTime',
-      key: 'endTime',
+      key: 'updateTime',
       hideInSearch: true,
       valueType: 'dateTime',
-    },
-    {
-      title: t('model:task.property.operator'),
-      width: 80,
-      dataIndex: 'operatorName',
-      key: 'operator',
-      hideInSearch: true,
-      renderText: (text, record) => {
-        return record.manualOperator ? text : t('model:task.operator.system')
-      },
     },
   ]
 }
