@@ -204,20 +204,6 @@ task:
     cancelled: 已取消
   operator:
     system: 系统自动
-  name:
-    CreateCluster: 创建集群
-    TakeoverCluster: 接管集群
-    ScaleOutCluster: 扩容集群
-    ScaleInCluster: 缩容集群
-    DeleteCluster: 删除集群
-    RestartCluster: 重启集群
-    StopCluster: 停止集群
-    ImportData: 导入数据
-    ExportData: 导出数据
-    BackupCluster: 备份集群
-    RecoverCluster: 恢复集群
-    ModifyParameters: 修改参数
-    BuildLogConfig: 重建日志配置
 knowledge:
   component:
     dispatch: 调度组件

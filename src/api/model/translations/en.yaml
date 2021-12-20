@@ -204,20 +204,6 @@ task:
     cancelled: Cancelled
   operator:
     system: System Automation
-  name:
-    CreateCluster: CreateCluster
-    TakeoverCluster: TakeoverCluster
-    ScaleOutCluster: ScaleOutluster
-    ScaleInCluster: ScaleInCluster
-    DeleteCluster: DeleteCluster
-    RestartCluster: RestartCluster
-    StopCluster: StopCluster
-    ImportData: ImportData
-    ExportData: ExportData
-    BackupCluster: BackupCluster
-    RecoverCluster: RecoverCluster
-    ModifyParameters: ModifyParameters
-    BuildLogConfig: BuildLogConfig
 knowledge:
   component:
     dispatch: Dispatch Component
