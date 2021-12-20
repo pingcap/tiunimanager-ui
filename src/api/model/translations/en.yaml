@@ -189,12 +189,9 @@ task:
   property:
     id: ID
     name: Name
-    inProcessFlowId: In Process Flow ID
-    clusterId: Cluster ID
-    clusterName: Cluster Name
-    startTime: Start Time
+    bizId: Cluster ID
+    creationTime: Creation Time
     updateTime: Update Time
-    endTime: End Time
     operator: Operator
     manual: Manual
     status: Status

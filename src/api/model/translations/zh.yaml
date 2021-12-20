@@ -189,12 +189,9 @@ task:
   property:
     id: ID
     name: 名称
-    inProcessFlowId: 任务流内部ID
-    clusterId: 集群ID
-    clusterName: 集群名称
-    startTime: 创建时间
+    bizId: 集群ID
+    creationTime: 创建时间
     updateTime: 更新时间
-    endTime: 结束时间
     operator: 发起者
     manual: 触发模式
     status: 状态
