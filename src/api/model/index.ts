@@ -21,8 +21,9 @@ import {
   KnowledgeClusterTypeSpec,
   KnowledgeClusterComponentSpec,
   KnowledgeClusterVersionSpec,
-  FlowtaskFlowWorkDetailInfo,
-  FlowtaskFlowWorkDisplayInfo,
+  MessageQueryWorkFlowDetailResp,
+  StructsWorkFlowInfo,
+  StructsWorkFlowInfoStatusEnum,
   KnowledgeClusterType,
   KnowledgeClusterVersion,
   KnowledgeClusterComponent,
@@ -66,8 +67,10 @@ export type ResourceTreeNode = WarehouseNode
 
 export type ClusterPreview = ManagementPreviewClusterRsp
 
-export type TaskWorkflowInfo = FlowtaskFlowWorkDisplayInfo
-export type TaskWorkflowDetailInfo = FlowtaskFlowWorkDetailInfo
+export { StructsWorkFlowInfoStatusEnum as TaskWorkflowStatus }
+
+export type TaskWorkflowInfo = StructsWorkFlowInfo
+export type TaskWorkflowDetailInfo = MessageQueryWorkFlowDetailResp
 
 export type KnowledgeOfClusterType = KnowledgeClusterTypeSpec
 export type KnowledgeOfClusterVersion = KnowledgeClusterVersionSpec
