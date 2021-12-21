@@ -7,17 +7,17 @@ actions:
   delete: Delete
 apply:
   loading: Applying the parameter group to the cluster {{ msg }}...
-  success: 'Successfully apply the parameter group: {{ msg }}'
-  fail: 'Fail to apply: {{ msg }}'
+  success: Successfully apply the parameter group
+  fail: 'Failed: {{ msg }}'
 copy:
   loading: Copying...
-  success: 'Successfully create a new parameter group: {{ msg }}'
-  fail: 'Fail to copy: {{ msg }}'
+  success: Successfully create a new parameter group
+  fail: 'Failed: {{ msg }}'
 edit:
   disabled: Only custom parameter groups are editable
 delete:
   disabled: Only custom parameter groups are deletable
   confirm: Are you sure to delete this parameter group?
   loading: Deleting...
-  success: 'Delete the parameter group {{ msg }} successfully'
-  fail: 'Fail: {{ msg }}'
+  success: Successfully delete the parameter group
+  fail: 'Failed: {{ msg }}'
