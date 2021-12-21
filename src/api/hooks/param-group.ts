@@ -51,14 +51,14 @@ export function useQueryParamGroupList(
     ],
     () =>
       APIS.ParamGroup.paramGroupsGet(
+        spec,
+        dbVersion,
         dbType,
         creationType,
         isParamsIncluded,
         name,
         page,
-        pageSize,
-        spec,
-        dbVersion
+        pageSize
       ),
     options
   )
@@ -88,8 +88,11 @@ export function useCreateParamGroup() {
   return useMutation(createParamGroup)
 }
 
-const updateParamGroup = (payload: RequestParamGroupUpdate) =>
-  APIS.ParamGroup.paramGroupsParamGroupIdPut(payload)
+const updateParamGroup = ({
+  paramGroupId,
+  ...payload
+}: { paramGroupId: string } & RequestParamGroupUpdate) =>
+  APIS.ParamGroup.paramGroupsParamGroupIdPut(paramGroupId, payload)
 
 export function useUpdateParamGroup() {
   return useMutation(updateParamGroup)
@@ -98,7 +101,7 @@ export function useUpdateParamGroup() {
 const copyParamGroup = ({
   paramGroupId,
   ...payload
-}: { paramGroupId: number } & RequestParamGroupCopy) =>
+}: { paramGroupId: string } & RequestParamGroupCopy) =>
   APIS.ParamGroup.paramGroupsParamGroupIdCopyPost(paramGroupId, payload)
 
 export function useCopyParamGroup() {
@@ -115,7 +118,7 @@ export function useDeleteParamGroup() {
 const applyParamGroup = ({
   paramGroupId,
   ...payload
-}: { paramGroupId: number } & RequestParamGroupApply) =>
+}: { paramGroupId: string } & RequestParamGroupApply) =>
   APIS.ParamGroup.paramGroupsParamGroupIdApplyPost(paramGroupId, payload)
 
 export function useApplyParamGroup() {
