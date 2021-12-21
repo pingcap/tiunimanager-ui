@@ -14,6 +14,7 @@ import {
   ParamGroupItem,
   ParamGroupDBType,
   ParamGroupCreationType,
+  ParamGroupScope,
 } from '@/api/model'
 import ParamGroupCopyModal from '../CopyModal'
 import { useCopyModal } from '../CopyModal/helper'
@@ -33,9 +34,9 @@ function getColumns({
 }: {
   t: TFunction<''>
   searchHidden: boolean
-  deleteAction: (paramGroupId: number) => unknown
-  openCopyModal: (paramGroupId: number) => void
-  openApplyingModal: (paramGroupId: number) => void
+  deleteAction: (paramGroupId: string) => unknown
+  openCopyModal: (paramGroupId: string) => void
+  openApplyingModal: (paramGroupId: string) => void
 }): ProColumns<ParamGroupItem>[] {
   return [
     {
@@ -56,8 +57,12 @@ function getColumns({
       key: 'type',
       valueType: 'select',
       valueEnum: {
-        1: { text: t('model:paramGroup.type.system') },
-        2: { text: t('model:paramGroup.type.custom') },
+        [ParamGroupCreationType.system]: {
+          text: t('model:paramGroup.type.system'),
+        },
+        [ParamGroupCreationType.custom]: {
+          text: t('model:paramGroup.type.custom'),
+        },
       },
     },
     {
@@ -67,8 +72,12 @@ function getColumns({
       key: 'scope',
       valueType: 'select',
       valueEnum: {
-        1: { text: t('model:paramGroup.scope.cluster') },
-        2: { text: t('model:paramGroup.scope.instance') },
+        [ParamGroupScope.cluster]: {
+          text: t('model:paramGroup.scope.cluster'),
+        },
+        [ParamGroupScope.instance]: {
+          text: t('model:paramGroup.scope.instance'),
+        },
       },
       hideInSearch: searchHidden,
     },
@@ -79,14 +88,14 @@ function getColumns({
       key: 'dbType',
       valueType: 'select',
       valueEnum: {
-        1: { text: t('model:paramGroup.dbType.tidb') },
-        2: { text: t('model:paramGroup.dbType.dm') },
+        [ParamGroupDBType.tidb]: { text: t('model:paramGroup.dbType.tidb') },
+        [ParamGroupDBType.dm]: { text: t('model:paramGroup.dbType.dm') },
       },
     },
     {
       title: t('model:paramGroup.property.dbVersion'),
       width: 160,
-      dataIndex: 'version',
+      dataIndex: 'clusterVersion',
       key: 'dbVersion',
     },
     {
@@ -160,8 +169,8 @@ function useTableColumn({
   openCopyModal,
   openApplyingModal,
 }: {
-  openCopyModal: (paramGroupId: number) => void
-  openApplyingModal: (paramGroupId: number) => void
+  openCopyModal: (paramGroupId: string) => void
+  openApplyingModal: (paramGroupId: string) => void
 }) {
   const { t } = useI18n()
 
@@ -204,7 +213,10 @@ function useFetchParamGroupData() {
       dbVersion: filters.dbVersion,
       creationType: filters.type,
     },
-    { keepPreviousData: true }
+    {
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+    }
   )
 
   const result = data?.data as PagedResult | undefined

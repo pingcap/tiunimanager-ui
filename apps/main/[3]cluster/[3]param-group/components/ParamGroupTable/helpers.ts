@@ -1,12 +1,14 @@
 import { useState, useEffect, useCallback } from 'react'
 import { message } from 'antd'
 import { useQueryClient } from 'react-query'
-import { useI18n } from '@i18n-macro'
+import { loadI18n, useI18n } from '@i18n-macro'
 import {
   useDeleteParamGroup,
   invalidateParamGroupList,
 } from '@/api/hooks/param-group'
 import { errToMsg } from '@/utils/error'
+
+loadI18n()
 
 /**
  * tricky!
@@ -36,12 +38,10 @@ export function useDeleteParamGroupAction() {
   const deleteParamGroup = useDeleteParamGroup()
 
   const deleteAction = useCallback(
-    (paramGroupId) =>
+    (paramGroupId: string) =>
       deleteParamGroup.mutateAsync(paramGroupId, {
-        onSuccess(data) {
-          message
-            .success(t('delete.success', { msg: data.data.data?.paramGroupId }))
-            .then()
+        onSuccess() {
+          message.success(t('delete.success')).then()
         },
         onSettled() {
           return Promise.allSettled([invalidateParamGroupList(queryClient)])
