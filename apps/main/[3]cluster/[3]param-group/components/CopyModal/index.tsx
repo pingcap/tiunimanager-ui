@@ -35,15 +35,13 @@ const ParamGroupCopyModal: React.FC<ParamGroupCopyModalProps> = ({
 
   const onError = useCallback(
     (msg?: string) => {
-      if (msg) {
-        message
-          .error(
-            t('message.fail', {
-              msg,
-            })
-          )
-          .then()
-      }
+      message
+        .error(
+          t('message.fail', {
+            msg,
+          })
+        )
+        .then()
 
       setConfirmLoading(false)
     },
@@ -64,7 +62,7 @@ const ParamGroupCopyModal: React.FC<ParamGroupCopyModalProps> = ({
       // error
       setConfirmLoading(false)
     }
-  }, [form, onSuccess, onError])
+  }, [form, onSuccess, onError, onConfirm])
 
   useEffect(() => {
     if (visible) {
