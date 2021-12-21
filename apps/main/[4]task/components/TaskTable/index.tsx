@@ -1,6 +1,6 @@
 import { ProColumns } from '@ant-design/pro-table'
 import { useMemo, useState } from 'react'
-import { PagedResult, TaskWorkflowInfo } from '@/api/model'
+import { PagedResult, TaskWorkflowInfo, TaskWorkflowStatus } from '@/api/model'
 import HeavyTable from '@/components/HeavyTable'
 import styles from './index.module.less'
 import { TFunction, useTranslation } from 'react-i18next'
@@ -24,7 +24,7 @@ export default function TaskTable() {
   return (
     <HeavyTable
       loading={isLoading}
-      dataSource={data?.data.data || []}
+      dataSource={data?.data.data?.workFlows || []}
       className={styles.taskTable}
       headerTitle={null}
       onSubmit={(filters: any) => {
@@ -56,7 +56,7 @@ export default function TaskTable() {
       expandable={{
         expandedRowRender: (record) => <TaskSteps id={record.id!} />,
         expandRowByClick: true,
-        rowExpandable: (record) => typeof record.id === 'number',
+        rowExpandable: (record) => !!record.id,
       }}
     />
   )
@@ -66,12 +66,12 @@ function useFetchTaskData() {
   const [pagination, setPagination] = usePagination()
   const [filters, setFilter] = useState<{
     keyword?: string
-    clusterId?: string
-    status?: number
+    bizId?: string
+    status?: TaskWorkflowStatus
   }>({
     keyword: undefined,
-    clusterId: undefined,
-    status: -1,
+    bizId: undefined,
+    status: undefined,
   })
   const { data, isLoading, isPreviousData, refetch } = useQueryTasks(
     {
