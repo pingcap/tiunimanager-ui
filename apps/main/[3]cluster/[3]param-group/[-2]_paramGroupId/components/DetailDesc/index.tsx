@@ -50,7 +50,11 @@ const DetailDesc: FC<DetailDesc> = ({ data }) => {
   const { t } = useI18n()
 
   return (
-    <Descriptions className={styles.detailDesc} title={t('desc.title')}>
+    <Descriptions
+      className={styles.detailDesc}
+      title={t('desc.title')}
+      column={2}
+    >
       <Descriptions.Item label={t('model:paramGroup.property.name')}>
         {data.name}
       </Descriptions.Item>
@@ -60,11 +64,14 @@ const DetailDesc: FC<DetailDesc> = ({ data }) => {
       <Descriptions.Item label={t('model:paramGroup.property.scope')}>
         {getScopeLabel(t, data.groupType!)}
       </Descriptions.Item>
+      <Descriptions.Item label={t('model:paramGroup.property.clusterSpec')}>
+        {data.clusterSpec}
+      </Descriptions.Item>
       <Descriptions.Item label={t('model:paramGroup.property.dbType')}>
         {getDBTypeLabel(t, data.dbType!)}
       </Descriptions.Item>
       <Descriptions.Item label={t('model:paramGroup.property.dbVersion')}>
-        {data.version}
+        {data.clusterVersion}
       </Descriptions.Item>
       <Descriptions.Item label={t('model:paramGroup.property.desc')}>
         {data.note}
