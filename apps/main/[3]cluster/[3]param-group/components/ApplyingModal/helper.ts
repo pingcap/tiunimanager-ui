@@ -3,7 +3,6 @@ import { useQueryClient } from 'react-query'
 import { useApplyParamGroup } from '@/api/hooks/param-group'
 import { errToMsg } from '@/utils/error'
 import type { ParamGroupItem } from '@/api/model'
-import { isNumber } from '@/utils/types'
 
 /**
  * Mutation result callbacks
@@ -30,16 +29,16 @@ export function useApplyingModal(dataSource?: ParamGroupItem[]) {
   // Modal visible status
   const [visible, setVisible] = useState(false)
 
-  const [paramGroupId, setParamGroupId] = useState<number>()
+  const [paramGroupId, setParamGroupId] = useState<string>()
 
   // data source for modal
   const applyingData = useMemo(() => {
-    return dataSource && isNumber(paramGroupId)
+    return dataSource && paramGroupId
       ? dataSource.filter((item) => item.paramGroupId === paramGroupId)[0] ?? {}
       : {}
   }, [dataSource, paramGroupId])
 
-  const onOpen = useCallback((paramGroupId: number) => {
+  const onOpen = useCallback((paramGroupId: string) => {
     setParamGroupId(paramGroupId)
     setVisible(true)
   }, [])
@@ -58,7 +57,7 @@ export function useApplyingModal(dataSource?: ParamGroupItem[]) {
         {
           paramGroupId: paramGroupId!,
           clusterId: payload.cluster,
-          needReboot: payload.reboot,
+          reboot: payload.reboot,
         },
         {
           onSuccess(response) {

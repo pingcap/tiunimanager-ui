@@ -44,15 +44,13 @@ const ParamGroupApplyingModal: FC<ParamGroupApplyingModalProps> = ({
 
   const onError = useCallback(
     (msg?: string) => {
-      if (msg) {
-        message
-          .error(
-            t('message.fail', {
-              msg,
-            })
-          )
-          .then()
-      }
+      message
+        .error(
+          t('message.fail', {
+            msg,
+          })
+        )
+        .then()
 
       setConfirmLoading(false)
     },
@@ -62,7 +60,7 @@ const ParamGroupApplyingModal: FC<ParamGroupApplyingModalProps> = ({
   const { data: clusterList, isLoading: clusterLoading } =
     useFetchAvalibleClusterList({
       dbType: dataSource.dbType,
-      dbVersion: dataSource.version,
+      dbVersion: dataSource.clusterVersion,
     })
 
   const onOk = useCallback(async () => {
@@ -79,7 +77,7 @@ const ParamGroupApplyingModal: FC<ParamGroupApplyingModalProps> = ({
       // error
       setConfirmLoading(false)
     }
-  }, [form, onSuccess, onError])
+  }, [form, onSuccess, onError, onConfirm])
 
   useEffect(() => {
     if (visible) {
