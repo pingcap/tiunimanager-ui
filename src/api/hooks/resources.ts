@@ -4,24 +4,36 @@ import { HardwareArch, ResourceUnitType } from '@/api/model'
 
 export const CACHE_HOSTS_LIST_KEY = 'resources-hosts-list'
 export const CACHE_HOST_DETAIL_KEY = 'resources-host-detail'
-export const CACHE_FAILURE_DOMAIN_KEY = 'resources-failure-domains'
 export const CACHE_HIERARCHY_KEY = 'resources-hierarchy'
 
 export function useQueryHostsList(
   query: {
+    arch?: string
+    hostId?: string
     page?: number
     pageSize?: number
     purpose?: string
-    status?: number
-    loadStat?: number
+    status?: string
+    loadStat?: string
   },
   options?: PartialUseQueryOptions
 ) {
-  const { page, pageSize, purpose, status, loadStat } = query
+  const { arch, hostId, page, pageSize, purpose, status, loadStat } = query
   return useQuery(
-    [CACHE_HOSTS_LIST_KEY, status, loadStat, purpose, page, pageSize],
+    [
+      CACHE_HOSTS_LIST_KEY,
+      arch,
+      hostId,
+      status,
+      loadStat,
+      purpose,
+      page,
+      pageSize,
+    ],
     () =>
       APIS.Resources.resourcesHostsGet(
+        arch,
+        hostId,
         loadStat,
         page,
         pageSize,
@@ -36,20 +48,6 @@ export async function invalidateHostsList(client: QueryClient) {
   await client.invalidateQueries(CACHE_HOSTS_LIST_KEY)
 }
 
-export function useQueryHostDetail(
-  query: {
-    hostId: string
-  },
-  options?: PartialUseQueryOptions
-) {
-  const { hostId } = query
-  return useQuery(
-    [CACHE_HOST_DETAIL_KEY, hostId],
-    () => APIS.Resources.resourcesHostsHostIdGet(hostId),
-    options
-  )
-}
-
 export async function invalidateHostDetail(
   client: QueryClient,
   hostId: string
@@ -57,28 +55,12 @@ export async function invalidateHostDetail(
   await client.invalidateQueries([CACHE_HOST_DETAIL_KEY, hostId])
 }
 
-export function useQueryFailureDomains(
-  query: {
-    type?: 1 | 2 | 3
-  },
-  options?: PartialUseQueryOptions
-) {
-  const { type } = query
-  return useQuery(
-    [CACHE_FAILURE_DOMAIN_KEY, type],
-    () => APIS.Resources.resourcesFailuredomainsGet(type),
-    options
-  )
-}
-
-export async function invalidateFailureDomains(client: QueryClient) {
-  await client.invalidateQueries(CACHE_FAILURE_DOMAIN_KEY)
-}
-
 const deleteHosts = (payload: { hostsId: string | string[] }) => {
-  return Array.isArray(payload.hostsId)
-    ? APIS.Resources.resourcesHostsDelete(payload.hostsId)
-    : APIS.Resources.resourcesHostsHostIdDelete(payload.hostsId)
+  return APIS.Resources.resourcesHostsDelete({
+    hostIds: Array.isArray(payload.hostsId)
+      ? payload.hostsId
+      : [payload.hostsId],
+  })
 }
 
 export function useDeleteHosts() {

@@ -1,12 +1,13 @@
 import { Badge, Descriptions } from 'antd'
 import { CopyIconButton } from '@/components/CopyToClipboard'
 import { formatTimeString } from '@/utils/time'
-import { ResponseClusterDetail } from '@/api/model'
+import { ClusterInfo, ClusterOperationStatus, ClusterStatus } from '@/api/model'
 import styles from './index.module.less'
 import { TFunction, useTranslation } from 'react-i18next'
+import { getKeyByValue } from '@/utils/obj'
 
 export type DescProps = {
-  cluster: ResponseClusterDetail
+  cluster: ClusterInfo
 }
 
 export function Desc({ cluster }: DescProps) {
@@ -51,51 +52,56 @@ export function Desc({ cluster }: DescProps) {
           </span>
         ))}
       </Descriptions.Item>
-      <Descriptions.Item label={t('cluster.property.status')}>
-        {getStatus(t, cluster.statusCode!)}
-      </Descriptions.Item>
       <Descriptions.Item label={t('cluster.property.createTime')}>
         {formatTimeString(cluster.createTime!)}
       </Descriptions.Item>
-      {/*Note: do not display updateTime/deleteTime now*/}
-      {/*{cluster.updateTime && (*/}
-      {/*  <Descriptions.Item label={t('label.updateTime')}>*/}
-      {/*    {formatTimeString(cluster.updateTime!)}*/}
-      {/*  </Descriptions.Item>*/}
-      {/*)}*/}
-      {/*{cluster.deleteTime && (*/}
-      {/*  <Descriptions.Item label={t('label.deleteTime')}>*/}
-      {/*    {formatTimeString(cluster.deleteTime!)}*/}
-      {/*  </Descriptions.Item>*/}
-      {/*)}*/}
+      <Descriptions.Item label={t('cluster.property.status')}>
+        {getStatus(t, cluster.status! as ClusterStatus)}
+      </Descriptions.Item>
+      <Descriptions.Item label={t('cluster.property.operationStatus')}>
+        {getOperationStatus(
+          t,
+          cluster.maintainStatus! as ClusterOperationStatus
+        )}
+      </Descriptions.Item>
     </Descriptions>
   )
 }
 
-function getStatus(t: TFunction<'model'>, statusCode: string) {
-  switch (statusCode) {
-    case '0':
-      return t('cluster.status.idle')
-    case '1':
-      return t('cluster.status.online')
-    case '2':
-      return t('cluster.status.offline')
-    case '3':
-      return t('cluster.status.deleted')
-    case 'CreateCluster':
-      return t('cluster.status.CreateCluster')
-    case 'DeleteCluster':
-      return t('cluster.status.DeleteCluster')
-    case 'BackupCluster':
-      return t('cluster.status.BackupCluster')
-    case 'RecoverCluster':
-      return t('cluster.status.RecoverCluster')
-    case 'ModifyParameters':
-      return t('cluster.status.ModifyParameters')
-    case 'ExportData':
-      return t('cluster.status.ExportData')
-    case 'ImportData':
-      return t('cluster.status.ImportData')
+function getStatus(t: TFunction<'model'>, status: ClusterStatus) {
+  switch (status) {
+    case ClusterStatus.initializing:
+      return (
+        <Badge status="default" text={t('model:cluster.status.initializing')} />
+      )
+    case ClusterStatus.running:
+      return <Badge status="success" text={t('model:cluster.status.running')} />
+    case ClusterStatus.recovering:
+      return (
+        <Badge status="warning" text={t('model:cluster.status.recovering')} />
+      )
+    case ClusterStatus.stopped:
+      return <Badge status="default" text={t('model:cluster.status.stopped')} />
+    case ClusterStatus.failure:
+      return <Badge status="error" text={t('model:cluster.status.failure')} />
   }
   return 'unknown'
+}
+
+function getOperationStatus(
+  t: TFunction<'model'>,
+  status: ClusterOperationStatus
+) {
+  if (!status) return '-'
+  return (
+    <Badge
+      status="processing"
+      text={t(
+        `model:cluster.operationStatus.${getKeyByValue(
+          ClusterOperationStatus,
+          status
+        )}`
+      )}
+    />
+  )
 }

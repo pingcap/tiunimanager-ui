@@ -40,7 +40,7 @@
             "in": "query"
           },
           {
-            "type": "string",
+            "type": "integer",
             "name": "endTime",
             "in": "query"
           },
@@ -57,7 +57,7 @@
             "in": "query"
           },
           {
-            "type": "string",
+            "type": "integer",
             "name": "startTime",
             "in": "query"
           }
@@ -1641,11 +1641,6 @@
         "summary": "query parameters of a cluster",
         "parameters": [
           {
-            "type": "string",
-            "name": "clusterId",
-            "in": "query"
-          },
-          {
             "type": "integer",
             "description": "Current page location",
             "name": "page",
@@ -2373,11 +2368,6 @@
             "name": "clusterId",
             "in": "path",
             "required": true
-          },
-          {
-            "type": "string",
-            "name": "clusterId",
-            "in": "query"
           },
           {
             "type": "string",
@@ -3930,9 +3920,6 @@
     "cluster.DeleteBackupDataReq": {
       "type": "object",
       "properties": {
-        "backupId": {
-          "type": "string"
-        },
         "backupMode": {
           "type": "string"
         },
@@ -3966,9 +3953,6 @@
         },
         "clearBackupData": {
           "type": "boolean"
-        },
-        "clusterID": {
-          "type": "string"
         }
       }
     },
@@ -4472,9 +4456,6 @@
     "cluster.SaveBackupStrategyReq": {
       "type": "object",
       "properties": {
-        "clusterId": {
-          "type": "string"
-        },
         "strategy": {
           "$ref": "#/definitions/structs.BackupStrategy"
         }
@@ -4486,9 +4467,6 @@
     "cluster.ScaleInClusterReq": {
       "type": "object",
       "properties": {
-        "clusterId": {
-          "type": "string"
-        },
         "instanceId": {
           "type": "string"
         }
@@ -4509,9 +4487,6 @@
     "cluster.ScaleOutClusterReq": {
       "type": "object",
       "properties": {
-        "clusterId": {
-          "type": "string"
-        },
         "instanceResource": {
           "type": "array",
           "items": {
@@ -4698,9 +4673,6 @@
     "cluster.UpdateClusterParametersReq": {
       "type": "object",
       "properties": {
-        "clusterId": {
-          "type": "string"
-        },
         "params": {
           "type": "array",
           "items": {
@@ -5033,10 +5005,6 @@
           "type": "string",
           "example": "123"
         },
-        "paramGroupId": {
-          "type": "string",
-          "example": "123"
-        },
         "reboot": {
           "type": "boolean"
         }
@@ -5069,9 +5037,6 @@
         "note": {
           "type": "string",
           "example": "copy param group"
-        },
-        "paramGroupId": {
-          "type": "string"
         }
       }
     },
@@ -5253,12 +5218,7 @@
       "type": "object"
     },
     "message.DeleteImportExportRecordReq": {
-      "type": "object",
-      "properties": {
-        "recordId": {
-          "type": "string"
-        }
-      }
+      "type": "object"
     },
     "message.DeleteImportExportRecordResp": {
       "type": "object",
@@ -5518,9 +5478,6 @@
           "type": "string",
           "example": "default param group"
         },
-        "paramGroupId": {
-          "type": "string"
-        },
         "params": {
           "type": "array",
           "items": {
@@ -5671,12 +5628,6 @@
         "memoryUsage": {
           "$ref": "#/definitions/structs.Usage"
         },
-        "portList": {
-          "type": "array",
-          "items": {
-            "type": "integer"
-          }
-        },
         "role": {
           "type": "string"
         },
@@ -5742,7 +5693,7 @@
         "ports": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "integer"
           }
         },
         "role": {
@@ -6354,7 +6305,7 @@
     "structs.WorkFlowInfo": {
       "type": "object",
       "properties": {
-        "BizId": {
+        "bizId": {
           "type": "string"
         },
         "createTime": {
@@ -6363,10 +6314,10 @@
         "deleteTime": {
           "type": "string"
         },
-        "flowWorkName": {
+        "id": {
           "type": "string"
         },
-        "id": {
+        "name": {
           "type": "string"
         },
         "status": {

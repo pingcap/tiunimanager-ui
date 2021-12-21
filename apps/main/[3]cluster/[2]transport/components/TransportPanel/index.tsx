@@ -631,7 +631,7 @@ function ClusterSelector({ value, onChange }: ClusterSelectorProps) {
   const options =
     isLoading || !data
       ? []
-      : data.data.data?.map((d) => (
+      : data.data.data?.clusters?.map((d) => (
           <Select.Option key={d.clusterId!} value={d.clusterId!}>
             {d.clusterName} ({d.clusterId})
           </Select.Option>

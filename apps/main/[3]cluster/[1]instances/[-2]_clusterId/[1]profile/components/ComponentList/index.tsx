@@ -1,5 +1,5 @@
-import { Space, Table } from 'antd'
-import { ResponseClusterDetail, ClusterComponentNodeInfo } from '@/api/model'
+import { Badge, Space, Table } from 'antd'
+import { ClusterComponentNodeInfo, ClusterNodeStatus } from '@/api/model'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction } from 'react-i18next'
 import styles from './index.module.less'
@@ -9,25 +9,37 @@ import { ColumnsType } from 'antd/es/table'
 loadI18n()
 
 export type ComponentListProps = {
-  cluster: ResponseClusterDetail
+  nodes: ClusterComponentNodeInfo[]
 }
 
-export function ComponentList({ cluster }: ComponentListProps) {
+export function ComponentList({ nodes }: ComponentListProps) {
   const { t, i18n } = useI18n()
-  return useMemo(
-    () => (
+  return useMemo(() => {
+    const groups = groupNodesByType(nodes)
+    return (
       <Space direction="vertical" className={styles.components}>
-        {cluster.components?.map((component) => (
+        {groups.map((component) => (
           <NodeTable
-            key={component.componentType}
-            title={t('list.title', { name: component.componentName })}
+            key={component.type}
+            title={t('list.title', { name: component.type })}
             nodes={component.nodes}
           />
         ))}
       </Space>
-    ),
-    [cluster, i18n.language]
-  )
+    )
+  }, [nodes, i18n.language])
+}
+
+function groupNodesByType(nodes: ClusterComponentNodeInfo[]) {
+  const result: Record<string, ClusterComponentNodeInfo[]> = Object.create(null)
+  nodes.forEach((node) => {
+    const arr = result[node.type!] || (result[node.type!] = [])
+    arr.push(node)
+  })
+  return Object.keys(result).map((key) => ({
+    type: key,
+    nodes: result[key],
+  }))
 }
 
 type NodeTableProps = {
@@ -44,7 +56,7 @@ function NodeTable({ nodes = [], title }: NodeTableProps) {
       className={styles.clusterTable}
       dataSource={nodes}
       columns={columns}
-      rowKey="nodeId"
+      rowKey="id"
       pagination={false}
       bordered={true}
     />
@@ -68,26 +80,50 @@ function getColumns(t: TFunction<''>): ColumnsType<ClusterComponentNodeInfo> {
     {
       title: t('model:clusterNode.property.hostIp'),
       width: 140,
-      dataIndex: 'HostIp',
-      key: 'hostIp',
+      key: 'addresses',
+      render: (_, record) => record.addresses?.join(', '),
     },
-    // {
-    //   title: t('columns.zone'),
-    //   width: 120,
-    //   dataIndex: ['zone', 'zoneName'],
-    //   key: 'zone',
-    // },
-    // {
-    //   title: t('columns.spec'),
-    //   width: 100,
-    //   dataIndex: ['spec', 'specName'],
-    //   key: 'spec',
-    // },
     {
       title: t('model:clusterNode.property.status'),
       width: 80,
       dataIndex: 'status',
       key: 'status',
+      render: (_, record) => {
+        switch (record.status as ClusterNodeStatus) {
+          case ClusterNodeStatus.initializing:
+            return (
+              <Badge
+                status="default"
+                text={t('model:cluster.status.initializing')}
+              />
+            )
+          case ClusterNodeStatus.running:
+            return (
+              <Badge
+                status="success"
+                text={t('model:cluster.status.running')}
+              />
+            )
+          case ClusterNodeStatus.stopped:
+            return (
+              <Badge
+                status="default"
+                text={t('model:cluster.status.stopped')}
+              />
+            )
+          case ClusterNodeStatus.recovering:
+            return (
+              <Badge
+                status="warning"
+                text={t('model:cluster.status.recovering')}
+              />
+            )
+          case ClusterNodeStatus.failure:
+            return (
+              <Badge status="error" text={t('model:cluster.status.failure')} />
+            )
+        }
+      },
     },
     {
       title: t('model:clusterNode.property.version'),
@@ -98,51 +134,8 @@ function getColumns(t: TFunction<''>): ColumnsType<ClusterComponentNodeInfo> {
     {
       title: t('model:clusterNode.property.port'),
       width: 80,
-      dataIndex: 'port',
-      key: 'port',
+      key: 'ports',
+      render: (_, record) => record.ports?.join(', '),
     },
-    // TODO: wait for the features beblow implement
-    // {
-    //   title: t('model:clusterNode.property.iops'),
-    //   width: 80,
-    //   key: 'iops',
-    //   render: (_, record) =>
-    //     record.iops && `${record.iops[0]} / ${record.iops[1]}`,
-    // },
-    // {
-    //   title: t('model:clusterNode.property.ioutil'),
-    //   width: 80,
-    //   dataIndex: 'ioUtil',
-    //   key: 'ioUtil',
-    // },
-    // {
-    //   title: t('model:clusterNode.property.usage'),
-    //   key: 'usage',
-    //   width: 180,
-    //   render(dom, record) {
-    //     return (
-    //       <span className={styles.usageCircleContainer}>
-    //         {record.memoryUsage && (
-    //           <SmallUsageCircle
-    //             total={record.memoryUsage.total!}
-    //             usageRate={record.memoryUsage.usageRate!}
-    //             used={record.memoryUsage.used!}
-    //             name={t('usage.mem')}
-    //             unit="MB"
-    //           />
-    //         )}
-    //         {record.storageUsage && (
-    //           <SmallUsageCircle
-    //             total={record.storageUsage.total!}
-    //             usageRate={record.storageUsage.usageRate!}
-    //             used={record.storageUsage.used!}
-    //             name={t('usage.storage')}
-    //             unit="MB"
-    //           />
-    //         )}
-    //       </span>
-    //     )
-    //   },
-    // },
   ]
 }

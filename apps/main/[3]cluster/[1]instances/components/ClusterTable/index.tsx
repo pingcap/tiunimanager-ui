@@ -2,7 +2,13 @@ import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import { Fragment, useMemo, useState, useCallback } from 'react'
 import styles from './index.module.less'
 import HeavyTable from '@/components/HeavyTable'
-import { ClusterInfo, KnowledgeOfClusterType, PagedResult } from '@/api/model'
+import {
+  ClusterInfo,
+  ClusterOperationStatus,
+  ClusterStatus,
+  KnowledgeOfClusterType,
+  PagedResult,
+} from '@/api/model'
 import { CopyIconButton } from '@/components/CopyToClipboard'
 import { Link } from 'react-router-dom'
 import { resolveRoute } from '@pages-macro'
@@ -23,6 +29,7 @@ import { Button, message } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { useQueryClient } from 'react-query'
 import { errToMsg } from '@/utils/error'
+import { mapObj } from '@/utils/obj'
 
 loadI18n()
 
@@ -46,7 +53,7 @@ export default function ClusterTable() {
       headerTitle={null}
       loading={isLoading}
       className={styles.clusterTable}
-      dataSource={data?.data?.data || []}
+      dataSource={data?.data?.data?.clusters || []}
       onSubmit={(filters) => {
         setFilter(filters as any)
       }}
@@ -128,7 +135,7 @@ function useTableColumn() {
             message
               .success(
                 t(`${bootType}.success`, {
-                  msg: data.data.data?.inProcessFlowId,
+                  msg: data.data.data?.workFlowId,
                 }),
                 5
               )
@@ -163,7 +170,7 @@ function useTableColumn() {
             message
               .success(
                 t('stop.success', {
-                  msg: data.data.data?.inProcessFlowId,
+                  msg: data.data.data?.workFlowId,
                 }),
                 5
               )
@@ -260,48 +267,40 @@ function getColumns(
     {
       title: t('model:cluster.property.status'),
       width: 100,
-      dataIndex: 'statusCode',
+      dataIndex: 'status',
       key: 'status',
       valueType: 'select',
       valueEnum: {
-        '0': { text: t('model:cluster.status.idle'), status: 'Default' },
-        '1': { text: t('model:cluster.status.online'), status: 'Success' },
-        '2': { text: t('model:cluster.status.offline'), status: 'Warning' },
-        '3': { text: t('model:cluster.status.deleted'), status: 'Error' },
-        '4': {
-          text: t('model:cluster.status.Restarting'),
-          status: 'Processing',
+        Initializing: {
+          text: t('model:cluster.status.initializing'),
+          status: 'Default',
         },
-        '5': { text: t('model:cluster.status.Stopping'), status: 'Processing' },
-        CreateCluster: {
-          text: t('model:cluster.status.CreateCluster'),
-          status: 'Processing',
+        Stopped: { text: t('model:cluster.status.stopped'), status: 'Default' },
+        Running: { text: t('model:cluster.status.running'), status: 'Success' },
+        Recovering: {
+          text: t('model:cluster.status.recovering'),
+          status: 'Warning',
         },
-        DeleteCluster: {
-          text: t('model:cluster.status.DeleteCluster'),
-          status: 'Processing',
-        },
-        BackupCluster: {
-          text: t('model:cluster.status.BackupCluster'),
-          status: 'Processing',
-        },
-        RecoverCluster: {
-          text: t('model:cluster.status.RecoverCluster'),
-          status: 'Processing',
-        },
-        ModifyParameters: {
-          text: t('model:cluster.status.ModifyParameters'),
-          status: 'Processing',
-        },
-        ExportData: {
-          text: t('model:cluster.status.ExportData'),
-          status: 'Processing',
-        },
-        ImportData: {
-          text: t('model:cluster.status.ImportData'),
-          status: 'Processing',
+        Failure: {
+          text: t('model:cluster.status.failure'),
+          status: 'Error',
         },
       },
+    },
+    {
+      title: t('model:cluster.property.operationStatus'),
+      width: 100,
+      dataIndex: 'maintainStatus',
+      key: 'operationStatus',
+      valueType: 'select',
+      valueEnum: mapObj(ClusterOperationStatus, (fullName, k) => ({
+        key: fullName,
+        value: {
+          text: t(`model:cluster.operationStatus.${k}`),
+          status: 'Processing',
+        },
+      })),
+      hideInSearch: true,
     },
     {
       title: t('model:cluster.property.address'),
@@ -321,25 +320,6 @@ function getColumns(
               </span>
             ))}
           </span>
-        )
-      },
-    },
-    {
-      title: t('model:cluster.property.password'),
-      width: 60,
-      dataIndex: 'dbPassword',
-      key: 'password',
-      hideInSearch: true,
-      render(_, record) {
-        return record.dbPassword ? (
-          <span>
-            <CopyIconButton
-              text={record.dbPassword}
-              label={t('model:cluster.property.password')}
-            />
-          </span>
-        ) : (
-          ''
         )
       },
     },
@@ -460,9 +440,11 @@ function getColumns(
       key: 'actions',
       valueType: 'option',
       render(_, record) {
-        const { statusCode = '' } = record
-        const bootEnabled = statusCode === '2'
-        const rebootDisabled = ['0', '1'].indexOf(statusCode) === -1
+        const { status } = record
+        const bootEnabled = status === ClusterStatus.stopped
+        const rebootDisabled =
+          status === ClusterStatus.initializing ||
+          status === ClusterStatus.recovering
         const stopDisabled = rebootDisabled
 
         return [

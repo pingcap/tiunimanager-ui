@@ -1,6 +1,6 @@
 import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import { useCallback, useMemo, useState } from 'react'
-import { PagedResult, TransportRecord } from '@/api/model'
+import { PagedResult, TransportRecord, TransportStatus } from '@/api/model'
 import HeavyTable from '@/components/HeavyTable'
 import styles from './index.module.less'
 import { TFunction } from 'react-i18next'
@@ -143,7 +143,7 @@ const defaultColumnsSetting: Record<string, ColumnsState> = {
 
 function getColumns(
   t: TFunction<''>,
-  deleteAction: (recordId: number, clusterId: string) => unknown
+  deleteAction: (recordId: string, clusterId: string) => unknown
 ): ProColumns<TransportRecord>[] {
   return [
     {
@@ -180,15 +180,26 @@ function getColumns(
     {
       title: t('model:transport.property.status'),
       width: 80,
-      dataIndex: ['status', 'statusCode'],
+      dataIndex: 'status',
       key: 'status',
       valueType: 'select',
-      // transport.status === task.status
       valueEnum: {
-        '0': { text: t('model:task.status.init'), status: 'Default' },
-        '1': { text: t('model:task.status.processing'), status: 'Processing' },
-        '2': { text: t('model:task.status.finished'), status: 'Success' },
-        '3': { text: t('model:task.status.error'), status: 'Error' },
+        Initializing: {
+          text: t('model:transport.status.initializing'),
+          status: 'Default',
+        },
+        Processing: {
+          text: t('model:transport.status.processing'),
+          status: 'Processing',
+        },
+        Finished: {
+          text: t('model:transport.status.success'),
+          status: 'Success',
+        },
+        Failed: {
+          text: t('model:transport.status.failed'),
+          status: 'Error',
+        },
       },
       hideInSearch: true,
     },
@@ -235,7 +246,8 @@ function getColumns(
       width: 100,
       render: (_, record) => {
         const isError =
-          record.status === undefined || record.status.statusCode === '3'
+          record.status === undefined ||
+          record.status === TransportStatus.failed
         return [
           record.storageType !== 'nfs' ||
           record.transportType !== 'export' ||
