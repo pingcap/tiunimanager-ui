@@ -3,38 +3,40 @@ import { Steps, Card, Spin } from 'antd'
 import type { StepProps } from 'antd'
 import moment from 'moment'
 import { formatTimeString } from '@/utils/time'
-import { TaskWorkflowSubTaskInfo } from '@/api/model'
+import { TaskWorkflowSubTaskInfo, TaskWorkflowSubTaskStatus } from '@/api/model'
 import { useQueryTaskDetail } from '@/api/hooks/task'
 import styles from './index.module.less'
 import { loadI18n, useI18n } from '@i18n-macro'
+import { isArray } from '@/utils/types'
 
 loadI18n()
 
 const { Step } = Steps
 
-const useFetchTaskDetailData = (id: number) => {
-  const { data, isLoading, isPreviousData } = useQueryTaskDetail(
+const useFetchTaskDetailData = (id: string) => {
+  const { data, isLoading } = useQueryTaskDetail(
     {
       id,
     },
     {
-      keepPreviousData: true,
       refetchOnWindowFocus: false,
     }
   )
+  const result = data?.data.data
 
   return {
-    data: data?.data.data || {},
-    isPreviousData,
+    steps: result?.nodes,
+    allStepNames: result?.nodeNames,
     isLoading,
   }
 }
 
-const stepStatusMap: Record<number, StepProps['status']> = {
-  0: 'wait',
-  1: 'process',
-  2: 'finish',
-  3: 'error',
+const stepStatusMap: Record<TaskWorkflowSubTaskStatus, StepProps['status']> = {
+  [TaskWorkflowSubTaskStatus.Initializing]: 'wait',
+  [TaskWorkflowSubTaskStatus.Processing]: 'process',
+  [TaskWorkflowSubTaskStatus.Finished]: 'finish',
+  [TaskWorkflowSubTaskStatus.Error]: 'error',
+  [TaskWorkflowSubTaskStatus.Canceled]: 'wait',
 }
 
 const useActiveStep = (stepLen: number) => {
@@ -58,12 +60,12 @@ type StepMap = Record<string, TaskWorkflowSubTaskInfo>
 
 const getExcutedStepData = (steps: TaskWorkflowSubTaskInfo[]) => {
   const excutedSteps = steps.filter(
-    (step) => ['end', 'fail'].indexOf(step.taskName!) === -1
+    (step) => ['end', 'fail'].indexOf(step.name!) === -1
   )
-  const excutedStepMap: StepMap = excutedSteps.reduce((prev, step) => {
+  const excutedStepMap: StepMap = excutedSteps?.reduce((prev, step) => {
     return {
       ...prev,
-      [step.taskName!]: step,
+      [step.name!]: step,
     }
   }, {} as StepMap)
 
@@ -74,21 +76,28 @@ const getExcutedStepData = (steps: TaskWorkflowSubTaskInfo[]) => {
 }
 
 interface TaskStepsProps {
-  id: number
+  id: string
 }
 
 const TaskSteps: FC<TaskStepsProps> = ({ id }) => {
   const { t, i18n } = useI18n()
-  const { data, isLoading } = useFetchTaskDetailData(id)
+  const { steps, allStepNames, isLoading } = useFetchTaskDetailData(id)
 
-  const { excutedSteps, excutedStepMap } = getExcutedStepData(data.tasks || [])
+  const { excutedSteps, excutedStepMap } = useMemo(() => {
+    if (!isArray(steps)) {
+      return {
+        excutedSteps: [],
+        excutedStepMap: {},
+      }
+    }
+
+    return getExcutedStepData(steps)
+  }, [steps])
 
   const { activeIndex, onStepChange } = useActiveStep(excutedSteps.length)
 
-  const { taskName: allStepNames = [] } = data
-
   const stepResult = useMemo(() => {
-    const stepName = allStepNames[activeIndex]
+    const stepName = allStepNames?.[activeIndex] || ''
     const { result } = excutedStepMap[stepName] || {}
 
     return {
@@ -113,14 +122,14 @@ const TaskSteps: FC<TaskStepsProps> = ({ id }) => {
         onChange={onStepChange}
         direction="vertical"
       >
-        {allStepNames.map((stepName, stepIndex) => {
+        {allStepNames?.map((stepName, stepIndex) => {
           const {
             startTime,
             endTime,
-            taskName,
-            taskStatus = 0,
+            name,
+            status = TaskWorkflowSubTaskStatus.Initializing,
           } = excutedStepMap[stepName] || {}
-          const disabled = !taskName
+          const disabled = !name
 
           if (disabled) {
             return (
@@ -128,7 +137,7 @@ const TaskSteps: FC<TaskStepsProps> = ({ id }) => {
                 key={stepName}
                 title={stepName}
                 disabled={disabled}
-                status={stepStatusMap[0]}
+                status={stepStatusMap[TaskWorkflowSubTaskStatus.Initializing]}
                 description={t('description.unexecuted')}
               />
             )
@@ -147,7 +156,7 @@ const TaskSteps: FC<TaskStepsProps> = ({ id }) => {
           return (
             <Step
               key={stepName}
-              status={stepStatusMap[taskStatus]}
+              status={stepStatusMap[status]}
               title={isActive ? <strong>{stepName}</strong> : stepName}
               description={desc}
               disabled={disabled}
