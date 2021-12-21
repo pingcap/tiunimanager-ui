@@ -4,16 +4,18 @@ import { loadI18n, useI18n } from '@i18n-macro'
 import { Card, Form, FormInstance } from 'antd'
 import { ActionType, ProColumns } from '@ant-design/pro-table'
 import HeavyTable from '@/components/HeavyTable'
-import { ParamItemDetail } from '@/api/model'
-import styles from './index.module.less'
+import { ParamItemDetail, ParamValueDataType } from '@/api/model'
 import { EditOutlined } from '@ant-design/icons'
+import { isArray } from '@/utils/types'
+
+import styles from './index.module.less'
 
 loadI18n()
 
 function getColumns(
   t: TFunction<''>,
   form: FormInstance,
-  saveKey: (key: number) => void
+  saveKey: (key: string) => void
 ) {
   const columns: ProColumns<ParamItemDetail>[] = [
     {
@@ -43,16 +45,17 @@ function getColumns(
       ellipsis: true,
       renderText(_, record) {
         const hashmap: Record<number, (r: string[], u?: string) => string> = {
-          0: (range: string[], unit = '') =>
+          [ParamValueDataType.int]: (range: string[], unit = '') =>
             `${range[0]}${unit} ~ ${range[1]}${unit}`,
-          1: (range: string[]) => range.join(', '),
-          2: (range: string[]) => `${range[0]}, ${range[1]}`,
-          3: (range: string[], unit = '') =>
+          [ParamValueDataType.string]: (range: string[]) => range.join(', '),
+          [ParamValueDataType.boolean]: (range: string[]) =>
+            `${range[0]}, ${range[1]}`,
+          [ParamValueDataType.float]: (range: string[], unit = '') =>
             `${range[0]}${unit} ~ ${range[1]}${unit}`,
-          4: (range: string[]) => range.join(', '),
+          [ParamValueDataType.array]: (range: string[]) => range.join(', '),
         }
 
-        return Array.isArray(record.range)
+        return isArray(record.range) && record.range.length > 0
           ? hashmap[record.type!]?.(record.range, record.unit)
           : null
       },
@@ -138,12 +141,12 @@ type ComponentParamMap = {
 
 const ParamCard: FC<ParamCardProps> = ({ loading, data, onEdit, onSave }) => {
   const componentParamMap = useMemo(() => {
-    if (!Array.isArray(data)) {
+    if (!isArray(data)) {
       return {}
     }
 
     const hashmap = data.reduce((prev, item) => {
-      const { componentType = '' } = item
+      const { instanceType: componentType = '' } = item
 
       if (!componentType) {
         return prev
@@ -157,8 +160,6 @@ const ParamCard: FC<ParamCardProps> = ({ loading, data, onEdit, onSave }) => {
 
       return prev
     }, {} as ComponentParamMap)
-
-    console.log('datasource changed')
 
     return hashmap
   }, [data])
@@ -174,7 +175,7 @@ const ParamCard: FC<ParamCardProps> = ({ loading, data, onEdit, onSave }) => {
 
   const [activeTab, setActiveTab] = useState(tabList?.[0]?.key)
 
-  const [editingKey, setEditingKey] = useState<number>()
+  const [editingKey, setEditingKey] = useState<string>()
 
   const [tableDataMap, setTableDataMap] = useState<{
     [k: string]: ParamItemDetail[]
@@ -214,14 +215,14 @@ const ParamCard: FC<ParamCardProps> = ({ loading, data, onEdit, onSave }) => {
   }, [loading, componentParamMap])
 
   useEffect(() => {
-    if (typeof editingKey === 'number') {
+    if (editingKey) {
       editorRef.current?.cancelEditable(editingKey)
       setEditingKey(undefined)
     }
   }, [data])
 
   useEffect(() => {
-    const isEditing = (editingKey ?? undefined) !== undefined
+    const isEditing = !!editingKey
 
     onEdit(isEditing)
   }, [editingKey])
@@ -244,7 +245,7 @@ const ParamCard: FC<ParamCardProps> = ({ loading, data, onEdit, onSave }) => {
       activeTabKey={activeTab}
       tabProps={{ size: 'middle' }}
       onTabChange={(key) => {
-        if (typeof editingKey === 'number') {
+        if (editingKey) {
           editorRef.current?.cancelEditable(editingKey)
           setEditingKey(undefined)
         }
@@ -268,7 +269,7 @@ const ParamCard: FC<ParamCardProps> = ({ loading, data, onEdit, onSave }) => {
           actionRender: (row, config, dom) => [dom.save, dom.cancel],
           onSave: async (paramId, editedRow) => {
             setTableDataMap((prev) => {
-              const mapKey = editedRow.componentType!
+              const mapKey = editedRow.instanceType!
               const prevTableData = prev[mapKey]
               const newTableData = prevTableData.map((row) => {
                 if (row.paramId !== paramId) {
