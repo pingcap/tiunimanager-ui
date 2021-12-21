@@ -4,6 +4,6 @@ export function getFsUploadURL() {
   return `/fs${fsBasePath}/file/import/upload`
 }
 
-export function getFsDownloadURL(id: number) {
+export function getFsDownloadURL(id: string) {
   return `/fs${fsBasePath}/file/export/download/${id}`
 }

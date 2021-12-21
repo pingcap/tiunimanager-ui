@@ -56,7 +56,7 @@ export default function BackupTable({ cluster }: BackupTableProps) {
   return (
     <HeavyTable
       loading={isLoading}
-      dataSource={data?.data.data || []}
+      dataSource={data?.data.data?.backupRecords || []}
       className={styles.backupTable}
       headerTitle={null}
       onSubmit={(filters) => {
@@ -106,7 +106,7 @@ function useFetchBackupData(clusterId: string) {
   })
   const { data, isLoading, isPreviousData, refetch } = useQueryClusterBackups(
     {
-      id: clusterId,
+      clusterId,
       ...pagination,
       ...filters,
     },
@@ -174,7 +174,7 @@ function useTableColumn({ cluster }: { cluster: ClusterInfo }) {
 function getColumns(
   t: TFunction<''>,
   restoreAction: (backup: ClusterBackupItem) => any,
-  deleteAction: (backupId: number) => any
+  deleteAction: (backupId: string) => any
 ): ProColumns<ClusterBackupItem>[] {
   return [
     {
@@ -245,8 +245,27 @@ function getColumns(
     {
       title: t('model:clusterBackup.property.status'),
       width: 80,
-      dataIndex: ['status', 'statusName'],
+      dataIndex: 'status',
       key: 'status',
+      valueType: 'select',
+      valueEnum: {
+        Initializing: {
+          text: t('model:clusterBackup.status.initializing'),
+          status: 'Default',
+        },
+        Processing: {
+          text: t('model:clusterBackup.status.processing'),
+          status: 'Processing',
+        },
+        Finished: {
+          text: t('model:clusterBackup.status.success'),
+          status: 'Success',
+        },
+        Failed: {
+          text: t('model:clusterBackup.status.failed'),
+          status: 'Error',
+        },
+      },
       hideInSearch: true,
     },
     {

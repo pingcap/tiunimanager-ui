@@ -5,6 +5,7 @@ cluster:
     type: Type
     version: Version
     status: Status
+    operationStatus: Operation Status
     address: Address
     extranetAddress: Extranet Address
     intranetAddress: Intranet Address
@@ -25,19 +26,25 @@ cluster:
     storage: Storage
     backup: Backup
   status:
-    idle: Idle
-    online: Online
-    offline: Offline
-    deleted: Deleted
-    CreateCluster: Creating
-    DeleteCluster: Deleting
-    BackupCluster: Backuping
-    RecoverCluster: Recovering
-    ModifyParameters: Modifying
-    ExportData: Exporting
-    ImportData: Importing
-    Restarting: Restarting
-    Stopping: Stopping
+    initializing: Initializing
+    stopped: Stopped
+    running: Running
+    recovering: Recovering
+    failure: Failure
+  operationStatus:
+    creating: Creating
+    cloning: Cloning
+    deleting: Deleting
+    stopping: Stopping
+    restarting: Restarting
+    backingUp: BackingUp
+    restoring: Restoring
+    scalingIn: Scaling In
+    scalingOut: Scaling Out
+    upgrading: Upgrading
+    switching: Switching
+    applyingParams: Modifying Params
+    takingOver: Takeover
 clusterLog:
   property:
     id: ID
@@ -73,6 +80,11 @@ clusterBackup:
   mode:
     manual: Manual
     auto: Plan
+  status:
+    initializing: Initializing
+    processing: Processing
+    success: Success
+    failed: Failed
 clusterBackupStrategy:
   property:
     clusterId: Cluster ID
@@ -119,6 +131,12 @@ clusterNode:
     version: Version
     zone: Zone
     usage: Usage
+  status:
+    initializing: Initializing
+    stopped: Stopped
+    running: Running
+    recovering: Recovering
+    failure: Failure
 host:
   property:
     id: ID
@@ -151,6 +169,7 @@ host:
   status:
     online: Online
     offline: Offline
+    deleted: Deleted
   load:
     idle: Free
     used: In Use
@@ -161,7 +180,7 @@ host:
   purpose:
     compute: Compute
     storage: Storage
-    general: General
+    schedule: Schedule
   disk:
     property:
       id: ID
@@ -213,7 +232,7 @@ knowledge:
 transport:
   property:
     id: ID
-    status: Status # the same as task.status
+    status: Status
     clusterId: Cluster
     startTime: Start Time
     endTime: End Time
@@ -229,3 +248,8 @@ transport:
   storageType:
     nfs: Local
     s3: AWS S3
+  status:
+    initializing: Initializing
+    processing: Processing
+    success: Success
+    failed: Failed
