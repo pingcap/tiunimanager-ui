@@ -6,6 +6,7 @@ import styles from './index.module.less'
 import { TFunction, useTranslation } from 'react-i18next'
 import { usePagination } from '@hooks/usePagination'
 import { useQueryTasks } from '@/api/hooks/task'
+import TaskSteps from '../TaskSteps'
 
 export default function TaskTable() {
   const {
@@ -44,6 +45,11 @@ export default function TaskTable() {
       rowKey="id"
       search={{
         filterType: 'light',
+      }}
+      expandable={{
+        expandedRowRender: (record) => <TaskSteps id={record.id!} />,
+        expandRowByClick: true,
+        rowExpandable: (record) => !!record.id,
       }}
       columnsState={{
         persistenceKey: 'task-table-show',
