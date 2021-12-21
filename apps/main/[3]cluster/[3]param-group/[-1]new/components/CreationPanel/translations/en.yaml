@@ -3,6 +3,7 @@ basic:
     name: Name
     dbType: Database Type
     dbVersion: Database Version
+    clusterSpec: Cluster Specification
     note: Note
   rules:
     name:
@@ -11,7 +12,9 @@ basic:
     dbType:
       required: Please select a database type
     dbVersion:
-      required: Please select a database version
+      required: Please select a version
+    clusterSpec:
+      required: Please select a specification
 footer:
   reset:
     title: Reset

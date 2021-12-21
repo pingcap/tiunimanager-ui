@@ -3,6 +3,7 @@ import { useQueryClient } from 'react-query'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { Button, Form, FormInstance, Input, message, Select } from 'antd'
 import { errToMsg } from '@/utils/error'
+import { isArray, isNumber } from '@/utils/types'
 import IntlPopConfirm from '@/components/IntlPopConfirm'
 import {
   useQueryParamGroupDetail,
@@ -59,10 +60,11 @@ type BasicField = {
   name: string
   dbType: ParamGroupDBType
   dbVersion: string
+  clusterSpec: string
   note?: string
 }
 
-type BasicFilter = Pick<BasicField, 'dbType' | 'dbVersion'>
+type BasicFilter = Pick<BasicField, 'dbType' | 'dbVersion' | 'clusterSpec'>
 
 interface BasicFormProps {
   form: FormInstance<BasicField>
@@ -82,16 +84,26 @@ const BasicForm: FC<BasicFormProps> = ({
 
       if (isDBTypeChange) {
         form.setFieldsValue({
-          dbVersion: void 0,
+          dbVersion: undefined,
+          clusterSpec: undefined,
         })
       }
 
       const isDBVersionChange = keys.includes('dbVersion')
 
-      if (isDBTypeChange || isDBVersionChange) {
+      if (isDBVersionChange) {
+        form.setFieldsValue({
+          clusterSpec: undefined,
+        })
+      }
+
+      const isClusterSpecChange = keys.includes('clusterSpec')
+
+      if (isDBTypeChange || isDBVersionChange || isClusterSpecChange) {
         onFilterValChange({
           dbType: values.dbType,
           dbVersion: values.dbVersion,
+          clusterSpec: values.clusterSpec,
         })
       }
     },
@@ -114,14 +126,36 @@ const BasicForm: FC<BasicFormProps> = ({
 
   const dbVersionOptionList = useMemo(() => {
     const dbType = form.getFieldValue('dbType')
-
-    return filterList
+    const versionValueList = filterList
       .filter((item) => item.dbType === dbType)
-      .map((item) => ({
-        value: item.dbVersion,
-        label: item.dbVersion,
-      }))
+      .map((item) => item.dbVersion)
+
+    const ret = Array.from(new Set(versionValueList)).map((value) => ({
+      value,
+      label: value,
+    }))
+
+    return ret
   }, [filterList, form.getFieldValue('dbType')])
+
+  const clusterSpecOptionList = useMemo(() => {
+    const dbType = form.getFieldValue('dbType')
+    const dbVersion = form.getFieldValue('dbVersion')
+    const specValueList = filterList
+      .filter((item) => item.dbType === dbType && item.dbVersion === dbVersion)
+      .map((item) => item.clusterSpec)
+
+    const ret = Array.from(new Set(specValueList)).map((value) => ({
+      value,
+      label: value,
+    }))
+
+    return ret
+  }, [
+    filterList,
+    form.getFieldValue('dbType'),
+    form.getFieldValue('dbVersion'),
+  ])
 
   const { t } = useI18n()
 
@@ -175,6 +209,21 @@ const BasicForm: FC<BasicFormProps> = ({
             ))}
           </Select>
         </Form.Item>
+        <Form.Item
+          name="clusterSpec"
+          label={t('basic.fields.clusterSpec')}
+          rules={[
+            { required: true, message: t('basic.rules.clusterSpec.required') },
+          ]}
+        >
+          <Select allowClear>
+            {clusterSpecOptionList.map((item) => (
+              <Select.Option key={item.value} value={item.value!}>
+                {item.label}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
         <Form.Item name="note" label={t('basic.fields.note')}>
           <Input.TextArea allowClear autoSize={{ minRows: 2, maxRows: 6 }} />
         </Form.Item>
@@ -206,14 +255,13 @@ function useFetchTmplParamGroup() {
  * Fetch system built-in parameter list as template
  * @param paramGroupId parameter group ID
  */
-function useFetchTmplParam(paramGroupId?: number) {
-  const INVALID_ID = 'not_number'
+function useFetchTmplParam(paramGroupId?: string) {
   const { data, isLoading } = useQueryParamGroupDetail(
     {
-      id: String(paramGroupId ?? ''),
+      id: paramGroupId ?? '',
     },
     {
-      enabled: (paramGroupId ?? INVALID_ID) !== INVALID_ID,
+      enabled: !!paramGroupId,
       refetchOnWindowFocus: false,
     }
   )
@@ -231,30 +279,29 @@ function useFetchTmplData() {
   const { data: tmplGroupList, isLoading: isFilterLoading } =
     useFetchTmplParamGroup()
 
-  const INVALID_VALUE = 'null_or_undefined'
-
   /**
    * Filter data source
    */
   const { validGroupList, filterList } = useMemo(() => {
-    if (!Array.isArray(tmplGroupList)) {
+    if (!isArray(tmplGroupList)) {
       return {
         validGroupList: [],
         filterList: [],
       }
     }
 
-    const validGroupList = tmplGroupList.filter((item) => {
-      const isNum = [item.paramGroupId, item.dbType].every(
-        (value) => (value ?? INVALID_VALUE) !== INVALID_VALUE
-      )
-
-      return isNum && item.version
-    })
+    const validGroupList = tmplGroupList.filter(
+      (item) =>
+        item.paramGroupId &&
+        isNumber(item.dbType) &&
+        item.clusterVersion &&
+        item.clusterSpec
+    )
 
     const filterList = validGroupList.map((item) => ({
       dbType: item.dbType!,
-      dbVersion: item.version!,
+      dbVersion: item.clusterVersion!,
+      clusterSpec: item.clusterSpec!,
     }))
 
     return {
@@ -268,10 +315,12 @@ function useFetchTmplData() {
    */
   const [dbTypeFilter, setDBTypeFilter] = useState<ParamGroupDBType>()
   const [dbVersionFilter, setDBVersionFilter] = useState<string>()
+  const [clusterSpecFilter, setClusterSpecFilter] = useState<string>()
 
   const onFilterValChange = useCallback((valMap?: BasicFilter) => {
     setDBTypeFilter(valMap?.dbType)
     setDBVersionFilter(valMap?.dbVersion)
+    setClusterSpecFilter(valMap?.clusterSpec)
   }, [])
 
   /**
@@ -279,24 +328,29 @@ function useFetchTmplData() {
    * to fetch the target parameter list
    */
   const { targetGroupId, targetGroup } = useMemo(() => {
-    const [dbType, dbVersion] = [dbTypeFilter, dbVersionFilter]
-    const invalid = [dbType, dbVersion].every(
-      (el) => (el ?? INVALID_VALUE) === INVALID_VALUE
-    )
+    const [dbType, dbVersion, clusterSpec] = [
+      dbTypeFilter,
+      dbVersionFilter,
+      clusterSpecFilter,
+    ]
+    const valid = isNumber(dbType) && !!dbVersion && !!clusterSpec
 
-    if (invalid) {
+    if (!valid) {
       return {}
     }
 
     const target = validGroupList.filter(
-      (item) => item.dbType === dbType && item.version === dbVersion
+      (item) =>
+        item.dbType === dbType &&
+        item.clusterVersion === dbVersion &&
+        item.clusterSpec === clusterSpec
     )
 
     return {
       targetGroupId: target[0]?.paramGroupId,
       targetGroup: target[0],
     }
-  }, [validGroupList, dbTypeFilter, dbVersionFilter])
+  }, [validGroupList, dbTypeFilter, dbVersionFilter, clusterSpecFilter])
 
   const { data: tmplParamList, isLoading: isTmplParamLoading } =
     useFetchTmplParam(targetGroupId)
@@ -372,8 +426,8 @@ function useSubmitter({
         {
           name: fields.name,
           dbType: fields.dbType,
-          version: fields.dbVersion,
-          spec: dataSource?.spec,
+          clusterVersion: fields.dbVersion,
+          clusterSpec: dataSource?.clusterSpec,
           note: fields.note,
           params: editedParamList.map((item) => ({
             paramId: item.paramId,
@@ -409,7 +463,7 @@ function useSubmitter({
     createParamGroup.mutateAsync,
     queryClient,
     basicForm,
-    dataSource?.spec,
+    dataSource?.clusterSpec,
     paramEditing,
     editedParamList,
   ])
