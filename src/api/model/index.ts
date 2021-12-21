@@ -29,12 +29,12 @@ import {
   WarehouseNode,
   ManagementPreviewClusterRsp,
   ImportexportDataTransportInfo,
-  ParamgroupQueryParamGroupResp,
-  ParamgroupParamDetail,
-  ParamgroupCreateParamGroupReq,
-  ParamgroupUpdateParamGroupReq,
-  ParamgroupCopyParamGroupReq,
-  ParamgroupApplyParamGroupReq,
+  MessageQueryParameterGroupResp,
+  MessageUpdateParameterGroupReq,
+  MessageCreateParameterGroupReq,
+  MessageCopyParameterGroupReq,
+  MessageApplyParameterGroupReq,
+  StructsParameterGroupParameterInfo,
 } from '#/api'
 
 export type PagedResult = ControllerResultWithPage
@@ -96,14 +96,22 @@ export enum ParamGroupScope {
   instance = 2,
 }
 
-export type ParamGroupItem = ParamgroupQueryParamGroupResp
+export enum ParamValueDataType {
+  int = 0,
+  string = 1,
+  boolean = 2,
+  float = 3,
+  array = 4,
+}
 
-export type ParamItemDetail = ParamgroupParamDetail
+export type ParamGroupItem = MessageQueryParameterGroupResp
 
-export type RequestParamGroupCreate = ParamgroupCreateParamGroupReq
-export type RequestParamGroupUpdate = ParamgroupUpdateParamGroupReq
-export type RequestParamGroupCopy = ParamgroupCopyParamGroupReq
-export type RequestParamGroupApply = ParamgroupApplyParamGroupReq
+export type ParamItemDetail = StructsParameterGroupParameterInfo
+
+export type RequestParamGroupCreate = MessageCreateParameterGroupReq
+export type RequestParamGroupUpdate = MessageUpdateParameterGroupReq
+export type RequestParamGroupCopy = MessageCopyParameterGroupReq
+export type RequestParamGroupApply = MessageApplyParameterGroupReq
 
 export type RequestBackupCreate = BackuprestoreBackupReq
 export type RequestBackupStrategyUpdate = BackuprestoreBackupStrategyUpdateReq
