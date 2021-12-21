@@ -1,18 +1,1 @@
-actions:
-  refresh: 刷新
-  reset: 重置
-  save: 保存更改
-  edit: 编辑
-reset:
-  confirm: 确认重置本地修改吗?
-save:
-  nochanges: 没有本地更改
-  confirm: 确认保存下列参数更改吗?
-  success: 更改参数成功
-  fail: '更改参数失败: {{ msg }}'
-  fields:
-    name: 参数名称
-    before: 更改前
-    after: 更改后
-columns:
-  actions: 操作
+_: _

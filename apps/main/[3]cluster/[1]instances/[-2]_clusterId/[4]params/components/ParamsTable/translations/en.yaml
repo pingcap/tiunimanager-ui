@@ -1,18 +1,1 @@
-actions:
-  refresh: Refresh
-  reset: Reset
-  save: Save
-  edit: Edit
-reset:
-  confirm: Are you sure to reset edited params?
-save:
-  nochanges: No changes
-  confirm: Are you sure to save the following parameter changes?
-  success: Update params successfully
-  fail: 'Fail: {{ msg }}'
-  fields:
-    name: Param Name
-    before: Before
-    after: After
-columns:
-  actions: Actions
+_: _

@@ -372,7 +372,7 @@ function NodeOptions({
         header={
           <span>
             {t('nodes.title', {
-              name: t(`model:knowledge.component.${componentName}`),
+              name: componentName,
             })}
             {!componentRequired && (
               <Tag color="default" className={styles.optionalBadge}>

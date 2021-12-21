@@ -85,11 +85,13 @@ export enum HardwareArch {
   arm = 'ARM',
   arm64 = 'ARM64',
 }
+
 export enum DiskType {
   nvme = 'NVMeSSD',
   ssd = 'SSD',
   sata = 'SATA',
 }
+
 export enum ClusterLogLevel {
   debug = 'DEBUG',
   info = 'INFO',
@@ -149,6 +151,10 @@ export enum ClusterOperationStatus {
   switching = 'Switching',
   applyingParams = 'ModifyParameterRestarting',
   takingOver = 'Takeover',
+}
+
+export enum ClusterBackupMethod {
+  manual = 'manual',
 }
 
 export function initModelTranslations() {
