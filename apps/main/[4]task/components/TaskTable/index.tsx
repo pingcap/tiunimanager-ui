@@ -109,7 +109,7 @@ function getColumns(
     {
       title: t('model:task.property.name'),
       width: 120,
-      dataIndex: 'flowWorkName',
+      dataIndex: 'name',
       key: 'keyword',
       renderText: (text) => t(`task:name.${text}`, text),
     },
