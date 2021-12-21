@@ -101,7 +101,7 @@ function getColumns(
   return [
     {
       title: t('model:task.property.id'),
-      width: 120,
+      width: 60,
       dataIndex: 'id',
       key: 'id',
       hideInSearch: true,
