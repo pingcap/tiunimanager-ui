@@ -6,7 +6,6 @@ import {
 } from '@/api/hooks/param-group'
 import { ParamGroupItem } from '@/api/model'
 import { errToMsg } from '@/utils/error'
-import { isNumber } from '@/utils/types'
 
 export interface ParamGroupCopyPayload {
   name: string
@@ -21,15 +20,15 @@ export interface CopyActionCallbacks {
 export function useCopyModal(dataSource?: ParamGroupItem[]) {
   const [visible, setVisible] = useState(false)
 
-  const [copyId, setCopyId] = useState<number>()
+  const [copyId, setCopyId] = useState<string>()
 
   const copyData = useMemo(() => {
-    return dataSource && isNumber(copyId)
+    return dataSource && copyId
       ? dataSource.filter((item) => item.paramGroupId === copyId)[0] ?? {}
       : {}
   }, [dataSource, copyId])
 
-  const onOpen = useCallback((paramGroupId: number) => {
+  const onOpen = useCallback((paramGroupId: string) => {
     setCopyId(paramGroupId)
     setVisible(true)
   }, [])
@@ -43,7 +42,7 @@ export function useCopyModal(dataSource?: ParamGroupItem[]) {
 
   const copyAction = useCallback(
     (payload: ParamGroupCopyPayload, callbacks: CopyActionCallbacks) => {
-      if (!isNumber(copyId)) {
+      if (!copyId) {
         return callbacks.onError()
       }
 
