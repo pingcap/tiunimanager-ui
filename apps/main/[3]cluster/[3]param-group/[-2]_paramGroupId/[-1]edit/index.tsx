@@ -1,11 +1,12 @@
 import { useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { resolveRoute } from '@pages-macro'
 import EditingPanel from './components/EditingPanel'
 import HeaderBar from './components/HeaderBar'
 
 export default function () {
   const history = useHistory()
+  const { paramGroupId } = useParams<{ paramGroupId: string }>()
 
   const back = useCallback(
     () => history.push(resolveRoute('../../')),
@@ -15,7 +16,7 @@ export default function () {
   return (
     <>
       <HeaderBar back={back} />
-      <EditingPanel back={back} />
+      <EditingPanel back={back} id={paramGroupId} />
     </>
   )
 }

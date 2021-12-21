@@ -3,6 +3,7 @@ basic:
     name: Name
     dbType: Database Type
     dbVersion: Database Version
+    clusterSpec: Cluster Specification
     note: Note
   rules:
     name:

@@ -1,7 +1,6 @@
 import { FC, useCallback, useMemo, useState } from 'react'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { useQueryClient } from 'react-query'
-import { useParams } from 'react-router-dom'
 import { Button, Form, FormInstance, Input, message } from 'antd'
 import IntlPopConfirm from '@/components/IntlPopConfirm'
 import { errToMsg } from '@/utils/error'
@@ -54,6 +53,7 @@ type BasicField = {
   name: string
   dbType: ParamGroupDBType
   dbVersion: string
+  clusterSpec: string
   note?: string
 }
 
@@ -112,6 +112,15 @@ const BasicForm: FC<BasicFormProps> = ({ form, dataSource }) => {
         >
           <Input disabled />
         </Form.Item>
+        <Form.Item
+          name="clusterSpec"
+          label={t('basic.fields.clusterSpec')}
+          rules={[
+            { required: true, message: t('basic.rules.clusterSpec.required') },
+          ]}
+        >
+          <Input disabled />
+        </Form.Item>
         <Form.Item name="note" label={t('basic.fields.note')}>
           <Input.TextArea allowClear autoSize={{ minRows: 2, maxRows: 6 }} />
         </Form.Item>
@@ -134,7 +143,8 @@ function useFetchParamGroup(id: string) {
     return {
       name: groupDetail?.name,
       dbType: groupDetail?.dbType,
-      dbVersion: groupDetail?.version,
+      dbVersion: groupDetail?.clusterVersion,
+      clusterSpec: groupDetail?.clusterSpec,
       note: groupDetail?.note,
     }
   }, [groupDetail])
@@ -185,12 +195,14 @@ function useParamReset(dataSource?: ParamItemDetail[]) {
  * Hook for getting state and handler of edit submitter
  */
 function useSubmitter({
+  paramGroupId,
   dataSource,
   basicForm,
   paramEditing,
   editedParamList,
   routeBack,
 }: {
+  paramGroupId: string
   dataSource?: ParamGroupItem
   basicForm: FormInstance<BasicField>
   paramEditing: boolean
@@ -224,9 +236,10 @@ function useSubmitter({
 
       await updateParamGroup.mutateAsync(
         {
+          paramGroupId,
           name: fields.name,
-          version: fields.dbVersion,
-          spec: dataSource?.spec,
+          clusterVersion: fields.dbVersion,
+          clusterSpec: dataSource?.clusterSpec,
           note: fields.note,
           params: editedParamList.map((item) => ({
             paramId: item.paramId,
@@ -261,7 +274,8 @@ function useSubmitter({
     updateParamGroup.mutateAsync,
     queryClient,
     basicForm,
-    dataSource?.spec,
+    paramGroupId,
+    dataSource?.clusterSpec,
     paramEditing,
     editedParamList,
   ])
@@ -274,11 +288,10 @@ function useSubmitter({
 
 interface EditPanelProps {
   back: () => void
+  id: string
 }
 
-const EditPanel: FC<EditPanelProps> = ({ back }) => {
-  const { paramGroupId } = useParams<{ paramGroupId: string }>()
-
+const EditPanel: FC<EditPanelProps> = ({ back, id: paramGroupId }) => {
   const {
     dataSource,
     basicData,
@@ -299,6 +312,7 @@ const EditPanel: FC<EditPanelProps> = ({ back }) => {
   const [basicForm] = Form.useForm<BasicField>()
 
   const { submitting, onSubmit } = useSubmitter({
+    paramGroupId,
     dataSource,
     basicForm,
     paramEditing,

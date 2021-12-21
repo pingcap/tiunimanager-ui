@@ -3,6 +3,7 @@ basic:
     name: 参数组名称
     dbType: 数据库类型
     dbVersion: 数据库版本
+    clusterSpec: 集群规格
     note: 描述
   rules:
     name:
