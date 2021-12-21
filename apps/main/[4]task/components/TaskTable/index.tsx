@@ -90,12 +90,14 @@ function useFetchTaskData() {
 }
 
 function useTableColumn() {
-  const { t, i18n } = useTranslation('model')
+  const { t, i18n } = useTranslation(['model', 'task'])
 
   return useMemo(() => getColumns(t), [i18n.language])
 }
 
-function getColumns(t: TFunction<'model'>): ProColumns<TaskWorkflowInfo>[] {
+function getColumns(
+  t: TFunction<('model' | 'task')[]>
+): ProColumns<TaskWorkflowInfo>[] {
   return [
     {
       title: t('model:task.property.id'),
@@ -143,13 +145,13 @@ function getColumns(t: TFunction<'model'>): ProColumns<TaskWorkflowInfo>[] {
     {
       title: t('model:task.property.bizId'),
       width: 140,
-      dataIndex: 'BizId',
+      dataIndex: 'bizId',
       key: 'bizId',
     },
     {
       title: t('model:task.property.creationTime'),
       width: 100,
-      dataIndex: 'creationTime',
+      dataIndex: 'createTime',
       key: 'creationTime',
       hideInSearch: true,
       valueType: 'dateTime',
