@@ -127,6 +127,7 @@ paramGroup:
     scope: 参数组级别
     dbType: 数据库类型
     dbVersion: 数据库版本
+    clusterSpec: 集群规格
     desc: 描述
   type:
     system: 系统内置

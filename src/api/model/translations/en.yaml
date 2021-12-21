@@ -127,6 +127,7 @@ paramGroup:
     scope: Scope
     dbType: Database
     dbVersion: Database Version
+    clusterSpec: Cluster Specification
     desc: Description
   type:
     system: System Built-in
