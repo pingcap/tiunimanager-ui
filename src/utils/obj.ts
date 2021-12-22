@@ -10,7 +10,7 @@ export function mapObj<O, K extends string, V>(
   o: O,
   mapper: (value: O[keyof O], key: keyof O) => { key: K; value: V }
 ): Record<K, V> {
-  const result = Object.create(null)
+  const result = {} as Record<K, V>
   const keys = Object.keys(o) as Array<keyof O>
   keys.forEach((k) => {
     const { key, value } = mapper(o[k], k)
