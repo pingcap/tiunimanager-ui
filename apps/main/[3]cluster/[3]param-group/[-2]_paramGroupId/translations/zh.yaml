@@ -1,0 +1,9 @@
+name: 参数组详情
+header:
+  title: 参数组详情
+desc:
+  title: 基础信息
+  label:
+    unknown: 未知
+card:
+  title: 参数列表

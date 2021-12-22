@@ -4,6 +4,7 @@ import { useClusterContext } from '@apps/main/[3]cluster/[1]instances/[-2]_clust
 
 const Index: FC = () => {
   const { info } = useClusterContext()
+
   return <ParamsTable cluster={info!} />
 }
 

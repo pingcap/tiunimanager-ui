@@ -101,6 +101,7 @@ clusterBackupStrategy:
     Sunday: Sunday
 clusterParam:
   property:
+    component: Component Name
     name: Param Name
     reboot: Reboot
     desc: Description
@@ -137,6 +138,25 @@ clusterNode:
     running: Running
     recovering: Recovering
     failure: Failure
+paramGroup:
+  property:
+    id: ID
+    name: Name
+    type: Type
+    scope: Scope
+    dbType: Database
+    dbVersion: Database Version
+    clusterSpec: Cluster Specification
+    desc: Description
+  type:
+    system: System Built-in
+    custom: User Custom
+  scope:
+    cluster: Cluster
+    instance: Component
+  dbType:
+    tidb: TIDB
+    dm: DM
 host:
   property:
     id: ID

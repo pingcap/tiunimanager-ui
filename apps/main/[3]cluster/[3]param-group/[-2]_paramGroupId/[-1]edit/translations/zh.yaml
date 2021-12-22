@@ -1,0 +1,9 @@
+name: 编辑参数组
+header:
+  title: 编辑参数组
+desc:
+  title: 基础信息
+  label:
+    unknown: 未知
+card:
+  title: 参数列表

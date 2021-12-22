@@ -31,6 +31,12 @@ import {
   StructsDataImportExportRecordInfo,
   StructsHierarchyTreeNode,
   StructsHostInfo,
+  MessageQueryParameterGroupResp,
+  MessageUpdateParameterGroupReq,
+  MessageCreateParameterGroupReq,
+  MessageCopyParameterGroupReq,
+  MessageApplyParameterGroupReq,
+  StructsParameterGroupParameterInfo,
 } from '#/api'
 import { loadI18nWithNS } from '@i18n-macro'
 
@@ -76,6 +82,21 @@ export type RequestTransportImport = MessageDataImportReq
 export type RequestClusterCreate = ClusterCreateClusterReq
 export type RequestClusterParamsUpdate = ClusterUpdateClusterParametersReq
 
+/**
+ * Parameter Group type
+ */
+export type ParamGroupItem = MessageQueryParameterGroupResp
+
+export type ParamItemDetail = StructsParameterGroupParameterInfo
+
+export type RequestParamGroupCreate = MessageCreateParameterGroupReq
+export type RequestParamGroupUpdate = MessageUpdateParameterGroupReq
+export type RequestParamGroupCopy = MessageCopyParameterGroupReq
+export type RequestParamGroupApply = MessageApplyParameterGroupReq
+
+/**
+ * Workflow Enum
+ */
 export { StructsWorkFlowInfoStatusEnum as TaskWorkflowStatus }
 export { StructsWorkFlowNodeInfoStatusEnum as TaskWorkflowSubTaskStatus }
 
@@ -155,6 +176,32 @@ export enum ClusterOperationStatus {
 
 export enum ClusterBackupMethod {
   manual = 'manual',
+}
+
+/**
+ * Parameter Group Enum
+ */
+export enum ParamGroupDBType {
+  tidb = 1,
+  dm = 2,
+}
+
+export enum ParamGroupCreationType {
+  system = 1,
+  custom = 2,
+}
+
+export enum ParamGroupScope {
+  cluster = 1,
+  instance = 2,
+}
+
+export enum ParamValueDataType {
+  int = 0,
+  string = 1,
+  boolean = 2,
+  float = 3,
+  array = 4,
 }
 
 export function initModelTranslations() {
