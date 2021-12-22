@@ -138,14 +138,14 @@ export const CACHE_CLUSTER_LOGS = 'cluster-logs'
 
 export type UseQueryClusterLogsParams = {
   clusterId: string
-  endTime?: string
+  endTime?: number
   page?: number
   ip?: string
   level?: string
   message?: string
   module?: string
   pageSize?: number
-  startTime?: string
+  startTime?: number
 }
 
 export function useQueryClusterLogs(
@@ -177,7 +177,7 @@ export function useQueryClusterLogs(
       module,
     ],
     () =>
-      APIS.Logs.logsTidbClusterIdGet(
+      APIS.Logs.clustersClusterIdLogGet(
         clusterId,
         endTime,
         ip,
