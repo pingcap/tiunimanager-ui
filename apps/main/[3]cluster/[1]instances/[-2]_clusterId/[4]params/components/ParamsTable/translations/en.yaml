@@ -1,3 +1,5 @@
+header:
+  title: Related Parameter Group
 actions:
   refresh: Refresh
   reset: Reset
@@ -11,8 +13,13 @@ save:
   success: Update params successfully
   fail: 'Fail: {{ msg }}'
   fields:
+    component: Component Name
     name: Param Name
     before: Before
     after: After
+    reboot: Reboot
+  okText:
+    normal: Confirm
+    reboot: Confirm and Reboot
 columns:
   actions: Actions

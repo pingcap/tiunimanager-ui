@@ -1,4 +1,3 @@
-import HeavyTable from '@/components/HeavyTable'
 import { useEffect, useMemo, useState } from 'react'
 import { ProColumns } from '@ant-design/pro-table'
 import {
@@ -14,11 +13,11 @@ import {
   EditOutlined,
   ExclamationCircleOutlined,
   QuestionCircleOutlined,
-  ReloadOutlined,
   RollbackOutlined,
   SaveOutlined,
 } from '@ant-design/icons'
-import { ClusterInfo, PagedResult, ClusterParamItem } from '@/api/model'
+import HeavyTable from '@/components/HeavyTable'
+import { ClusterInfo, ClusterParamItem, ParamValueDataType } from '@/api/model'
 import {
   invalidateClusterParams,
   useQueryClusterParams,
@@ -26,10 +25,13 @@ import {
 } from '@/api/hooks/cluster'
 import IntlPopConfirm from '@/components/IntlPopConfirm'
 import { useQueryClient } from 'react-query'
-import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction } from 'react-i18next'
+import { loadI18n, useI18n } from '@i18n-macro'
 import { errToMsg } from '@/utils/error'
-import { usePagination } from '@hooks/usePagination'
+import { Link } from 'react-router-dom'
+import { resolveRoute } from '@pages-macro'
+import { isArray } from '@/utils/types'
+// import { usePagination } from '@hooks/usePagination'
 
 loadI18n()
 
@@ -37,29 +39,21 @@ export interface ParamsTableProps {
   cluster: ClusterInfo
 }
 
-const TableOptions = {
-  density: false,
-  fullScreen: false,
-  setting: false,
-  reload: false,
-}
-
 const getRowKey = (record: ClusterParamItem) => record.paramId!
 
 export function ParamsTable({ cluster }: ParamsTableProps) {
   const { t, i18n } = useI18n()
   const {
-    data: originalData,
+    paramGroupId,
+    paramList: originalData,
     refetch,
     isLoading,
-    setPagination,
-    pagination,
   } = useFetchParamsData(cluster.clusterId!)
 
   const [tableData, setTableData] = useState<ClusterParamItem[]>([])
 
   useEffect(() => {
-    !isLoading && setTableData(originalData!.data.data!)
+    !isLoading && setTableData(originalData!)
   }, [isLoading, originalData])
 
   const [form] = Form.useForm()
@@ -68,15 +62,20 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
   const updateParams = useUpdateClusterParams()
 
   const handleSave = () => {
-    const changes = findParamsChanges(originalData!.data.data!, tableData)
+    const changes = findParamsChanges(originalData!, tableData)
     if (changes.length === 0) {
       message.info(t('save.nochanges'))
     } else {
+      const rebootNeeded = changes.some((change) => change.reboot)
+
       Modal.confirm({
         title: t('save.confirm'),
         icon: <ExclamationCircleOutlined />,
         width: 600,
         content: <ConfirmTable changes={changes} />,
+        okText: rebootNeeded
+          ? t('save.okText.reboot')
+          : t('save.okText.normal'),
         async onOk() {
           updateParams.mutateAsync(
             {
@@ -84,9 +83,12 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
               params: changes.map((change) => ({
                 paramId: change.paramId,
                 realValue: {
-                  cluster: change.change[1],
+                  clusterValue: change.change[1],
                 },
+                systemVariable: change.sysVar,
               })),
+              // TODO
+              reboot: rebootNeeded,
             },
             {
               onSuccess() {
@@ -115,7 +117,7 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
       title={t('reset.confirm')}
       icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
       onConfirm={() => {
-        setTableData(originalData!.data.data!)
+        setTableData(originalData!)
       }}
     >
       <Button>
@@ -134,21 +136,23 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
       loading={isLoading}
       dataSource={tableData}
       headerTitle={
-        <Button key="refresh" onClick={() => refetch()}>
-          <ReloadOutlined /> {t('actions.refresh')}
-        </Button>
+        <>
+          <span>{t('header.title')}: </span>
+          <Link to={`${resolveRoute('../../../')}/param-group/${paramGroupId}`}>
+            {paramGroupId}
+          </Link>
+        </>
       }
       tooltip={false}
       columns={columns}
-      pagination={{
-        pageSize: pagination.pageSize,
-        current: pagination.page,
-        total: (originalData?.data as PagedResult)?.page?.total || 0,
-        onChange(page, pageSize) {
-          setPagination({ page, pageSize: pageSize || pagination.pageSize })
-        },
+      pagination={false}
+      scroll={{ y: 700 }}
+      options={{
+        density: false,
+        fullScreen: false,
+        setting: false,
+        reload: () => refetch(),
       }}
-      options={TableOptions}
       rowKey={getRowKey}
       toolBarRender={toolbar}
       editable={{
@@ -164,7 +168,8 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
                 ...row,
                 realValue: {
                   ...row.realValue,
-                  cluster: editedRow.realValue?.cluster || row.defaultValue,
+                  clusterValue:
+                    editedRow.realValue?.clusterValue || row.defaultValue,
                 },
               }
             })
@@ -178,10 +183,22 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
 function getColumns(t: TFunction<''>, form: FormInstance) {
   const columns: ProColumns<ClusterParamItem>[] = [
     {
+      title: t('model:clusterParam.property.component'),
+      width: 100,
+      dataIndex: 'instanceType',
+      editable: false,
+    },
+    {
       title: t('model:clusterParam.property.name'),
       width: 160,
       dataIndex: 'name',
       editable: false,
+    },
+    {
+      title: t('model:clusterParam.property.desc'),
+      dataIndex: 'description',
+      editable: false,
+      ellipsis: true,
     },
     {
       title: t('model:clusterParam.property.reboot'),
@@ -195,21 +212,24 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
       editable: false,
     },
     {
-      title: t('model:clusterParam.property.desc'),
-      dataIndex: 'description',
-      editable: false,
-      ellipsis: true,
-    },
-    {
       title: t('model:clusterParam.property.range'),
       width: 200,
       key: 'range',
       renderText(_, record) {
-        const unit = record.unit ?? ''
-        // TODO: handle different types
-        return record.range
-          ?.map((rangeValue) => `${rangeValue} ${unit}`)
-          .join(', ')
+        const hashmap: Record<number, (r: string[], u?: string) => string> = {
+          [ParamValueDataType.int]: (range: string[], unit = '') =>
+            `${range[0]}${unit} ~ ${range[1]}${unit}`,
+          [ParamValueDataType.string]: (range: string[]) => range.join(', '),
+          [ParamValueDataType.boolean]: (range: string[]) =>
+            `${range[0]}, ${range[1]}`,
+          [ParamValueDataType.float]: (range: string[], unit = '') =>
+            `${range[0]}${unit} ~ ${range[1]}${unit}`,
+          [ParamValueDataType.array]: (range: string[]) => range.join(', '),
+        }
+
+        return isArray(record.range) && record.range.length > 0
+          ? hashmap[record.type!]?.(record.range, record.unit)
+          : null
       },
       editable: false,
     },
@@ -222,7 +242,7 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
     {
       title: t('model:clusterParam.property.current'),
       width: 180,
-      dataIndex: ['realValue', 'cluster'],
+      dataIndex: ['realValue', 'clusterValue'],
       render(_, record, __, action) {
         return (
           <span
@@ -232,7 +252,7 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
             }}
             style={{ cursor: 'pointer' }}
           >
-            <EditOutlined /> {record.realValue?.cluster}
+            <EditOutlined /> {record.realValue?.clusterValue}
           </span>
         )
       },
@@ -260,27 +280,32 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
 }
 
 function useFetchParamsData(id: string) {
-  const [pagination, setPagination] = usePagination(40)
+  // const [pagination, setPagination] = usePagination(40)
   const { data, isLoading, refetch } = useQueryClusterParams(
     {
       id,
-      ...pagination,
     },
     { refetchOnWindowFocus: false }
   )
+  const result = data?.data.data
+
   return {
-    pagination,
-    setPagination,
-    data,
+    // pagination,
+    // setPagination,
+    paramGroupId: result?.paramGroupId,
+    paramList: result?.params,
     isLoading,
     refetch,
   }
 }
 
 type Change = {
-  paramId: number
+  paramId: string
+  component: string
   name: string
   change: [string, string]
+  reboot: number
+  sysVar: string
 }
 
 function findParamsChanges(
@@ -289,11 +314,17 @@ function findParamsChanges(
 ) {
   const changes: Change[] = []
   origin.forEach((raw, i) => {
-    if (raw.realValue?.cluster !== table[i].realValue?.cluster) {
+    if (raw.realValue?.clusterValue !== table[i].realValue?.clusterValue) {
       changes.push({
         paramId: raw.paramId!,
+        component: raw.instanceType!,
         name: raw.name!,
-        change: [raw.realValue!.cluster!, table[i].realValue!.cluster!],
+        change: [
+          raw.realValue!.clusterValue!,
+          table[i].realValue!.clusterValue!,
+        ],
+        reboot: raw.hasReboot!,
+        sysVar: raw.systemVariable!,
       })
     }
   })
@@ -304,6 +335,11 @@ function ConfirmTable({ changes }: { changes: Change[] }) {
   const { t, i18n } = useI18n()
   const columns: TableColumnsType<Change> = useMemo(
     () => [
+      {
+        title: t('save.fields.component'),
+        dataIndex: 'component',
+        key: 'component',
+      },
       {
         title: t('save.fields.name'),
         dataIndex: 'name',
@@ -319,6 +355,15 @@ function ConfirmTable({ changes }: { changes: Change[] }) {
         key: 'after',
         render: (_, record) => record.change[1],
       },
+      {
+        title: t('save.fields.reboot'),
+        key: 'reboot',
+        render(_, record) {
+          return record.reboot!
+            ? t('model:clusterParam.reboot.true')
+            : t('model:clusterParam.reboot.false')
+        },
+      },
     ],
     [i18n.language]
   )
@@ -329,6 +374,7 @@ function ConfirmTable({ changes }: { changes: Change[] }) {
       rowKey="name"
       size="small"
       columns={columns}
+      scroll={{ y: 400 }}
     />
   )
 }
