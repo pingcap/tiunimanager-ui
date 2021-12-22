@@ -5,9 +5,7 @@ import {
   ImportexportDataExportReq,
   ImportexportDataImportReq,
   ManagementCreateReq,
-  ParameterUpdateParamsReq,
   IdentificationLoginInfo,
-  ParameterListParamsResp,
   ManagementClusterDisplayInfo,
   LogSearchTiDBLogDetail,
   ControllerResultWithPage,
@@ -35,6 +33,8 @@ import {
   MessageCopyParameterGroupReq,
   MessageApplyParameterGroupReq,
   StructsParameterGroupParameterInfo,
+  ClusterUpdateClusterParametersReq,
+  StructsClusterParameterInfo,
 } from '#/api'
 
 export type PagedResult = ControllerResultWithPage
@@ -44,7 +44,7 @@ export type UserInfo = IdentificationUserIdentity
 
 export type ClusterInfo = ManagementClusterDisplayInfo
 export type ClusterComponentNodeInfo = ManagementComponentNodeDisplayInfo
-export type ClusterParamItem = ParameterListParamsResp
+export type ClusterParamItem = StructsClusterParameterInfo
 export type ClusterLogItem = LogSearchTiDBLogDetail
 export type ClusterBackupItem = BackuprestoreBackupRecord
 
@@ -119,7 +119,7 @@ export type RequestBackupRestore = BackuprestoreRestoreReq
 export type RequestTransportExport = ImportexportDataExportReq
 export type RequestTransportImport = ImportexportDataImportReq
 export type RequestClusterCreate = ManagementCreateReq
-export type RequestClusterParamsUpdate = ParameterUpdateParamsReq
+export type RequestClusterParamsUpdate = ClusterUpdateClusterParametersReq
 
 export type ResponseClusterDetail = ManagementDetailClusterRsp
 
