@@ -5,7 +5,7 @@ import {
   ClusterDataTransportApi,
   ClusterExportApi,
   ClusterImportApi,
-  ClusterParamsApi,
+  ClusterParametersApi,
   ParameterGroupApi,
   Configuration,
   KnowledgeApi,
@@ -61,7 +61,7 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
       undefined,
       axiosInstance
     ),
-    ClusterParams: new ClusterParamsApi(
+    ClusterParams: new ClusterParametersApi(
       configuration,
       undefined,
       axiosInstance
