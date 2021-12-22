@@ -20,7 +20,7 @@ import {
   KnowledgeClusterType,
   KnowledgeClusterTypeSpec,
   KnowledgeClusterVersion,
-  ManagementPreviewClusterRsp,
+  ClusterPreviewClusterResp,
   MessageDataExportReq,
   MessageDataImportReq,
   StructsBackupRecord,
@@ -56,7 +56,7 @@ export type HostInfo = StructsHostInfo
 
 export type ResourceTreeNode = StructsHierarchyTreeNode
 
-export type ClusterPreview = ManagementPreviewClusterRsp
+export type ClusterPreview = ClusterPreviewClusterResp
 
 export type TaskWorkflowInfo = StructsWorkFlowInfo
 export type TaskWorkflowDetailInfo = MessageQueryWorkFlowDetailResp
