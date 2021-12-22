@@ -89,6 +89,7 @@ clusterBackupStrategy:
     Sunday: 周日
 clusterParam:
   property:
+    component: 组件名称
     name: 参数名称
     reboot: 重启
     desc: 参数描述
