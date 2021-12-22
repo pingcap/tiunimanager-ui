@@ -232,7 +232,7 @@ export function useUpdateClusterBackupStrategy() {
 
 export function useQueryClusterBackups(
   query: {
-    id: string
+    clusterId: string
     page?: number
     pageSize?: number
     startTime?: number
@@ -240,11 +240,18 @@ export function useQueryClusterBackups(
   },
   options?: PartialUseQueryOptions
 ) {
-  const { id, page, pageSize, startTime, endTime } = query
+  const { clusterId, page, pageSize, startTime, endTime } = query
   return useQuery(
-    [CACHE_CLUSTER_BACKUPS, id, page, pageSize, startTime, endTime],
+    [CACHE_CLUSTER_BACKUPS, clusterId, page, pageSize, startTime, endTime],
     () =>
-      APIS.ClusterBackups.backupsGet(id, endTime, page, pageSize, startTime),
+      APIS.ClusterBackups.backupsGet(
+        undefined,
+        clusterId,
+        endTime,
+        page,
+        pageSize,
+        startTime
+      ),
     options
   )
 }

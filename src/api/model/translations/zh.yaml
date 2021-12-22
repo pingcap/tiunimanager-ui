@@ -3,6 +3,7 @@ cluster:
     id: 集群ID
     name: 集群名称
     status: 状态
+    operationStatus: 操作状态
     address: 连接地址
     extranetAddress: 外网地址
     intranetAddress: 内网地址
@@ -25,19 +26,25 @@ cluster:
     storage: 存储
     backup: 备份
   status:
-    idle: 空闲中
-    online: 运行中
-    offline: 已下线
-    deleted: 已删除
-    CreateCluster: 创建中
-    DeleteCluster: 删除中
-    BackupCluster: 备份中
-    RecoverCluster: 备份恢复中
-    ModifyParameters: 修改参数中
-    ExportData: 数据导出中
-    ImportData: 数据导入中
-    Restarting: 重启中
-    Stopping: 停止中
+    initializing: 初始化中
+    stopped: 已停止
+    running: 运行中
+    recovering: 恢复中
+    failure: 异常
+  operationStatus:
+    creating: 创建中
+    cloning: 克隆中
+    deleting: 删除中
+    stopping: 停止中
+    restarting: 重启中
+    backingUp: 备份中
+    restoring: 恢复中
+    scalingIn: 缩容中
+    scalingOut: 扩容中
+    upgrading: 升级中
+    switching: 切换中
+    applyingParams: 应用参数中
+    takingOver: 接管中
 clusterLog:
   property:
     id: ID
@@ -73,6 +80,11 @@ clusterBackup:
   mode:
     manual: 手动
     auto: 自动
+  status:
+    initializing: 初始化中
+    processing: 处理中
+    success: 成功
+    failed: 失败
 clusterBackupStrategy:
   property:
     clusterId: 集群ID
@@ -120,6 +132,12 @@ clusterNode:
     iops: IO/s
     zone: Zone
     role: 用途
+  status:
+    initializing: 初始化中
+    stopped: 已停止
+    running: 运行中
+    recovering: 恢复中
+    failure: 异常
 paramGroup:
   property:
     id: ID
@@ -171,6 +189,7 @@ host:
   status:
     online: 在线
     offline: 离线
+    deleted: 已删除
   load:
     idle: 空闲中
     used: 使用中
@@ -181,7 +200,7 @@ host:
   purpose:
     compute: 计算
     storage: 存储
-    general: 通用
+    schedule: 调度
   disk:
     property:
       id: ID
@@ -209,12 +228,9 @@ task:
   property:
     id: ID
     name: 名称
-    inProcessFlowId: 任务流内部ID
-    clusterId: 集群ID
-    clusterName: 集群名称
-    startTime: 创建时间
+    bizId: 集群ID
+    creationTime: 创建时间
     updateTime: 更新时间
-    endTime: 结束时间
     operator: 发起者
     manual: 触发模式
     status: 状态
@@ -224,6 +240,7 @@ task:
     processing: 进行中
     finished: 完成
     error: 失败
+    cancelled: 已取消
   operator:
     system: 系统自动
 knowledge:
@@ -235,7 +252,7 @@ knowledge:
 transport:
   property:
     id: ID
-    status: 状态 # the same as task.status
+    status: 状态
     clusterId: 集群 ID
     startTime: 开始时间
     endTime: 截至时间
@@ -251,3 +268,8 @@ transport:
   storageType:
     nfs: 本地存储
     s3: AWS S3
+  status:
+    initializing: 初始化中
+    processing: 处理中
+    success: 成功
+    failed: 失败

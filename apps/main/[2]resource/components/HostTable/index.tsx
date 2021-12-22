@@ -36,7 +36,7 @@ export default function HostTable() {
     <HeavyTable
       headerTitle={null}
       loading={isLoading}
-      dataSource={data?.data.data || []}
+      dataSource={data?.data.data?.hosts || []}
       onSubmit={(filters) => {
         setFilter(filters as any)
       }}
@@ -97,8 +97,8 @@ function useTableColumn() {
       deleteHosts.mutateAsync(
         { hostsId: hostId },
         {
-          onSuccess(data) {
-            message.success(t('delete.success', { msg: data.data.data })).then()
+          onSuccess() {
+            message.success(t('delete.success'))
           },
           onSettled() {
             return Promise.allSettled([
@@ -107,13 +107,11 @@ function useTableColumn() {
             ])
           },
           onError(e: any) {
-            message
-              .error(
-                t('delete.fail', {
-                  msg: errToMsg(e),
-                })
-              )
-              .then()
+            message.error(
+              t('delete.fail', {
+                msg: errToMsg(e),
+              })
+            )
           },
         }
       ),
@@ -159,8 +157,9 @@ function getHostColumns(
       key: 'status',
       valueType: 'select',
       valueEnum: {
-        0: { text: t('model:host.status.online'), status: 'Success' },
-        1: { text: t('model:host.status.offline'), status: 'Default' },
+        Online: { text: t('model:host.status.online'), status: 'Success' },
+        Offline: { text: t('model:host.status.offline'), status: 'Default' },
+        Deleted: { text: t('model:host.status.deleted'), status: 'Error' },
       },
     },
     {
@@ -170,12 +169,21 @@ function getHostColumns(
       key: 'loadStat',
       valueType: 'select',
       valueEnum: {
-        0: { text: t('model:host.load.idle'), status: 'Default' },
-        1: { text: t('model:host.load.used'), status: 'Processing' },
-        2: { text: t('model:host.load.full'), status: 'Warning' },
-        3: { text: t('model:host.load.computeExhausted'), status: 'Warning' },
-        4: { text: t('model:host.load.storageExhausted'), status: 'Warning' },
-        5: { text: t('model:host.load.exclusive'), status: 'Processing' },
+        LoadLess: { text: t('model:host.load.idle'), status: 'Default' },
+        InUsed: { text: t('model:host.load.used'), status: 'Processing' },
+        Exhaust: { text: t('model:host.load.full'), status: 'Warning' },
+        ComputeExhaust: {
+          text: t('model:host.load.computeExhausted'),
+          status: 'Warning',
+        },
+        DiskExhaust: {
+          text: t('model:host.load.storageExhausted'),
+          status: 'Warning',
+        },
+        Exclusive: {
+          text: t('model:host.load.exclusive'),
+          status: 'Processing',
+        },
       },
     },
     {
@@ -198,6 +206,7 @@ function getHostColumns(
       hideInSearch: true,
     },
     {
+      // only for filter
       title: t('model:host.property.purpose'),
       width: 80,
       dataIndex: 'purpose',
@@ -206,8 +215,17 @@ function getHostColumns(
       valueEnum: {
         Compute: { text: t('model:host.purpose.compute') },
         Storage: { text: t('model:host.purpose.storage') },
-        General: { text: t('model:host.purpose.general') },
+        Schedule: { text: t('model:host.purpose.schedule') },
       },
+      hideInTable: true,
+    },
+    {
+      // only for table
+      title: t('model:host.property.purpose'),
+      width: 80,
+      dataIndex: 'purpose',
+      key: 'purpose-show',
+      render: (_, record) => record,
     },
     {
       title: t('columns.system'),

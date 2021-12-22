@@ -11,7 +11,7 @@ export default function () {
   const { t } = useI18n()
   const [settingVisible, toggleSettingVisible] = useToggle(false)
 
-  const cluster = useClusterContext()
+  const { info } = useClusterContext()
   return (
     <>
       <div className={styles.toolbar}>
@@ -25,10 +25,10 @@ export default function () {
       </div>
       <SettingModal
         close={toggleSettingVisible}
-        clusterId={cluster.clusterId!}
+        clusterId={info!.clusterId!}
         visible={settingVisible}
       />
-      <BackupTable cluster={cluster} />
+      <BackupTable cluster={info!} />
     </>
   )
 }

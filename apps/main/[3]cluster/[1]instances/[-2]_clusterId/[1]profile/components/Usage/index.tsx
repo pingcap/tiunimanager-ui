@@ -1,13 +1,13 @@
 import { Card, Col, Row } from 'antd'
 import { BigUsageCircle } from '@/components/UsageCircle'
-import { ResponseClusterDetail } from '@/api/model'
+import { ClusterInfo } from '@/api/model'
 import styles from './index.module.less'
 import { loadI18n, useI18n } from '@i18n-macro'
 
 loadI18n()
 
 export type UsageProps = {
-  cluster: ResponseClusterDetail
+  cluster: ClusterInfo
 }
 
 export function Usage({ cluster }: UsageProps) {
@@ -32,16 +32,6 @@ export function Usage({ cluster }: UsageProps) {
             used={cluster.memoryUsage?.used}
             total={cluster.memoryUsage?.total}
             name={t('model:cluster.usage.memory')}
-            unit="MB"
-          />
-        </Col>
-        <Col span={4} offset={1}>
-          <BigUsageCircle
-            className={styles.usageCard}
-            usageRate={cluster.diskUsage?.usageRate}
-            used={cluster.diskUsage?.used}
-            total={cluster.diskUsage?.total}
-            name={t('model:cluster.usage.disk')}
             unit="MB"
           />
         </Col>

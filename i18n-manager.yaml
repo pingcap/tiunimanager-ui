@@ -8,6 +8,9 @@ patterns:
   - glob: src/api/model/translations/*.yaml
     path: (model)/translations/
     lang: ([^/]+?)\.ya?ml$
+  - glob: src/api/task/translations/*.yaml
+    path: (task)/translations/
+    lang: ([^/]+?)\.ya?ml$
 languages:
   zh: Chinese
   en: English

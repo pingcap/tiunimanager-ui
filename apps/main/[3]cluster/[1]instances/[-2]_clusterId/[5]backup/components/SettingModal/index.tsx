@@ -71,10 +71,18 @@ export default function SettingModal({
   const [form] = Form.useForm()
 
   const handleReset = () => {
-    form.setFieldsValue({
-      backupDate: data?.data.data?.backupDate?.split(',') || [],
-      period: data?.data.data?.period || '00:00-01:00',
-    })
+    const strategy = data?.data.data?.strategy
+    if (strategy?.backupDate) {
+      form.setFieldsValue({
+        backupDate: strategy?.backupDate?.split(',') || [],
+        period: strategy?.period || '00:00-01:00',
+      })
+    } else {
+      form.setFieldsValue({
+        backupDate: [],
+        period: '00:00-01:00',
+      })
+    }
   }
 
   const handleUpdate = () => {

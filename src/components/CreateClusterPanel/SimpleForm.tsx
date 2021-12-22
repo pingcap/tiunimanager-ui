@@ -69,7 +69,7 @@ export function SimpleForm({
 
   const [clusterType, setClusterType] = useState<string>()
   const [clusterVersion, setClusterVersion] = useState<string>()
-  const [arch, setArch] = useState<HardwareArch>('X86_64')
+  const [arch, setArch] = useState<HardwareArch>(HardwareArch.x86_64)
   const [region, setRegion] = useState<string | undefined>()
 
   const availableStocksMap = useAvailableStocks(arch)
@@ -96,8 +96,8 @@ export function SimpleForm({
   )
 
   const resetArch = () => {
-    setArch('X86_64')
-    form.setFields([{ name: 'cpuArchitecture', value: 'X86_64' }])
+    setArch(HardwareArch.x86_64)
+    form.setFields([{ name: 'cpuArchitecture', value: HardwareArch.x86_64 }])
   }
   const resetRegion = () => {
     setRegion(undefined)
@@ -296,11 +296,13 @@ function BasicOptions({
         name="cpuArchitecture"
         label={t('basic.fields.arch')}
         rules={[{ required: true }]}
-        initialValue={'X86_64'}
+        initialValue={HardwareArch.x86_64}
       >
         <Radio.Group onChange={(v) => onSelectArch(v.target.value)}>
-          <Radio.Button value="X86_64">x86_64</Radio.Button>
-          <Radio.Button value="ARM64">amd64</Radio.Button>
+          <Radio.Button value={HardwareArch.x86_64}>x86_64</Radio.Button>
+          <Radio.Button value={HardwareArch.x86}>x86</Radio.Button>
+          <Radio.Button value={HardwareArch.arm64}>arm64</Radio.Button>
+          <Radio.Button value={HardwareArch.arm}>arm</Radio.Button>
         </Radio.Group>
       </Form.Item>
       <Form.Item
@@ -351,7 +353,7 @@ function NodeOptions({
   region?: string
   availableStocksMap: AvailableStocksMap
 }) {
-  const componentName = spec.clusterComponent!.componentPurpose!
+  const componentName = spec.clusterComponent!.componentName!
   const componentType = spec.clusterComponent!.componentType!
   const componentRequired = spec.componentConstraint!.componentRequired
   const suggestedNodeQuantity = componentRequired
@@ -370,7 +372,7 @@ function NodeOptions({
         header={
           <span>
             {t('nodes.title', {
-              name: t(`model:knowledge.component.${componentName}`),
+              name: componentName,
             })}
             {!componentRequired && (
               <Tag color="default" className={styles.optionalBadge}>
@@ -381,7 +383,12 @@ function NodeOptions({
         }
       >
         <Form.Item
-          name={['nodeDemandList', idx, 'componentType']}
+          name={[
+            'resourceParameters',
+            'instanceResource',
+            idx,
+            'componentType',
+          ]}
           hidden
           initialValue={componentType}
         >
@@ -407,9 +414,10 @@ function NodeOptions({
               <Col span={8}>
                 <Form.Item
                   name={[
-                    'nodeDemandList',
+                    'resourceParameters',
+                    'instanceResource',
                     idx,
-                    'distributionItems',
+                    'resource',
                     i,
                     'zoneCode',
                   ]}
@@ -423,9 +431,10 @@ function NodeOptions({
               <Col span={8}>
                 <Form.Item
                   name={[
-                    'nodeDemandList',
+                    'resourceParameters',
+                    'instanceResource',
                     idx,
-                    'distributionItems',
+                    'resource',
                     i,
                     'specCode',
                   ]}
@@ -443,9 +452,10 @@ function NodeOptions({
               <Col span={8}>
                 <Form.Item
                   name={[
-                    'nodeDemandList',
+                    'resourceParameters',
+                    'instanceResource',
                     idx,
-                    'distributionItems',
+                    'resource',
                     i,
                     'count',
                   ]}
@@ -591,7 +601,7 @@ function getColumns(
     {
       title: t('preview.columns.component'),
       width: 80,
-      dataIndex: ['component', 'componentPurpose'],
+      dataIndex: 'componentName',
       key: 'type',
     },
     {

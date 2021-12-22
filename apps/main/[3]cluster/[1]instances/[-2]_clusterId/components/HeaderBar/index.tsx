@@ -17,32 +17,31 @@ import Header from '@/components/Header'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { errToMsg } from '@/utils/error'
 import { DeleteConfirm } from '@/components/DeleteConfirm'
+import { ClusterBackupMethod } from '@/api/model'
 
 loadI18n()
 
 export default function HeaderBar() {
   const history = useHistory()
-  const cluster = useClusterContext()
+  const { info } = useClusterContext()
   const createBackup = useCreateClusterBackup()
   const deleteCluster = useDeleteCluster()
   const queryClient = useQueryClient()
   const { t, i18n } = useI18n()
 
-  const { clusterId, statusName } = cluster
+  const { clusterId, status } = info!
 
   return useMemo(() => {
     const backToList = () => history.push(resolveRoute('../'))
-    const handleBackup = async () => {
-      await createBackup.mutateAsync(
-        { clusterId },
+    const handleBackup = () => {
+      createBackup.mutateAsync(
+        { clusterId, backupMode: ClusterBackupMethod.manual },
         {
-          onSuccess(data) {
-            message.success(
-              t('backup.success', { msg: data.data.data!.clusterId })
-            )
+          onSuccess() {
+            message.success(t('backup.success', { msg: clusterId }))
           },
           onSettled() {
-            return invalidateClusterBackups(queryClient, clusterId!)
+            invalidateClusterBackups(queryClient, clusterId!)
           },
           onError(e: any) {
             message.error(
@@ -54,17 +53,15 @@ export default function HeaderBar() {
         }
       )
     }
-    const handleDelete = async () => {
-      await deleteCluster.mutateAsync(
+    const handleDelete = () => {
+      deleteCluster.mutateAsync(
         { id: clusterId! },
         {
-          onSuccess(data) {
-            message.success(
-              t('delete.success', { msg: data.data.data!.clusterId })
-            )
+          onSuccess() {
+            message.success(t('delete.success', { msg: clusterId }))
           },
           onSettled() {
-            return invalidateClusterDetail(queryClient, clusterId!)
+            invalidateClusterDetail(queryClient, clusterId!)
           },
           onError(e: any) {
             message.error(
@@ -81,7 +78,7 @@ export default function HeaderBar() {
         key="backup"
         onClick={() => {
           Modal.confirm({
-            content: t('backup.confirm', { name: cluster.clusterName! }),
+            content: t('backup.confirm', { name: clusterId! }),
             onOk: handleBackup,
           })
         }}
@@ -137,7 +134,7 @@ export default function HeaderBar() {
     )
   }, [
     clusterId,
-    statusName,
+    status,
     createBackup.mutateAsync,
     deleteCluster.mutateAsync,
     i18n.language,
