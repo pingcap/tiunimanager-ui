@@ -22,6 +22,7 @@ import { useMemo, useState } from 'react'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { CodeInput } from '@/components/CodeEditor'
 import {
+  ClusterStatus,
   PagedResult,
   RequestTransportExport,
   TransportRecord,
@@ -625,7 +626,7 @@ type ClusterSelectorProps = {
 
 function ClusterSelector({ value, onChange }: ClusterSelectorProps) {
   const { data, isLoading } = useQueryClustersList(
-    {},
+    { status: ClusterStatus.running },
     { keepPreviousData: true }
   )
   const options =
