@@ -1,0 +1,9 @@
+card:
+  title: Parameters
+  rules:
+    required: Please input a valid value
+actions:
+  save: Save
+  edit: Edit
+columns:
+  actions: Actions

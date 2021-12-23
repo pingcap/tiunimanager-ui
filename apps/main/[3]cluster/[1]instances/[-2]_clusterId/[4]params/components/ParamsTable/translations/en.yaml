@@ -1,1 +1,25 @@
-_: _
+header:
+  title: Related Parameter Group
+actions:
+  refresh: Refresh
+  reset: Reset
+  save: Save
+  edit: Edit
+reset:
+  confirm: Are you sure to reset edited params?
+save:
+  nochanges: No changes
+  confirm: Are you sure to save the following parameter changes?
+  success: Update params successfully
+  fail: 'Fail: {{ msg }}'
+  fields:
+    component: Component Name
+    name: Param Name
+    before: Before
+    after: After
+    reboot: Reboot
+  okText:
+    normal: Confirm
+    reboot: Confirm and Reboot
+columns:
+  actions: Actions
