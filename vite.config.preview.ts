@@ -16,7 +16,6 @@ export default defineConfig(({ mode }) => {
     proxy['/fs'] = {
       target: VITE_PROXY_FS_TARGET,
       changeOrigin: true,
-      rewrite: (path) => path.replace(/^\/fs/, ''),
     }
   return {
     server: {

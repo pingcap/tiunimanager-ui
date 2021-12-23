@@ -10,7 +10,7 @@ import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction } from 'react-i18next'
 import { usePagination } from '@hooks/usePagination'
 import styles from './index.module.less'
-import moment from 'moment'
+import { getTimestamp } from '@/utils/time'
 
 loadI18n()
 
@@ -30,7 +30,15 @@ export function LogsTable({ cluster }: LogsTableProps) {
       headerTitle={null}
       loading={isLoading}
       onSubmit={(filters) => {
-        setFilter(filters as any)
+        const { startTime, endTime, ...rest } = filters as {
+          startTime?: string
+          endTime?: string
+        }
+        setFilter({
+          startTime: startTime ? getTimestamp(startTime) : undefined,
+          endTime: endTime ? getTimestamp(endTime) : undefined,
+          ...rest,
+        })
       }}
       dataSource={data?.data.data?.results || []}
       search={{
@@ -142,13 +150,10 @@ function useFetchLogsData(clusterId: string) {
   const [filters, setFilter] = useState<
     Omit<UseQueryClusterLogsParams, 'clusterId' | 'from' | 'size'>
   >({})
-  const { startTime, endTime, ...rest } = filters
   const { data, isLoading, refetch } = useQueryClusterLogs(
     {
       clusterId,
-      startTime: startTime && moment(startTime).format('YYYY-MM-DD hh:mm:ss'),
-      endTime: endTime && moment(endTime).format('YYYY-MM-DD hh:mm:ss'),
-      ...rest,
+      ...filters,
       ...pagination,
     },
     { refetchOnWindowFocus: false }

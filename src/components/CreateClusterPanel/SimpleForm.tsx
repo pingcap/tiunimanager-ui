@@ -511,7 +511,6 @@ function Submitter({
               region,
               cpuArchitecture,
               stockCheckResult,
-              recoverInfo,
             } = resp.data!.data!
             const data = stockCheckResult!.map((r, id) => ({
               id,
@@ -541,14 +540,14 @@ function Submitter({
                       components={{ strong: <strong /> }}
                     />
                   </p>
-                  {recoverInfo && fields.recoverInfo && (
+                  {fields.recoverInfo && (
                     <p>
                       <Trans
                         t={t}
                         i18nKey="preview.restoreInfo"
                         values={{
-                          backupId: recoverInfo.backupRecordId,
-                          clusterId: recoverInfo.sourceClusterId,
+                          backupId: fields.recoverInfo.backupRecordId,
+                          clusterId: fields.recoverInfo.sourceClusterId,
                         }}
                         components={{ strong: <strong /> }}
                       />
