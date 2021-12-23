@@ -63,7 +63,7 @@ modeSelector:
 preview:
   title: 集群配置预览
   description: '正在 Region <strong>{{ region }}</strong> 中创建 <strong>{{ arch }}</strong> <strong>{{ type }}</strong> <strong>{{ version }}</strong> 集群 <strong>{{ name }}</strong>'
-  restoreInfo: '从集群 <strong>{{ clusterId }}</strong> 的 <strong>#{{ backupId }}</strong> 备份中初始化数据'
+  restoreInfo: '从集群 <strong>{{ clusterId }}</strong> 的备份 <strong>{{ backupId }}</strong> 中初始化数据'
   columns:
     component: 组件
     zone: 可用区
