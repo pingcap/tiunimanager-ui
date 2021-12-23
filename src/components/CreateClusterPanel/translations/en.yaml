@@ -63,7 +63,7 @@ modeSelector:
 preview:
   title: Cluster Preview
   description: 'Creating cluster <strong>{{ name }}</strong> of <strong>{{ type }}</strong> <strong>{{ version }}</strong> on <strong>{{ arch }}</strong> hardware in <strong>{{ region }}</strong>.'
-  restoreInfo: 'Restore from backup <strong>#{{ backupId }}</strong> of cluster <strong>{{ clusterId }}</strong>'
+  restoreInfo: 'Restore from backup <strong>{{ backupId }}</strong> of cluster <strong>{{ clusterId }}</strong>'
   columns:
     component: Component
     zone: Zone
