@@ -9,6 +9,7 @@ name:
   ImportData: 导入数据
   ExportData: 导出数据
   BackupCluster: 备份集群
-  RecoverCluster: 恢复集群
+  RestoreNewCluster: 恢复新集群
+  RestoreExistCluster: 恢复集群
   ModifyParameters: 修改参数
   BuildLogConfig: 重建日志配置
