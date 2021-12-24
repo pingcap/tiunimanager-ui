@@ -1,14 +1,15 @@
 name:
-  CreateCluster: CreateCluster
-  TakeoverCluster: TakeoverCluster
-  ScaleOutCluster: ScaleOutluster
-  ScaleInCluster: ScaleInCluster
-  DeleteCluster: DeleteCluster
-  RestartCluster: RestartCluster
-  StopCluster: StopCluster
-  ImportData: ImportData
-  ExportData: ExportData
-  BackupCluster: BackupCluster
-  RecoverCluster: RecoverCluster
-  ModifyParameters: ModifyParameters
-  BuildLogConfig: BuildLogConfig
+  CreateCluster: Create Cluster
+  TakeoverCluster: Takeover Cluster
+  ScaleOutCluster: Scale-out Cluster
+  ScaleInCluster: Scale-in Cluster
+  DeleteCluster: Delete Cluster
+  RestartCluster: Restart Cluster
+  StopCluster: Shutdown Cluster
+  ImportData: Import Data
+  ExportData: Export Data
+  BackupCluster: Backup Cluster
+  RestoreNewCluster: Restore New Cluster
+  RestoreExistCluster: Restore Existed Cluster
+  ModifyParameters: Update Parameters
+  BuildLogConfig: Rebuild Logs Config
