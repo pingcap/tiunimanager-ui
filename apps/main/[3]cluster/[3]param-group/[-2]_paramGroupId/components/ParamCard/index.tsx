@@ -49,7 +49,6 @@ function getColumns(t: TFunction<''>) {
       title: t('model:clusterParam.property.desc'),
       dataIndex: 'description',
       key: 'description',
-      ellipsis: true,
     },
   ]
   return columns
@@ -109,25 +108,6 @@ const ParamCard: FC<ParamCardProps> = ({ data }) => {
 
   const [activeTab, setActiveTab] = useState(tabList?.[0]?.key)
 
-  const activeTabIndex = useMemo(
-    () => tabList.findIndex((config) => config.key === activeTab),
-    [tabList, activeTab]
-  )
-
-  const tableDomList = useMemo(() => {
-    return tabList.map((config) => (
-      <HeavyTable
-        dataSource={componentParamMap[config.key]}
-        tooltip={false}
-        columns={columns}
-        pagination={false}
-        options={TableOptions}
-        rowKey="paramId"
-        scroll={{ x: 1200, y: 600 }}
-      />
-    ))
-  }, [componentParamMap, tabList, columns])
-
   if (!tabList.length) {
     // TODO
     // render Empty
@@ -146,16 +126,15 @@ const ParamCard: FC<ParamCardProps> = ({ data }) => {
         setActiveTab(key)
       }}
     >
-      <div
-        className={styles.translationWrapper}
-        style={{ transform: `translateX(-${activeTabIndex}00%)` }}
-      >
-        {tabList.map((config, index) => (
-          <div className={styles.tableWrapper} key={config.key}>
-            {tableDomList[index]}
-          </div>
-        ))}
-      </div>
+      <HeavyTable
+        dataSource={componentParamMap[activeTab]}
+        tooltip={false}
+        columns={columns}
+        pagination={false}
+        options={TableOptions}
+        rowKey="paramId"
+        scroll={{ x: 1200, y: 600 }}
+      />
     </Card>
   )
 }

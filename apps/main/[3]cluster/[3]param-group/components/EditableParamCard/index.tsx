@@ -43,7 +43,6 @@ function getColumns(
       title: t('model:clusterParam.property.range'),
       width: 200,
       key: 'range',
-      ellipsis: true,
       renderText(_, record) {
         return isArray(record.range) && record.range.length > 0
           ? renderRange(record.type!, record.range, record.unit)
@@ -101,7 +100,6 @@ function getColumns(
       title: t('model:clusterParam.property.desc'),
       dataIndex: 'description',
       key: 'description',
-      ellipsis: true,
       editable: false,
     },
   ]
