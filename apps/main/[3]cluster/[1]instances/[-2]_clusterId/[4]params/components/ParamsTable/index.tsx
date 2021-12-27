@@ -199,7 +199,6 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
       title: t('model:clusterParam.property.desc'),
       dataIndex: 'description',
       editable: false,
-      ellipsis: true,
     },
     {
       title: t('model:clusterParam.property.reboot'),
