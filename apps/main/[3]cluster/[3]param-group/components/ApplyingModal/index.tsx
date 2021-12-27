@@ -3,7 +3,12 @@ import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction } from 'react-i18next'
 import { Form, Modal, message, Switch, Table } from 'antd'
 import { useQueryClustersList } from '@/api/hooks/cluster'
-import { ParamGroupItem, ClusterInfo, ParamGroupDBType } from '@/api/model'
+import {
+  ParamGroupItem,
+  ClusterInfo,
+  ParamGroupDBType,
+  ClusterStatus,
+} from '@/api/model'
 import { isArray } from '@/utils/types'
 import type {
   ParamGroupApplyingPayload,
@@ -154,23 +159,23 @@ function useFetchAvalibleClusterList({
       enabled: !!dbType,
     }
   )
-  const clusterList = data?.data.data
+  const clusterList = data?.data.data?.clusters
 
   const filteredList = useMemo(() => {
-    const majorDBVerion = parseInt(dbVersion ?? '')
+    // const majorDBVerion = parseInt(dbVersion ?? '')
 
-    if (!dbType || majorDBVerion > 0 || !isArray(clusterList)) {
+    if (!dbType || !isArray(clusterList)) {
       return []
     }
 
     return clusterList.filter((item) => {
-      const { clusterType, clusterVersion, statusCode } = item
+      const { clusterType, status } = item
 
       // only online clusters and offline clusters avaliable
       return (
         clusterType &&
-        parseInt(clusterVersion ?? '') >= majorDBVerion &&
-        (statusCode === '1' || statusCode === '2')
+        // parseInt(clusterVersion ?? '') >= majorDBVerion &&
+        (status === ClusterStatus.stopped || status === ClusterStatus.running)
       )
     })
   }, [dbType, dbVersion, clusterList])
@@ -213,6 +218,7 @@ const FormItemCluster: FC<FormItemClusterProps> = ({
       }}
       dataSource={dataSource}
       columns={columns}
+      rowKey="clusterId"
     />
   )
 }
