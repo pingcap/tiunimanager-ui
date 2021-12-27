@@ -9,8 +9,7 @@ export default function () {
     () => (
       <div>
         <Desc cluster={info!} />
-        {/*TODO: display usage after monitor feature is done*/}
-        <ComponentList nodes={topology!} />
+        {topology && <ComponentList nodes={topology} />}
       </div>
     ),
     [info]

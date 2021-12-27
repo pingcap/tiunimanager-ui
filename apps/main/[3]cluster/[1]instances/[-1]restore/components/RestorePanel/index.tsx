@@ -31,11 +31,8 @@ export function RestorePanel({ back, cluster, backup }: CreatePanelProps) {
 
   const processValue: SimpleFormProps['processValue'] = useCallback(
     (value) => {
-      const { id, clusterId } = backup
-      ;(value as any).recoverInfo = {
-        backupRecordId: id,
-        sourceClusterId: clusterId,
-      }
+      ;(value as any).backupId = backup.id
+      ;(value as any).clusterId = backup.clusterId
       return true
     },
     [backup]

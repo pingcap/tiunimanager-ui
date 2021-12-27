@@ -131,11 +131,11 @@ function useTableColumn() {
       rebootCluster.mutateAsync(
         { id: clusterId },
         {
-          onSuccess(data) {
+          onSuccess(resp) {
             message
               .success(
                 t(`${bootType}.success`, {
-                  msg: data.data.data?.workFlowId,
+                  msg: resp.data.data?.workFlowId,
                 }),
                 5
               )
@@ -166,11 +166,11 @@ function useTableColumn() {
       stopCluster.mutateAsync(
         { id: clusterId },
         {
-          onSuccess(data) {
+          onSuccess(resp) {
             message
               .success(
                 t('stop.success', {
-                  msg: data.data.data?.workFlowId,
+                  msg: resp.data.data?.workFlowId,
                 }),
                 5
               )

@@ -300,9 +300,9 @@ function BasicOptions({
       >
         <Radio.Group onChange={(v) => onSelectArch(v.target.value)}>
           <Radio.Button value={HardwareArch.x86_64}>x86_64</Radio.Button>
-          <Radio.Button value={HardwareArch.x86}>x86</Radio.Button>
+          {/*<Radio.Button value={HardwareArch.x86}>x86</Radio.Button>*/}
           <Radio.Button value={HardwareArch.arm64}>arm64</Radio.Button>
-          <Radio.Button value={HardwareArch.arm}>arm</Radio.Button>
+          {/*<Radio.Button value={HardwareArch.arm}>arm</Radio.Button>*/}
         </Radio.Group>
       </Form.Item>
       <Form.Item
@@ -511,7 +511,6 @@ function Submitter({
               region,
               cpuArchitecture,
               stockCheckResult,
-              recoverInfo,
             } = resp.data!.data!
             const data = stockCheckResult!.map((r, id) => ({
               id,
@@ -541,14 +540,14 @@ function Submitter({
                       components={{ strong: <strong /> }}
                     />
                   </p>
-                  {recoverInfo && fields.recoverInfo && (
+                  {fields.backupId && (
                     <p>
                       <Trans
                         t={t}
                         i18nKey="preview.restoreInfo"
                         values={{
-                          backupId: recoverInfo.backupRecordId,
-                          clusterId: recoverInfo.sourceClusterId,
+                          backupId: fields.backupId,
+                          clusterId: fields.clusterId,
                         }}
                         components={{ strong: <strong /> }}
                       />
