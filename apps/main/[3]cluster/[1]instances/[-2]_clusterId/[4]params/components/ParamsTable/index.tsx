@@ -17,7 +17,7 @@ import {
   SaveOutlined,
 } from '@ant-design/icons'
 import HeavyTable from '@/components/HeavyTable'
-import { ClusterInfo, ClusterParamItem, ParamValueDataType } from '@/api/model'
+import { ClusterInfo, ClusterParamItem } from '@/api/model'
 import {
   invalidateClusterParams,
   useQueryClusterParams,
@@ -31,6 +31,7 @@ import { errToMsg } from '@/utils/error'
 import { Link } from 'react-router-dom'
 import { resolveRoute } from '@pages-macro'
 import { isArray } from '@/utils/types'
+import { renderRange } from './helper'
 // import { usePagination } from '@hooks/usePagination'
 
 loadI18n()
@@ -216,19 +217,8 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
       width: 200,
       key: 'range',
       renderText(_, record) {
-        const hashmap: Record<number, (r: string[], u?: string) => string> = {
-          [ParamValueDataType.int]: (range: string[], unit = '') =>
-            `${range[0]}${unit} ~ ${range[1]}${unit}`,
-          [ParamValueDataType.string]: (range: string[]) => range.join(', '),
-          [ParamValueDataType.boolean]: (range: string[]) =>
-            `${range[0]}, ${range[1]}`,
-          [ParamValueDataType.float]: (range: string[], unit = '') =>
-            `${range[0]}${unit} ~ ${range[1]}${unit}`,
-          [ParamValueDataType.array]: (range: string[]) => range.join(', '),
-        }
-
         return isArray(record.range) && record.range.length > 0
-          ? hashmap[record.type!]?.(record.range, record.unit)
+          ? renderRange(record.type!, record.range, record.unit)
           : null
       },
       editable: false,
