@@ -1,5 +1,5 @@
 import { FC, useState, useMemo } from 'react'
-import { ParamItemDetail, ParamValueDataType } from '@/api/model'
+import { ParamItemDetail } from '@/api/model'
 import { Card } from 'antd'
 import { TFunction } from 'react-i18next'
 import { useI18n } from '@i18n-macro'
@@ -7,6 +7,7 @@ import type { ProColumns } from '@ant-design/pro-table'
 import HeavyTable from '@/components/HeavyTable'
 import { isArray } from '@/utils/types'
 import styles from './index.module.less'
+import { renderRange } from '../../../components/EditableParamCard/helper'
 
 function getColumns(t: TFunction<''>) {
   const columns: ProColumns<ParamItemDetail>[] = [
@@ -33,19 +34,8 @@ function getColumns(t: TFunction<''>) {
       width: 200,
       key: 'range',
       renderText(_, record) {
-        const hashmap: Record<number, (r: string[], u?: string) => string> = {
-          [ParamValueDataType.int]: (range: string[], unit = '') =>
-            `${range[0]}${unit} ~ ${range[1]}${unit}`,
-          [ParamValueDataType.string]: (range: string[]) => range.join(', '),
-          [ParamValueDataType.boolean]: (range: string[]) =>
-            `${range[0]}, ${range[1]}`,
-          [ParamValueDataType.float]: (range: string[], unit = '') =>
-            `${range[0]}${unit} ~ ${range[1]}${unit}`,
-          [ParamValueDataType.array]: (range: string[]) => range.join(', '),
-        }
-
         return isArray(record.range) && record.range.length > 0
-          ? hashmap[record.type!]?.(record.range, record.unit)
+          ? renderRange(record.type!, record.range, record.unit)
           : null
       },
     },
