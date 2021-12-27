@@ -119,6 +119,25 @@ const ParamCard: FC<ParamCardProps> = ({ data }) => {
 
   const [activeTab, setActiveTab] = useState(tabList?.[0]?.key)
 
+  const activeTabIndex = useMemo(
+    () => tabList.findIndex((config) => config.key === activeTab),
+    [tabList, activeTab]
+  )
+
+  const tableDomList = useMemo(() => {
+    return tabList.map((config) => (
+      <HeavyTable
+        dataSource={componentParamMap[config.key]}
+        tooltip={false}
+        columns={columns}
+        pagination={false}
+        options={TableOptions}
+        rowKey="paramId"
+        scroll={{ x: 1200, y: 600 }}
+      />
+    ))
+  }, [componentParamMap, tabList, columns])
+
   if (!tabList.length) {
     // TODO
     // render Empty
@@ -132,19 +151,21 @@ const ParamCard: FC<ParamCardProps> = ({ data }) => {
       size="small"
       tabList={tabList}
       tabProps={{ size: 'middle' }}
+      bodyStyle={{ transform: 'translation()' }}
       onTabChange={(key) => {
         setActiveTab(key)
       }}
     >
-      <HeavyTable
-        dataSource={componentParamMap[activeTab]}
-        tooltip={false}
-        columns={columns}
-        pagination={false}
-        options={TableOptions}
-        rowKey="name"
-        scroll={{ x: 1200, y: 600 }}
-      />
+      <div
+        className={styles.translationWrapper}
+        style={{ transform: `translateX(-${activeTabIndex}00%)` }}
+      >
+        {tabList.map((config, index) => (
+          <div className={styles.tableWrapper} key={config.key}>
+            {tableDomList[index]}
+          </div>
+        ))}
+      </div>
     </Card>
   )
 }
