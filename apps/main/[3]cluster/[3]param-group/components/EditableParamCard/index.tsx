@@ -4,11 +4,12 @@ import { loadI18n, useI18n } from '@i18n-macro'
 import { Card, Form, FormInstance } from 'antd'
 import { ActionType, ProColumns } from '@ant-design/pro-table'
 import HeavyTable from '@/components/HeavyTable'
-import { ParamItemDetail, ParamValueDataType } from '@/api/model'
+import { ParamItemDetail } from '@/api/model'
 import { EditOutlined } from '@ant-design/icons'
 import { isArray } from '@/utils/types'
 
 import styles from './index.module.less'
+import { renderRange } from './helper'
 
 loadI18n()
 
@@ -44,19 +45,8 @@ function getColumns(
       key: 'range',
       ellipsis: true,
       renderText(_, record) {
-        const hashmap: Record<number, (r: string[], u?: string) => string> = {
-          [ParamValueDataType.int]: (range: string[], unit = '') =>
-            `${range[0]}${unit} ~ ${range[1]}${unit}`,
-          [ParamValueDataType.string]: (range: string[]) => range.join(', '),
-          [ParamValueDataType.boolean]: (range: string[]) =>
-            `${range[0]}, ${range[1]}`,
-          [ParamValueDataType.float]: (range: string[], unit = '') =>
-            `${range[0]}${unit} ~ ${range[1]}${unit}`,
-          [ParamValueDataType.array]: (range: string[]) => range.join(', '),
-        }
-
         return isArray(record.range) && record.range.length > 0
-          ? hashmap[record.type!]?.(record.range, record.unit)
+          ? renderRange(record.type!, record.range, record.unit)
           : null
       },
       editable: false,
