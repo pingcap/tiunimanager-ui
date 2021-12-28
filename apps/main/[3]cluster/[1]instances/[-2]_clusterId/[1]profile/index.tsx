@@ -9,7 +9,9 @@ export default function () {
     () => (
       <div>
         <Desc cluster={info!} />
-        {topology && <ComponentList nodes={topology} />}
+        {topology && (
+          <ComponentList clusterId={info!.clusterId!} nodes={topology} />
+        )}
       </div>
     ),
     [info]
