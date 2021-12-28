@@ -7,7 +7,7 @@
       "axios": {
         "generatorName": "typescript-axios",
         "output": "#{cwd}/generated/api",
-        "glob": "./external/swagger.{json,yaml,yml}",
+        "glob": "./external/api/swagger.{json,yaml,yml}",
         "additionalProperties": {
           "supportsES6": "true",
           "enumPropertyNaming": "original"

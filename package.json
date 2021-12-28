@@ -11,7 +11,10 @@
     "lint": "eslint . --cache",
     "lint:ci": "eslint . --max-warnings 0",
     "prepare": "is-ci || husky install",
-    "api:gen": "yarn openapi-generator-cli generate"
+    "generate": "yarn api:gen && yarn error:gen",
+    "bootstrap": "pip install -r contrib/error-code-gen/requirements.txt",
+    "api:gen": "yarn openapi-generator-cli generate",
+    "error:gen": "python contrib/error-code-gen/main.py -i external/error/input.csv -t external/error/template ./generated/error/index.ts"
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
