@@ -93,8 +93,11 @@ export const APIS = initApis(apiBasePath, axiosInstance)
 const TokenHeader = 'Authorization'
 
 export function setRequestToken(token?: string) {
-  if (!token) delete axiosInstance.defaults.headers[TokenHeader]
-  axiosInstance.defaults.headers[TokenHeader] = `Bearer ${token}`
+  if (!token) {
+    delete axiosInstance.defaults.headers[TokenHeader]
+  } else {
+    axiosInstance.defaults.headers[TokenHeader] = `Bearer ${token}`
+  }
 }
 
 export const APIProvider: FC = ({ children }) =>
