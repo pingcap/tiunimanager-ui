@@ -7,8 +7,8 @@ import {
   ClusterUpdateClusterParametersReq,
   ControllerCommonResult,
   ControllerResultWithPage,
-  IdentificationLoginInfo,
-  IdentificationUserIdentity,
+  MessageLoginReq,
+  MessageLoginResp,
   KnowledgeClusterComponent,
   KnowledgeClusterComponentSpec,
   KnowledgeClusterVersionSpec,
@@ -37,7 +37,7 @@ import { loadI18nWithNS } from '@i18n-macro'
 export type PagedResult = ControllerResultWithPage
 export type CommonResult = ControllerCommonResult
 
-export type UserInfo = IdentificationUserIdentity
+export type UserInfo = MessageLoginResp
 
 export type ClusterDetails = ClusterQueryClusterDetailResp
 export type ClusterInfo = StructsClusterInfo
@@ -66,7 +66,7 @@ export type KnowledgeOfClusterType = KnowledgeClusterTypeSpec
 export type KnowledgeOfClusterVersion = KnowledgeClusterVersionSpec
 export type KnowledgeOfClusterComponent = KnowledgeClusterComponentSpec
 
-export type UserLoginRequest = IdentificationLoginInfo
+export type UserLoginRequest = MessageLoginReq
 
 export type RequestBackupCreate = ClusterBackupClusterDataReq
 export type RequestBackupStrategyUpdate = ClusterSaveBackupStrategyReq

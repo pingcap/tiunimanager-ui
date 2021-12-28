@@ -119,8 +119,7 @@ function UserAction() {
         key="logout"
         title={t('actions.logout')}
         onClick={() => {
-          doUserLogout().then()
-          dispatchLogout()
+          doUserLogout().then(dispatchLogout)
         }}
       >
         {/* TODO: logout & i18n */}
