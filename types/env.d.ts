@@ -17,7 +17,4 @@ interface ImportMetaEnv {
   VITE_MONITOR_URL: string
   VITE_TRACER_URL: string
   VITE_ALERT_URL: string
-
-  // release mode for bundle
-  VITE_RELEASE: string
 }

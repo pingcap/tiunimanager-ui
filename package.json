@@ -6,7 +6,7 @@
     "dev:wdyr": "cross-env VITE_WDYR=1 vite",
     "dev:mock:wdyr": "cross-env VITE_MOCK=1 VITE_WDYR=1 vite",
     "build": "tsc && vite build",
-    "release": "cross-env VITE_RELEASE=1 yarn build",
+    "release": "yarn build --mode release",
     "serve": "vite preview",
     "lint": "eslint . --cache",
     "lint:ci": "eslint . --max-warnings 0",

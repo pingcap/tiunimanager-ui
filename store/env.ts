@@ -12,7 +12,7 @@ type EnvState = {
 }
 
 export const useEnvState = create<EnvState>((set) => {
-  if (import.meta.env.VITE_RELEASE) fetchEnv().then((env) => set(env))
+  if (import.meta.env.MODE === 'release') fetchEnv().then((env) => set(env))
 
   return {
     protocol: 'http',
