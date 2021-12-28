@@ -1,0 +1,40 @@
+basic:
+  title: Basic Info
+nodes:
+  title: '{{ name }} Options'
+  add: Add more nodes
+  remove: Remove
+  optional: Optional
+  allocator:
+    title: Quick Allocate
+    items: '{{ count }} Nodes'
+  fields:
+    zone: Available Zone
+    spec: Spec
+    oldAmount: Old Amount
+    newAmount: New Amount
+footer:
+  reset:
+    title: Reset
+    confirm: Are you sure to reset the form?
+  submit:
+    title: Submit
+    confirm: Are you sure to submit the form?
+message:
+  noZone: no available zone
+  success: Scale out successfully!
+  fail: 'Fail to scale out: {{ msg }}'
+preview:
+  columns:
+    component: Component
+    zone: Zone
+    spec: Spec
+    amount: Amount
+    status: Status
+  status:
+    normal: Normal
+    notEnough: Insufficient inventory, please adjust the configuration.
+  actions:
+    confirm: Confirm Scale Out
+  empty: No changes.
+  fail: 'Fail to preview: {{ msg }}'

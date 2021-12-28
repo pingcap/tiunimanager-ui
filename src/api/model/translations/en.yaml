@@ -16,6 +16,7 @@ cluster:
     deleteTime: Delete Time
     tls: TLS
     usage: Usage
+    region: Region
   tls:
     on: ON
     off: OFF
