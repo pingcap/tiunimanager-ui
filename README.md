@@ -10,11 +10,11 @@ cd tiem-ui
 # Install Dependencies
 yarn
 
-# Sync Swagger Spec
-yarn api:sync # not supported yet because no fixed source at present
+# Bootstrap
+yarn bootstrap
 
-# Generate Glue Code for API
-yarn api:gen
+# Generate Glue Codes
+yarn generate
 
 # Start Dev Server
 yarn dev
