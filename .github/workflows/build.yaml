@@ -23,7 +23,8 @@ jobs:
           restore-keys: |
             yarn-
       - run: yarn --frozen-lockfile --network-timeout 180000
-      - run: yarn api:gen
+      - run: yarn bootstrap
+      - run: yarn generate
       - run: yarn build
       - uses: actions/upload-artifact@v2
         with:
