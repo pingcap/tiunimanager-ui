@@ -16,13 +16,13 @@ import { SimpleFormProps } from '@/components/CreateClusterPanel/SimpleForm'
 
 loadI18n()
 
-export interface CreatePanelProps {
+export interface RestorePanelProps {
   cluster: ClusterInfo
   backup: ClusterBackupItem
   back: () => void
 }
 
-export function RestorePanel({ back, cluster, backup }: CreatePanelProps) {
+export function RestorePanel({ back, cluster, backup }: RestorePanelProps) {
   const [form] = Form.useForm()
   const { t, i18n } = useI18n()
 

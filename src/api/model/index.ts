@@ -7,8 +7,8 @@ import {
   ClusterUpdateClusterParametersReq,
   ControllerCommonResult,
   ControllerResultWithPage,
-  IdentificationLoginInfo,
-  IdentificationUserIdentity,
+  MessageLoginReq,
+  MessageLoginResp,
   KnowledgeClusterComponent,
   KnowledgeClusterComponentSpec,
   KnowledgeClusterVersionSpec,
@@ -31,16 +31,23 @@ import {
   StructsDataImportExportRecordInfo,
   StructsHierarchyTreeNode,
   StructsHostInfo,
+  ClusterScaleOutClusterReq,
+  ClusterScaleInClusterReq,
+  StructsClusterResourceParameterCompute,
+  StructsClusterResourceParameterComputeResource,
 } from '#/api'
 import { loadI18nWithNS } from '@i18n-macro'
 
 export type PagedResult = ControllerResultWithPage
 export type CommonResult = ControllerCommonResult
 
-export type UserInfo = IdentificationUserIdentity
+export type UserInfo = MessageLoginResp
 
 export type ClusterDetails = ClusterQueryClusterDetailResp
 export type ClusterInfo = StructsClusterInfo
+export type ClusterRawTopologyItem = StructsClusterResourceParameterCompute
+export type ClusterRawTopologyResourceItem =
+  StructsClusterResourceParameterComputeResource
 export type ClusterComponentNodeInfo = StructsClusterInstanceInfo
 export type ClusterParamItem = StructsClusterParameterInfo
 export type ClusterLogItem = StructsClusterLogItem
@@ -66,7 +73,7 @@ export type KnowledgeOfClusterType = KnowledgeClusterTypeSpec
 export type KnowledgeOfClusterVersion = KnowledgeClusterVersionSpec
 export type KnowledgeOfClusterComponent = KnowledgeClusterComponentSpec
 
-export type UserLoginRequest = IdentificationLoginInfo
+export type UserLoginRequest = MessageLoginReq
 
 export type RequestBackupCreate = ClusterBackupClusterDataReq
 export type RequestBackupStrategyUpdate = ClusterSaveBackupStrategyReq
@@ -75,6 +82,8 @@ export type RequestTransportExport = MessageDataExportReq
 export type RequestTransportImport = MessageDataImportReq
 export type RequestClusterCreate = ClusterCreateClusterReq
 export type RequestClusterParamsUpdate = ClusterUpdateClusterParametersReq
+export type RequestClusterScaleOut = ClusterScaleOutClusterReq
+export type RequestClusterScaleIn = ClusterScaleInClusterReq
 
 export { StructsWorkFlowInfoStatusEnum as TaskWorkflowStatus }
 export { StructsWorkFlowNodeInfoStatusEnum as TaskWorkflowSubTaskStatus }

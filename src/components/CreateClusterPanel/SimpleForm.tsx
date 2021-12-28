@@ -74,8 +74,6 @@ export function SimpleForm({
 
   const availableStocksMap = useAvailableStocks(arch)
 
-  // TODO: reset arch and region after select cluster type
-
   const setDefaultTypeAndVersion = useCallback(
     (clusterType?: string) => {
       const defaultClusterType = clusterType || knowledgeMap.types[0]?.code

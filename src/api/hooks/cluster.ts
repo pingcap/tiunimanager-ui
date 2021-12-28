@@ -6,6 +6,8 @@ import {
   RequestBackupStrategyUpdate,
   RequestClusterCreate,
   RequestClusterParamsUpdate,
+  RequestClusterScaleIn,
+  RequestClusterScaleOut,
 } from '@/api/model'
 
 /**
@@ -332,4 +334,30 @@ export function useQueryClusterExternalService(
       ...options,
     }
   )
+}
+
+/**
+ * Cluster Scaling
+ */
+
+const scaleOutCluster = ({
+  clusterId,
+  ...payload
+}: RequestClusterScaleOut & {
+  clusterId: string
+}) => APIS.Clusters.clustersClusterIdScaleOutPost(clusterId, payload)
+
+export function useClusterScaleOut() {
+  return useMutation(scaleOutCluster)
+}
+
+const scaleInCluster = ({
+  clusterId,
+  ...payload
+}: RequestClusterScaleIn & {
+  clusterId: string
+}) => APIS.Clusters.clustersClusterIdScaleInPost(clusterId, payload)
+
+export function useClusterScaleIn() {
+  return useMutation(scaleInCluster)
 }

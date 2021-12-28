@@ -86,7 +86,7 @@ export default function SettingModal({
   }
 
   const handleUpdate = () => {
-    const value = form.getFieldsValue()
+    const value = form.validateFields()
     updateBackupStrategy.mutateAsync(
       {
         clusterId: clusterId,

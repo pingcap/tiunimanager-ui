@@ -144,7 +144,11 @@ export function processCreateRequest(
   t: TFunction<''>
 ) {
   {
-    value.resourceParameters?.instanceResource?.forEach((comp) => {
+    // remove undefined
+    value.resourceParameters!.instanceResource =
+      value.resourceParameters!.instanceResource?.filter((r) => !!r) || []
+
+    value.resourceParameters!.instanceResource!.forEach((comp) => {
       // remove count=0
       comp.resource = comp.resource!.filter((item) => item && item.count! > 0)
       // calculate totalCount

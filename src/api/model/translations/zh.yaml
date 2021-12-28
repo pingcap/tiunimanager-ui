@@ -16,6 +16,7 @@ cluster:
     deleteTime: 删除时间
     tls: TLS
     usage: 资源使用率
+    region: Region
   tls:
     on: 启用
     off: 无

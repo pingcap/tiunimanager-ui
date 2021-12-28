@@ -2,6 +2,7 @@ title: 集群详情
 actions:
   edit: 编辑
   reboot: 重启
+  scaleOut: 集群扩容
   backup: 立即备份
   delete: 删除
 delete:
