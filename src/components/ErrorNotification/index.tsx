@@ -13,6 +13,7 @@ export function useErrorNotification(error: AxiosError) {
     icon: null,
     duration: 0, // TODO: How long?
     description: <ErrorNotification error={error} />,
+    className: styles.notification,
   })
 }
 
