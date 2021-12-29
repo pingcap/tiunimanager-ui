@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - uses: actions/setup-node@v2
         with:
           node-version: 14
@@ -23,5 +25,6 @@ jobs:
           restore-keys: |
             yarn-
       - run: yarn --frozen-lockfile --network-timeout 180000
-      - run: yarn api:gen
+      - run: yarn bootstrap
+      - run: yarn generate
       - run: yarn lint:ci

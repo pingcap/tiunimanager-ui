@@ -15,7 +15,7 @@ window.console.error = (...data: any[]) => {
 
 if (import.meta.env.VITE_MOCK) {
   const mock = await import('@mock/index')
-  // By default MSW will catch all requests during its initialization
+  // By default, MSW will catch all requests during its initialization
   mock.initMock().then()
 }
 
@@ -28,5 +28,4 @@ if (import.meta.env.VITE_WDYR) {
   whyDidYouRender(React, {
     trackAllPureComponents: true,
   })
-  console.log('hacked')
 }

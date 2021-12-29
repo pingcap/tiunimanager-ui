@@ -1,4 +1,10 @@
 import axios, { AxiosInstance } from 'axios'
+import { readonly } from '@/utils/obj'
+import { createElement, FC } from 'react'
+import { QueryClient, QueryClientProvider, UseQueryOptions } from 'react-query'
+import { initModelTranslations } from './model'
+import { getEnvState, subscribeEnv } from '@store/env'
+import { initTaskTranslations } from './task'
 import {
   ClusterApi,
   ClusterBackupApi,
@@ -13,12 +19,9 @@ import {
   ResourceApi,
   TaskApi,
 } from '#/api'
-import { readonly } from '@/utils/obj'
-import { createElement, FC } from 'react'
-import { QueryClient, QueryClientProvider, UseQueryOptions } from 'react-query'
-import { initModelTranslations } from './model'
-import { getEnvState, subscribeEnv } from '@store/env'
-import { initTaskTranslations } from './task'
+
+// load translations for error codes
+import '#/error'
 
 function initAxios() {
   const instance = axios.create()
