@@ -7,10 +7,11 @@ import { useHistoryWithState } from '@/router/helper'
 import styles from './index.module.less'
 import { DownOutlined, KeyOutlined, UserOutlined } from '@ant-design/icons'
 import LanguageDropdown from '@/components/LanguageDropdown'
-import { CommonResult, UserInfo } from '@/api/model'
+import { UserInfo } from '@/api/model'
 import { doUserLogin } from '@/api/hooks/platform'
 import IntlForm from '@/components/IntlForm'
 import { Logo } from '@/components/Logo'
+import { errToMsg } from '@/utils/error'
 
 export default function Login() {
   const { t } = useI18n()
@@ -61,7 +62,7 @@ export default function Login() {
           <Form.Item
             name="password"
             {...(errorMsg && {
-              help: errorMsg,
+              help: t('message.error', { msg: errorMsg }),
               validateStatus: 'error',
             })}
           >
@@ -103,36 +104,27 @@ function useLogin(
   onSuccess: (data: UserInfo) => void,
   onFailure: (msg: string) => void
 ) {
-  const { t } = useI18n()
   const [loading, setLoading] = useState(false)
-  // Error from response.
-  const [errorMsg, setErrorMsg] = useState(null)
 
-  const clearErrorMsg = () => setErrorMsg(null)
+  const [errorMsg, setErrorMsg] = useState<string>()
+
+  const clearErrorMsg = () => setErrorMsg(undefined)
 
   const handleSubmit = async (form: { username: string; password: string }) => {
     clearErrorMsg()
     setLoading(true)
-    const result = await doUserLogin({
-      userName: form.username,
-      userPassword: form.password,
-    })
-    setLoading(false)
-    if (result.type === 'Result') {
-      const { data } = result
-      onSuccess(data.data!)
-      return
-    } else {
-      const errMsg =
-        (result.type === 'AxiosError'
-          ? (result.err.response!.data as CommonResult).message
-          : result.type === 'Error' && result.err.message) || 'unknown reason'
-      setErrorMsg(
-        t('message.error', {
-          msg: errMsg,
-        })
-      )
+    try {
+      const result = await doUserLogin({
+        userName: form.username,
+        userPassword: form.password,
+      })
+      onSuccess(result.data.data!)
+    } catch (err) {
+      const errMsg = errToMsg(err)
+      setErrorMsg(errMsg)
       onFailure(errMsg)
+    } finally {
+      setLoading(false)
     }
   }
 

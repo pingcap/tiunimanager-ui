@@ -22,12 +22,7 @@ import {
 
 // load translations for error codes
 import '#/error'
-
-function initAxios() {
-  const instance = axios.create()
-  // TODO: add interceptors
-  return instance
-}
+import { onErrorResponse } from '@/api/interceptors'
 
 function buildBasePath(
   basePath: string,
@@ -40,6 +35,8 @@ function buildBasePath(
 }
 
 function initApis(basePath: string, axiosInstance: AxiosInstance) {
+  axiosInstance.interceptors.response.use(undefined, onErrorResponse)
+
   const { tlsPort, protocol } = getEnvState()
   const configuration = new Configuration({
     basePath: buildBasePath(basePath, protocol, tlsPort),
@@ -89,7 +86,7 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
 export const apiBasePath = import.meta.env.VITE_API_BASE_URL
 export const fsBasePath = import.meta.env.VITE_FS_BASE_URL
 
-export const axiosInstance = initAxios()
+export const axiosInstance = axios.create()
 
 export const APIS = initApis(apiBasePath, axiosInstance)
 

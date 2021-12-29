@@ -1,0 +1,8 @@
+error:
+  title: Request Failed
+  description: Desciption
+  more: More
+  method: Method
+  url: URL
+  code: Error Code
+  stack: Stack
