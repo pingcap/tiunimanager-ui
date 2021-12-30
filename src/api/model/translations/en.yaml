@@ -113,6 +113,20 @@ clusterParam:
   reboot:
     true: Need
     false: No
+clusterDataReplication:
+  property:
+    id: Id
+    name: Name
+    downstream: Downstream
+    status: Status
+    time: 'Left Time(Unit: ms)'
+  status:
+    initial: Initializing
+    stopped: Stopped
+    running: Running
+    finished: Finished
+    failed: Failed
+    error: Error
 clusterComponent:
   property:
     name: Name
