@@ -11,5 +11,4 @@ actions:
   scaleIn: 缩容
 scaleIn:
   confirm: 确认缩容位于 {{ ip }} 上的 {{ type }} 节点吗
-  success: 缩容节点 {{ id }} 成功
-  fail: '缩容失败: {{ msg }}'
+  name: 缩容节点

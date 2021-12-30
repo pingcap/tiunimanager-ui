@@ -1,7 +1,6 @@
 delete:
   confirm: 确认删除该备份吗?
-  success: 删除备份成功
-  fail: '删除备份失败: {{ msg }}'
+  name: 删除备份
 restore:
   confirm: 确认使用该备份恢复集群吗?
 columns:

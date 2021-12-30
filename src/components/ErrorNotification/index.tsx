@@ -9,9 +9,11 @@ export function useErrorNotification(error: AxiosError) {
   // Note: Notifications do not require response language switching, so use getI18n instead of useI18n
   const t = getI18n()
   notification.open({
-    message: t('error.title'),
+    message: error.config.actionName
+      ? t('error.title', { name: error.config.actionName })
+      : t('error.defaultTitle'),
     icon: null,
-    duration: 0, // TODO: How long?
+    duration: 0,
     description: <ErrorNotification error={error} />,
     className: styles.notification,
   })

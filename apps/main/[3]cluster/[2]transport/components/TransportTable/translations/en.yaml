@@ -5,8 +5,7 @@ actions:
   delete: Delete
 delete:
   confirm: Confirm Delete
-  success: Delete successfullt!
-  fail: 'Fail to delete: {{ msg }}'
+  name: Delete Transport Record
 download:
   notSupport: Only exported file in shared storage can be downloaded.
 copy:

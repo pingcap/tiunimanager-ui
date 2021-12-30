@@ -1,5 +1,6 @@
 error:
-  title: 请求失败
+  defaultTitle: 请求失败
+  title: '{{ name }}失败'
   description: 描述
   more: 更多
   method: 方法

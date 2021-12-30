@@ -1,4 +1,4 @@
-import { Badge, message, Space } from 'antd'
+import { Badge, Space } from 'antd'
 import { ClusterComponentNodeInfo, ClusterNodeStatus } from '@/api/model'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction, Trans } from 'react-i18next'
@@ -8,7 +8,6 @@ import HeavyTable from '@/components/HeavyTable'
 import { ProColumns } from '@ant-design/pro-table'
 import { useQueryClient } from 'react-query'
 import { invalidateClusterDetail, useClusterScaleIn } from '@/api/hooks/cluster'
-import { errToMsg } from '@/utils/error'
 import IntlPopConfirm from '@/components/IntlPopConfirm'
 
 loadI18n()
@@ -29,18 +28,13 @@ export function ComponentList({ nodes, clusterId }: ComponentListProps) {
         {
           clusterId,
           instanceId,
+          options: {
+            actionName: t('scaleIn.name'),
+          },
         },
         {
           async onSuccess() {
             await invalidateClusterDetail(queryClient, clusterId)
-            message.success(t('scaleIn.success', { id: instanceId }), 0.8)
-          },
-          async onError(e: any) {
-            message.error(
-              t('scaleIn.fail', {
-                msg: errToMsg(e),
-              })
-            )
           },
         }
       )

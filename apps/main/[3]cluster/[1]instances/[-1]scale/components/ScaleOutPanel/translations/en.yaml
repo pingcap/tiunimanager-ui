@@ -1,3 +1,6 @@
+name:
+  scaleOut: Scale Out Cluster
+  preview: Preview Allocation
 basic:
   title: Basic Info
 nodes:
@@ -22,8 +25,6 @@ footer:
     confirm: Are you sure to submit the form?
 message:
   noZone: no available zone
-  success: Scale out successfully!
-  fail: 'Fail to scale out: {{ msg }}'
 preview:
   columns:
     component: Component

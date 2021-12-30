@@ -5,8 +5,7 @@ save: Save
 fetch:
   fail: 'Fail to fetch backup strategy: {{ msg }}'
 update:
-  success: 'Update backup strategy for cluster {{ msg }} successfully'
-  fail: 'Fail: {{ msg }}'
+  name: Update Backup Strategy
 
 form:
   backupDate: Date

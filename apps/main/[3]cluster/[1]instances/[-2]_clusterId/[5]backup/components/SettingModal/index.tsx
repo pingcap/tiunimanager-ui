@@ -1,11 +1,10 @@
-import { Button, Checkbox, Col, Form, message, Modal, Row, Select } from 'antd'
+import { Button, Checkbox, Col, Form, Modal, Row, Select } from 'antd'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { useEffect } from 'react'
 import {
   useQueryClusterBackupStrategy,
   useUpdateClusterBackupStrategy,
 } from '@/api/hooks/cluster'
-import { errToMsg } from '@/utils/error'
 
 loadI18n()
 
@@ -63,8 +62,9 @@ export default function SettingModal({
 }: SettingModalProps) {
   const { t } = useI18n()
 
-  const { isLoading, data, isError, error, refetch } =
-    useQueryClusterBackupStrategy({ id: clusterId })
+  const { isLoading, data, refetch } = useQueryClusterBackupStrategy({
+    id: clusterId,
+  })
 
   const updateBackupStrategy = useUpdateClusterBackupStrategy()
 
@@ -94,15 +94,14 @@ export default function SettingModal({
           backupDate: value?.backupDate?.join(','),
           period: value?.period,
         },
+        options: {
+          actionName: t('update.name'),
+        },
       },
       {
         onSuccess() {
-          message.success(t('update.success', { msg: clusterId }), 0.8)
           close()
           refetch()
-        },
-        onError(e: any) {
-          message.error(t('update.fail', { msg: errToMsg(e) }))
         },
       }
     )
@@ -132,8 +131,6 @@ export default function SettingModal({
     >
       {isLoading ? (
         'Loading...'
-      ) : isError ? (
-        message.error(t('fetch.fail', { msg: errToMsg(error) }))
       ) : (
         <div>
           <Form form={form}>

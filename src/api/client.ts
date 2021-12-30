@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios'
 import { readonly } from '@/utils/obj'
 import { createElement, FC } from 'react'
-import { QueryClient, QueryClientProvider, UseQueryOptions } from 'react-query'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { initModelTranslations } from './model'
 import { getEnvState, subscribeEnv } from '@store/env'
 import { initTaskTranslations } from './task'
@@ -22,7 +22,7 @@ import {
 
 // load translations for error codes
 import '#/error'
-import { onErrorResponse } from '@/api/interceptors'
+import { onErrorResponse, onSuccessResponse } from '@/api/interceptors'
 
 function buildBasePath(
   basePath: string,
@@ -35,7 +35,7 @@ function buildBasePath(
 }
 
 function initApis(basePath: string, axiosInstance: AxiosInstance) {
-  axiosInstance.interceptors.response.use(undefined, onErrorResponse)
+  axiosInstance.interceptors.response.use(onSuccessResponse, onErrorResponse)
 
   const { tlsPort, protocol } = getEnvState()
   const configuration = new Configuration({
@@ -102,18 +102,3 @@ export function setRequestToken(token?: string) {
 
 export const APIProvider: FC = ({ children }) =>
   createElement(QueryClientProvider, { client: new QueryClient() }, children)
-
-export type PartialUseQueryOptions = Pick<
-  UseQueryOptions,
-  | 'cacheTime'
-  | 'enabled'
-  | 'staleTime'
-  | 'keepPreviousData'
-  | 'suspense'
-  | 'refetchInterval'
-  | 'refetchIntervalInBackground'
-  | 'refetchOnWindowFocus'
-  | 'refetchOnReconnect'
-  | 'refetchOnMount'
-  | 'retryOnMount'
->

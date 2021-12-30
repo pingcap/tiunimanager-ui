@@ -1,4 +1,4 @@
-import { Card, Form, Input, Layout, message } from 'antd'
+import { Card, Form, Input, Layout } from 'antd'
 import { useCallback, useMemo } from 'react'
 
 import styles from './index.module.less'
@@ -10,7 +10,6 @@ import {
 import { useRestoreClusterBackup } from '@/api/hooks/cluster'
 import { useQueryClient } from 'react-query'
 import { loadI18n, useI18n } from '@i18n-macro'
-import { errToMsg } from '@/utils/error'
 import { SimpleForm } from '@/components/CreateClusterPanel'
 import { SimpleFormProps } from '@/components/CreateClusterPanel/SimpleForm'
 
@@ -40,18 +39,19 @@ export function RestorePanel({ back, cluster, backup }: RestorePanelProps) {
 
   const handleSubmit = useCallback(
     (value: RequestClusterCreate) => {
-      restoreCluster.mutateAsync(value, {
-        onSuccess() {
-          message.success(t('message.success'), 0.8).then(back)
+      restoreCluster.mutateAsync(
+        {
+          ...value,
+          options: {
+            actionName: t('name'),
+          },
         },
-        onError(e: any) {
-          message.error(
-            t('message.fail', {
-              msg: errToMsg(e),
-            })
-          )
-        },
-      })
+        {
+          onSuccess() {
+            back()
+          },
+        }
+      )
     },
     [back, restoreCluster.mutateAsync, queryClient, i18n.language]
   )

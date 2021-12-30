@@ -1,6 +1,7 @@
-import { APIS, PartialUseQueryOptions } from '@/api/client'
+import { APIS } from '@/api/client'
 import { useQuery } from 'react-query'
 import { TaskWorkflowStatus } from '../model'
+import { PartialUseQueryOptions } from './utils'
 
 export const CACHE_TASK = 'tasks'
 export const CACHE_TASK_DETAIL = 'task-detail'

@@ -1,0 +1,6 @@
+success:
+  defaultTitle: 请求成功
+  title: '{{ name }}成功'
+  workflowTitle: '{{ name }}任务启动成功'
+  workflowId: 任务 ID
+  toDetail: 查看任务详情

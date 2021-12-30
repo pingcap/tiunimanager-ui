@@ -1,6 +1,6 @@
 import { useHistory } from 'react-router-dom'
 import { useMemo } from 'react'
-import { Button, message, Modal } from 'antd'
+import { Button, Modal } from 'antd'
 import {
   DeleteOutlined,
   DeploymentUnitOutlined,
@@ -19,7 +19,6 @@ import { resolveRoute } from '@pages-macro'
 import { useQueryClient } from 'react-query'
 import Header from '@/components/Header'
 import { loadI18n, useI18n } from '@i18n-macro'
-import { errToMsg } from '@/utils/error'
 import { DeleteConfirm } from '@/components/DeleteConfirm'
 import { ClusterBackupMethod } from '@/api/model'
 
@@ -38,40 +37,31 @@ export default function HeaderBar() {
     const backToList = () => history.push(resolveRoute('../'))
     const handleBackup = () => {
       createBackup.mutateAsync(
-        { clusterId, backupMode: ClusterBackupMethod.manual },
         {
-          onSuccess() {
-            message.success(t('backup.success', { msg: clusterId }))
+          clusterId,
+          backupMode: ClusterBackupMethod.manual,
+          options: {
+            actionName: t('backup.name'),
           },
+        },
+        {
           onSettled() {
             invalidateClusterBackups(queryClient, clusterId!)
-          },
-          onError(e: any) {
-            message.error(
-              t('backup.fail', {
-                msg: errToMsg(e),
-              })
-            )
           },
         }
       )
     }
     const handleDelete = () => {
       deleteCluster.mutateAsync(
-        { id: clusterId! },
         {
-          onSuccess() {
-            message.success(t('delete.success', { msg: clusterId }))
+          id: clusterId!,
+          options: {
+            actionName: t('delete.name'),
           },
+        },
+        {
           onSettled() {
             invalidateClusterDetail(queryClient, clusterId!)
-          },
-          onError(e: any) {
-            message.error(
-              t('delete.fail', {
-                msg: errToMsg(e),
-              })
-            )
           },
         }
       )

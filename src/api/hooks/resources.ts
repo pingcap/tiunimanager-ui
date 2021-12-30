@@ -1,6 +1,8 @@
-import { APIS, apiBasePath, PartialUseQueryOptions } from '@/api/client'
+import { APIS, apiBasePath } from '@/api/client'
 import { QueryClient, useMutation, useQuery } from 'react-query'
 import { HardwareArch, ResourceUnitType } from '@/api/model'
+import { AxiosRequestConfig } from 'axios'
+import { PartialUseQueryOptions, withRequestOptions } from './utils'
 
 export const CACHE_HOSTS_LIST_KEY = 'resources-hosts-list'
 export const CACHE_HOST_DETAIL_KEY = 'resources-host-detail'
@@ -55,13 +57,18 @@ export async function invalidateHostDetail(
   await client.invalidateQueries([CACHE_HOST_DETAIL_KEY, hostId])
 }
 
-const deleteHosts = (payload: { hostsId: string | string[] }) => {
-  return APIS.Resources.resourcesHostsDelete({
-    hostIds: Array.isArray(payload.hostsId)
-      ? payload.hostsId
-      : [payload.hostsId],
-  })
-}
+const deleteHosts = withRequestOptions(
+  (payload: { hostsId: string | string[] }, options?: AxiosRequestConfig) => {
+    return APIS.Resources.resourcesHostsDelete(
+      {
+        hostIds: Array.isArray(payload.hostsId)
+          ? payload.hostsId
+          : [payload.hostsId],
+      },
+      options
+    )
+  }
+)
 
 export function useDeleteHosts() {
   return useMutation(deleteHosts)
