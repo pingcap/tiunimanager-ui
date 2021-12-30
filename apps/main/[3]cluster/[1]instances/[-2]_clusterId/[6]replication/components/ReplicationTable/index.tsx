@@ -174,7 +174,7 @@ function getColumns({
       width: 180,
       key: 'time',
       renderText(text, record) {
-        return record.downstreamSyncTs! > 0
+        return record.upstreamUpdateTs > 0 && record.downstreamSyncTs! > 0
           ? record.upstreamUpdateTs! - record.downstreamSyncTs!
           : null
       },
