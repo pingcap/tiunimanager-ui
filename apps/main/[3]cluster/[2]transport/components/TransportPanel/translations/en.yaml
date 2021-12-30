@@ -3,17 +3,11 @@ export:
   target: Export Target
   source: Source Database
   options: Export Options
-  message:
-    success: Export successfully!
-    fail: 'Fail: {{ msg }}'
 import:
   title: Import Cluster Data
   source: Data Source
   target: Target Database
   options: Import Options
-  message:
-    success: Import successfully!
-    fail: 'Fail: {{ msg }}'
 form:
   storageType: Storage Type
   s3:

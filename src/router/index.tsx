@@ -1,21 +1,17 @@
-import {
-  BrowserRouter,
-  HashRouter,
-  Redirect,
-  Route,
-  RouteProps,
-  Switch,
-} from 'react-router-dom'
+import { Router, Redirect, Route, RouteProps, Switch } from 'react-router-dom'
 import { Location } from 'history'
-import { ComponentType, ElementType, Suspense } from 'react'
+import { ElementType, Suspense } from 'react'
 import useProgress from '@hooks/useProgress'
 import { IRoute } from '@pages-macro'
 import { IPageMeta } from '@/model/page'
 import { Role } from '@/model/role'
 import { useAuthState } from '@store/auth'
-import { Redirector, RouteState, useLocationWithState } from '@/router/helper'
-
-const Router: ComponentType = import.meta.env.DEV ? HashRouter : BrowserRouter
+import {
+  Redirector,
+  RouteState,
+  useLocationWithState,
+  history,
+} from '@/router/helper'
 
 function getCurrentRoutePath() {
   if (import.meta.env.DEV) return window.location.hash.slice(1)
@@ -34,7 +30,7 @@ export default function mountRouter(
   guard?: RoleGuard
 ) {
   return (
-    <Router>
+    <Router history={history}>
       <Switch>
         {...routes.map((def, idx) => (
           <Route {...genRouteProp(def, guard)} key={idx} />

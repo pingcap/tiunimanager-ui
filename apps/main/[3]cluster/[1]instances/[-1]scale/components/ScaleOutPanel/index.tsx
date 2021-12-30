@@ -26,7 +26,6 @@ import {
   Input,
   InputNumber,
   Layout,
-  message,
   Modal,
   Row,
   Select,
@@ -44,7 +43,6 @@ import {
   useClusterScaleOut,
   usePreviewCreateCluster,
 } from '@/api/hooks/cluster'
-import { errToMsg } from '@/utils/error'
 import { ColumnsType } from 'antd/lib/table/interface'
 
 const styles = {
@@ -112,18 +110,14 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
         {
           clusterId: cluster.clusterId!,
           instanceResource: diff,
+          options: {
+            actionName: t('name.scaleOut'),
+          },
         },
         {
           onSuccess() {
             invalidateClusterDetail(queryClient, cluster.clusterId!)
-            message.success(t('message.success'), 0.8).then(back)
-          },
-          onError(e: any) {
-            message.error(
-              t('message.fail', {
-                msg: errToMsg(e),
-              })
-            )
+            back()
           },
         }
       )
@@ -136,6 +130,9 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
         clusterVersion: cluster.clusterVersion,
         resourceParameters: {
           instanceResource: diff,
+        },
+        options: {
+          actionName: t('name.preview'),
         },
       },
       {
@@ -171,13 +168,6 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
               applyScaleOut()
             },
           })
-        },
-        onError(e: any) {
-          message.error(
-            t('preview.fail', {
-              msg: errToMsg(e),
-            })
-          )
         },
       }
     )

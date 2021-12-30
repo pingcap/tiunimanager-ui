@@ -11,5 +11,4 @@ actions:
   scaleIn: Scale In
 scaleIn:
   confirm: Are you sure to scale in the {{ type }} instance on {{ ip }}?
-  success: Scale in instance {{ id }} successfully!
-  fail: 'Fail to scale in: {{ msg }}'
+  name: Scale In

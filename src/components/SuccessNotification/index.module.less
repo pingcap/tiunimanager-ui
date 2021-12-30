@@ -1,0 +1,21 @@
+.notification {
+  border-left: 2px solid #47db82;
+}
+
+.body {
+  :global(.ant-collapse-content-box) {
+    padding-top: 0!important;
+    width: 380px;
+  }
+
+  .item {
+    display: flex;
+    margin-bottom: 8px;
+    justify-content: space-between;
+
+    div:nth-child(2) {
+      width: 270px;
+      white-space: pre-wrap;
+    }
+  }
+}

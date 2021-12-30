@@ -14,20 +14,13 @@ usage:
   storage: STO
 boot:
   confirm: Are you sure to boot this cluster?
-  loading: Creating a boot task...
-  success: 'Successfully create a boot task, task id: {{ msg }}'
-  fail: 'Fail to create a boot task: {{ msg }}'
+  success: Boot Cluster
 reboot:
   confirm: Are you sure to reboot this cluster?
-  loading: Creating a reboot task...
-  success: 'Successfully create a reboot task, task id: {{ msg }}'
-  fail: 'Fail to create a reboot task: {{ msg }}'
+  success: Reboot Cluster
 stop:
   confirm: Are you sure to stop this cluster?
-  loading: Creating a stop task...
-  success: 'Successfully create a stop task, task id: {{ msg }}'
-  fail: 'Fail to create a stop task: {{ msg }}'
+  name: Stop Cluster
 delete:
   confirm: Are you sure to delete this cluster?
-  success: 'Delete cluster {{ msg }} successfully'
-  fail: 'Fail: {{ msg }}'
+  name: Delete Cluster

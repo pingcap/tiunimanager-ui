@@ -5,7 +5,6 @@ export:
   options: 导出选项
   message:
     success: 导出成功
-    fail: '导出失败: {{ msg }}'
 import:
   title: 导入集群数据
   source: 数据源
@@ -13,7 +12,6 @@ import:
   options: 导入选项
   message:
     success: 导入成功
-    fail: '导入失败: {{ msg }}'
 form:
   storageType: 存储类型
   s3:

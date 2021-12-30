@@ -1,3 +1,6 @@
+name:
+  scaleOut: 集群扩容
+  preview: 预览节点分配
 basic:
   title: 基础信息
 nodes:
@@ -22,8 +25,6 @@ footer:
     confirm: 确认提交表单吗?
 message:
   noZone: 无可用 Zone
-  success: 扩容成功
-  fail: '扩容失败: {{ msg }}'
 preview:
   columns:
     component: 组件

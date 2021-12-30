@@ -11,5 +11,4 @@ actions:
   delete: Delete
 delete:
   confirm: Are you sure to delete this host?
-  success: 'Delete successfully'
-  fail: 'Fail: {{ msg }}'
+  name: Delete Host

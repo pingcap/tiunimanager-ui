@@ -2,7 +2,6 @@ import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import HeavyTable from '@/components/HeavyTable'
 import { HostInfo, PagedResult } from '@/api/model'
 import { useCallback, useMemo, useState } from 'react'
-import { message } from 'antd'
 import {
   invalidateHostDetail,
   invalidateHostsList,
@@ -13,7 +12,6 @@ import { useQueryClient } from 'react-query'
 import styles from './index.module.less'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction } from 'react-i18next'
-import { errToMsg } from '@/utils/error'
 import { usePagination } from '@hooks/usePagination'
 import { DeleteConfirm } from '@/components/DeleteConfirm'
 import { isNumber } from '@/utils/types'
@@ -95,23 +93,18 @@ function useTableColumn() {
   const deleteAction = useCallback(
     (hostId) =>
       deleteHosts.mutateAsync(
-        { hostsId: hostId },
         {
-          onSuccess() {
-            message.success(t('delete.success'))
+          hostsId: hostId,
+          options: {
+            actionName: t('delete.name'),
           },
+        },
+        {
           onSettled() {
             return Promise.allSettled([
               invalidateHostsList(queryClient),
               invalidateHostDetail(queryClient, hostId),
             ])
-          },
-          onError(e: any) {
-            message.error(
-              t('delete.fail', {
-                msg: errToMsg(e),
-              })
-            )
           },
         }
       ),

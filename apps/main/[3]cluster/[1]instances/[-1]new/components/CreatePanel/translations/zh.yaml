@@ -1,3 +1,1 @@
-message:
-  success: '集群 {{ msg }} 创建成功'
-  fail: '集群创建失败: {{ msg }}'
+name: 创建集群

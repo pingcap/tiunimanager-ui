@@ -25,7 +25,6 @@ import {
   Form,
   Input,
   InputNumber,
-  message,
   Modal,
   Radio,
   Row,
@@ -37,7 +36,6 @@ import {
 import styles from '@/components/CreateClusterPanel/index.module.less'
 import IntlPopConfirm from '../IntlPopConfirm'
 import { usePreviewCreateCluster } from '@/api/hooks/cluster'
-import { errToMsg } from '@/utils/error'
 import { ColumnsType } from 'antd/lib/table/interface'
 
 loadI18n()
@@ -500,79 +498,80 @@ function Submitter({
         processCreateRequest(fields, knowledgeMap, t) &&
         (!processValue || processValue(fields, knowledgeMap, t))
       ) {
-        await previewCreateCluster.mutateAsync(fields, {
-          onSuccess(resp) {
-            const {
-              clusterName,
-              clusterType,
-              clusterVersion,
-              region,
-              cpuArchitecture,
-              stockCheckResult,
-            } = resp.data!.data!
-            const data = stockCheckResult!.map((r, id) => ({
-              id,
-              ...r,
-            }))
-            const isSubmittable = !data.find((r) => !r.enough)
-            Modal.confirm({
-              icon: <></>,
-              width: 800,
-              okButtonProps: {
-                disabled: !isSubmittable,
-              },
-              okText: t('preview.actions.confirm'),
-              content: (
-                <div>
-                  <p>
-                    <Trans
-                      t={t}
-                      i18nKey="preview.description"
-                      values={{
-                        arch: cpuArchitecture,
-                        name: clusterName,
-                        version: clusterVersion,
-                        type: clusterType,
-                        region,
-                      }}
-                      components={{ strong: <strong /> }}
-                    />
-                  </p>
-                  {fields.backupId && (
+        await previewCreateCluster.mutateAsync(
+          {
+            ...fields,
+            options: {
+              actionName: t('create.name'),
+            },
+          },
+          {
+            onSuccess(resp) {
+              const {
+                clusterName,
+                clusterType,
+                clusterVersion,
+                region,
+                cpuArchitecture,
+                stockCheckResult,
+              } = resp.data!.data!
+              const data = stockCheckResult!.map((r, id) => ({
+                id,
+                ...r,
+              }))
+              const isSubmittable = !data.find((r) => !r.enough)
+              Modal.confirm({
+                icon: <></>,
+                width: 800,
+                okButtonProps: {
+                  disabled: !isSubmittable,
+                },
+                okText: t('preview.actions.confirm'),
+                content: (
+                  <div>
                     <p>
                       <Trans
                         t={t}
-                        i18nKey="preview.restoreInfo"
+                        i18nKey="preview.description"
                         values={{
-                          backupId: fields.backupId,
-                          clusterId: fields.clusterId,
+                          arch: cpuArchitecture,
+                          name: clusterName,
+                          version: clusterVersion,
+                          type: clusterType,
+                          region,
                         }}
                         components={{ strong: <strong /> }}
                       />
                     </p>
-                  )}
-                  <Table
-                    size="small"
-                    columns={columns}
-                    dataSource={data}
-                    rowKey="id"
-                    pagination={false}
-                  />
-                </div>
-              ),
-              onOk() {
-                onSubmit(fields)
-              },
-            })
-          },
-          onError(e: any) {
-            message.error(
-              t('message.fail', {
-                msg: errToMsg(e),
+                    {fields.backupId && (
+                      <p>
+                        <Trans
+                          t={t}
+                          i18nKey="preview.restoreInfo"
+                          values={{
+                            backupId: fields.backupId,
+                            clusterId: fields.clusterId,
+                          }}
+                          components={{ strong: <strong /> }}
+                        />
+                      </p>
+                    )}
+                    <Table
+                      size="small"
+                      columns={columns}
+                      dataSource={data}
+                      rowKey="id"
+                      pagination={false}
+                    />
+                  </div>
+                ),
+                onOk() {
+                  onSubmit(fields)
+                },
               })
-            )
-          },
-        })
+            },
+          }
+        )
       }
     } catch (e) {
       // TODO: show err message

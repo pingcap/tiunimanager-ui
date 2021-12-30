@@ -45,8 +45,7 @@ create:
   validation:
     miss: 'The {{ name }} node cannot be missing！'
     zone: '{{ name }} requires at least {{ count }} nodes in different zones!'
-  success: 'Create cluster {{ msg }} successfully'
-  fail: 'Fail: {{ msg }}'
+  name: Create Cluster
 
 message:
   needRegion: Please select a region first!

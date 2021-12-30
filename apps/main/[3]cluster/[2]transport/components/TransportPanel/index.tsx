@@ -17,7 +17,6 @@ import {
   useImportCluster,
   useQueryTransportRecords,
 } from '@/api/hooks/transport'
-import { errToMsg } from '@/utils/error'
 import { useMemo, useState } from 'react'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { CodeInput } from '@/components/CodeEditor'
@@ -102,15 +101,19 @@ export function ExportPanel({ back }: TransportPanelProps) {
       if (value.filter && Array.isArray(value.filter)) {
         value.filter = value.filter.join(';')
       }
-      await exportCluster.mutateAsync(value, {
-        onSuccess() {
-          message.success(t('export.message.success'))
-          back()
+      await exportCluster.mutateAsync(
+        {
+          ...value,
+          options: {
+            actionName: t('export.title'),
+          },
         },
-        onError(e: any) {
-          message.error(t('export.message.fail', { msg: errToMsg(e) }))
-        },
-      })
+        {
+          onSuccess() {
+            back()
+          },
+        }
+      )
     }
 
     const target = <Card title={t('export.target')}>{targetOptions}</Card>
@@ -426,15 +429,19 @@ export function ImportPanel({ back }: TransportPanelProps) {
       processS3Options(value)
       if (sourceType === 'nfs') value.recordId = selectedImportable!.recordId!
       if (sourceType === 'local') value.storageType = 'nfs'
-      await importCluster.mutateAsync(value, {
-        onSuccess() {
-          message.success(t('import.message.success'))
-          back()
+      await importCluster.mutateAsync(
+        {
+          ...value,
+          options: {
+            actionName: t('import.title'),
+          },
         },
-        onError(e: any) {
-          message.error(t('import.message.fail', { msg: errToMsg(e) }))
-        },
-      })
+        {
+          onSuccess() {
+            back()
+          },
+        }
+      )
     }
 
     const source = <Card title={t('import.source')}>{sourceOptions}</Card>

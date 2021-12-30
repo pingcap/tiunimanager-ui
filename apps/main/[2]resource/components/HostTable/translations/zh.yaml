@@ -11,5 +11,4 @@ actions:
   delete: 删除
 delete:
   confirm: 确认删除该主机吗?
-  success: '删除主机成功'
-  fail: '删除失败: {{ msg }}'
+  name: 删除主机

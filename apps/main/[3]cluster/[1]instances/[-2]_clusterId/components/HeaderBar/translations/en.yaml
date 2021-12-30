@@ -7,9 +7,7 @@ actions:
   delete: Delete
 delete:
   confirm: Are you sure to delete this cluster?
-  success: 'Delete cluster {{ msg }} successfully'
-  fail: 'Fail: {{ msg }}'
+  name: Delete Cluster
 backup:
   confirm: 'Are you sure to create backup task for cluster {{ name }} now?'
-  success: 'Create backup task for cluster {{ msg }} successfully'
-  fail: 'Fail: {{ msg }}'
+  name: Backup Cluster
