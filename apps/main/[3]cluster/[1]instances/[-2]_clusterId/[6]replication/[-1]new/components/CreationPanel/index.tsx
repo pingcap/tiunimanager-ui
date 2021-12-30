@@ -421,14 +421,27 @@ const CreationPanel: FC<CreationPanelProps> = ({ clusterId, back }) => {
     try {
       const fields = form.getFieldsValue()
 
+      const kafkaDispatchers = fields.downstream?.kafka?.dispatchers?.filter(
+        (el) => el.dispatcher && el.matcher
+      )
+      const kafkaDownstream = {
+        ...(fields.downstream?.kafka || {}),
+        dispatchers: kafkaDispatchers,
+      }
+
+      const downstream = {
+        ...(fields.downstream || {}),
+        kafka: kafkaDownstream,
+      }
+
       await createDataReplication.mutateAsync(
         {
           clusterId,
           name: fields.name,
           startTS: fields.tso,
-          rules: fields.filterRuleList,
+          rules: fields.filterRuleList.filter((el) => el),
           downstreamType: fields.downstreamType as any,
-          downstream: fields.downstream[fields.downstreamType],
+          downstream: downstream[fields.downstreamType],
         },
         {
           onSuccess() {
