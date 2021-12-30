@@ -84,7 +84,6 @@ const BasicFormBlock: FC = () => {
         name="tso"
         label={t('basic.fields.tso')}
         tooltip={t('basic.tips.tso')}
-        rules={[{ required: true, message: t('basic.rules.tso.required') }]}
       >
         <InputNumber min={0} precision={0} />
       </Form.Item>
@@ -137,6 +136,9 @@ const BasicFormBlock: FC = () => {
   )
 }
 
+const urlPattern =
+  '^(?:\\S+(?::\\S*)?@)?(?:(?:(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[0-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\u00a1-\\uffff0-9]+-*)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]+-*)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z\\u00a1-\\uffff]{2,})))|localhost)(?::\\d{2,5})?(?:(/|\\?|#)[^\\s]*)?$'
+
 const DBFormBlock: FC<{ db: 'mysql' | 'tidb' }> = ({ db }) => {
   const { t } = useI18n()
 
@@ -148,13 +150,13 @@ const DBFormBlock: FC<{ db: 'mysql' | 'tidb' }> = ({ db }) => {
         tooltip={t(`${db}.tips.url`)}
         rules={[
           {
-            type: 'url',
             required: true,
+            pattern: new RegExp(urlPattern, 'i'),
             message: t(`${db}.rules.url.required`),
           },
         ]}
       >
-        <Input allowClear />
+        <Input allowClear maxLength={2048} />
       </Form.Item>
       <Form.Item
         name={['downstream', db, 'port']}
@@ -186,7 +188,7 @@ const DBFormBlock: FC<{ db: 'mysql' | 'tidb' }> = ({ db }) => {
       <Form.Item
         name={['downstream', db, 'concurrentThreads']}
         label={t(`${db}.fields.thread`)}
-        rules={[{ required: true, message: t(`${db}.rules.thread.required`) }]}
+        tooltip={t(`${db}.tips.thread`)}
       >
         <InputNumber min={1} max={128} precision={0} />
       </Form.Item>
@@ -209,13 +211,13 @@ const KafkaFormBlock: FC = () => {
         tooltip={t('kafka.tips.url')}
         rules={[
           {
-            type: 'url',
             required: true,
+            pattern: new RegExp(urlPattern, 'i'),
             message: t('kafka.rules.url.required'),
           },
         ]}
       >
-        <Input allowClear />
+        <Input allowClear maxLength={2048} />
       </Form.Item>
       <Form.Item
         name={['downstream', 'kafka', 'port']}
@@ -267,34 +269,24 @@ const KafkaFormBlock: FC = () => {
       <Form.Item
         name={['downstream', 'kafka', 'partitions']}
         label={t('kafka.fields.partition')}
-        rules={[
-          { required: true, message: t('kafka.rules.partition.required') },
-        ]}
       >
         <InputNumber min={0} precision={0} />
       </Form.Item>
       <Form.Item
         name={['downstream', 'kafka', 'replicationFactor']}
         label={t('kafka.fields.replica')}
-        rules={[{ required: true, message: t('kafka.rules.replica.required') }]}
       >
         <InputNumber min={0} precision={0} />
       </Form.Item>
       <Form.Item
         name={['downstream', 'kafka', 'maxMessageBytes']}
         label={t('kafka.fields.maxMsgSize')}
-        rules={[
-          { required: true, message: t('kafka.rules.maxMsgSize.required') },
-        ]}
       >
         <InputNumber min={0} precision={0} />
       </Form.Item>
       <Form.Item
         name={['downstream', 'kafka', 'maxBatchSize']}
         label={t('kafka.fields.maxMsgNum')}
-        rules={[
-          { required: true, message: t('kafka.rules.maxMsgNum.required') },
-        ]}
       >
         <InputNumber min={0} precision={0} />
       </Form.Item>
@@ -475,7 +467,7 @@ const CreationPanel: FC<CreationPanelProps> = ({ clusterId, back }) => {
         className={styles.form}
         form={form}
         colon={false}
-        requiredMark="optional"
+        requiredMark={false}
         scrollToFirstError={true}
         onFinish={onFinish}
         initialValues={{
