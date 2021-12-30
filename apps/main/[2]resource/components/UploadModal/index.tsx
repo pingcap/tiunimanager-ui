@@ -43,6 +43,9 @@ export default function UploadModal({ visible, close }: UploadModalProps) {
           }}
           beforeUpload={checkFileFormat}
           maxCount={1}
+          accept={
+            'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          }
           onChange={(info) => {
             switch (info.file.status) {
               case 'done':

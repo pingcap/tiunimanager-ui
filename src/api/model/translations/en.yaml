@@ -168,9 +168,11 @@ host:
     createTime: Create Time
     updateTime: Update Time
   status:
+    init: Init
     online: Online
     offline: Offline
     deleted: Deleted
+    failed: Failed
   load:
     idle: Free
     used: In Use

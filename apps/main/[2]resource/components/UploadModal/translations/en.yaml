@@ -1,8 +1,8 @@
 title: Import Hosts
 status:
   uploading: Uploading...
-  success: Success!
-  fail: 'Fail: {{ msg }}'
+  success: Start importing hosts successfully!
+  fail: 'Fail to start importing: {{ msg }}'
 hint:
   upload: Click or drag the file to there to upload.
   format: Currently only .xls or .xlsx files are supported.

@@ -168,9 +168,11 @@ host:
     createTime: 创建时间
     updateTime: 更新时间
   status:
+    init: 初始化
     online: 在线
     offline: 离线
     deleted: 已删除
+    failed: 异常
   load:
     idle: 空闲中
     used: 使用中
