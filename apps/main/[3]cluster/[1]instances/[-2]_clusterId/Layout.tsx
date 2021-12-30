@@ -27,6 +27,10 @@ const Layout: FC = ({ children }) => {
       { key: resolveRoute('alert', clusterId), tab: t('pages.alert') },
       { key: resolveRoute('params', clusterId), tab: t('pages.params') },
       { key: resolveRoute('backup', clusterId), tab: t('pages.backup') },
+      {
+        key: resolveRoute('replication', clusterId),
+        tab: t('pages.replication'),
+      },
     ],
     [clusterId, i18n.language]
   )
