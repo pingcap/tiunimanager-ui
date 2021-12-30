@@ -3,7 +3,7 @@ basic:
   fields:
     name: Name
     tso: Beginning TSO
-    filterRule: Rules
+    filterRule: Filter Rules
   tips:
     tso: The value of the beginning TSO must be between 0 ~ tikv_gc_save_point
     filterRule: Each rule is a regular expression
@@ -11,8 +11,6 @@ basic:
     name:
       required: Please enter a task name
       length: The length must be between 1 ~ 20
-    tso:
-      required: Please enter a beginning TSO
     filterRule:
       valid: Please enter a valid rule
   action:
@@ -21,17 +19,17 @@ basic:
 downstream:
   title: Downstream Config
   fields:
-    type: Downstream Type
+    type: Downstream
   rules:
     type:
-      required: Please select a protocol
+      required: Please select a downstream
 mysql:
   fields:
     url: URL/IP
     port: Port
     user: User Name
     password: Password
-    thread: Number of Threads
+    thread: Number of Concurrent Threads
   rules:
     url:
       required: Please enter a valid URL or IP address
@@ -43,17 +41,16 @@ mysql:
     password:
       required: Please enter a password
       length: The length must be between 6 ~ 20
-    thread:
-      required: Please enter the number of threads
   tips:
-    url: 'URL is required to begin with http:// or https://'
+    url: 'e.g., abc.com or X.X.X.X'
+    thread: From 1 to 128 and 16 is the default value.
 tidb:
   fields:
     url: URL/IP
     port: Port
     user: User Name
     password: Password
-    thread: Number of Threads
+    thread: Number of Concurrent Threads
   rules:
     url:
       required: Please enter a valid URL or IP address
@@ -65,10 +62,9 @@ tidb:
     password:
       required: Please enter a password
       length: The length must be between 6 ~ 20
-    thread:
-      required: Please enter the number of threads
   tips:
-    url: 'URL is required to begin with http:// or https://'
+    url: 'e.g., abc.com or X.X.X.X'
+    thread: From 1 to 128 and 16 is the default value.
 kafka:
   fields:
     url: URL/IP
@@ -98,18 +94,10 @@ kafka:
       required: Please enter a topic name
     protocol:
       required: Please select a protocol
-    partition:
-      required: Please enter the partitions number
-    replica:
-      required: Please enter a replica number
-    maxMsgSize:
-      required: Please enter the max size of each message
-    maxMsgNum:
-      required: Please enter the max number of batch messages
     dispatchRule:
       valid: Please enter a valid dispatch rule
   tips:
-    url: 'URL is required to begin with http:// or https://'
+    url: 'e.g., abc.com or X.X.X.X'
   action:
     dispatchRule:
       add: New Dispatch Rule
