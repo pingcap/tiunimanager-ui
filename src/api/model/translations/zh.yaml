@@ -113,6 +113,20 @@ clusterParam:
   reboot:
     true: 需要
     false: 不需要
+clusterDataReplication:
+  property:
+    id: ID
+    name: 任务名称
+    downstream: 下游类型
+    status: 任务状态
+    time: 剩余待同步数据（单位：毫秒）
+  status:
+    initial: 初始化中
+    stopped: 已结束
+    running: 同步中
+    finished: 已完成
+    failed: 失败
+    error: 发生错误
 clusterComponent:
   property:
     name: 名称
