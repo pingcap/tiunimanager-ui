@@ -150,9 +150,11 @@ function getHostColumns(
       key: 'status',
       valueType: 'select',
       valueEnum: {
+        Init: { text: t('model:host.status.init'), status: 'Processing' },
         Online: { text: t('model:host.status.online'), status: 'Success' },
         Offline: { text: t('model:host.status.offline'), status: 'Default' },
         Deleted: { text: t('model:host.status.deleted'), status: 'Error' },
+        Failed: { text: t('model:host.status.failed'), status: 'Error' },
       },
     },
     {
