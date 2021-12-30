@@ -3,7 +3,7 @@ basic:
   fields:
     name: 任务名称
     tso: 起始 TSO
-    filterRule: 忽略规则
+    filterRule: 过滤规则
   tips:
     tso: 同步任务开始的 TSO，取值范围是 0 ～ tikv_gc_save_point
     filterRule: 正则表达式
@@ -11,8 +11,6 @@ basic:
     name:
       required: 请填写任务名称
       length: 长度必须在 1 ~ 20 之间
-    tso:
-      required: 请填写同步任务开始的 TSO
     filterRule:
       valid: 请填写有效的忽略规则
   action:
@@ -43,10 +41,9 @@ mysql:
     password:
       required: 请填写密码
       length: 长度必须在 6 ~ 20 之间
-    thread:
-      required: 请填写并发线程数
   tips:
-    url: 'URL 必须以 http:// 或 https:// 开头'
+    url: 格式如 abc.com 或 X.X.X.X
+    thread: 取值范围 1 ～ 128，默认 16
 tidb:
   fields:
     url: URL/IP
@@ -65,10 +62,9 @@ tidb:
     password:
       required: 请填写密码
       length: 长度必须在 6 ~ 20 之间
-    thread:
-      required: 请填写并发线程数
   tips:
-    url: 'URL 必须以 http:// 或 https:// 开头'
+    url: 格式如 abc.com 或 X.X.X.X
+    thread: 取值范围 1 ～ 128，默认 16
 kafka:
   fields:
     url: URL/IP
@@ -98,18 +94,10 @@ kafka:
       required: 请填写 Topic
     protocol:
       required: 请选择协议
-    partition:
-      required: 请填写 Partitions
-    replica:
-      required: 请填写副本数
-    maxMsgSize:
-      required: 请填写单条消息大小上限
-    maxMsgNum:
-      required: 请填写批量消息条数上限
     dispatchRule:
       valid: 请填写有效的分发规则
   tips:
-    url: 'URL 必须以 http:// 或 https:// 开头'
+    url: 格式如 abc.com 或 X.X.X.X
   action:
     dispatchRule:
       add: 新增分发规则
