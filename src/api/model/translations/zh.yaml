@@ -156,7 +156,7 @@ paramGroup:
     cluster: 集群
     instance: 组件
   dbType:
-    tidb: TIDB
+    tidb: TiDB
     dm: DM
 host:
   property:

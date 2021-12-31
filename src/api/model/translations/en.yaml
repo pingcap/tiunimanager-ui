@@ -156,7 +156,7 @@ paramGroup:
     cluster: Cluster
     instance: Component
   dbType:
-    tidb: TIDB
+    tidb: TiDB
     dm: DM
 host:
   property:
