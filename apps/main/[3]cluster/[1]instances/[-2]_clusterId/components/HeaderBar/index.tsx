@@ -52,7 +52,7 @@ export default function HeaderBar() {
         }
       )
     }
-    const handleDelete = () => {
+    const handleDelete = (closeConfirm: () => void) => {
       deleteCluster.mutateAsync(
         {
           id: clusterId!,
@@ -63,6 +63,9 @@ export default function HeaderBar() {
           },
         },
         {
+          onSuccess() {
+            closeConfirm()
+          },
           onSettled() {
             invalidateClusterDetail(queryClient, clusterId!)
           },
