@@ -6,12 +6,15 @@
     "dev:wdyr": "cross-env VITE_WDYR=1 vite",
     "dev:mock:wdyr": "cross-env VITE_MOCK=1 VITE_WDYR=1 vite",
     "build": "tsc && vite build",
-    "release": "cross-env VITE_RELEASE=1 yarn build",
+    "release": "yarn build --mode release",
     "serve": "vite preview",
     "lint": "eslint . --cache",
     "lint:ci": "eslint . --max-warnings 0",
     "prepare": "is-ci || husky install",
-    "api:gen": "yarn openapi-generator-cli generate"
+    "generate": "yarn api:gen && yarn error:gen",
+    "bootstrap": "pip install -r contrib/error-code-gen/requirements.txt",
+    "api:gen": "yarn openapi-generator-cli generate",
+    "error:gen": "python contrib/error-code-gen/main.py -i external/error/input.csv -t external/error/template ./generated/error/index.ts"
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
@@ -23,6 +26,7 @@
     "copy-to-clipboard": "^3.3.1",
     "cron-parser": "^3.5.0",
     "dayjs": "^1.10.6",
+    "history": "^4",
     "i18next": "^20.3.3",
     "i18next-browser-languagedetector": "^6.1.2",
     "nprogress": "^0.2.0",

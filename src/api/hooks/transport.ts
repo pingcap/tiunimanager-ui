@@ -1,16 +1,22 @@
 import { RequestTransportExport, RequestTransportImport } from '@/api/model'
-import { APIS, PartialUseQueryOptions } from '@/api/client'
+import { APIS } from '@/api/client'
 import { QueryClient, useMutation, useQuery } from 'react-query'
+import { AxiosRequestConfig } from 'axios'
+import { PartialUseQueryOptions, withRequestOptions } from '@/api/hooks/utils'
 
-const importCluster = (payload: RequestTransportImport) =>
-  APIS.ClustersImport.clustersImportPost(payload)
+const importCluster = withRequestOptions(
+  (payload: RequestTransportImport, options?: AxiosRequestConfig) =>
+    APIS.ClustersImport.clustersImportPost(payload, options)
+)
 
 export function useImportCluster() {
   return useMutation(importCluster)
 }
 
-const exportCluster = (payload: RequestTransportExport) =>
-  APIS.ClustersExport.clustersExportPost(payload)
+const exportCluster = withRequestOptions(
+  (payload: RequestTransportExport, options?: AxiosRequestConfig) =>
+    APIS.ClustersExport.clustersExportPost(payload, options)
+)
 
 export function useExportCluster() {
   return useMutation(exportCluster)
@@ -58,13 +64,23 @@ export async function invalidateTransportRecords(client: QueryClient) {
   await client.invalidateQueries([CACHE_TRANSPORT_RECORDS])
 }
 
-const deleteTransportRecord = ({
-  recordId,
-  clusterId,
-}: {
-  recordId: number
-  clusterId: string
-}) => APIS.Transport.clustersTransportRecordIdDelete(recordId, { clusterId })
+const deleteTransportRecord = withRequestOptions(
+  (
+    {
+      recordId,
+      clusterId,
+    }: {
+      recordId: number
+      clusterId: string
+    },
+    options?: AxiosRequestConfig
+  ) =>
+    APIS.Transport.clustersTransportRecordIdDelete(
+      recordId,
+      { clusterId },
+      options
+    )
+)
 
 export function useDeleteTransportRecord() {
   return useMutation(deleteTransportRecord)

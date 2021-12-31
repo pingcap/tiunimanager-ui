@@ -1,4 +1,4 @@
-import { History, Location } from 'history'
+import { History, Location, createBrowserHistory } from 'history'
 import { useHistory, useLocation } from 'react-router-dom'
 
 export type IntrinsicRouteState = {
@@ -31,3 +31,5 @@ export function useLocationWithState<S extends object = {}>(
   if (!location.state) location.state = defaultState
   return location
 }
+
+export const history = createBrowserHistory()

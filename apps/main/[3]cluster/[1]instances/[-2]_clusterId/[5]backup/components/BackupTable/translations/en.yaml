@@ -1,7 +1,6 @@
 delete:
   confirm: Are you sure to delete this backup?
-  success: Delete backup successfully
-  fail: 'Fail: {{ msg }}'
+  name: Delete Backup
 restore:
   confirm: Are you sure to restore cluster from this backup?
 columns:

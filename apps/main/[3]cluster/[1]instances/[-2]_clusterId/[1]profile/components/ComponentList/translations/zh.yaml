@@ -5,3 +5,10 @@ list:
 usage:
   mem: 内存
   storage: 存储
+columns:
+  actions: 操作
+actions:
+  scaleIn: 缩容
+scaleIn:
+  confirm: 确认缩容位于 {{ ip }} 上的 {{ type }} 节点吗
+  name: 缩容节点

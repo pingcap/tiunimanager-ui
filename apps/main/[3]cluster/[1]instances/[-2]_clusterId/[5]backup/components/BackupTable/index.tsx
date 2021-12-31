@@ -2,7 +2,7 @@ import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import { useCallback, useMemo, useState } from 'react'
 import { ClusterBackupItem, ClusterInfo, PagedResult } from '@/api/model'
 import HeavyTable from '@/components/HeavyTable'
-import { message, Popconfirm } from 'antd'
+import { Popconfirm } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import {
   invalidateClusterBackups,
@@ -12,7 +12,6 @@ import {
 import { loadI18n, useI18n } from '@i18n-macro'
 import { useQueryClient } from 'react-query'
 import styles from './index.module.less'
-import { errToMsg } from '@/utils/error'
 import { TFunction } from 'react-i18next'
 import { getTimestamp } from '@/utils/time'
 import { usePagination } from '@hooks/usePagination'
@@ -133,22 +132,16 @@ function useTableColumn({ cluster }: { cluster: ClusterInfo }) {
   const deleteAction = useCallback(
     (backupId) =>
       deleteBackup.mutateAsync(
-        { backupId, clusterId },
         {
-          onSuccess(data) {
-            message.success(t('delete.success', { msg: data.data.data })).then()
+          backupId,
+          clusterId,
+          options: {
+            actionName: t('delete.name'),
           },
+        },
+        {
           onSettled() {
             return invalidateClusterBackups(queryClient, clusterId)
-          },
-          onError(e: any) {
-            message
-              .error(
-                t('delete.fail', {
-                  msg: errToMsg(e),
-                })
-              )
-              .then()
           },
         }
       ),

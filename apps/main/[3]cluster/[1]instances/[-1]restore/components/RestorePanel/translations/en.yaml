@@ -7,6 +7,4 @@ restore-info:
     backupPath: Backup Path
   tips:
     not-editable: You can not change this manually.
-message:
-  success: 'Restore backup {{ msg }} successfully'
-  fail: 'Fail: {{ msg }}'
+name: Restore Backup

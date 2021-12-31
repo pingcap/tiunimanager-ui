@@ -1,4 +1,4 @@
-import { Form, Layout, message } from 'antd'
+import { Form, Layout } from 'antd'
 import { useCallback, useState } from 'react'
 
 import styles from './index.module.less'
@@ -6,7 +6,6 @@ import { RequestClusterCreate } from '@/api/model'
 import { invalidateClustersList, useCreateCluster } from '@/api/hooks/cluster'
 import { useQueryClient } from 'react-query'
 import { loadI18n, useI18n } from '@i18n-macro'
-import { errToMsg } from '@/utils/error'
 import {
   ModeSelector,
   SimpleForm,
@@ -29,24 +28,20 @@ export function CreatePanel({ back }: CreatePanelProps) {
 
   const handleSubmit = useCallback(
     (value: RequestClusterCreate) => {
-      createCluster.mutateAsync(value, {
-        onSuccess(data) {
-          invalidateClustersList(queryClient)
-          message
-            .success(
-              t('message.success', { msg: data.data.data!.clusterId }),
-              0.8
-            )
-            .then(back)
+      createCluster.mutateAsync(
+        {
+          ...value,
+          options: {
+            actionName: t('name'),
+          },
         },
-        onError(e: any) {
-          message.error(
-            t('message.fail', {
-              msg: errToMsg(e),
-            })
-          )
-        },
-      })
+        {
+          onSuccess() {
+            invalidateClustersList(queryClient)
+            back()
+          },
+        }
+      )
     },
     [back, createCluster.mutateAsync, queryClient, i18n.language]
   )

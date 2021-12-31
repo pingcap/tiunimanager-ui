@@ -1,5 +1,5 @@
 import { ColumnsState, ProColumns } from '@ant-design/pro-table'
-import { Fragment, useMemo, useState, useCallback } from 'react'
+import { Fragment, useCallback, useMemo, useState } from 'react'
 import styles from './index.module.less'
 import HeavyTable from '@/components/HeavyTable'
 import {
@@ -14,9 +14,9 @@ import { Link } from 'react-router-dom'
 import { resolveRoute } from '@pages-macro'
 import { useQueryKnowledge } from '@/api/hooks/knowledge'
 import {
-  useQueryClustersList,
-  invalidateClustersList,
   invalidateClusterDetail,
+  invalidateClustersList,
+  useQueryClustersList,
   useRebootCluster,
   useStopCluster,
 } from '@/api/hooks/cluster'
@@ -28,7 +28,6 @@ import IntlPopConfirm from '@/components/IntlPopConfirm'
 import { Button, message } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { useQueryClient } from 'react-query'
-import { errToMsg } from '@/utils/error'
 import { mapObj } from '@/utils/obj'
 
 loadI18n()
@@ -129,32 +128,18 @@ function useTableColumn() {
   const bootAction = useCallback(
     (bootType: BootType, clusterId: string) =>
       rebootCluster.mutateAsync(
-        { id: clusterId },
         {
-          onSuccess(resp) {
-            message
-              .success(
-                t(`${bootType}.success`, {
-                  msg: resp.data.data?.workFlowId,
-                }),
-                5
-              )
-              .then()
+          id: clusterId,
+          options: {
+            actionName: t(`${bootType}.name`),
           },
+        },
+        {
           onSettled() {
             return Promise.allSettled([
               invalidateClustersList(queryClient),
               invalidateClusterDetail(queryClient, clusterId),
             ])
-          },
-          onError(e: any) {
-            message
-              .error(
-                t(`${bootType}.fail`, {
-                  msg: errToMsg(e),
-                })
-              )
-              .then()
           },
         }
       ),
@@ -164,32 +149,18 @@ function useTableColumn() {
   const stopAction = useCallback(
     (clusterId: string) =>
       stopCluster.mutateAsync(
-        { id: clusterId },
         {
-          onSuccess(resp) {
-            message
-              .success(
-                t('stop.success', {
-                  msg: resp.data.data?.workFlowId,
-                }),
-                5
-              )
-              .then()
+          id: clusterId,
+          options: {
+            actionName: t('stop.name'),
           },
+        },
+        {
           onSettled() {
             return Promise.allSettled([
               invalidateClustersList(queryClient),
               invalidateClusterDetail(queryClient, clusterId),
             ])
-          },
-          onError(e: any) {
-            message
-              .error(
-                t('stop.fail', {
-                  msg: errToMsg(e),
-                })
-              )
-              .then()
           },
         }
       ),

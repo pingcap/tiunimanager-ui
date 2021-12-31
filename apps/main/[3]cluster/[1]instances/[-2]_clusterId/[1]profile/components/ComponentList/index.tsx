@@ -1,19 +1,47 @@
-import { Badge, Space, Table } from 'antd'
+import { Badge, Space } from 'antd'
 import { ClusterComponentNodeInfo, ClusterNodeStatus } from '@/api/model'
 import { loadI18n, useI18n } from '@i18n-macro'
-import { TFunction } from 'react-i18next'
+import { TFunction, Trans } from 'react-i18next'
 import styles from './index.module.less'
-import { useMemo } from 'react'
-import { ColumnsType } from 'antd/es/table'
+import { useCallback, useMemo } from 'react'
+import HeavyTable from '@/components/HeavyTable'
+import { ProColumns } from '@ant-design/pro-table'
+import { useQueryClient } from 'react-query'
+import { invalidateClusterDetail, useClusterScaleIn } from '@/api/hooks/cluster'
+import IntlPopConfirm from '@/components/IntlPopConfirm'
 
 loadI18n()
 
 export type ComponentListProps = {
+  clusterId: string
   nodes: ClusterComponentNodeInfo[]
 }
 
-export function ComponentList({ nodes }: ComponentListProps) {
+export function ComponentList({ nodes, clusterId }: ComponentListProps) {
+  const queryClient = useQueryClient()
+  const scaleIn = useClusterScaleIn()
   const { t, i18n } = useI18n()
+
+  const onScaleIn = useCallback(
+    (instanceId: string) => {
+      scaleIn.mutateAsync(
+        {
+          clusterId,
+          instanceId,
+          options: {
+            actionName: t('scaleIn.name'),
+          },
+        },
+        {
+          async onSuccess() {
+            await invalidateClusterDetail(queryClient, clusterId)
+          },
+        }
+      )
+    },
+    [clusterId, scaleIn.mutateAsync, queryClient]
+  )
+
   return useMemo(() => {
     const groups = groupNodesByType(nodes)
     return (
@@ -23,6 +51,7 @@ export function ComponentList({ nodes }: ComponentListProps) {
             key={component.type}
             title={t('list.title', { name: component.type })}
             nodes={component.nodes}
+            onScaleIn={onScaleIn}
           />
         ))}
       </Space>
@@ -44,39 +73,45 @@ function groupNodesByType(nodes: ClusterComponentNodeInfo[]) {
 
 type NodeTableProps = {
   nodes?: ClusterComponentNodeInfo[]
+  onScaleIn: (instanceId: string) => unknown
   title: string
 }
 
-function NodeTable({ nodes = [], title }: NodeTableProps) {
-  const columns = useColumns()
+function NodeTable({ nodes = [], title, onScaleIn }: NodeTableProps) {
+  const { t, i18n } = useI18n()
+
+  const columns = useMemo(
+    () =>
+      getColumns({
+        t,
+        onScaleIn,
+      }),
+    [i18n.language, onScaleIn]
+  )
+
   return (
-    <Table
+    <HeavyTable
       size="small"
       title={() => title}
       className={styles.clusterTable}
       dataSource={nodes}
       columns={columns}
       rowKey="id"
+      toolBarRender={false}
       pagination={false}
       bordered={true}
     />
   )
 }
 
-function useColumns() {
-  const { t, i18n } = useI18n()
-  return useMemo(() => getColumns(t), [i18n.language])
-}
-
-function getColumns(t: TFunction<''>): ColumnsType<ClusterComponentNodeInfo> {
+function getColumns({
+  t,
+  onScaleIn,
+}: {
+  t: TFunction<''>
+  onScaleIn: (instanceId: string) => unknown
+}): ProColumns<ClusterComponentNodeInfo>[] {
   return [
-    // Note: hide some fields now
-    // {
-    //   title: t('columns.id'),
-    //   width: 140,
-    //   dataIndex: 'nodeId',
-    //   key: 'id',
-    // },
     {
       title: t('model:clusterNode.property.hostIp'),
       width: 140,
@@ -127,15 +162,42 @@ function getColumns(t: TFunction<''>): ColumnsType<ClusterComponentNodeInfo> {
     },
     {
       title: t('model:clusterNode.property.version'),
-      width: 80,
+      width: 120,
       dataIndex: 'version',
       key: 'version',
     },
     {
       title: t('model:clusterNode.property.port'),
-      width: 80,
+      width: 120,
       key: 'ports',
       render: (_, record) => record.ports?.join(', '),
+    },
+    {
+      title: t('columns.actions'),
+      width: 40,
+      key: 'actions',
+      valueType: 'option',
+      render(_, record) {
+        return [
+          <IntlPopConfirm
+            key="scaleIn"
+            title={
+              <Trans
+                t={t}
+                i18nKey="scaleIn.confirm"
+                values={{
+                  type: record.type,
+                  ip: record.addresses?.[0] || 'unknown host',
+                }}
+                components={{ strong: <strong /> }}
+              />
+            }
+            onConfirm={() => onScaleIn(record.id!)}
+          >
+            <a className="danger-link">{t('actions.scaleIn')}</a>
+          </IntlPopConfirm>,
+        ]
+      },
     },
   ]
 }

@@ -5,8 +5,7 @@ save: 保存
 fetch:
   fail: '获取集群备份计划失败: {{ msg }}'
 update:
-  success: '更新集群 {{ msg }} 的备份计划成功'
-  fail: '更新备份计划失败: {{ msg }}'
+  name: 更新备份计划
 
 form:
   backupDate: 备份日期

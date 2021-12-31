@@ -1,12 +1,16 @@
 import { QueryClient, useMutation, useQuery } from 'react-query'
-import { APIS, PartialUseQueryOptions } from '@/api/client'
+import { APIS } from '@/api/client'
 import {
   RequestBackupCreate,
   RequestBackupRestore,
   RequestBackupStrategyUpdate,
   RequestClusterCreate,
   RequestClusterParamsUpdate,
+  RequestClusterScaleIn,
+  RequestClusterScaleOut,
 } from '@/api/model'
+import { AxiosRequestConfig } from 'axios'
+import { withRequestOptions, PartialUseQueryOptions } from '@/api/hooks/utils'
 
 /**
  * Clusters
@@ -56,36 +60,45 @@ export async function invalidateClusterDetail(client: QueryClient, id: string) {
   await client.invalidateQueries([CACHE_CLUSTER_DETAIL_KEY, id])
 }
 
-const deleteCluster = (payload: { id: string }) =>
-  APIS.Clusters.clustersClusterIdDelete(payload.id)
-
+const deleteCluster = withRequestOptions(
+  (payload: { id: string }, options?: AxiosRequestConfig) =>
+    APIS.Clusters.clustersClusterIdDelete(payload.id, undefined, options)
+)
 export function useDeleteCluster() {
   return useMutation(deleteCluster)
 }
 
-const createCluster = (payload: RequestClusterCreate) =>
-  APIS.Clusters.clustersPost(payload)
+const createCluster = withRequestOptions(
+  (payload: RequestClusterCreate, options?: AxiosRequestConfig) =>
+    APIS.Clusters.clustersPost(payload, options)
+)
 
 export function useCreateCluster() {
   return useMutation(createCluster)
 }
 
-const rebootCluster = (payload: { id: string }) =>
-  APIS.Clusters.clustersClusterIdRestartPost(payload.id)
+const rebootCluster = withRequestOptions(
+  (payload: { id: string }, options?: AxiosRequestConfig) =>
+    APIS.Clusters.clustersClusterIdRestartPost(payload.id, options)
+)
 
 export function useRebootCluster() {
   return useMutation(rebootCluster)
 }
 
-const stopCluster = (payload: { id: string }) =>
-  APIS.Clusters.clustersClusterIdStopPost(payload.id)
+const stopCluster = withRequestOptions(
+  (payload: { id: string }, options?: AxiosRequestConfig) =>
+    APIS.Clusters.clustersClusterIdStopPost(payload.id, options)
+)
 
 export function useStopCluster() {
   return useMutation(stopCluster)
 }
 
-const previewCreateCluster = (payload: RequestClusterCreate) =>
-  APIS.Clusters.clustersPreviewPost(payload)
+const previewCreateCluster = withRequestOptions(
+  (payload: RequestClusterCreate, options?: AxiosRequestConfig) =>
+    APIS.Clusters.clustersPreviewPost(payload, options)
+)
 
 export function usePreviewCreateCluster() {
   return useMutation(previewCreateCluster)
@@ -120,11 +133,16 @@ export async function invalidateClusterParams(
   await client.invalidateQueries([CACHE_CLUSTER_PARAMS, clusterId])
 }
 
-const updateClusterParams = ({
-  clusterId,
-  ...payload
-}: RequestClusterParamsUpdate & { clusterId: string }) =>
-  APIS.ClusterParams.clustersClusterIdParamsPut(clusterId, payload)
+const updateClusterParams = withRequestOptions(
+  (
+    {
+      clusterId,
+      ...payload
+    }: RequestClusterParamsUpdate & { clusterId: string },
+    options?: AxiosRequestConfig
+  ) =>
+    APIS.ClusterParams.clustersClusterIdParamsPut(clusterId, payload, options)
+)
 
 export function useUpdateClusterParams() {
   return useMutation(updateClusterParams)
@@ -220,11 +238,20 @@ export async function invalidateClusterBackupStrategy(
   await client.invalidateQueries([CACHE_CLUSTER_BACKUP_STRATEGY, clusterId])
 }
 
-const updateClusterBackupStrategy = ({
-  clusterId,
-  ...payload
-}: RequestBackupStrategyUpdate & { clusterId: string }) =>
-  APIS.ClusterBackups.clustersClusterIdStrategyPut(clusterId, payload)
+const updateClusterBackupStrategy = withRequestOptions(
+  (
+    {
+      clusterId,
+      ...payload
+    }: RequestBackupStrategyUpdate & { clusterId: string },
+    options?: AxiosRequestConfig
+  ) =>
+    APIS.ClusterBackups.clustersClusterIdStrategyPut(
+      clusterId,
+      payload,
+      options
+    )
+)
 
 export function useUpdateClusterBackupStrategy() {
   return useMutation(updateClusterBackupStrategy)
@@ -263,27 +290,40 @@ export async function invalidateClusterBackups(
   await client.invalidateQueries([CACHE_CLUSTER_BACKUPS, clusterId])
 }
 
-const deleteClusterBackup = (payload: {
-  backupId: number
-  clusterId: string
-}) =>
-  APIS.ClusterBackups.backupsBackupIdDelete(payload.backupId, {
-    clusterId: payload.clusterId,
-  })
+const deleteClusterBackup = withRequestOptions(
+  (
+    payload: {
+      backupId: number
+      clusterId: string
+    },
+    options?: AxiosRequestConfig
+  ) =>
+    APIS.ClusterBackups.backupsBackupIdDelete(
+      payload.backupId,
+      {
+        clusterId: payload.clusterId,
+      },
+      options
+    )
+)
 
 export function useDeleteClusterBackup() {
   return useMutation(deleteClusterBackup)
 }
 
-const createClusterBackup = (payload: RequestBackupCreate) =>
-  APIS.ClusterBackups.backupsPost(payload)
+const createClusterBackup = withRequestOptions(
+  (payload: RequestBackupCreate, options?: AxiosRequestConfig) =>
+    APIS.ClusterBackups.backupsPost(payload, options)
+)
 
 export function useCreateClusterBackup() {
   return useMutation(createClusterBackup)
 }
 
-const restoreClusterBackup = (payload: RequestBackupRestore) =>
-  APIS.Clusters.clustersRestorePost(payload)
+const restoreClusterBackup = withRequestOptions(
+  (payload: RequestBackupRestore, options?: AxiosRequestConfig) =>
+    APIS.Clusters.clustersRestorePost(payload, options)
+)
 
 export function useRestoreClusterBackup() {
   return useMutation(restoreClusterBackup)
@@ -332,4 +372,40 @@ export function useQueryClusterExternalService(
       ...options,
     }
   )
+}
+
+/**
+ * Cluster Scaling
+ */
+
+const scaleOutCluster = withRequestOptions(
+  (
+    {
+      clusterId,
+      ...payload
+    }: RequestClusterScaleOut & {
+      clusterId: string
+    },
+    options?: AxiosRequestConfig
+  ) => APIS.Clusters.clustersClusterIdScaleOutPost(clusterId, payload, options)
+)
+
+export function useClusterScaleOut() {
+  return useMutation(scaleOutCluster)
+}
+
+const scaleInCluster = withRequestOptions(
+  (
+    {
+      clusterId,
+      ...payload
+    }: RequestClusterScaleIn & {
+      clusterId: string
+    },
+    options?: AxiosRequestConfig
+  ) => APIS.Clusters.clustersClusterIdScaleInPost(clusterId, payload, options)
+)
+
+export function useClusterScaleIn() {
+  return useMutation(scaleInCluster)
 }

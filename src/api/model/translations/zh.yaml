@@ -16,6 +16,7 @@ cluster:
     deleteTime: 删除时间
     tls: TLS
     usage: 资源使用率
+    region: Region
   tls:
     on: 启用
     off: 无
@@ -187,9 +188,11 @@ host:
     createTime: 创建时间
     updateTime: 更新时间
   status:
+    init: 初始化
     online: 在线
     offline: 离线
     deleted: 已删除
+    failed: 异常
   load:
     idle: 空闲中
     used: 使用中

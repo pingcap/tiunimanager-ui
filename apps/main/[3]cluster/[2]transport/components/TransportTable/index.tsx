@@ -13,8 +13,7 @@ import {
   useQueryTransportRecords,
 } from '@/api/hooks/transport'
 import { useQueryClient } from 'react-query'
-import { message, Tooltip } from 'antd'
-import { errToMsg } from '@/utils/error'
+import { Tooltip } from 'antd'
 import moment from 'moment'
 import { CopyIconButton } from '@/components/CopyToClipboard'
 import { useDownload } from '@hooks/useDownload'
@@ -112,22 +111,16 @@ function useTableColumn() {
   const deleteAction = useCallback(
     (recordId, clusterId) =>
       deleteTransportRecord.mutateAsync(
-        { recordId, clusterId },
         {
-          onSuccess(data) {
-            message.success(t('delete.success', { msg: data.data.data })).then()
+          recordId,
+          clusterId,
+          options: {
+            actionName: t('delete.name'),
           },
+        },
+        {
           onSettled() {
             return Promise.allSettled([invalidateTransportRecords(queryClient)])
-          },
-          onError(e: any) {
-            message
-              .error(
-                t('delete.fail', {
-                  msg: errToMsg(e),
-                })
-              )
-              .then()
           },
         }
       ),

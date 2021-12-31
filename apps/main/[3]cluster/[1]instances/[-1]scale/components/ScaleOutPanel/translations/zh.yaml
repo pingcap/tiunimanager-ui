@@ -1,0 +1,41 @@
+name:
+  scaleOut: 集群扩容
+  preview: 预览节点分配
+basic:
+  title: 基础信息
+nodes:
+  title: '{{ name }} 配置'
+  add: 增加更多节点
+  remove: 移除
+  optional: 可选
+  allocator:
+    title: 快速分配
+    items: '{{ count }} 节点'
+  fields:
+    zone: 可用区
+    spec: 规格
+    oldAmount: 原有数量
+    newAmount: 扩容后数量
+footer:
+  reset:
+    title: 重置
+    confirm: 确认重置表单吗?
+  submit:
+    title: 提交
+    confirm: 确认提交表单吗?
+message:
+  noZone: 无可用 Zone
+preview:
+  columns:
+    component: 组件
+    zone: 可用区
+    spec: 规格
+    amount: 数量
+    status: 状态
+  status:
+    normal: 正常
+    notEnough: 库存不足，请调整配置
+  actions:
+    confirm: 确认扩容
+  empty: 没有新增节点
+  fail: '预览失败: {{ msg }}'

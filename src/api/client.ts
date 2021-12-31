@@ -1,4 +1,10 @@
 import axios, { AxiosInstance } from 'axios'
+import { readonly } from '@/utils/obj'
+import { createElement, FC } from 'react'
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { initModelTranslations } from './model'
+import { getEnvState, subscribeEnv } from '@store/env'
+import { initTaskTranslations } from './task'
 import {
   ClusterApi,
   ClusterBackupApi,
@@ -14,18 +20,10 @@ import {
   ResourceApi,
   TaskApi,
 } from '#/api'
-import { readonly } from '@/utils/obj'
-import { createElement, FC } from 'react'
-import { QueryClient, QueryClientProvider, UseQueryOptions } from 'react-query'
-import { initModelTranslations } from './model'
-import { getEnvState, subscribeEnv } from '@store/env'
-import { initTaskTranslations } from './task'
 
-function initAxios() {
-  const instance = axios.create()
-  // TODO: add interceptors
-  return instance
-}
+// load translations for error codes
+import '#/error'
+import { onErrorResponse, onSuccessResponse } from '@/api/interceptors'
 
 function buildBasePath(
   basePath: string,
@@ -38,6 +36,8 @@ function buildBasePath(
 }
 
 function initApis(basePath: string, axiosInstance: AxiosInstance) {
+  axiosInstance.interceptors.response.use(onSuccessResponse, onErrorResponse)
+
   const { tlsPort, protocol } = getEnvState()
   const configuration = new Configuration({
     basePath: buildBasePath(basePath, protocol, tlsPort),
@@ -88,31 +88,19 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
 export const apiBasePath = import.meta.env.VITE_API_BASE_URL
 export const fsBasePath = import.meta.env.VITE_FS_BASE_URL
 
-export const axiosInstance = initAxios()
+export const axiosInstance = axios.create()
 
 export const APIS = initApis(apiBasePath, axiosInstance)
 
 const TokenHeader = 'Authorization'
 
 export function setRequestToken(token?: string) {
-  if (!token) delete axiosInstance.defaults.headers[TokenHeader]
-  axiosInstance.defaults.headers[TokenHeader] = `Bearer ${token}`
+  if (!token) {
+    delete axiosInstance.defaults.headers[TokenHeader]
+  } else {
+    axiosInstance.defaults.headers[TokenHeader] = `Bearer ${token}`
+  }
 }
 
 export const APIProvider: FC = ({ children }) =>
   createElement(QueryClientProvider, { client: new QueryClient() }, children)
-
-export type PartialUseQueryOptions = Pick<
-  UseQueryOptions,
-  | 'cacheTime'
-  | 'enabled'
-  | 'staleTime'
-  | 'keepPreviousData'
-  | 'suspense'
-  | 'refetchInterval'
-  | 'refetchIntervalInBackground'
-  | 'refetchOnWindowFocus'
-  | 'refetchOnReconnect'
-  | 'refetchOnMount'
-  | 'retryOnMount'
->

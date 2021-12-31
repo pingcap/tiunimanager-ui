@@ -1,0 +1,10 @@
+error:
+  defaultTitle: Request Failed
+  title: '{{ name }} Failed'
+  description: Desciption
+  more: More
+  method: Method
+  url: URL
+  code: Error Code
+  request: Request
+  response: Response

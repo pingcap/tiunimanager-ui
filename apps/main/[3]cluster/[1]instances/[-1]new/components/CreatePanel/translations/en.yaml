@@ -1,3 +1,1 @@
-message:
-  success: 'Create cluster {{ msg }} successfully'
-  fail: 'Fail: {{ msg }}'
+name: Create Cluster
