@@ -102,6 +102,7 @@ clusterBackupStrategy:
     Sunday: 周日
 clusterParam:
   property:
+    component: 组件名称
     name: 参数名称
     reboot: 重启
     desc: 参数描述
@@ -152,6 +153,25 @@ clusterNode:
     running: 运行中
     recovering: 恢复中
     failure: 异常
+paramGroup:
+  property:
+    id: ID
+    name: 参数组名称
+    type: 参数组类别
+    scope: 参数组级别
+    dbType: 数据库类型
+    dbVersion: 数据库版本
+    clusterSpec: 集群规格
+    desc: 描述
+  type:
+    system: 系统内置
+    custom: 自定义
+  scope:
+    cluster: 集群
+    instance: 组件
+  dbType:
+    tidb: TiDB
+    dm: DM
 host:
   property:
     id: ID

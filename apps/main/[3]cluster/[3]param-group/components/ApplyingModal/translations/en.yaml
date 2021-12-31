@@ -1,0 +1,17 @@
+modal:
+  title: Use The Parameter Group
+form:
+  fields:
+    cluster: Choose a Cluster
+    reboot: Reboot right now
+  rules:
+    cluster:
+      required: Please choose a cluster
+footer:
+  cancel:
+    text: Cancel
+  ok:
+    text: Confirm
+message:
+  success: 'Use the parameter group successfully'
+  fail: 'Failed: {{ msg }}'
