@@ -110,11 +110,14 @@ function getColumns({
       width: 140,
       dataIndex: 'id',
       key: 'id',
-      render: (el, record) => (
-        <Link to={`${resolveRoute('', record.clusterId!)}/${record.id}`}>
-          {record.id}
-        </Link>
-      ),
+      render: (el, record) =>
+        record.status === ClusterDataReplicationStatus.Initial ? (
+          record.id
+        ) : (
+          <Link to={`${resolveRoute('', record.clusterId!)}/${record.id}`}>
+            {record.id}
+          </Link>
+        ),
     },
     {
       title: t('model:clusterDataReplication.property.name'),
@@ -190,19 +193,26 @@ function getColumns({
       width: 180,
       key: 'action',
       render: (_, record) => {
-        // const disabled = record.status === ClusterDataReplicationStatus.Initial
+        const editDisabled =
+          record.status === ClusterDataReplicationStatus.Initial
         const suspendDisabled =
           record.status !== ClusterDataReplicationStatus.Normal
         const resumeDisabled =
           record.status !== ClusterDataReplicationStatus.Stopped
 
         return [
-          <Link
-            key="edit"
-            to={`${resolveRoute('', record.clusterId!)}/${record.id}/edit`}
-          >
-            {t('actions.edit')}
-          </Link>,
+          editDisabled ? (
+            <span className={styles.disabledLink} key="edit">
+              {t('actions.edit')}
+            </span>
+          ) : (
+            <Link
+              key="edit"
+              to={`${resolveRoute('', record.clusterId!)}/${record.id}/edit`}
+            >
+              {t('actions.edit')}
+            </Link>
+          ),
           <IntlPopConfirm
             key="suspend"
             title={t('suspend.confirm')}
