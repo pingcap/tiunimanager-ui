@@ -438,7 +438,7 @@ const CreationPanel: FC<CreationPanelProps> = ({ clusterId, back }) => {
         {
           clusterId,
           name: fields.name,
-          startTS: fields.tso,
+          startTS: String(fields.tso),
           rules: fields?.filterRuleList?.filter((el) => el),
           downstreamType: fields.downstreamType as any,
           downstream: downstream[fields.downstreamType],
