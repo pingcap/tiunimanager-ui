@@ -181,10 +181,17 @@ function getColumns({
           return
         }
 
-        const diffBigInt =
-          BigInt(record.upstreamUpdateTs) - BigInt(record.downstreamSyncTs)
+        const upstreamTimestamp = Number(
+          (BigInt(record.upstreamUpdateTs) >> 18n).toString()
+        )
 
-        return diffBigInt.toString()
+        const downstreamTimestamp = Number(
+          (BigInt(record.downstreamSyncTs) >> 18n).toString()
+        )
+
+        return upstreamTimestamp >= downstreamTimestamp
+          ? upstreamTimestamp - downstreamTimestamp
+          : undefined
       },
     },
     {
