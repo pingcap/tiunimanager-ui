@@ -8,6 +8,9 @@ actions:
 delete:
   confirm: 确认删除该集群吗?
   name: 删除集群
+  options:
+    autoBackup: 删除前进行最终备份
+    clearBackup: 删除历史备份数据
 backup:
   confirm: '确认立即备份集群 {{ name }} 吗?'
   name: 创建备份

@@ -8,6 +8,9 @@ actions:
 delete:
   confirm: Are you sure to delete this cluster?
   name: Delete Cluster
+  options:
+    autoBackup: Backup before deletion
+    clearBackup: Remove existing backup data
 backup:
   confirm: 'Are you sure to create backup task for cluster {{ name }} now?'
   name: Backup Cluster
