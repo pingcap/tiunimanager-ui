@@ -61,8 +61,22 @@ export async function invalidateClusterDetail(client: QueryClient, id: string) {
 }
 
 const deleteCluster = withRequestOptions(
-  (payload: { id: string }, options?: AxiosRequestConfig) =>
-    APIS.Clusters.clustersClusterIdDelete(payload.id, undefined, options)
+  (
+    payload: {
+      id: string
+      autoBackup: boolean
+      clearBackupData: boolean
+    },
+    options?: AxiosRequestConfig
+  ) =>
+    APIS.Clusters.clustersClusterIdDelete(
+      payload.id,
+      {
+        autoBackup: payload.autoBackup,
+        clearBackupData: payload.clearBackupData,
+      },
+      options
+    )
 )
 export function useDeleteCluster() {
   return useMutation(deleteCluster)
