@@ -6,4 +6,5 @@ error:
   method: Method
   url: URL
   code: Error Code
-  stack: Stack
+  request: Request
+  response: Response
