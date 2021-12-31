@@ -461,7 +461,7 @@ const EditingPanel: FC<EditingPanelProps> = ({ taskId, back }) => {
         {
           id: taskId,
           name: fields.name,
-          rules: fields.filterRuleList.filter((el) => el),
+          rules: fields?.filterRuleList?.filter((el) => el),
           downstreamType: fields.downstreamType as any,
           downstream: downstream[fields.downstreamType],
         },
@@ -485,6 +485,11 @@ const EditingPanel: FC<EditingPanelProps> = ({ taskId, back }) => {
         }
       )
     } catch (e) {
+      message.error(
+        t('message.fail', {
+          msg: errToMsg(e),
+        })
+      )
       setSubmitting(false)
     }
   }, [form, i18n.language, queryClient, updateDataReplication, taskId])
