@@ -1,6 +1,6 @@
 import { useHistory } from 'react-router-dom'
 import { useMemo } from 'react'
-import { Button, Modal } from 'antd'
+import { Button, Form, Modal, Switch } from 'antd'
 import {
   DeleteOutlined,
   DeploymentUnitOutlined,
@@ -31,6 +31,7 @@ export default function HeaderBar() {
   const deleteCluster = useDeleteCluster()
   const queryClient = useQueryClient()
   const { t, i18n } = useI18n()
+  const [deletionForm] = Form.useForm()
 
   return useMemo(() => {
     const { clusterId } = info!
@@ -55,6 +56,8 @@ export default function HeaderBar() {
       deleteCluster.mutateAsync(
         {
           id: clusterId!,
+          autoBackup: deletionForm.getFieldValue('autoBackup'),
+          clearBackupData: deletionForm.getFieldValue('clearBackup'),
           options: {
             actionName: t('delete.name'),
           },
@@ -102,6 +105,33 @@ export default function HeaderBar() {
       <DeleteConfirm
         key="delete"
         title={t('delete.confirm')}
+        content={
+          <Form
+            className={styles.deletionForm}
+            form={deletionForm}
+            colon={false}
+            requiredMark={false}
+            initialValues={{
+              autoBackup: true,
+              clearBackup: false,
+            }}
+          >
+            <Form.Item
+              name="autoBackup"
+              label={t('delete.options.autoBackup')}
+              valuePropName="checked"
+            >
+              <Switch />
+            </Form.Item>
+            <Form.Item
+              name="clearBackup"
+              label={t('delete.options.clearBackup')}
+              valuePropName="checked"
+            >
+              <Switch />
+            </Form.Item>
+          </Form>
+        }
         confirmInput={{
           expect: 'delete',
         }}
@@ -138,5 +168,6 @@ export default function HeaderBar() {
     i18n.language,
     history,
     queryClient,
+    deletionForm,
   ])
 }
