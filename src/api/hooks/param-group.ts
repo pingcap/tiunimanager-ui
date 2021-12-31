@@ -7,7 +7,8 @@ import {
   RequestParamGroupCopy,
   RequestParamGroupApply,
 } from '@/api/model'
-import { APIS, PartialUseQueryOptions } from '@/api/client'
+import { APIS } from '@/api/client'
+import { PartialUseQueryOptions } from '@/api/hooks/utils'
 
 const CACHE_PARAM_GROUP_LIST_KEY = 'param-group-list'
 
