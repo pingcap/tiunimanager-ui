@@ -174,9 +174,14 @@ function getColumns({
       width: 180,
       key: 'time',
       renderText(text, record) {
-        return record.upstreamUpdateTs > 0 && record.downstreamSyncTs! > 0
-          ? record.upstreamUpdateTs! - record.downstreamSyncTs!
-          : null
+        if (!record.upstreamUpdateTs || !record.downstreamSyncTs) {
+          return
+        }
+
+        const diffBigInt =
+          BigInt(record.upstreamUpdateTs) - BigInt(record.downstreamSyncTs)
+
+        return diffBigInt.toString()
       },
     },
     {
