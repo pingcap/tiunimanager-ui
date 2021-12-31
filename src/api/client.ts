@@ -13,6 +13,7 @@ import {
   ClusterImportApi,
   ClusterLogApi,
   ClusterParametersApi,
+  ChangeFeedApi as ClusterDataReplicationApi,
   ParameterGroupApi,
   Configuration,
   KnowledgeApi,
@@ -69,6 +70,11 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
       axiosInstance
     ),
     ClusterBackups: new ClusterBackupApi(
+      configuration,
+      undefined,
+      axiosInstance
+    ),
+    ClusterDataReplication: new ClusterDataReplicationApi(
       configuration,
       undefined,
       axiosInstance
