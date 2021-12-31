@@ -39,6 +39,7 @@ import {
   ClusterMysqlDownstream,
   ClusterKafkaDownstream,
   ClusterKafkaDownstreamProtocolEnum,
+  ClusterDetailChangeFeedTaskResp,
   ClusterCreateChangeFeedTaskReq,
   ClusterUpdateChangeFeedTaskReq,
   ClusterQueryChangeFeedTaskResp,
@@ -62,6 +63,7 @@ export type ClusterParamItem = StructsClusterParameterInfo
 export type ClusterLogItem = StructsClusterLogItem
 export type ClusterBackupItem = StructsBackupRecord
 
+export type ClusterDataReplicationDetail = ClusterDetailChangeFeedTaskResp
 export type ClusterDataReplicationItem = ClusterQueryChangeFeedTaskResp
 export type ClusterDownstreamKafka = ClusterKafkaDownstream
 export type ClusterDownstreamMySQL = ClusterMysqlDownstream
