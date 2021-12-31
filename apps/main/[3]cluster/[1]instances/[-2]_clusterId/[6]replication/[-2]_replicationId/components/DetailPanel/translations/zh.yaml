@@ -1,0 +1,45 @@
+basic:
+  title: 基本信息
+  fields:
+    id: 任务 ID
+    name: 任务名称
+    status: 任务状态
+    tso: 起始 TSO
+    filterRule: 过滤规则
+    latestUpstreamTSO: 最新的上游时间
+    latestFetchTSO: 最近一次获取上游数据的时间
+    latestSyncTSO: 最近一次同步成功的时间
+downstream:
+  title: 下游配置
+  fields:
+    type: 下游类型
+mysql:
+  fields:
+    url: URL/IP
+    port: 端口
+    user: 用户名
+    password: 密码
+    thread: 并发线程数
+tidb:
+  fields:
+    url: URL/IP
+    port: 端口
+    user: 用户名
+    password: 密码
+    thread: 并发线程数
+kafka:
+  fields:
+    url: URL/IP
+    port: 端口
+    version: 版本号
+    clientId: 客户端 ID
+    topic: Topic
+    protocol: 协议
+    partition: Partitions
+    replica: 副本数
+    maxMsgSize: 单条消息大小上限
+    maxMsgNum: 批量消息条数上限
+    dispatchRule: 分发规则
+  dispatchRule:
+    dispatcher: 规则
+    matcher: 函数

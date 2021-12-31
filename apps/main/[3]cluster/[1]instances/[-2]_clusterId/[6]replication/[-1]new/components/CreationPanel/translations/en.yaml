@@ -1,0 +1,113 @@
+basic:
+  title: Basic Info
+  fields:
+    name: Name
+    tso: Beginning TSO
+    filterRule: Filter Rules
+  tips:
+    tso: The value of the beginning TSO must be between 0 ~ tikv_gc_save_point
+    filterRule: Each rule is a regular expression
+  rules:
+    name:
+      required: Please enter a task name
+      length: The length must be between 1 ~ 20
+    filterRule:
+      valid: Please enter a valid rule
+  action:
+    filterRule:
+      add: New Rule
+downstream:
+  title: Downstream Config
+  fields:
+    type: Downstream
+  rules:
+    type:
+      required: Please select a downstream
+mysql:
+  fields:
+    url: URL/IP
+    port: Port
+    user: User Name
+    password: Password
+    thread: Number of Concurrent Threads
+  rules:
+    url:
+      required: Please enter a valid URL or IP address
+    port:
+      required: Please enter a port
+    user:
+      required: Please enter a user name
+      length: The length must be between 3 ~ 20
+    password:
+      required: Please enter a password
+      length: The length must be between 6 ~ 20
+  tips:
+    url: 'e.g., abc.com or X.X.X.X'
+    thread: From 1 to 128 and 16 is the default value.
+tidb:
+  fields:
+    url: URL/IP
+    port: Port
+    user: User Name
+    password: Password
+    thread: Number of Concurrent Threads
+  rules:
+    url:
+      required: Please enter a valid URL or IP address
+    port:
+      required: Please enter a port
+    user:
+      required: Please enter a user name
+      length: The length must be between 3 ~ 20
+    password:
+      required: Please enter a password
+      length: The length must be between 6 ~ 20
+  tips:
+    url: 'e.g., abc.com or X.X.X.X'
+    thread: From 1 to 128 and 16 is the default value.
+kafka:
+  fields:
+    url: URL/IP
+    port: Port
+    version: Version
+    clientId: Client ID
+    topic: Topic
+    protocol: Protocol
+    partition: Partitions
+    replica: Number of replicas
+    maxMsgSize: Max size of each message
+    maxMsgNum: Max number of batch messages
+    dispatchRule: Dispatch rules
+  placeholder:
+    dispatcher: Dispatch Rule
+    matcher: Matcher
+  rules:
+    url:
+      required: Please enter a valid URL or IP address
+    port:
+      required: Please enter a port
+    version:
+      required: Please enter the Kafka version
+    clientId:
+      required: Please enter a client ID
+    topic:
+      required: Please enter a topic name
+    protocol:
+      required: Please select a protocol
+    dispatchRule:
+      valid: Please enter a valid dispatch rule
+  tips:
+    url: 'e.g., abc.com or X.X.X.X'
+  action:
+    dispatchRule:
+      add: New Dispatch Rule
+footer:
+  reset:
+    title: Reset
+    confirm: Are you sure to reset?
+  submit:
+    title: Submit
+    confirm: Are you sure to submit?
+message:
+  success: Successfully create a data replication task
+  fail: 'Failed: {{ msg }}'
