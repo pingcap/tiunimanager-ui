@@ -6,4 +6,5 @@ error:
   method: 方法
   url: URL
   code: 错误码
-  stack: 堆栈
+  request: 请求
+  response: 响应

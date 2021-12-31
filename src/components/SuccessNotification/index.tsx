@@ -40,8 +40,7 @@ export function SuccessNotification({ workflowId }: { workflowId: string }) {
           className="ant-btn-link"
           onClick={() => {
             history.push({
-              pathname: '/task',
-              search: 'id=' + workflowId, // TODO: how to pass query?
+              pathname: '/task', // FIXME: pass workflow id
             })
             notification.close(workflowId)
           }}

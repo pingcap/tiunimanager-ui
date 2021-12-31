@@ -1,4 +1,4 @@
-import { Collapse, notification } from 'antd'
+import { Collapse, notification, Typography } from 'antd'
 import { getI18n, loadI18n } from '@i18n-macro'
 import { AxiosError } from 'axios'
 import styles from './index.module.less'
@@ -47,10 +47,26 @@ export function ErrorNotification({ error }: { error: AxiosError }) {
             <div>{t('error.code')}</div>
             <div>{code}</div>
           </div>
-          <div className={styles.item}>
-            <div>{t('error.stack')}</div>
-            <div>{error.stack}</div>
-          </div>
+          {error.config.method !== 'get' && (
+            <div className={styles.item}>
+              <div>{t('error.request')}</div>
+              <Typography.Paragraph
+                ellipsis={{ rows: 2, expandable: true, symbol: 'more' }}
+              >
+                {JSON.stringify(error.request)}
+              </Typography.Paragraph>
+            </div>
+          )}
+          {error.response?.data.message && (
+            <div className={styles.item}>
+              <div>{t('error.response')}</div>
+              <Typography.Paragraph
+                ellipsis={{ rows: 2, expandable: true, symbol: 'more' }}
+              >
+                {error.response?.data.message}
+              </Typography.Paragraph>
+            </div>
+          )}
         </Collapse.Panel>
       </Collapse>
     </div>

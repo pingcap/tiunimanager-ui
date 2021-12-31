@@ -1,22 +1,20 @@
 import { PropsWithChildren } from 'react'
 import ProTable, { ProTableProps } from '@ant-design/pro-table'
 
-const defaultTableProps = {
-  // bordered: true,
-  size: 'middle',
-  showHeader: true,
-  search: false,
-} as const
-
 export default function HeavyTable<T, U, R>({
   pagination,
   options,
   columnsState,
+  search = false,
+  size = 'middle',
+  showHeader = true,
   ...props
 }: PropsWithChildren<ProTableProps<T, U, R>>) {
   return (
     <ProTable
-      {...defaultTableProps}
+      showHeader={showHeader}
+      size={size}
+      search={search}
       pagination={
         pagination === false
           ? false
