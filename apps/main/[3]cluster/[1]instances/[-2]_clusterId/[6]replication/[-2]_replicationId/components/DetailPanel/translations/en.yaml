@@ -1,0 +1,45 @@
+basic:
+  title: Basic Info
+  fields:
+    id: ID
+    name: Name
+    status: Status
+    tso: Beginning TSO
+    filterRule: Filter Rules
+    latestUpstreamTSO: Latest Upstream TSO
+    latestFetchTSO: Latest Data Fetch TSO
+    latestSyncTSO: Latest Data Sync TSO
+downstream:
+  title: Downstream Config
+  fields:
+    type: Downstream
+mysql:
+  fields:
+    url: URL/IP
+    port: Port
+    user: User Name
+    password: Password
+    thread: Number of Concurrent Threads
+tidb:
+  fields:
+    url: URL/IP
+    port: Port
+    user: User Name
+    password: Password
+    thread: Number of Concurrent Threads
+kafka:
+  fields:
+    url: URL/IP
+    port: Port
+    version: Version
+    clientId: Client ID
+    topic: Topic
+    protocol: Protocol
+    partition: Partitions
+    replica: Number of replicas
+    maxMsgSize: Max size of each message
+    maxMsgNum: Max number of batch messages
+    dispatchRule: Dispatch rules
+  dispatchRule:
+    dispatcher: Rule
+    matcher: Matcher
