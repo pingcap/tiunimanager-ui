@@ -439,7 +439,7 @@ const CreationPanel: FC<CreationPanelProps> = ({ clusterId, back }) => {
           clusterId,
           name: fields.name,
           startTS: fields.tso,
-          rules: fields.filterRuleList.filter((el) => el),
+          rules: fields?.filterRuleList?.filter((el) => el),
           downstreamType: fields.downstreamType as any,
           downstream: downstream[fields.downstreamType],
         },
@@ -463,6 +463,11 @@ const CreationPanel: FC<CreationPanelProps> = ({ clusterId, back }) => {
         }
       )
     } catch (e) {
+      message.error(
+        t('message.fail', {
+          msg: errToMsg(e),
+        })
+      )
       setSubmitting(false)
     }
   }, [form, i18n.language, queryClient, createDataReplication, clusterId])
