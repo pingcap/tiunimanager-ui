@@ -11,6 +11,7 @@
     "lint": "eslint . --cache",
     "lint:ci": "eslint . --max-warnings 0",
     "prepare": "is-ci || husky install",
+    "bootstrap": "yarn error:bootstrap",
     "generate": "yarn api:gen && yarn error:gen",
     "api:gen": "yarn openapi-generator-cli generate",
     "error:bootstrap": "go install github.com/unbyte/error-code-gen@latest",
