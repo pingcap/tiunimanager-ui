@@ -1,3 +1,0 @@
-[submodule "contrib/error-code-gen"]
-	path = contrib/error-code-gen
-	url = https://github.com/unbyte/error-code-gen
