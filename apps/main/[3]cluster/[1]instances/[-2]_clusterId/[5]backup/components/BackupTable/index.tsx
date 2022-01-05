@@ -1,6 +1,11 @@
 import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import { useCallback, useMemo, useState } from 'react'
-import { ClusterBackupItem, ClusterInfo, PagedResult } from '@/api/model'
+import {
+  BackupStatus,
+  ClusterBackupItem,
+  ClusterInfo,
+  PagedResult,
+} from '@/api/model'
 import HeavyTable from '@/components/HeavyTable'
 import { Popconfirm } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
@@ -274,17 +279,24 @@ function getColumns(
       key: 'actions',
       valueType: 'option',
       render(_, record) {
+        const disableRestore = record.status !== BackupStatus.success
         return [
-          <Popconfirm
-            key="restore"
-            title={t('restore.confirm')}
-            icon={<QuestionCircleOutlined />}
-            onConfirm={async () => {
-              restoreAction(record)
-            }}
-          >
-            <a>{t('actions.restore')}</a>
-          </Popconfirm>,
+          disableRestore ? (
+            <span className="disabled-text-btn" key="restore">
+              {t('actions.restore')}
+            </span>
+          ) : (
+            <Popconfirm
+              key="restore"
+              title={t('restore.confirm')}
+              icon={<QuestionCircleOutlined />}
+              onConfirm={async () => {
+                restoreAction(record)
+              }}
+            >
+              <a>{t('actions.restore')}</a>
+            </Popconfirm>
+          ),
           <DeleteConfirm
             key="delete"
             title={t('delete.confirm')}
@@ -296,7 +308,7 @@ function getColumns(
               close()
             }}
           >
-            <a className="danger-link">{t('actions.delete')}</a>
+            <span className="danger-link">{t('actions.delete')}</span>
           </DeleteConfirm>,
         ]
       },

@@ -246,7 +246,7 @@ function getColumns(
           record.transportType !== 'export' ||
           isError ? (
             <Tooltip title={t('download.notSupport')} key="download">
-              <span className={styles.disabled}>{t('actions.download')}</span>
+              <span className="disabled-text-btn">{t('actions.download')}</span>
             </Tooltip>
           ) : (
             <a

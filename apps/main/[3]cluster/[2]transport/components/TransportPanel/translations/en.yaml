@@ -3,11 +3,13 @@ export:
   target: Export Target
   source: Source Database
   options: Export Options
+  submit: Export
 import:
   title: Import Cluster Data
   source: Data Source
   target: Target Database
   options: Import Options
+  submit: Import
 form:
   storageType: Storage Type
   s3:
@@ -28,7 +30,7 @@ form:
   password: Password
   submit:
     title: Submit
-    confirm: Are you sure to submit the form?
+    confirm: Are you sure to submit?
 enum:
   filetype:
     csv: CSV
@@ -58,4 +60,5 @@ upload:
     success: Upload successfully
     fail: 'Fail to upload: {{ msg }}'
 importable:
+  id: ID
   time: Time
