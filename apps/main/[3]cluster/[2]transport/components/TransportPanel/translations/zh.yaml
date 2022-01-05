@@ -3,15 +3,13 @@ export:
   target: 导出目标
   source: 源数据库
   options: 导出选项
-  message:
-    success: 导出成功
+  submit: 创建导出任务
 import:
   title: 导入集群数据
   source: 数据源
   target: 目标数据库
   options: 导入选项
-  message:
-    success: 导入成功
+  submit: 创建导入任务
 form:
   storageType: 存储类型
   s3:
@@ -32,7 +30,7 @@ form:
   password: 密码
   submit:
     title: 确认
-    confirm: 确认提交表单吗?
+    confirm: 确认提交吗?
 enum:
   filetype:
     csv: CSV
@@ -60,4 +58,5 @@ upload:
     success: 上传成功
     fail: '上传失败: {{ msg }}'
 importable:
+  id: ID
   time: 时间

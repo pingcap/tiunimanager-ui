@@ -1,6 +1,6 @@
-import { Button, Checkbox, Col, Form, Modal, Row, Select } from 'antd'
+import { Button, Checkbox, Col, Form, Modal, Row, Select, Tooltip } from 'antd'
 import { loadI18n, useI18n } from '@i18n-macro'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import {
   useQueryClusterBackupStrategy,
   useUpdateClusterBackupStrategy,
@@ -66,12 +66,13 @@ export default function SettingModal({
     id: clusterId,
   })
 
+  const strategy = data?.data.data?.strategy
+
   const updateBackupStrategy = useUpdateClusterBackupStrategy()
 
   const [form] = Form.useForm()
 
   const handleReset = () => {
-    const strategy = data?.data.data?.strategy
     if (strategy?.backupDate) {
       form.setFieldsValue({
         backupDate: strategy?.backupDate?.split(',') || [],
@@ -87,7 +88,7 @@ export default function SettingModal({
 
   const handleUpdate = async () => {
     const value = await form.validateFields()
-    updateBackupStrategy.mutateAsync(
+    await updateBackupStrategy.mutateAsync(
       {
         clusterId: clusterId,
         strategy: {
@@ -112,6 +113,8 @@ export default function SettingModal({
     if (!isLoading) handleReset()
   }, [isLoading])
 
+  const [changed, setChanged] = useState(false)
+
   return (
     <Modal
       title={t('title')}
@@ -123,9 +126,19 @@ export default function SettingModal({
       footer={
         <div>
           <Button onClick={handleReset}>{t('reset')}</Button>
-          <Button onClick={handleUpdate} type="primary">
-            {t('save')}
-          </Button>
+          <span style={{ marginLeft: 8 }}>
+            {changed ? (
+              <Button onClick={handleUpdate} type="primary">
+                {t('save')}
+              </Button>
+            ) : (
+              <Tooltip title={t('noChanges')}>
+                <Button type="primary" disabled>
+                  {t('save')}
+                </Button>
+              </Tooltip>
+            )}
+          </span>
         </div>
       }
     >
@@ -133,7 +146,21 @@ export default function SettingModal({
         'Loading...'
       ) : (
         <div>
-          <Form form={form}>
+          <Form
+            form={form}
+            onValuesChange={(v: { backupDate?: string[]; period?: string }) => {
+              if (!strategy) return false
+              let diff = false
+              if (
+                v?.backupDate &&
+                v?.backupDate?.sort().join(',') !==
+                  strategy.backupDate?.split(',').sort().join(',')
+              )
+                diff = true
+              if (v?.period && v?.period !== strategy.period) diff = true
+              setChanged(diff)
+            }}
+          >
             <Form.Item name="backupDate" label={t('form.backupDate')}>
               <Checkbox.Group>
                 <Row>

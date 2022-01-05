@@ -25,7 +25,7 @@ import { TFunction } from 'react-i18next'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { usePagination } from '@hooks/usePagination'
 import IntlPopConfirm from '@/components/IntlPopConfirm'
-import { Button, message } from 'antd'
+import { Button } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { useQueryClient } from 'react-query'
 import { mapObj } from '@/utils/obj'
@@ -419,20 +419,12 @@ function getColumns(
         const stopDisabled = rebootDisabled
 
         return [
-          // TODO: implement actions in cluster list
-          // <a key="edit">{t('actions.edit')}</a>,
           bootEnabled ? (
             <IntlPopConfirm
               key="boot"
               title={t('boot.confirm')}
               icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-              onConfirm={async () => {
-                const hide = message.loading(t('boot.loading'), 0)
-
-                await bootAction('boot', record.clusterId!)
-
-                hide()
-              }}
+              onConfirm={() => bootAction('boot', record.clusterId!)}
             >
               <Button className={styles.actionBtn} type="link">
                 {t('actions.boot')}
@@ -444,13 +436,7 @@ function getColumns(
               title={t('reboot.confirm')}
               icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
               disabled={rebootDisabled}
-              onConfirm={async () => {
-                const hide = message.loading(t('reboot.loading'), 0)
-
-                await bootAction('reboot', record.clusterId!)
-
-                hide()
-              }}
+              onConfirm={() => bootAction('reboot', record.clusterId!)}
             >
               <Button
                 className={styles.actionBtn}
@@ -466,13 +452,7 @@ function getColumns(
             title={t('stop.confirm')}
             icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
             disabled={stopDisabled}
-            onConfirm={async () => {
-              const hide = message.loading(t('stop.loading'), 0)
-
-              await stopAction(record.clusterId!)
-
-              hide()
-            }}
+            onConfirm={() => stopAction(record.clusterId!)}
           >
             <Button
               className={styles.actionBtn}
