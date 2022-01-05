@@ -13,5 +13,14 @@ const addMessages = () => {
   })
 }
 
-if (i18next.isInitialized) addMessages()
-else i18next.on('initialized', addMessages)
+// enum doesn't support numeric members
+export const Error = {
+  {{- range . }}
+  {{ .Code }}: {{ .Code }},
+  {{- end }}
+}
+
+export function initErrorTranslations() {
+  if (i18next.isInitialized) addMessages()
+  else i18next.on('initialized', addMessages)
+}
