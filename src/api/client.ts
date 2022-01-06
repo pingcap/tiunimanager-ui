@@ -20,10 +20,8 @@ import {
   ResourceApi,
   TaskApi,
 } from '#/api'
-
-// load translations for error codes
-import '#/error'
 import { onErrorResponse, onSuccessResponse } from '@/api/interceptors'
+import { initErrorTranslations } from '#/error'
 
 function buildBasePath(
   basePath: string,
@@ -48,6 +46,7 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
 
   initModelTranslations()
   initTaskTranslations()
+  initErrorTranslations()
 
   return readonly({
     Platform: new PlatformApi(configuration, undefined, axiosInstance),
