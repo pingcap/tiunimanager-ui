@@ -13,5 +13,4 @@ footer:
   ok:
     text: Confirm
 message:
-  success: 'Use the parameter group successfully'
-  fail: 'Failed: {{ msg }}'
+  name: Applied

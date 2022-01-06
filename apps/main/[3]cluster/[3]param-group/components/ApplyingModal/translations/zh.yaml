@@ -13,5 +13,4 @@ footer:
   ok:
     text: 确认
 message:
-  success: '应用成功'
-  fail: '应用失败: {{ msg }}'
+  name: 应用参数组

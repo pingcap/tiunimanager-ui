@@ -1,8 +1,11 @@
 import { useState, useCallback, useMemo } from 'react'
 import { useQueryClient } from 'react-query'
+import { loadI18n, useI18n } from '@i18n-macro'
 import { useApplyParamGroup } from '@/api/hooks/param-group'
 import { errToMsg } from '@/utils/error'
 import type { ParamGroupItem } from '@/api/model'
+
+loadI18n()
 
 /**
  * Mutation result callbacks
@@ -38,6 +41,8 @@ export function useApplyingModal(dataSource?: ParamGroupItem[]) {
       : {}
   }, [dataSource, paramGroupId])
 
+  const { t } = useI18n()
+
   const onOpen = useCallback((paramGroupId: string) => {
     setParamGroupId(paramGroupId)
     setVisible(true)
@@ -55,9 +60,14 @@ export function useApplyingModal(dataSource?: ParamGroupItem[]) {
     (payload: ParamGroupApplyingPayload, callbacks: ApplyingActionCallbacks) =>
       applyParamGroup.mutateAsync(
         {
-          paramGroupId: paramGroupId!,
-          clusterId: payload.cluster,
-          reboot: payload.reboot,
+          payload: {
+            paramGroupId: paramGroupId!,
+            clusterId: payload.cluster,
+            reboot: payload.reboot,
+          },
+          options: {
+            actionName: t('message.name'),
+          },
         },
         {
           onSuccess(response) {

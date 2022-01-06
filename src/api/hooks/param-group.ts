@@ -9,6 +9,7 @@ import {
 } from '@/api/model'
 import { APIS } from '@/api/client'
 import { PartialUseQueryOptions } from '@/api/hooks/utils'
+import { AxiosRequestConfig } from 'axios'
 
 const CACHE_PARAM_GROUP_LIST_KEY = 'param-group-list'
 
@@ -117,10 +118,17 @@ export function useDeleteParamGroup() {
 }
 
 const applyParamGroup = ({
-  paramGroupId,
-  ...payload
-}: { paramGroupId: string } & RequestParamGroupApply) =>
-  APIS.ParamGroup.paramGroupsParamGroupIdApplyPost(paramGroupId, payload)
+  payload: { paramGroupId, ...leftPayload },
+  options,
+}: {
+  payload: { paramGroupId: string } & RequestParamGroupApply
+  options?: AxiosRequestConfig
+}) =>
+  APIS.ParamGroup.paramGroupsParamGroupIdApplyPost(
+    paramGroupId,
+    leftPayload,
+    options
+  )
 
 export function useApplyParamGroup() {
   return useMutation(applyParamGroup)

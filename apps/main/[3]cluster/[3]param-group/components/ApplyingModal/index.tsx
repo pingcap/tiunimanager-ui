@@ -1,7 +1,7 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction } from 'react-i18next'
-import { Form, Modal, message, Switch, Table } from 'antd'
+import { Form, Modal, Switch, Table } from 'antd'
 import { useQueryClustersList } from '@/api/hooks/cluster'
 import {
   ParamGroupItem,
@@ -42,25 +42,12 @@ const ParamGroupApplyingModal: FC<ParamGroupApplyingModalProps> = ({
   const [confirmLoading, setConfirmLoading] = useState(false)
 
   const onSuccess = useCallback(() => {
-    message.success(t('message.success')).then()
-
     setConfirmLoading(false)
   }, [i18n.language])
 
-  const onError = useCallback(
-    (msg?: string) => {
-      message
-        .error(
-          t('message.fail', {
-            msg,
-          })
-        )
-        .then()
-
-      setConfirmLoading(false)
-    },
-    [i18n.language]
-  )
+  const onError = useCallback(() => {
+    setConfirmLoading(false)
+  }, [i18n.language])
 
   const { data: clusterList, isLoading: clusterLoading } =
     useFetchAvalibleClusterList({
