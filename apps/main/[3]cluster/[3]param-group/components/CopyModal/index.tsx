@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { loadI18n, useI18n } from '@i18n-macro'
-import { Form, Modal, Input, message } from 'antd'
+import { Form, Modal, Input } from 'antd'
 import type { ParamGroupCopyPayload, CopyActionCallbacks } from './helper'
 import type { ParamGroupItem } from '@/api/model'
 
@@ -28,25 +28,12 @@ const ParamGroupCopyModal: React.FC<ParamGroupCopyModalProps> = ({
   const [confirmLoading, setConfirmLoading] = useState(false)
 
   const onSuccess = useCallback(() => {
-    message.success(t('message.success')).then()
-
     setConfirmLoading(false)
   }, [i18n.language])
 
-  const onError = useCallback(
-    (msg?: string) => {
-      message
-        .error(
-          t('message.fail', {
-            msg,
-          })
-        )
-        .then()
-
-      setConfirmLoading(false)
-    },
-    [i18n.language]
-  )
+  const onError = useCallback(() => {
+    setConfirmLoading(false)
+  }, [i18n.language])
 
   const onOk = useCallback(async () => {
     setConfirmLoading(true)

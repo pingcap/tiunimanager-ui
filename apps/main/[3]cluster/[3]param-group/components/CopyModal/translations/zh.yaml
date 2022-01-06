@@ -14,5 +14,4 @@ footer:
   ok:
     text: 确认
 message:
-  success: '复制成功'
-  fail: '复制失败: {{ msg }}'
+  name: 复制

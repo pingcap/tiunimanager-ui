@@ -14,5 +14,4 @@ footer:
   ok:
     text: Confirm
 message:
-  success: 'Copy successfully'
-  fail: 'Failed: {{ msg }}'
+  name: Copy

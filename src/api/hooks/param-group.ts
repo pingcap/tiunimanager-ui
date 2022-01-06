@@ -101,10 +101,17 @@ export function useUpdateParamGroup() {
 }
 
 const copyParamGroup = ({
-  paramGroupId,
-  ...payload
-}: { paramGroupId: string } & RequestParamGroupCopy) =>
-  APIS.ParamGroup.paramGroupsParamGroupIdCopyPost(paramGroupId, payload)
+  payload: { paramGroupId, ...leftPayload },
+  options,
+}: {
+  payload: { paramGroupId: string } & RequestParamGroupCopy
+  options?: AxiosRequestConfig
+}) =>
+  APIS.ParamGroup.paramGroupsParamGroupIdCopyPost(
+    paramGroupId,
+    leftPayload,
+    options
+  )
 
 export function useCopyParamGroup() {
   return useMutation(copyParamGroup)

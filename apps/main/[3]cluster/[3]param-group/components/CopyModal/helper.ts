@@ -6,7 +6,9 @@ import {
 } from '@/api/hooks/param-group'
 import { ParamGroupItem } from '@/api/model'
 import { errToMsg } from '@/utils/error'
+import { loadI18n, useI18n } from '@i18n-macro'
 
+loadI18n()
 export interface ParamGroupCopyPayload {
   name: string
   note?: string
@@ -37,6 +39,7 @@ export function useCopyModal(dataSource?: ParamGroupItem[]) {
     setCopyId(undefined)
   }, [])
 
+  const { t } = useI18n()
   const queryClient = useQueryClient()
   const copyParamGroup = useCopyParamGroup()
 
@@ -48,8 +51,13 @@ export function useCopyModal(dataSource?: ParamGroupItem[]) {
 
       copyParamGroup.mutateAsync(
         {
-          ...payload,
-          paramGroupId: copyId,
+          payload: {
+            ...payload,
+            paramGroupId: copyId,
+          },
+          options: {
+            actionName: t('message.name'),
+          },
         },
         {
           onSuccess(response) {
