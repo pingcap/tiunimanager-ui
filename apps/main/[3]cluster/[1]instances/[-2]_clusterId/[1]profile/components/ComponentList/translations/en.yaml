@@ -8,7 +8,7 @@ usage:
 columns:
   actions: Actions
 actions:
-  scaleIn: Scale In
+  scaleIn: Delete
 scaleIn:
-  confirm: Are you sure to scale in the {{ type }} instance on {{ ip }}?
-  name: Scale In
+  confirm: Are you sure to delete the {{ type }} instance on {{ ip }}?
+  name: Delete
