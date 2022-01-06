@@ -19,5 +19,4 @@ footer:
     error:
       param: Please save the editing parameter first
 message:
-  success: 'Update successfully'
-  fail: 'Fail: {{ msg }}'
+  name: Update

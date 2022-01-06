@@ -19,5 +19,4 @@ footer:
     error:
       param: 请保存参数后再提交
 message:
-  success: '成功修改参数组'
-  fail: '修改失败: {{ msg }}'
+  name: 修改

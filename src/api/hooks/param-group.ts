@@ -96,10 +96,13 @@ export function useCreateParamGroup() {
 }
 
 const updateParamGroup = ({
-  paramGroupId,
-  ...payload
-}: { paramGroupId: string } & RequestParamGroupUpdate) =>
-  APIS.ParamGroup.paramGroupsParamGroupIdPut(paramGroupId, payload)
+  payload: { paramGroupId, ...leftPayload },
+  options,
+}: {
+  payload: { paramGroupId: string } & RequestParamGroupUpdate
+  options?: AxiosRequestConfig
+}) =>
+  APIS.ParamGroup.paramGroupsParamGroupIdPut(paramGroupId, leftPayload, options)
 
 export function useUpdateParamGroup() {
   return useMutation(updateParamGroup)
