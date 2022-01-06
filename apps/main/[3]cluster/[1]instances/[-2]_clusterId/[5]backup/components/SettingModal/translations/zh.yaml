@@ -1,6 +1,7 @@
 title: 备份计划
 preview: 下五次执行备份任务的时间为
 reset: 重置
+noChanges: 没有修改
 save: 保存
 fetch:
   fail: '获取集群备份计划失败: {{ msg }}'

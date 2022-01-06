@@ -230,7 +230,11 @@ export function ExportPanel({ back }: TransportPanelProps) {
   return (
     <>
       {formDom}
-      <Submitter onSubmit={() => form.submit()} onReset={onReset} />
+      <Submitter
+        onSubmit={() => form.submit()}
+        onReset={onReset}
+        confirmText={t('export.submit')}
+      />
     </>
   )
 }
@@ -324,6 +328,20 @@ export function ImportPanel({ back }: TransportPanelProps) {
     const nfsOptions = (
       <Table
         columns={[
+          {
+            title: t('importable.id'),
+            width: 80,
+            dataIndex: 'recordId',
+            key: 'id',
+            render: (_, record) => (
+              <Tooltip placement="top" title={record.recordId}>
+                {record.recordId}
+              </Tooltip>
+            ),
+            ellipsis: {
+              showTitle: false,
+            },
+          },
           {
             title: t('importable.time'),
             width: 100,
@@ -508,6 +526,7 @@ export function ImportPanel({ back }: TransportPanelProps) {
         onSubmit={() => form.submit()}
         disabled={!submitEnabled}
         onReset={onReset}
+        confirmText={t('import.submit')}
       />
     </>
   )
@@ -599,12 +618,17 @@ function useS3Options() {
 }
 
 type SubmitterProps = {
+  confirmText?: string
   disabled?: boolean
   onSubmit: () => unknown
   onReset: () => unknown
 }
 
-function Submitter({ disabled = false, onSubmit }: SubmitterProps) {
+function Submitter({
+  disabled = false,
+  onSubmit,
+  confirmText,
+}: SubmitterProps) {
   const { t } = useI18n()
   return (
     <div className={styles.submitter}>
@@ -619,7 +643,7 @@ function Submitter({ disabled = false, onSubmit }: SubmitterProps) {
           type="primary"
           disabled={disabled}
         >
-          {t('form.submit.title')}
+          {confirmText || t('form.submit.title')}
         </Button>
       </IntlPopConfirm>
     </div>
