@@ -2,16 +2,25 @@ import i18next from 'i18next'
 
 const addMessages = () => {
   i18next.addResourceBundle('en', 'error', {
-    {%- for _,value in data.iterrows() %}
-    '{{ value.code }}': `{{ value.en }}`,
-    {%- endfor %}
+    {{- range . }}
+    '{{ .Code }}': `{{ .En }}`,
+    {{- end }}
   })
   i18next.addResourceBundle('zh', 'error', {
-    {%- for _,value in data.iterrows() %}
-    '{{ value.code }}': `{{ value.zh }}`,
-    {%- endfor %}
+    {{- range . }}
+    '{{ .Code }}': `{{ .Zh }}`,
+    {{- end }}
   })
 }
 
-if (i18next.isInitialized) addMessages()
-else i18next.on('initialized', addMessages)
+// enum doesn't support numeric members
+export const Error = {
+  {{- range . }}
+  {{ .Code }}: {{ .Code }},
+  {{- end }}
+}
+
+export function initErrorTranslations() {
+  if (i18next.isInitialized) addMessages()
+  else i18next.on('initialized', addMessages)
+}
