@@ -83,8 +83,13 @@ export function useQueryParamGroupDetail(
   )
 }
 
-const createParamGroup = (payload: RequestParamGroupCreate) =>
-  APIS.ParamGroup.paramGroupsPost(payload)
+const createParamGroup = ({
+  payload,
+  options,
+}: {
+  payload: RequestParamGroupCreate
+  options?: AxiosRequestConfig
+}) => APIS.ParamGroup.paramGroupsPost(payload, options)
 
 export function useCreateParamGroup() {
   return useMutation(createParamGroup)

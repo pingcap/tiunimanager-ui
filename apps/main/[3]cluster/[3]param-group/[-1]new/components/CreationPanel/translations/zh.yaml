@@ -25,5 +25,4 @@ footer:
     error:
       param: 请保存参数后再提交
 message:
-  success: '成功创建参数组'
-  fail: '创建失败: {{ msg }}'
+  name: 创建

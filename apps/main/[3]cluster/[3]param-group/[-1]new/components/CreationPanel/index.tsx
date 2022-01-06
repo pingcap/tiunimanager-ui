@@ -2,7 +2,6 @@ import { FC, useCallback, useMemo, useState } from 'react'
 import { useQueryClient } from 'react-query'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { Button, Form, FormInstance, Input, message, Select } from 'antd'
-import { errToMsg } from '@/utils/error'
 import { isArray, isNumber } from '@/utils/types'
 import IntlPopConfirm from '@/components/IntlPopConfirm'
 import {
@@ -424,29 +423,28 @@ function useSubmitter({
 
       await createParamGroup.mutateAsync(
         {
-          name: fields.name,
-          dbType: fields.dbType,
-          clusterVersion: fields.dbVersion,
-          clusterSpec: dataSource?.clusterSpec,
-          note: fields.note,
-          params: editedParamList.map((item) => ({
-            paramId: item.paramId,
-            defaultValue: item.defaultValue,
-            note: item.note,
-          })),
-          hasDefault: ParamGroupCreationType.custom,
+          payload: {
+            name: fields.name,
+            dbType: fields.dbType,
+            clusterVersion: fields.dbVersion,
+            clusterSpec: dataSource?.clusterSpec,
+            note: fields.note,
+            params: editedParamList.map((item) => ({
+              paramId: item.paramId,
+              defaultValue: item.defaultValue,
+              note: item.note,
+            })),
+            hasDefault: ParamGroupCreationType.custom,
+          },
+          options: {
+            actionName: t('message.name'),
+          },
         },
         {
           onSuccess() {
-            message.success(t('message.success')).then(routeBack)
+            routeBack()
           },
-          onError(e) {
-            message.error(
-              t('message.fail', {
-                msg: errToMsg(e),
-              })
-            )
-
+          onError() {
             setSubmitting(false)
           },
           onSettled() {

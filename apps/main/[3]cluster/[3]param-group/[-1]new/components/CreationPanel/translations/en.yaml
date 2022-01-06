@@ -25,5 +25,4 @@ footer:
     error:
       param: Please save the editing parameter first
 message:
-  success: 'Create a parameter group successfully'
-  fail: 'Fail: {{ msg }}'
+  name: Create
