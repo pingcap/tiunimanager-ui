@@ -122,7 +122,7 @@ function useLogin(
       const errMsg = errToMsg(err)
       setErrorMsg(errMsg)
       onFailure(errMsg)
-    } finally {
+      // when success, this component will be unmounted immediately so no need to setLoading()
       setLoading(false)
     }
   }
