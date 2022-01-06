@@ -19,5 +19,4 @@ delete:
   disabled: 不允许删除系统内置参数组
   confirm: 确认删除此参数组吗?
   loading: 删除中
-  success: 删除成功
-  fail: '删除失败: {{ msg }}'
+  name: 删除

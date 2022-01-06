@@ -125,8 +125,13 @@ export function useCopyParamGroup() {
   return useMutation(copyParamGroup)
 }
 
-const deleteParamGroup = (paramGroupId: string) =>
-  APIS.ParamGroup.paramGroupsParamGroupIdDelete(paramGroupId)
+const deleteParamGroup = ({
+  payload: { paramGroupId },
+  options,
+}: {
+  payload: { paramGroupId: string }
+  options?: AxiosRequestConfig
+}) => APIS.ParamGroup.paramGroupsParamGroupIdDelete(paramGroupId, options)
 
 export function useDeleteParamGroup() {
   return useMutation(deleteParamGroup)

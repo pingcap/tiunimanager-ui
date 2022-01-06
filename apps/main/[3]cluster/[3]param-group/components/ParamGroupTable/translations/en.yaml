@@ -19,5 +19,4 @@ delete:
   disabled: Only custom parameter groups are deletable
   confirm: Are you sure to delete this parameter group?
   loading: Deleting...
-  success: Successfully delete the parameter group
-  fail: 'Failed: {{ msg }}'
+  name: Delete
