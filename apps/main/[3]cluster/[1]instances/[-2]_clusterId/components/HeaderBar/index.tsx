@@ -4,6 +4,7 @@ import { Button, Form, Modal, Switch } from 'antd'
 import {
   DeleteOutlined,
   DeploymentUnitOutlined,
+  ExclamationCircleOutlined,
   SaveOutlined,
 } from '@ant-design/icons'
 import { CopyIconButton } from '@/components/CopyToClipboard'
@@ -21,6 +22,7 @@ import Header from '@/components/Header'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { DeleteConfirm } from '@/components/DeleteConfirm'
 import { ClusterBackupMethod } from '@/api/model'
+import { useErrorNotification } from '@/components/ErrorNotification'
 
 loadI18n()
 
@@ -52,18 +54,80 @@ export default function HeaderBar() {
         }
       )
     }
+
+    const handleForceDelete = (payload: {
+      autoBackup: boolean
+      keepExistingBackupData: boolean
+    }) => {
+      Modal.confirm({
+        title: t('forceDelete.confirm'),
+        icon: <ExclamationCircleOutlined />,
+        content: t('forceDelete.tips'),
+        okType: 'danger',
+        async onOk() {
+          return new Promise((resolve, reject) => {
+            deleteCluster.mutateAsync(
+              {
+                payload: {
+                  id: clusterId!,
+                  autoBackup: payload.autoBackup,
+                  keepExistingBackupData: payload.keepExistingBackupData,
+                  force: true,
+                },
+                options: {
+                  actionName: t('forceDelete.name'),
+                },
+              },
+              {
+                onSuccess(resp) {
+                  resolve(resp.data?.data)
+
+                  backToList()
+                },
+                onError() {
+                  reject()
+                },
+                onSettled() {
+                  invalidateClusterDetail(queryClient, clusterId!)
+                },
+              }
+            )
+          })
+        },
+      })
+    }
+
     const handleDelete = (closeConfirm: () => void) => {
+      const reqPayload = {
+        autoBackup: deletionForm.getFieldValue('autoBackup'),
+        keepExistingBackupData:
+          deletionForm.getFieldValue('keepExistingBackup'),
+      }
+
       deleteCluster.mutateAsync(
         {
-          id: clusterId!,
-          autoBackup: deletionForm.getFieldValue('autoBackup'),
-          clearBackupData: deletionForm.getFieldValue('clearBackup'),
+          payload: {
+            id: clusterId!,
+            ...reqPayload,
+          },
           options: {
             actionName: t('delete.name'),
+            skipErrorNotification: true,
           },
         },
         {
           onSuccess() {
+            closeConfirm()
+
+            backToList()
+          },
+          onError(error: any) {
+            if (error?.response?.status === 409) {
+              handleForceDelete(reqPayload)
+            } else {
+              useErrorNotification(error)
+            }
+
             closeConfirm()
           },
           onSettled() {
@@ -72,6 +136,7 @@ export default function HeaderBar() {
         }
       )
     }
+
     const handleScaleOut = () =>
       history.push({
         pathname: resolveRoute('../scale'),
@@ -116,7 +181,7 @@ export default function HeaderBar() {
             requiredMark={false}
             initialValues={{
               autoBackup: true,
-              clearBackup: false,
+              keepExistingBackup: true,
             }}
           >
             <Form.Item
@@ -127,8 +192,8 @@ export default function HeaderBar() {
               <Switch />
             </Form.Item>
             <Form.Item
-              name="clearBackup"
-              label={t('delete.options.clearBackup')}
+              name="keepExistingBackup"
+              label={t('delete.options.keepExistingBackup')}
               valuePropName="checked"
             >
               <Switch />

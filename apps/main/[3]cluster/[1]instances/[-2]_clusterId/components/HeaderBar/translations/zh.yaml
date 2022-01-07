@@ -10,7 +10,11 @@ delete:
   name: 删除集群
   options:
     autoBackup: 删除前进行最终备份
-    clearBackup: 删除历史备份数据
+    keepExistingBackup: 保留历史备份数据
+forceDelete:
+  name: 删除集群
+  confirm: 该集群正在运行其他任务，确认要强制删除吗?
+  tips: 强制删除集群可能带来难以预估的影响，请谨慎操作
 backup:
   confirm: '确认立即备份集群 {{ name }} 吗?'
   name: 创建备份
