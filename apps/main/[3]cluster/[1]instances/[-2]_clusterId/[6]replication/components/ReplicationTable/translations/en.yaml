@@ -10,15 +10,15 @@ actions:
 suspend:
   confirm: Are you sure to suspend this task?
   loading: Suspending...
-  success: Suspended
+  name: Suspend
   fail: 'Failed: {{ msg }}'
 resume:
   confirm: Are you sure to resume this task?
   loading: Resuming...
-  success: Resumed
+  name: Resume
   fail: 'Failed: {{ msg }}'
 delete:
   confirm: Are you sure to delete this task?
   loading: Deleting...
-  success: Deleted
+  name: Delete
   fail: 'Failed: {{ msg }}'

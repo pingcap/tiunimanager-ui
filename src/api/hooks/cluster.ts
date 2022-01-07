@@ -546,15 +546,19 @@ export function useQueryClusterDataReplicationDetail(
  * Create a cluster data replication task
  * @param payload creation payload
  */
-const createClusterDataReplication = (
+const createClusterDataReplication = ({
+  payload,
+  options,
+}: {
   payload: {
     downstream:
       | ClusterDownstreamMySQL
       | ClusterDownstreamTiDB
       | ClusterDownstreamKafka
   } & Omit<RequestClusterDataReplicationCreate, 'downstream'>
-) => {
-  return APIS.ClusterDataReplication.changefeedsPost(payload)
+  options?: AxiosRequestConfig
+}) => {
+  return APIS.ClusterDataReplication.changefeedsPost(payload, options)
 }
 
 /**
@@ -568,7 +572,10 @@ export function useCreateClusterDataReplication() {
  * Update a cluster date replication task
  * @param payload update payload
  */
-const updateClusterDataReplication = (
+const updateClusterDataReplication = ({
+  payload,
+  options,
+}: {
   payload: {
     id: string
     downstream:
@@ -576,12 +583,14 @@ const updateClusterDataReplication = (
       | ClusterDownstreamTiDB
       | ClusterDownstreamKafka
   } & Omit<RequestClusterDataReplicationUpdate, 'downstream'>
-) => {
+  options?: AxiosRequestConfig
+}) => {
   const { id, ...leftPayload } = payload
 
   return APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdUpdatePost(
     id,
-    leftPayload
+    leftPayload,
+    options
   )
 }
 
@@ -596,8 +605,13 @@ export function useUpdateClusterDataReplication() {
  * Delete a cluster data replication task
  * @param payload delete payload
  */
-const deleteClusterDataReplication = (payload: { id: string }) =>
-  APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdDelete(payload.id)
+const deleteClusterDataReplication = ({
+  payload: { id },
+  options,
+}: {
+  payload: { id: string }
+  options?: AxiosRequestConfig
+}) => APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdDelete(id, options)
 
 /**
  * Hook for deleting a cluster data replication task
@@ -610,8 +624,14 @@ export function useDeleteClusterDataReplication() {
  * Suspend a running cluster data replication task
  * @param payload suspension payload
  */
-const suspendClusterDataReplication = (payload: { id: string }) =>
-  APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdPausePost(payload.id)
+const suspendClusterDataReplication = ({
+  payload: { id },
+  options,
+}: {
+  payload: { id: string }
+  options?: AxiosRequestConfig
+}) =>
+  APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdPausePost(id, options)
 
 /**
  * Hook for suspending a cluster data replication task
@@ -624,8 +644,14 @@ export function useSuspendClusterDataReplication() {
  * Resume a suspended cluster data replication task
  * @param payload resumption payload
  */
-const resumeClusterDataReplication = (payload: { id: string }) =>
-  APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdResumePost(payload.id)
+const resumeClusterDataReplication = ({
+  payload: { id },
+  options,
+}: {
+  payload: { id: string }
+  options?: AxiosRequestConfig
+}) =>
+  APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdResumePost(id, options)
 
 /**
  * Hook for resuming a suspended cluster data replication task
