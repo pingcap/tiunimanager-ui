@@ -1,4 +1,4 @@
-import { Badge, Space } from 'antd'
+import { Badge, Space, Tooltip } from 'antd'
 import { ClusterComponentNodeInfo, ClusterNodeStatus } from '@/api/model'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction, Trans } from 'react-i18next'
@@ -80,14 +80,16 @@ type NodeTableProps = {
 function NodeTable({ nodes = [], title, onScaleIn }: NodeTableProps) {
   const { t, i18n } = useI18n()
 
+  const disableScaleIn = isScaleInDisabled(nodes)
+
   const columns = useMemo(
     () =>
       getColumns({
         t,
         onScaleIn,
-        nodesLen: nodes.length,
+        disableScaleIn,
       }),
-    [i18n.language, onScaleIn, nodes.length]
+    [i18n.language, onScaleIn, disableScaleIn]
   )
 
   return (
@@ -108,11 +110,11 @@ function NodeTable({ nodes = [], title, onScaleIn }: NodeTableProps) {
 function getColumns({
   t,
   onScaleIn,
-  nodesLen,
+  disableScaleIn,
 }: {
   t: TFunction<''>
   onScaleIn: (instanceId: string) => unknown
-  nodesLen: number
+  disableScaleIn: boolean
 }): ProColumns<ClusterComponentNodeInfo>[] {
   return [
     {
@@ -181,11 +183,13 @@ function getColumns({
       key: 'actions',
       valueType: 'option',
       render(_, record) {
-        if (nodesLen <= 1) {
+        if (disableScaleIn) {
           return [
-            <span className="disabled-text-btn" key="scaleIn">
-              {t('actions.scaleIn')}
-            </span>,
+            <Tooltip title={t('scaleIn.disabled')}>
+              <span className="disabled-text-btn" key="scaleIn">
+                {t('actions.scaleIn')}
+              </span>
+            </Tooltip>,
           ]
         }
 
@@ -197,7 +201,7 @@ function getColumns({
             values={{
               ip: record.addresses?.[0] || 'unknown host',
             }}
-            components={{ caution: <span className="danger-link"></span> }}
+            components={{ caution: <span className="danger-link" /> }}
           />
         ) : (
           <Trans
@@ -222,4 +226,9 @@ function getColumns({
       },
     },
   ]
+}
+
+// FIXME: remove this logic in client side
+function isScaleInDisabled(nodes: ClusterComponentNodeInfo[]) {
+  return nodes.length < 2
 }
