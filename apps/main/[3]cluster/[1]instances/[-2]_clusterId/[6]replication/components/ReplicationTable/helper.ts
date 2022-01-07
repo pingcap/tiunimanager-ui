@@ -8,7 +8,6 @@ import {
   useResumeClusterDataReplication,
   useSuspendClusterDataReplication,
 } from '@/api/hooks/cluster'
-import { errToMsg } from '@/utils/error'
 
 loadI18n()
 
@@ -26,20 +25,13 @@ export function useSuspendReplicationTask() {
       const hide = message.loading(t('suspend.loading'), 0)
 
       return suspendTask.mutateAsync(
-        { id },
         {
-          onSuccess() {
-            message.success(t('suspend.success')).then()
+          payload: { id },
+          options: {
+            actionName: t('suspend.name'),
           },
-          onError(e) {
-            message
-              .error(
-                t('suspend.fail', {
-                  msg: errToMsg(e),
-                })
-              )
-              .then()
-          },
+        },
+        {
           onSettled() {
             hide()
 
@@ -68,20 +60,13 @@ export function useResumeReplicationTask() {
       const hide = message.loading(t('resume.loading'), 0)
 
       return resumeTask.mutateAsync(
-        { id },
         {
-          onSuccess() {
-            message.success(t('resume.success')).then()
+          payload: { id },
+          options: {
+            actionName: t('resume.name'),
           },
-          onError(e) {
-            message
-              .error(
-                t('resume.fail', {
-                  msg: errToMsg(e),
-                })
-              )
-              .then()
-          },
+        },
+        {
           onSettled() {
             hide()
 
@@ -110,20 +95,13 @@ export function useDeleteReplicationTask() {
       const hide = message.loading(t('delete.loading'), 0)
 
       return deleteTask.mutateAsync(
-        { id },
         {
-          onSuccess() {
-            message.success(t('delete.success')).then()
+          payload: { id },
+          options: {
+            actionName: t('delete.name'),
           },
-          onError(e) {
-            message
-              .error(
-                t('delete.fail', {
-                  msg: errToMsg(e),
-                })
-              )
-              .then()
-          },
+        },
+        {
           onSettled() {
             hide()
 

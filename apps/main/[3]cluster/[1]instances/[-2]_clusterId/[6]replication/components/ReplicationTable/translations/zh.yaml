@@ -10,15 +10,15 @@ actions:
 suspend:
   confirm: 确认暂停此任务吗？
   loading: 正在暂停任务
-  success: 暂停成功
+  name: 暂停
   fail: '暂停失败: {{ msg }}'
 resume:
   confirm: 确认恢复此任务吗？
   loading: 正在恢复任务
-  success: 恢复成功
+  name: 恢复
   fail: '恢复失败: {{ msg }}'
 delete:
   confirm: 确认删除此任务吗?
   loading: 正在删除
-  success: '删除成功'
+  name: 删除
   fail: '删除失败: {{ msg }}'

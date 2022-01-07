@@ -13,7 +13,6 @@ import {
   Radio,
 } from 'antd'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { errToMsg } from '@/utils/error'
 import IntlPopConfirm from '@/components/IntlPopConfirm'
 import {
   ClusterDataReplicationDownstreamDisplay,
@@ -436,36 +435,34 @@ const CreationPanel: FC<CreationPanelProps> = ({ clusterId, back }) => {
 
       await createDataReplication.mutateAsync(
         {
-          clusterId,
-          name: fields.name,
-          startTS: String(fields.tso),
-          rules: fields?.filterRuleList?.filter((el) => el),
-          downstreamType: fields.downstreamType as any,
-          downstream: downstream[fields.downstreamType],
+          payload: {
+            clusterId,
+            name: fields.name,
+            startTS: String(fields.tso),
+            rules: fields?.filterRuleList?.filter((el) => el),
+            downstreamType: fields.downstreamType as any,
+            downstream: downstream[fields.downstreamType],
+          },
+          options: {
+            actionName: t('message.name'),
+          },
         },
         {
           onSuccess() {
-            message.success(t('message.success'))
             back()
           },
-          onError(e) {
+          onError() {
             setSubmitting(false)
-
-            message.error(
-              t('message.fail', {
-                msg: errToMsg(e),
-              })
-            )
           },
           onSettled() {
             return invalidateClusterDataReplicationList(queryClient)
           },
         }
       )
-    } catch (e) {
+    } catch (e: any) {
       message.error(
         t('message.fail', {
-          msg: errToMsg(e),
+          msg: e?.message,
         })
       )
       setSubmitting(false)

@@ -109,5 +109,5 @@ footer:
     title: 提交
     confirm: 确认提交吗?
 message:
-  success: 成功创建同步任务
+  name: 创建
   fail: '创建失败: {{ msg }}'

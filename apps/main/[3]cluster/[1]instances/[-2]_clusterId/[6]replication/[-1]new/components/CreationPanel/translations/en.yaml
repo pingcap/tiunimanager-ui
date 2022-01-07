@@ -109,5 +109,5 @@ footer:
     title: Submit
     confirm: Are you sure to submit?
 message:
-  success: Successfully create a data replication task
+  name: Create
   fail: 'Failed: {{ msg }}'
