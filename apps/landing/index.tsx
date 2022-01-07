@@ -10,7 +10,7 @@ import LanguageDropdown from '@/components/LanguageDropdown'
 import { UserInfo } from '@/api/model'
 import { doUserLogin } from '@/api/hooks/platform'
 import { Logo } from '@/components/Logo'
-import { errToMsg } from '@/utils/error'
+import { AxiosError } from 'axios'
 
 export default function Login() {
   const { t } = useI18n()
@@ -99,10 +99,9 @@ export default function Login() {
   )
 }
 
-function useLogin(
-  onSuccess: (data: UserInfo) => void,
-  onFailure: (msg: string) => void
-) {
+function useLogin(onSuccess: (data: UserInfo) => void, onFailure: () => void) {
+  const { t } = useI18n()
+
   const [loading, setLoading] = useState(false)
 
   const [errorMsg, setErrorMsg] = useState<string>()
@@ -119,9 +118,10 @@ function useLogin(
       })
       onSuccess(result.data.data!)
     } catch (err) {
-      const errMsg = errToMsg(err)
-      setErrorMsg(errMsg)
-      onFailure(errMsg)
+      setErrorMsg(
+        t(`error:${(err as AxiosError).response?.data?.code}`, 'unknown')
+      )
+      onFailure()
       // when success, this component will be unmounted immediately so no need to setLoading()
       setLoading(false)
     }
