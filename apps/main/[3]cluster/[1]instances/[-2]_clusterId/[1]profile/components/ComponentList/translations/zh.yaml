@@ -8,7 +8,10 @@ usage:
 columns:
   actions: 操作
 actions:
-  scaleIn: 缩容
+  scaleIn: 删除
 scaleIn:
-  confirm: 确认缩容位于 {{ ip }} 上的 {{ type }} 节点吗
-  name: 缩容节点
+  disabled: 该节点不可删除
+  confirm:
+    common: 确认删除位于 {{ ip }} 上的 {{ type }} 节点吗
+    pd: 确认删除位于 {{ ip }} 上的 PD 节点吗？<br><caution>注意：集群中的 PD 节点数必须是奇数，请谨慎操作</caution>
+  name: 删除节点

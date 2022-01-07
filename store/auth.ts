@@ -33,3 +33,5 @@ export const useAuthState = create<AuthState>((set) => {
     },
   }
 })
+
+export const getAuthState = useAuthState.getState

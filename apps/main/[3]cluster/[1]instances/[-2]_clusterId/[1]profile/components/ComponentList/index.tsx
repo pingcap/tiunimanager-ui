@@ -1,4 +1,4 @@
-import { Badge, Space } from 'antd'
+import { Badge, Space, Tooltip } from 'antd'
 import { ClusterComponentNodeInfo, ClusterNodeStatus } from '@/api/model'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction, Trans } from 'react-i18next'
@@ -80,13 +80,16 @@ type NodeTableProps = {
 function NodeTable({ nodes = [], title, onScaleIn }: NodeTableProps) {
   const { t, i18n } = useI18n()
 
+  const disableScaleIn = isScaleInDisabled(nodes)
+
   const columns = useMemo(
     () =>
       getColumns({
         t,
         onScaleIn,
+        disableScaleIn,
       }),
-    [i18n.language, onScaleIn]
+    [i18n.language, onScaleIn, disableScaleIn]
   )
 
   return (
@@ -107,9 +110,11 @@ function NodeTable({ nodes = [], title, onScaleIn }: NodeTableProps) {
 function getColumns({
   t,
   onScaleIn,
+  disableScaleIn,
 }: {
   t: TFunction<''>
   onScaleIn: (instanceId: string) => unknown
+  disableScaleIn: boolean
 }): ProColumns<ClusterComponentNodeInfo>[] {
   return [
     {
@@ -178,26 +183,52 @@ function getColumns({
       key: 'actions',
       valueType: 'option',
       render(_, record) {
+        if (disableScaleIn) {
+          return [
+            <Tooltip title={t('scaleIn.disabled')}>
+              <span className="disabled-text-btn" key="scaleIn">
+                {t('actions.scaleIn')}
+              </span>
+            </Tooltip>,
+          ]
+        }
+
+        const isPD = record.type === 'PD'
+        const title = isPD ? (
+          <Trans
+            t={t}
+            i18nKey="scaleIn.confirm.pd"
+            values={{
+              ip: record.addresses?.[0] || 'unknown host',
+            }}
+            components={{ caution: <span className="danger-link" /> }}
+          />
+        ) : (
+          <Trans
+            t={t}
+            i18nKey="scaleIn.confirm.common"
+            values={{
+              type: record.type,
+              ip: record.addresses?.[0] || 'unknown host',
+            }}
+          />
+        )
+
         return [
           <IntlPopConfirm
             key="scaleIn"
-            title={
-              <Trans
-                t={t}
-                i18nKey="scaleIn.confirm"
-                values={{
-                  type: record.type,
-                  ip: record.addresses?.[0] || 'unknown host',
-                }}
-                components={{ strong: <strong /> }}
-              />
-            }
+            title={title}
             onConfirm={() => onScaleIn(record.id!)}
           >
-            <a className="danger-link">{t('actions.scaleIn')}</a>
+            <a>{t('actions.scaleIn')}</a>
           </IntlPopConfirm>,
         ]
       },
     },
   ]
+}
+
+// FIXME: remove this logic in client side
+function isScaleInDisabled(nodes: ClusterComponentNodeInfo[]) {
+  return nodes.length < 2
 }

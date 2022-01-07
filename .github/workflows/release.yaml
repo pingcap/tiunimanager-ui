@@ -1,13 +1,9 @@
-name: Build
+name: Release
 
 on:
   push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
-      - 'release/**'
+    tags:
+      - 'v**'
 
 jobs:
   build:
@@ -31,9 +27,7 @@ jobs:
       - run: yarn --frozen-lockfile --network-timeout 180000
       - run: yarn bootstrap
       - run: yarn generate
-      - run: yarn build
-      - uses: actions/upload-artifact@v2
+      - run: yarn release
+      - uses: softprops/action-gh-release@v1
         with:
-          path: |
-            dist/
-            vite.config.preview.ts
+          files: dist
