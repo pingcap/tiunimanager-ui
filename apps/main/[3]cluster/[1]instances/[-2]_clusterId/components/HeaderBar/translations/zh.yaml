@@ -9,8 +9,10 @@ delete:
   confirm: 确认删除该集群吗?
   name: 删除集群
   options:
-    autoBackup: 删除前进行最终备份
-    keepExistingBackup: 保留历史备份数据
+    autoBackup: 删除集群前是否进行最终备份
+    keepExistingBackup: 保留历史手动备份数据
+  note:
+    autoBackup: 删除集群将清除数据库自动备份数据，建议进行一次最终备份以保护数据
 forceDelete:
   name: 删除集群
   confirm: 该集群正在运行其他任务，确认要强制删除吗?
