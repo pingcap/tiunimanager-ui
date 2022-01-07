@@ -5,7 +5,6 @@ import {
   useCopyParamGroup,
 } from '@/api/hooks/param-group'
 import { ParamGroupItem } from '@/api/model'
-import { errToMsg } from '@/utils/error'
 import { loadI18n, useI18n } from '@i18n-macro'
 
 loadI18n()
@@ -68,8 +67,8 @@ export function useCopyModal(dataSource?: ParamGroupItem[]) {
           onSettled() {
             return Promise.allSettled([invalidateParamGroupList(queryClient)])
           },
-          onError(e: any) {
-            callbacks.onError(errToMsg(e))
+          onError() {
+            callbacks.onError()
           },
         }
       )

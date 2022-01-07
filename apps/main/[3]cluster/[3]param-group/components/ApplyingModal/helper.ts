@@ -2,7 +2,6 @@ import { useState, useCallback, useMemo } from 'react'
 import { useQueryClient } from 'react-query'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { useApplyParamGroup } from '@/api/hooks/param-group'
-import { errToMsg } from '@/utils/error'
 import type { ParamGroupItem } from '@/api/model'
 
 loadI18n()
@@ -75,8 +74,8 @@ export function useApplyingModal(dataSource?: ParamGroupItem[]) {
 
             onClose()
           },
-          onError(e: any) {
-            callbacks.onError(errToMsg(e))
+          onError() {
+            callbacks.onError()
           },
         }
       ),
