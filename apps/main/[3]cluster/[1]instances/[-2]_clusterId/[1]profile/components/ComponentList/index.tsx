@@ -194,7 +194,7 @@ function getColumns({
             }
             onConfirm={() => onScaleIn(record.id!)}
           >
-            <a className="danger-link">{t('actions.scaleIn')}</a>
+            <a>{t('actions.scaleIn')}</a>
           </IntlPopConfirm>,
         ]
       },
