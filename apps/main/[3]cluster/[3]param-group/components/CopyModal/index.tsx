@@ -80,6 +80,12 @@ const ParamGroupCopyModal: React.FC<ParamGroupCopyModalProps> = ({
           rules={[
             { required: true, message: t('form.rules.name.required') },
             { min: 1, max: 22, message: t('form.rules.name.length') },
+            {
+              validator: (rule, value) =>
+                value !== dataSource.name
+                  ? Promise.resolve()
+                  : Promise.reject(new Error(t('form.rules.name.duplicate'))),
+            },
           ]}
         >
           <Input />

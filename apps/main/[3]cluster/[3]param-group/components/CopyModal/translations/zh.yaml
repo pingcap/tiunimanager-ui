@@ -8,6 +8,7 @@ form:
     name:
       required: 请输入参数组名称
       length: 长度须在 1 ～ 22 位之间
+      duplicate: 不能输入重复的名称
 footer:
   cancel:
     text: 取消

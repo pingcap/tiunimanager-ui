@@ -8,6 +8,7 @@ form:
     name:
       required: Please enter the parameter group name
       length: The length must be between 1 ~ 22
+      duplicate: A duplicate name is not allowed
 footer:
   cancel:
     text: Cancel
