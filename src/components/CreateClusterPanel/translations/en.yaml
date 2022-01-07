@@ -1,25 +1,10 @@
 basic:
   title: Basic Options
   fields:
-    name: Cluster Name
-    tags: Cluster Tags
-    password: DB Password
     type: Cluster Type
-    tls: Enable TLS
-    region: Region
     arch: Arch
-    exclusive: Exclusive
-  tooltip:
-    name: Upper and lower case letters, numbers and hyphens, starting with a letter, and with length between 8-32
-    password: Upper and lower case letters, visible special characters !@#$%^&*()_+=, numbers, with length between 8-32
-    tags: "You can use comma ',' or space ' ' to separate each tag"
+    version: Version
   rules:
-    name:
-      require: Please enter the cluster name
-      length: The length must be between 8-32
-    password:
-      require: Please enter the database password
-      length: The length must be between 8-32
     type:
       require: Please select the cluster type
     version:
@@ -34,6 +19,24 @@ nodes:
     zone: Available Zone
     spec: Spec
     amount: Amount
+cluster:
+  title: Cluster Options
+  fields:
+    name: Cluster Name
+    tags: Cluster Tags
+    password: DB Password
+    exclusive: Exclusive
+  tooltip:
+    name: Upper and lower case letters, numbers and hyphens, starting with a letter, and with length between 8-32
+    password: Upper and lower case letters, visible special characters !@#$%^&*()_+=, numbers, with length between 8-32
+    tags: "You can use comma ',' or space ' ' to separate each tag"
+  rules:
+    name:
+      require: Please enter the cluster name
+      length: The length must be between 8-32
+    password:
+      require: Please enter the database password
+      length: The length must be between 8-32
 footer:
   reset:
     title: Reset
@@ -44,11 +47,12 @@ footer:
 create:
   validation:
     miss: 'The {{ name }} node cannot be missing！'
-    zone: '{{ name }} requires at least {{ count }} nodes in different zones!'
+    minZone: '{{ name }} requires at least {{ count }} nodes'
+    maxZone: '{{ name }} requires no more than {{ count }} nodes'
   name: Create Cluster
 
 message:
-  needRegion: Please select a region first!
+  noZone: No available zone.
 
 modeSelector:
   title: Select Create Mode
@@ -58,6 +62,18 @@ modeSelector:
   standard:
     title: Standard Mode
     description: Set all configuration options manually, including the rack, host, specification and quantity of the instances.
+
+vendorSelector:
+  title: Vendor
+  vendors:
+    local: Local
+    aws: AWS
+    gcp: GCP
+
+regionSelector:
+  title: Region
+  rules:
+    require: Please select the region
 
 preview:
   title: Cluster Preview

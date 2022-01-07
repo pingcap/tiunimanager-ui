@@ -1,19 +1,14 @@
 import { FormInstance } from '@ant-design/pro-form'
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
-import {
-  ClusterPreview,
-  HardwareArch,
-  KnowledgeOfClusterComponent,
-  RequestClusterCreate,
-} from '@/api/model'
+import { ClusterPreview, RequestClusterCreate } from '@/api/model'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction, Trans } from 'react-i18next'
 import {
-  AvailableStocksMap,
-  KnowledgeMap,
+  ComponentKnowledge,
+  Knowledge,
   processCreateRequest,
-  useAvailableStocks,
-  useKnowledgeMap,
+  RegionKnowledge,
+  useKnowledge,
 } from '@/components/CreateClusterPanel/helpers'
 import {
   Button,
@@ -37,6 +32,10 @@ import styles from '@/components/CreateClusterPanel/index.module.less'
 import IntlPopConfirm from '../IntlPopConfirm'
 import { usePreviewCreateCluster } from '@/api/hooks/cluster'
 import { ColumnsType } from 'antd/lib/table/interface'
+import RadioCard from '@/components/RadioCard'
+import AWSLogo from '/vendors/aws.svg'
+import GCPLogo from '/vendors/gcp.svg'
+import LocalLogo from '/vendors/local.svg'
 
 loadI18n()
 
@@ -46,7 +45,7 @@ export interface SimpleFormProps {
   additionalOptions?: ReactNode
   processValue?: (
     value: RequestClusterCreate,
-    knowledgeMap: KnowledgeMap,
+    knowledge: Knowledge,
     t: TFunction<''>
   ) => boolean
 
@@ -63,113 +62,150 @@ export function SimpleForm({
   onSubmit,
   footerClassName,
 }: SimpleFormProps) {
-  const knowledgeMap = useKnowledgeMap()
+  const knowledge = useKnowledge()
 
-  const [clusterType, setClusterType] = useState<string>()
-  const [clusterVersion, setClusterVersion] = useState<string>()
-  const [arch, setArch] = useState<HardwareArch>(HardwareArch.x86_64)
-  const [region, setRegion] = useState<string | undefined>()
+  const [vendorId, setVendorId] = useState<string>()
+  const [productId, setProductId] = useState<string>()
+  const [productVersion, setProductVersion] = useState<string>()
+  const [region, setRegion] = useState<string>()
 
-  const availableStocksMap = useAvailableStocks(arch)
-
-  const setDefaultTypeAndVersion = useCallback(
-    (clusterType?: string) => {
-      const defaultClusterType = clusterType || knowledgeMap.types[0]?.code
-      if (defaultClusterType) {
-        setClusterType(defaultClusterType)
-        const defaultVersion =
-          knowledgeMap.map[defaultClusterType].versions[0].code
-        setClusterVersion(defaultVersion)
-        form.setFields([
-          {
-            name: 'clusterVersion',
-            value: defaultVersion,
-          },
-        ])
-      }
+  const setVendor = useCallback(
+    (vendorId?: string) => {
+      const currentVendorId = vendorId || knowledge._vendors[0]
+      const defaultRegion = knowledge.vendors[currentVendorId]?._regions[0]
+      setVendorId(currentVendorId)
+      setRegion(defaultRegion)
+      form.setFields([
+        {
+          name: 'vendorId',
+          value: currentVendorId,
+        },
+        {
+          name: 'region',
+          value: defaultRegion,
+        },
+      ])
     },
-    [knowledgeMap, form]
+    [knowledge, form]
   )
 
-  const resetArch = () => {
-    setArch(HardwareArch.x86_64)
-    form.setFields([{ name: 'cpuArchitecture', value: HardwareArch.x86_64 }])
-  }
-  const resetRegion = () => {
-    setRegion(undefined)
-    form.setFields([{ name: 'region', value: undefined }])
-  }
+  const setProduct = useCallback(
+    (productId?: string) => {
+      const currentRegion =
+        vendorId && region
+          ? knowledge.vendors[vendorId]?.regions[region]
+          : undefined
+      const currentProduct =
+        currentRegion?.products[productId || currentRegion?._products[0]]
+      setProductId(currentProduct?.id)
+      const defaultVersion = currentProduct?._versions[0]
+      const defaultArch =
+        defaultVersion && currentProduct?.versions[defaultVersion]?.archs[0]
+      setProductVersion(defaultVersion)
+      form.setFields([
+        {
+          name: 'clusterVersion',
+          value: defaultVersion,
+        },
+        {
+          name: 'cpuArchitecture',
+          value: defaultArch,
+        },
+      ])
+    },
+    [knowledge, vendorId, region, form]
+  )
 
   useEffect(() => {
-    setDefaultTypeAndVersion()
-  }, [setDefaultTypeAndVersion])
+    setVendor()
+  }, [knowledge])
+
+  useEffect(() => {
+    setProduct()
+  }, [knowledge, vendorId, region])
 
   const { t, i18n } = useI18n()
 
-  const basicOptions = useMemo(
-    () =>
-      !!clusterType &&
-      !!clusterVersion && (
-        <BasicOptions
-          t={t}
-          onSelectType={setDefaultTypeAndVersion}
-          onSelectVersion={setClusterVersion}
-          onSelectArch={(newArch) => {
-            setArch(newArch)
-            resetRegion()
-          }}
-          onSelectRegion={setRegion}
-          type={clusterType}
-          version={clusterVersion}
-          region={region}
-          knowledgeMap={knowledgeMap}
-          availableStocksMap={availableStocksMap}
-        />
-      ),
-    [
-      clusterType,
-      clusterVersion,
-      region,
-      knowledgeMap,
-      availableStocksMap,
-      i18n.language,
-    ]
+  const vendorSelector = useMemo(
+    () => <VendorSelector selected={vendorId} onSelect={setVendor} />,
+    [vendorId, setVendor]
   )
 
-  const nodeOptions = useMemo(
+  const regionSelector = useMemo(() => {
+    const regions = vendorId && knowledge?.vendors[vendorId]?.regions
+    return (
+      <RegionSelector
+        regions={regions ? Object.values(regions) : []}
+        selected={region}
+        onSelect={(v) => setRegion(v)}
+      />
+    )
+  }, [region, knowledge, vendorId])
+
+  const basicOptions = useMemo(
     () =>
-      knowledgeMap.map?.[clusterType!]?.map?.[clusterVersion!]?.components.map(
-        (spec, idx) => (
-          <NodeOptions
-            t={t}
-            key={spec.clusterComponent!.componentType!}
-            idx={idx}
-            spec={spec}
-            region={region}
-            availableStocksMap={availableStocksMap}
-          />
-        )
+      !!productId &&
+      !!productVersion &&
+      !!vendorId &&
+      !!region && (
+        <BasicOptions
+          t={t}
+          onSelectProduct={setProduct}
+          onSelectVersion={setProductVersion}
+          onSelectRegion={setRegion}
+          type={productId}
+          version={productVersion}
+          products={knowledge.vendors[vendorId]?.regions[region] || []}
+        />
       ),
-    [
-      clusterType,
-      clusterVersion,
-      region,
-      form,
-      availableStocksMap,
-      knowledgeMap,
-      i18n.language,
-    ]
+    [productId, productVersion, vendorId, region, knowledge, i18n.language]
+  )
+
+  const nodeOptions = useMemo(() => {
+    const components =
+      !!vendorId &&
+      !!region &&
+      !!productId &&
+      !!productVersion &&
+      knowledge.vendors[vendorId]?.regions[region]?.products[productId]
+        ?.versions[productVersion]?.components
+    return (
+      !!components &&
+      Object.values(components).map((comp, idx) => (
+        <NodeOptions t={t} key={comp.id} idx={idx} component={comp} />
+      ))
+    )
+  }, [
+    productId,
+    productVersion,
+    region,
+    vendorId,
+    form,
+    knowledge,
+    i18n.language,
+  ])
+
+  const clusterOptions = useMemo(
+    () => productId === 'TiDB' && <ClusterOptions />,
+    [productId]
   )
 
   const onReset = useCallback(() => {
     form.resetFields()
-    setDefaultTypeAndVersion()
-    resetArch()
-    resetRegion()
-  }, [form, setDefaultTypeAndVersion])
+    setProduct()
+  }, [form, setProduct])
+
+  const wrappedProcessValue: SimpleFormProps['processValue'] = (v, k, t) => {
+    v.vendorId = vendorId
+    v.region = region
+    if (processValue) return processValue(v, k, t)
+    return true
+  }
 
   return (
     <>
+      {vendorSelector}
+      {regionSelector}
       <Form
         layout="horizontal"
         hideRequiredMark
@@ -181,14 +217,18 @@ export function SimpleForm({
         <Row>{additionalOptions}</Row>
         <Row>{basicOptions}</Row>
         {nodeOptions}
+        {clusterOptions}
       </Form>
       <Submitter
         onSubmit={onSubmit}
-        processValue={processValue}
+        processValue={wrappedProcessValue}
         onReset={onReset}
-        knowledgeMap={knowledgeMap}
+        knowledge={knowledge}
         form={form}
         footerClassName={footerClassName}
+        vendorId={vendorId}
+        region={region}
+        disableSubmit={!productId}
       />
     </>
   )
@@ -196,171 +236,83 @@ export function SimpleForm({
 
 function BasicOptions({
   t,
-  onSelectType,
+  onSelectProduct,
   onSelectVersion,
-  onSelectArch,
-  onSelectRegion,
   type,
   version,
-  region,
-  knowledgeMap,
-  availableStocksMap,
+  products,
 }: {
   t: TFunction<''>
-  onSelectType: (type: string) => void
+  onSelectProduct: (type: string) => void
   onSelectVersion: (version: string) => void
-  onSelectArch: (arch: HardwareArch) => void
   onSelectRegion: (newRegion: string) => void
   type: string
   version: string
-  region?: string
-  knowledgeMap: KnowledgeMap
-  availableStocksMap: AvailableStocksMap
+  products: RegionKnowledge
 }) {
   return (
     <Card title={t('basic.title')}>
       <Form.Item
-        name="clusterName"
-        label={t('basic.fields.name')}
-        tooltip={t('basic.tooltip.name')}
-        rules={[
-          { required: true, message: t('basic.rules.name.require') },
-          { min: 8, max: 32, message: t('basic.rules.name.length') },
-        ]}
+        label={t('basic.fields.type')}
+        name="clusterType"
+        rules={[{ required: true, message: t('basic.rules.type.require') }]}
+        initialValue={type}
       >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name="tags"
-        label={t('basic.fields.tags')}
-        tooltip={t('basic.tooltip.tags')}
-        initialValue={[]}
-      >
-        <Select
-          mode="tags"
-          tokenSeparators={[',', ' ']}
-          dropdownStyle={{ display: 'none' }}
-        />
-      </Form.Item>
-      <Form.Item
-        name="dbPassword"
-        label={t('basic.fields.password')}
-        tooltip={t('basic.tooltip.password')}
-        rules={[
-          { required: true, message: t('basic.rules.password.require') },
-          { min: 8, max: 32, message: t('basic.rules.password.length') },
-        ]}
-      >
-        <Input.Password />
-      </Form.Item>
-      <Form.Item label={t('basic.fields.type')}>
-        <Input.Group compact>
-          <Form.Item
-            name="clusterType"
-            noStyle
-            rules={[{ required: true, message: t('basic.rules.type.require') }]}
-            initialValue={type}
-          >
-            <Select onSelect={(key) => onSelectType(key as any)}>
-              {knowledgeMap.types.map((t) => (
-                <Select.Option value={t.code!} key={t.code!}>
-                  {t.name!}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item
-            name="clusterVersion"
-            noStyle
-            rules={[
-              { required: true, message: t('basic.rules.version.require') },
-            ]}
-            initialValue={version}
-          >
-            <Select onSelect={(key) => onSelectVersion(key as string)}>
-              {!!type &&
-                knowledgeMap.map[type].versions.map((v) => (
-                  <Select.Option value={v.code!} key={v.code!}>
-                    {v.name!}
-                  </Select.Option>
-                ))}
-            </Select>
-          </Form.Item>
-        </Input.Group>
-      </Form.Item>
-      <Form.Item
-        name="cpuArchitecture"
-        label={t('basic.fields.arch')}
-        rules={[{ required: true }]}
-        initialValue={HardwareArch.x86_64}
-      >
-        <Radio.Group onChange={(v) => onSelectArch(v.target.value)}>
-          <Radio.Button value={HardwareArch.x86_64}>x86_64</Radio.Button>
-          {/*<Radio.Button value={HardwareArch.x86}>x86</Radio.Button>*/}
-          <Radio.Button value={HardwareArch.arm64}>arm64</Radio.Button>
-          {/*<Radio.Button value={HardwareArch.arm}>arm</Radio.Button>*/}
-        </Radio.Group>
-      </Form.Item>
-      <Form.Item
-        name="region"
-        label={t('basic.fields.region')}
-        rules={[{ required: true }]}
-        initialValue={region}
-      >
-        <Select onChange={onSelectRegion}>
-          {availableStocksMap.regions.map((r) => (
-            <Select.Option value={r} key={r}>
-              {availableStocksMap.map[r].name}
+        <Select onChange={(key) => onSelectProduct(key as any)}>
+          {products._products?.map((id) => (
+            <Select.Option value={id} key={id}>
+              {products.products[id]?.name}
             </Select.Option>
           ))}
         </Select>
       </Form.Item>
       <Form.Item
-        name="exclusive"
-        label={t('basic.fields.exclusive')}
-        initialValue={true}
-        valuePropName="checked"
+        label={t('basic.fields.version')}
+        name="clusterVersion"
+        rules={[{ required: true, message: t('basic.rules.version.require') }]}
+        initialValue={version}
       >
-        <Switch />
+        <Select onChange={(key) => onSelectVersion(key as string)}>
+          {!!type &&
+            products.products[type]?._versions?.map((v) => (
+              <Select.Option value={v} key={v}>
+                {products.products[type]?.versions[v]?.name}
+              </Select.Option>
+            ))}
+        </Select>
       </Form.Item>
-      {/* TODO: wait for TLS support */}
-      {/* <Form.Item
-        name="tls"
-        label={t('basic.fields.tls')}
-        valuePropName="checked"
-        initialValue={false}
+      <Form.Item
+        name="cpuArchitecture"
+        label={t('basic.fields.arch')}
+        rules={[{ required: true }]}
       >
-        <Switch />
-      </Form.Item> */}
+        <Radio.Group>
+          {!!type &&
+            !!version &&
+            products.products[type]?.versions[version]?.archs.map((a) => (
+              <Radio.Button value={a} key={a}>
+                {a}
+              </Radio.Button>
+            ))}
+        </Radio.Group>
+      </Form.Item>
     </Card>
   )
 }
 
 function NodeOptions({
   t,
-  spec,
+  component,
   idx,
-  region,
-  availableStocksMap,
 }: {
   t: TFunction<''>
-  spec: KnowledgeOfClusterComponent
+  component: ComponentKnowledge
   idx: number
-  region?: string
-  availableStocksMap: AvailableStocksMap
 }) {
-  const componentName = spec.clusterComponent!.componentName!
-  const componentType = spec.clusterComponent!.componentType!
-  const componentRequired = spec.componentConstraint!.componentRequired
-  const suggestedNodeQuantity = componentRequired
-    ? spec.componentConstraint!.suggestedNodeQuantities?.[0] || 1
-    : 0
-  const specCodes = spec.componentConstraint!.availableSpecCodes!
-  const currentRegion = region ? availableStocksMap.map[region] : undefined
   return (
     <Collapse
       collapsible="header"
-      defaultActiveKey={componentRequired ? ['1'] : []}
+      defaultActiveKey={component.required ? ['1'] : []}
       className={styles.componentForm}
     >
       <Collapse.Panel
@@ -368,9 +320,9 @@ function NodeOptions({
         header={
           <span>
             {t('nodes.title', {
-              name: componentName,
+              name: component.name,
             })}
-            {!componentRequired && (
+            {!component.required && (
               <Tag color="default" className={styles.optionalBadge}>
                 {t('nodes.optional')}
               </Tag>
@@ -386,7 +338,7 @@ function NodeOptions({
             'componentType',
           ]}
           hidden
-          initialValue={componentType}
+          initialValue={component.id}
         >
           <Input />
         </Form.Item>
@@ -402,9 +354,9 @@ function NodeOptions({
           <Col span={8}>{t('nodes.fields.amount')}</Col>
         </Row>
         <Divider style={{ margin: '16px 0' }} />
-        {currentRegion?.zones.map((zoneCode, i) => {
-          const zone = currentRegion.map[zoneCode]
-          if (specCodes.length === 0) return undefined
+        {component._zones.map((zoneCode, i) => {
+          const zone = component.zones[zoneCode]
+          if (!zone) return undefined
           return (
             <Row key={i} gutter={20}>
               <Col span={8}>
@@ -434,14 +386,17 @@ function NodeOptions({
                     i,
                     'specCode',
                   ]}
-                  initialValue={specCodes[0]}
+                  initialValue={zone._specs[0]}
                 >
                   <Select>
-                    {specCodes.map((spec) => (
-                      <Select.Option key={spec} value={spec}>
-                        {spec}
-                      </Select.Option>
-                    ))}
+                    {zone._specs.map((specCode) => {
+                      const spec = zone.specs[specCode]
+                      return (
+                        <Select.Option key={specCode} value={specCode}>
+                          {spec.id} ({spec.cpu}C {spec.memory}G)
+                        </Select.Option>
+                      )
+                    })}
                   </Select>
                 </Form.Item>
               </Col>
@@ -455,19 +410,70 @@ function NodeOptions({
                     i,
                     'count',
                   ]}
-                  initialValue={suggestedNodeQuantity}
+                  initialValue={component.required ? 3 : 0}
                 >
                   <InputNumber
-                    min={0}
-                    // TODO: add max limit
+                    min={component.required ? component.minInstance : 0}
+                    max={component.maxInstance}
                   />
                 </Form.Item>
               </Col>
             </Row>
           )
-        }) || <Empty description={t('message.needRegion')} />}
+        }) || <Empty description={t('message.noZone')} />}
       </Collapse.Panel>
     </Collapse>
+  )
+}
+
+function ClusterOptions() {
+  const { t } = useI18n()
+
+  return (
+    <Card title={t('cluster.title')}>
+      <Form.Item
+        name="clusterName"
+        label={t('cluster.fields.name')}
+        tooltip={t('cluster.tooltip.name')}
+        rules={[
+          { required: true, message: t('cluster.rules.name.require') },
+          { min: 8, max: 32, message: t('cluster.rules.name.length') },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        name="tags"
+        label={t('cluster.fields.tags')}
+        tooltip={t('cluster.tooltip.tags')}
+        initialValue={[]}
+      >
+        <Select
+          mode="tags"
+          tokenSeparators={[',', ' ']}
+          dropdownStyle={{ display: 'none' }}
+        />
+      </Form.Item>
+      <Form.Item
+        name="dbPassword"
+        label={t('cluster.fields.password')}
+        tooltip={t('cluster.tooltip.password')}
+        rules={[
+          { required: true, message: t('cluster.rules.password.require') },
+          { min: 8, max: 32, message: t('cluster.rules.password.length') },
+        ]}
+      >
+        <Input.Password />
+      </Form.Item>
+      <Form.Item
+        name="exclusive"
+        label={t('cluster.fields.exclusive')}
+        initialValue={true}
+        valuePropName="checked"
+      >
+        <Switch />
+      </Form.Item>
+    </Card>
   )
 }
 
@@ -475,16 +481,22 @@ function Submitter({
   onReset,
   onSubmit,
   footerClassName,
-  knowledgeMap,
+  knowledge,
   processValue,
   form,
+  disableSubmit,
+  region,
+  vendorId,
 }: {
   onReset: () => unknown
   processValue?: SimpleFormProps['processValue']
   onSubmit: (data: RequestClusterCreate) => unknown
   footerClassName?: string
-  knowledgeMap: KnowledgeMap
+  knowledge: Knowledge
   form: FormInstance
+  disableSubmit: boolean
+  region?: string
+  vendorId?: string
 }) {
   const { t, i18n } = useI18n()
   const previewCreateCluster = usePreviewCreateCluster()
@@ -494,15 +506,17 @@ function Submitter({
   const handleSubmit = async () => {
     try {
       const fields = await form.validateFields()
+      fields.vendorId = vendorId
+      fields.region = region
       if (
-        processCreateRequest(fields, knowledgeMap, t) &&
-        (!processValue || processValue(fields, knowledgeMap, t))
+        processCreateRequest(fields, knowledge, t) &&
+        (!processValue || processValue(fields, knowledge, t))
       ) {
         await previewCreateCluster.mutateAsync(
           {
             payload: fields,
             options: {
-              actionName: t('create.name'),
+              actionName: t('preview.name'),
               skipSuccessNotification: true,
             },
           },
@@ -584,7 +598,12 @@ function Submitter({
       <IntlPopConfirm title={t('footer.reset.confirm')} onConfirm={onReset}>
         <Button size="large">{t('footer.reset.title')}</Button>
       </IntlPopConfirm>
-      <Button size="large" type="primary" onClick={handleSubmit}>
+      <Button
+        size="large"
+        type="primary"
+        onClick={handleSubmit}
+        disabled={disableSubmit}
+      >
         {t('footer.submit.title')}
       </Button>
     </div>
@@ -631,4 +650,84 @@ function getColumns(
         ),
     },
   ]
+}
+
+type VendorSelectorProps = {
+  selected?: string
+  onSelect: (vendor: string) => unknown
+}
+
+function VendorSelector({ selected, onSelect }: VendorSelectorProps) {
+  const { t } = useI18n()
+  // FIXME: vendors should be generated from real data, so should logo urls.
+
+  return (
+    <div className={styles.standardSelector}>
+      <Card
+        title={t('vendorSelector.title')}
+        bodyStyle={{
+          display: 'flex',
+          justifyContent: 'space-around',
+        }}
+      >
+        <RadioCard
+          checked={selected === 'local'}
+          cover={LocalLogo}
+          onClick={() => {
+            if (selected === 'local') return
+            onSelect('local')
+          }}
+          tooltip={t('vendorSelector.vendors.local')}
+        />
+        <RadioCard
+          checked={selected === 'AWS'}
+          cover={AWSLogo}
+          onClick={() => {
+            if (selected === 'AWS') return
+            onSelect('AWS')
+          }}
+          tooltip={t('vendorSelector.vendors.aws')}
+        />
+        <RadioCard
+          checked={selected === 'GCP'}
+          cover={GCPLogo}
+          onClick={() => {
+            if (selected === 'GCP') return
+            onSelect('GCP')
+          }}
+          tooltip={t('vendorSelector.vendors.gcp')}
+        />
+      </Card>
+    </div>
+  )
+}
+
+type RegionSelectorProps = {
+  regions: RegionKnowledge[]
+  selected?: string
+  onSelect: (region: string) => unknown
+}
+
+function RegionSelector({ regions, selected, onSelect }: RegionSelectorProps) {
+  const { t } = useI18n()
+
+  return (
+    <div className={styles.standardSelector}>
+      <Card
+        title={t('regionSelector.title')}
+        bodyStyle={{
+          display: 'flex',
+          justifyContent: 'space-around',
+        }}
+      >
+        <Select onChange={onSelect} value={selected} style={{ width: '100%' }}>
+          {regions.map((r) => (
+            <Select.Option value={r.id} key={r.id}>
+              {r.name}
+            </Select.Option>
+          ))}
+        </Select>
+      </Card>
+    </div>
+  )
 }
