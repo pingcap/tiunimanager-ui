@@ -35,6 +35,16 @@ import {
   ClusterScaleInClusterReq,
   StructsClusterResourceParameterCompute,
   StructsClusterResourceParameterComputeResource,
+  ClusterTiDBDownstream,
+  ClusterMysqlDownstream,
+  ClusterKafkaDownstream,
+  ClusterKafkaDownstreamProtocolEnum,
+  ClusterDetailChangeFeedTaskResp,
+  ClusterCreateChangeFeedTaskReq,
+  ClusterUpdateChangeFeedTaskReq,
+  ClusterQueryChangeFeedTaskResp,
+  ClusterQueryChangeFeedTaskRespDownstreamTypeEnum,
+  ClusterQueryChangeFeedTaskRespStatusEnum,
 } from '#/api'
 import { loadI18nWithNS } from '@i18n-macro'
 
@@ -52,6 +62,12 @@ export type ClusterComponentNodeInfo = StructsClusterInstanceInfo
 export type ClusterParamItem = StructsClusterParameterInfo
 export type ClusterLogItem = StructsClusterLogItem
 export type ClusterBackupItem = StructsBackupRecord
+
+export type ClusterDataReplicationDetail = ClusterDetailChangeFeedTaskResp
+export type ClusterDataReplicationItem = ClusterQueryChangeFeedTaskResp
+export type ClusterDownstreamKafka = ClusterKafkaDownstream
+export type ClusterDownstreamMySQL = ClusterMysqlDownstream
+export type ClusterDownstreamTiDB = ClusterTiDBDownstream
 
 export type ClusterType = KnowledgeClusterType
 export type ClusterVersion = KnowledgeClusterVersion
@@ -84,6 +100,9 @@ export type RequestClusterCreate = ClusterCreateClusterReq
 export type RequestClusterParamsUpdate = ClusterUpdateClusterParametersReq
 export type RequestClusterScaleOut = ClusterScaleOutClusterReq
 export type RequestClusterScaleIn = ClusterScaleInClusterReq
+
+export type RequestClusterDataReplicationCreate = ClusterCreateChangeFeedTaskReq
+export type RequestClusterDataReplicationUpdate = ClusterUpdateChangeFeedTaskReq
 
 export { StructsWorkFlowInfoStatusEnum as TaskWorkflowStatus }
 export { StructsWorkFlowNodeInfoStatusEnum as TaskWorkflowSubTaskStatus }
@@ -165,6 +184,18 @@ export enum ClusterOperationStatus {
 export enum ClusterBackupMethod {
   manual = 'manual',
 }
+
+export enum ClusterDataReplicationDownstreamDisplay {
+  tidb = 'TiDB',
+  mysql = 'MySQL',
+  kafka = 'Kafka',
+}
+
+export { ClusterQueryChangeFeedTaskRespDownstreamTypeEnum as ClusterDataReplicationDownstreamType }
+
+export { ClusterQueryChangeFeedTaskRespStatusEnum as ClusterDataReplicationStatus }
+
+export { ClusterKafkaDownstreamProtocolEnum as ClusterDataReplicationKafkaProtocol }
 
 export function initModelTranslations() {
   // load translations

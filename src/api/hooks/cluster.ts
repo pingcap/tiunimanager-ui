@@ -1,10 +1,15 @@
 import { QueryClient, useMutation, useQuery } from 'react-query'
 import { APIS } from '@/api/client'
 import {
+  ClusterDownstreamKafka,
+  ClusterDownstreamMySQL,
+  ClusterDownstreamTiDB,
   RequestBackupCreate,
   RequestBackupRestore,
   RequestBackupStrategyUpdate,
   RequestClusterCreate,
+  RequestClusterDataReplicationCreate,
+  RequestClusterDataReplicationUpdate,
   RequestClusterParamsUpdate,
   RequestClusterScaleIn,
   RequestClusterScaleOut,
@@ -426,4 +431,177 @@ const scaleInCluster = withRequestOptions(
 
 export function useClusterScaleIn() {
   return useMutation(scaleInCluster)
+}
+
+/***************************
+ * Cluster Data Replication
+ ***************************/
+
+const CACHE_CLUSTER_DATA_REPLICATION_LIST = 'cluster-data-replication-list'
+const CACHE_CLUSTER_DATA_REPLICATION_DETAIL = 'cluster-data-replication-detail'
+
+/**
+ * Hook for querying cluster data replication task list
+ * @param query query filter
+ * @param options react-query useQuery options
+ */
+export function useQueryClusterDataReplicationList(
+  query: {
+    clusterId?: string
+    page?: number
+    pageSize?: number
+  },
+  options?: PartialUseQueryOptions
+) {
+  const { clusterId, page, pageSize } = query
+  return useQuery(
+    [CACHE_CLUSTER_DATA_REPLICATION_LIST, page, pageSize, clusterId],
+    () => APIS.ClusterDataReplication.changefeedsGet(clusterId, page, pageSize),
+    options
+  )
+}
+
+/**
+ * Invalidate the cache of cluster data replication task list
+ * @param client react-query QueryClient
+ */
+export async function invalidateClusterDataReplicationList(
+  client: QueryClient
+) {
+  await client.invalidateQueries(CACHE_CLUSTER_DATA_REPLICATION_LIST)
+}
+
+/**
+ * Hook for querying cluster data replication task detail
+ * @param query query filter
+ * @param options react-query useQuery options
+ */
+export function useQueryClusterDataReplicationDetail(
+  query: { id: string },
+  options?: PartialUseQueryOptions
+) {
+  const { id } = query
+  return useQuery(
+    [CACHE_CLUSTER_DATA_REPLICATION_DETAIL, id],
+    () => APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdGet(id),
+    options
+  )
+}
+
+/**
+ * Create a cluster data replication task
+ * @param payload creation payload
+ */
+const createClusterDataReplication = ({
+  payload,
+  options,
+}: {
+  payload: {
+    downstream:
+      | ClusterDownstreamMySQL
+      | ClusterDownstreamTiDB
+      | ClusterDownstreamKafka
+  } & Omit<RequestClusterDataReplicationCreate, 'downstream'>
+  options?: AxiosRequestConfig
+}) => {
+  return APIS.ClusterDataReplication.changefeedsPost(payload, options)
+}
+
+/**
+ * Hook for creating a cluster data replication task
+ */
+export function useCreateClusterDataReplication() {
+  return useMutation(createClusterDataReplication)
+}
+
+/**
+ * Update a cluster date replication task
+ * @param payload update payload
+ */
+const updateClusterDataReplication = ({
+  payload,
+  options,
+}: {
+  payload: {
+    id: string
+    downstream:
+      | ClusterDownstreamMySQL
+      | ClusterDownstreamTiDB
+      | ClusterDownstreamKafka
+  } & Omit<RequestClusterDataReplicationUpdate, 'downstream'>
+  options?: AxiosRequestConfig
+}) => {
+  const { id, ...leftPayload } = payload
+
+  return APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdUpdatePost(
+    id,
+    leftPayload,
+    options
+  )
+}
+
+/**
+ * Hook for updating a cluster data replication task
+ */
+export function useUpdateClusterDataReplication() {
+  return useMutation(updateClusterDataReplication)
+}
+
+/**
+ * Delete a cluster data replication task
+ * @param payload delete payload
+ */
+const deleteClusterDataReplication = ({
+  payload: { id },
+  options,
+}: {
+  payload: { id: string }
+  options?: AxiosRequestConfig
+}) => APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdDelete(id, options)
+
+/**
+ * Hook for deleting a cluster data replication task
+ */
+export function useDeleteClusterDataReplication() {
+  return useMutation(deleteClusterDataReplication)
+}
+
+/**
+ * Suspend a running cluster data replication task
+ * @param payload suspension payload
+ */
+const suspendClusterDataReplication = ({
+  payload: { id },
+  options,
+}: {
+  payload: { id: string }
+  options?: AxiosRequestConfig
+}) =>
+  APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdPausePost(id, options)
+
+/**
+ * Hook for suspending a cluster data replication task
+ */
+export function useSuspendClusterDataReplication() {
+  return useMutation(suspendClusterDataReplication)
+}
+
+/**
+ * Resume a suspended cluster data replication task
+ * @param payload resumption payload
+ */
+const resumeClusterDataReplication = ({
+  payload: { id },
+  options,
+}: {
+  payload: { id: string }
+  options?: AxiosRequestConfig
+}) =>
+  APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdResumePost(id, options)
+
+/**
+ * Hook for resuming a suspended cluster data replication task
+ */
+export function useResumeClusterDataReplication() {
+  return useMutation(resumeClusterDataReplication)
 }
