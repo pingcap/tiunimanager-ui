@@ -60,24 +60,28 @@ export async function invalidateClusterDetail(client: QueryClient, id: string) {
   await client.invalidateQueries([CACHE_CLUSTER_DETAIL_KEY, id])
 }
 
-const deleteCluster = withRequestOptions(
-  (
-    payload: {
-      id: string
-      autoBackup: boolean
-      clearBackupData: boolean
+const deleteCluster = ({
+  payload,
+  options,
+}: {
+  payload: {
+    id: string
+    autoBackup: boolean
+    keepExistingBackupData: boolean
+    force?: boolean
+  }
+  options?: AxiosRequestConfig
+}) =>
+  APIS.Clusters.clustersClusterIdDelete(
+    payload.id,
+    {
+      autoBackup: payload.autoBackup,
+      keepHistoryBackupRecords: payload.keepExistingBackupData,
+      force: payload.force,
     },
-    options?: AxiosRequestConfig
-  ) =>
-    APIS.Clusters.clustersClusterIdDelete(
-      payload.id,
-      {
-        autoBackup: payload.autoBackup,
-        clearBackupData: payload.clearBackupData,
-      },
-      options
-    )
-)
+    options
+  )
+
 export function useDeleteCluster() {
   return useMutation(deleteCluster)
 }
