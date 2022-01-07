@@ -179,18 +179,23 @@ export default function HeaderBar() {
             form={deletionForm}
             colon={false}
             requiredMark={false}
+            labelAlign="left"
             initialValues={{
               autoBackup: true,
               keepExistingBackup: true,
             }}
           >
             <Form.Item
+              className={styles.noMessageItem}
               name="autoBackup"
               label={t('delete.options.autoBackup')}
               valuePropName="checked"
             >
               <Switch />
             </Form.Item>
+            <div className="ant-form-item-extra">
+              {t('delete.note.autoBackup')}
+            </div>
             <Form.Item
               name="keepExistingBackup"
               label={t('delete.options.keepExistingBackup')}
