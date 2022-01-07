@@ -133,16 +133,14 @@ export async function invalidateClusterParams(
   await client.invalidateQueries([CACHE_CLUSTER_PARAMS, clusterId])
 }
 
-const updateClusterParams = withRequestOptions(
-  (
-    {
-      clusterId,
-      ...payload
-    }: RequestClusterParamsUpdate & { clusterId: string },
-    options?: AxiosRequestConfig
-  ) =>
-    APIS.ClusterParams.clustersClusterIdParamsPut(clusterId, payload, options)
-)
+const updateClusterParams = ({
+  payload: { clusterId, ...leftPayload },
+  options,
+}: {
+  payload: { clusterId: string } & RequestClusterParamsUpdate
+  options?: AxiosRequestConfig
+}) =>
+  APIS.ClusterParams.clustersClusterIdParamsPut(clusterId, leftPayload, options)
 
 export function useUpdateClusterParams() {
   return useMutation(updateClusterParams)

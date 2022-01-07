@@ -27,7 +27,6 @@ import IntlPopConfirm from '@/components/IntlPopConfirm'
 import { useQueryClient } from 'react-query'
 import { TFunction } from 'react-i18next'
 import { loadI18n, useI18n } from '@i18n-macro'
-import { errToMsg } from '@/utils/error'
 import { Link } from 'react-router-dom'
 import { resolveRoute } from '@pages-macro'
 import { isArray } from '@/utils/types'
@@ -80,29 +79,24 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
         async onOk() {
           updateParams.mutateAsync(
             {
-              clusterId: cluster.clusterId!,
-              params: changes.map((change) => ({
-                paramId: change.paramId,
-                realValue: {
-                  clusterValue: change.change[1],
-                },
-              })),
-              // TODO
-              reboot: rebootNeeded,
+              payload: {
+                clusterId: cluster.clusterId!,
+                params: changes.map((change) => ({
+                  paramId: change.paramId,
+                  realValue: {
+                    clusterValue: change.change[1],
+                  },
+                })),
+                // TODO
+                reboot: rebootNeeded,
+              },
+              options: {
+                actionName: t('save.name'),
+              },
             },
             {
-              onSuccess() {
-                message.success(t('save.success'))
-              },
               onSettled() {
                 invalidateClusterParams(queryClient, cluster.clusterId!)
-              },
-              onError(e: any) {
-                message.error(
-                  t('save.fail', {
-                    msg: errToMsg(e),
-                  })
-                )
               },
             }
           )

@@ -10,8 +10,7 @@ reset:
 save:
   nochanges: 没有本地更改
   confirm: 确认保存下列参数更改吗?
-  success: 更改参数成功
-  fail: '更改参数失败: {{ msg }}'
+  name: 更新
   fields:
     component: 组件名称
     name: 参数名称

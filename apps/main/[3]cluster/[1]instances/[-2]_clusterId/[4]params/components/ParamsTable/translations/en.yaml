@@ -10,8 +10,7 @@ reset:
 save:
   nochanges: No changes
   confirm: Are you sure to save the following parameter changes?
-  success: Update params successfully
-  fail: 'Fail: {{ msg }}'
+  name: Update
   fields:
     component: Component Name
     name: Param Name
