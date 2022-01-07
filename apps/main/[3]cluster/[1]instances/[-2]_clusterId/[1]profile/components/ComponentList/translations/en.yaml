@@ -10,5 +10,7 @@ columns:
 actions:
   scaleIn: Delete
 scaleIn:
-  confirm: Are you sure to delete the {{ type }} instance on {{ ip }}?
+  confirm: 
+    common: Are you sure to delete the {{ type }} instance on {{ ip }}?
+    pd: 'Are you sure to delete the PD instance on {{ ip }}? <br><caution>Caution: The number of PD nodes must be odd, please be careful</caution>'
   name: Delete

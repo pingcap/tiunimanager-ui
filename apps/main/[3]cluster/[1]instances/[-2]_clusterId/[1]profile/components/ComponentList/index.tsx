@@ -85,8 +85,9 @@ function NodeTable({ nodes = [], title, onScaleIn }: NodeTableProps) {
       getColumns({
         t,
         onScaleIn,
+        nodesLen: nodes.length,
       }),
-    [i18n.language, onScaleIn]
+    [i18n.language, onScaleIn, nodes.length]
   )
 
   return (
@@ -107,9 +108,11 @@ function NodeTable({ nodes = [], title, onScaleIn }: NodeTableProps) {
 function getColumns({
   t,
   onScaleIn,
+  nodesLen,
 }: {
   t: TFunction<''>
   onScaleIn: (instanceId: string) => unknown
+  nodesLen: number
 }): ProColumns<ClusterComponentNodeInfo>[] {
   return [
     {
@@ -178,20 +181,39 @@ function getColumns({
       key: 'actions',
       valueType: 'option',
       render(_, record) {
+        if (nodesLen <= 1) {
+          return [
+            <span className="disabled-text-btn" key="scaleIn">
+              {t('actions.scaleIn')}
+            </span>,
+          ]
+        }
+
+        const isPD = record.type === 'PD'
+        const title = isPD ? (
+          <Trans
+            t={t}
+            i18nKey="scaleIn.confirm.pd"
+            values={{
+              ip: record.addresses?.[0] || 'unknown host',
+            }}
+            components={{ caution: <span className="danger-link"></span> }}
+          />
+        ) : (
+          <Trans
+            t={t}
+            i18nKey="scaleIn.confirm.common"
+            values={{
+              type: record.type,
+              ip: record.addresses?.[0] || 'unknown host',
+            }}
+          />
+        )
+
         return [
           <IntlPopConfirm
             key="scaleIn"
-            title={
-              <Trans
-                t={t}
-                i18nKey="scaleIn.confirm"
-                values={{
-                  type: record.type,
-                  ip: record.addresses?.[0] || 'unknown host',
-                }}
-                components={{ strong: <strong /> }}
-              />
-            }
+            title={title}
             onConfirm={() => onScaleIn(record.id!)}
           >
             <a>{t('actions.scaleIn')}</a>
