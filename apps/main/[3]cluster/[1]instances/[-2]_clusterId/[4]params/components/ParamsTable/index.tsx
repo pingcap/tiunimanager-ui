@@ -83,16 +83,9 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
               clusterId: cluster.clusterId!,
               params: changes.map((change) => ({
                 paramId: change.paramId,
-                name: change.name,
-                instanceType: change.component,
                 realValue: {
                   clusterValue: change.change[1],
                 },
-                systemVariable: change.sysVar,
-                type: change.type,
-                category: change.category,
-                updateSource: change.updateSource,
-                hasApply: change.applicable,
               })),
               // TODO
               reboot: rebootNeeded,
@@ -299,12 +292,7 @@ type Change = {
   component: string
   name: string
   change: [string, string]
-  type: number
   reboot: number
-  sysVar: string
-  category: string
-  updateSource: number
-  applicable: number
 }
 
 function findParamsChanges(
@@ -322,12 +310,7 @@ function findParamsChanges(
           raw.realValue!.clusterValue!,
           table[i].realValue!.clusterValue!,
         ],
-        type: raw.type!,
         reboot: raw.hasReboot!,
-        sysVar: raw.systemVariable!,
-        category: raw.category!,
-        updateSource: raw.updateSource!,
-        applicable: raw.hasApply!,
       })
     }
   })
