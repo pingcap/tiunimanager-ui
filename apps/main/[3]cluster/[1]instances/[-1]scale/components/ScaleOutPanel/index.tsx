@@ -58,6 +58,7 @@ export interface ScaleOutPanelProps {
   back: () => void
 }
 
+// TODO: adapt to new knowledge
 export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
   const [form] = Form.useForm()
   const queryClient = useQueryClient()
@@ -77,7 +78,7 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
     [cluster, i18n.language]
   )
 
-  const nodeOptions = knowledgeMap.map?.[clusterType!]?.map?.[
+  const nodeOptions = knowledgeMap.types?.[clusterType!]?.versions?.[
     clusterVersion!
   ]?.components.map((spec, idx) => (
     <NodeOptions
