@@ -143,7 +143,6 @@ export function processCreateRequest(
   knowledge: Knowledge,
   t: TFunction<''>
 ) {
-  console.log(value)
   if (!value.vendorId || !value.region) return false
   {
     // remove undefined
@@ -152,14 +151,18 @@ export function processCreateRequest(
 
     value.resourceParameters!.instanceResource!.forEach((comp) => {
       // remove count=0
-      comp.resource = comp
-        .resource!.filter((item) => item && item.count! > 0)
-        .map((item) => ({
+      comp.resource = comp.resource!.filter((item) => item && item.count! > 0)
+
+      // FIXME: remove hardcode
+      {
+        comp.resource = comp.resource.map((item) => ({
           ...item,
           diskCapacity: 0,
           diskType: 'SATA',
           specCode: '4C8G',
         }))
+      }
+
       // calculate totalCount
       comp.totalNodeCount = comp.resource!.reduce(
         (count, item) => count + item.count!,
@@ -307,10 +310,10 @@ const _fake_tidb_product: ProductKnowledge = {
   name: 'TiDB',
   internal: false,
   status: 'Online',
-  _versions: ['5.0.0', '5.1.0'],
+  _versions: ['5.2.2', '5.1.0'],
   versions: {
-    '5.0.0': {
-      name: '5.0.0',
+    '5.2.2': {
+      name: '5.2.2',
       archs: ['x86_64', 'ARM64'],
       _components: ['TiDB', 'TiKV', 'TiFlash', 'PD', 'TiCDC'],
       components: {
