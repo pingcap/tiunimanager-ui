@@ -152,7 +152,14 @@ export function processCreateRequest(
 
     value.resourceParameters!.instanceResource!.forEach((comp) => {
       // remove count=0
-      comp.resource = comp.resource!.filter((item) => item && item.count! > 0)
+      comp.resource = comp
+        .resource!.filter((item) => item && item.count! > 0)
+        .map((item) => ({
+          ...item,
+          diskCapacity: 0,
+          diskType: 'SATA',
+          specCode: '4C8G',
+        }))
       // calculate totalCount
       comp.totalNodeCount = comp.resource!.reduce(
         (count, item) => count + item.count!,
