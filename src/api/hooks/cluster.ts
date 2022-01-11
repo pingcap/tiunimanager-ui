@@ -8,6 +8,7 @@ import {
   RequestClusterParamsUpdate,
   RequestClusterScaleIn,
   RequestClusterScaleOut,
+  RequestClusterTakeover,
 } from '@/api/model'
 import { AxiosRequestConfig } from 'axios'
 import { withRequestOptions, PartialUseQueryOptions } from '@/api/hooks/utils'
@@ -408,4 +409,17 @@ const scaleInCluster = withRequestOptions(
 
 export function useClusterScaleIn() {
   return useMutation(scaleInCluster)
+}
+
+/**
+ * Cluster Taking Over
+ */
+
+const takeOverCluster = withRequestOptions(
+  (payload: RequestClusterTakeover, options?: AxiosRequestConfig) =>
+    APIS.Clusters.clustersTakeoverPost(payload, options)
+)
+
+export function useClusterTakeover() {
+  return useMutation(takeOverCluster)
 }

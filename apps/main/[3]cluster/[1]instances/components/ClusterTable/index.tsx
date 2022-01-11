@@ -323,64 +323,6 @@ function getColumns(
           : t('model:cluster.tls.off')
       },
     },
-    // TODO: wait for the cluster usage support
-    // {
-    //   title: t('model:cluster.property.usage'),
-    //   key: 'usage',
-    //   width: 300,
-    //   hideInSearch: true,
-    //   render(dom, record) {
-    //     return (
-    //       <span className={styles.usageCircleContainer}>
-    //         {record.cpuUsage && (
-    //           <SmallUsageCircle
-    //             total={record.cpuUsage.total!}
-    //             usageRate={record.cpuUsage.usageRate!}
-    //             used={record.cpuUsage.used!}
-    //             name={t('usage.cpu')}
-    //             unit=""
-    //           />
-    //         )}
-    //         {record.memoryUsage && (
-    //           <SmallUsageCircle
-    //             total={record.memoryUsage.total!}
-    //             usageRate={record.memoryUsage.usageRate!}
-    //             used={record.memoryUsage.used!}
-    //             name={t('usage.mem')}
-    //             unit="MB"
-    //           />
-    //         )}
-    //         {record.diskUsage && (
-    //           <SmallUsageCircle
-    //             total={record.diskUsage.total!}
-    //             usageRate={record.diskUsage.usageRate!}
-    //             used={record.diskUsage.used!}
-    //             name={t('usage.disk')}
-    //             unit="MB"
-    //           />
-    //         )}
-    //         {record.backupFileUsage && (
-    //           <SmallUsageCircle
-    //             total={record.backupFileUsage.total!}
-    //             usageRate={record.backupFileUsage.usageRate!}
-    //             used={record.backupFileUsage.used!}
-    //             name={t('usage.backup')}
-    //             unit="MB"
-    //           />
-    //         )}
-    //         {record.storageUsage && (
-    //           <SmallUsageCircle
-    //             total={record.storageUsage.total!}
-    //             usageRate={record.storageUsage.usageRate!}
-    //             used={record.storageUsage.used!}
-    //             name={t('usage.storage')}
-    //             unit="MB"
-    //           />
-    //         )}
-    //       </span>
-    //     )
-    //   },
-    // },
     {
       title: t('model:cluster.property.createTime'),
       width: 180,
@@ -394,14 +336,6 @@ function getColumns(
       width: 180,
       dataIndex: 'updateTime',
       key: 'updateTime',
-      hideInSearch: true,
-      valueType: 'dateTime',
-    },
-    {
-      title: t('model:cluster.property.deleteTime'),
-      width: 180,
-      dataIndex: 'deleteTime',
-      key: 'deleteTime',
       hideInSearch: true,
       valueType: 'dateTime',
     },
@@ -470,7 +404,6 @@ function getColumns(
 
 const defaultColumnsSetting: Record<string, ColumnsState> = {
   actions: { fixed: 'right' },
-  deleteTime: { show: false },
   dbPassword: { show: false },
   backup: { show: false },
   updateTime: { show: false },

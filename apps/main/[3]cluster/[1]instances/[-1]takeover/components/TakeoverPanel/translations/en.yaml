@@ -1,0 +1,33 @@
+form:
+  jumpServer:
+    title: Jump Server Options
+    fields:
+      ip: Host IP
+      port: SSH Port
+      user: SSH User
+      password: SSH Password
+      tiupPath: TiUP Path
+  basic:
+    title: Basic Options
+    fields:
+      name: Cluster Name
+      username: Database Username
+      password: Database Password
+  resources:
+    title: Hosts Import
+tooltip:
+  user: The user which has TiUP execution permission.
+  clusterName: Names of the clusters to be takeovered, separated by commas. Use asterisk '*' to indicates all clusters.
+footer:
+  submit:
+    title: Submit
+    confirm: Are you sure to submit the form?
+rules:
+  ip:
+    format: Invalid IP format
+  clusterName:
+    length: The length must be between 8-32
+message:
+  success: Success to takeover clusters
+  fail: 'Fail: {{ msg }}'
+actionName: Take over cluster
