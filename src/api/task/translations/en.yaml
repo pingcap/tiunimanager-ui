@@ -13,3 +13,5 @@ name:
   RestoreExistCluster: Restore Existed Cluster
   ModifyParameters: Update Parameters
   BuildLogConfig: Rebuild Logs Config
+  ImportHosts: Import Hosts
+  DeleteHosts: Delete Hosts
