@@ -17,7 +17,6 @@ form:
     title: 主机资源导入
 tooltip:
   user: 拥有 TiUP 执行权限的用户
-  clusterName: 待接管的集群名称，用逗号分隔，用星号'*'表示所有集群
 footer:
   submit:
     title: 提交

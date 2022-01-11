@@ -17,7 +17,6 @@ form:
     title: Hosts Import
 tooltip:
   user: The user which has TiUP execution permission.
-  clusterName: Names of the clusters to be takeovered, separated by commas. Use asterisk '*' to indicates all clusters.
 footer:
   submit:
     title: Submit

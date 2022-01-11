@@ -13,11 +13,16 @@ const DownloadURL = getHostsTemplateURL()
 const MaxBytes = 2 * 1024 * 1024 * 1024 // in bytes
 
 export interface HostsUploaderProps {
+  reserved?: boolean
   onFinish?: (success: boolean) => unknown
   uploadProps?: UploadProps
 }
 
-export function HostsUploader({ onFinish, uploadProps }: HostsUploaderProps) {
+export function HostsUploader({
+  onFinish,
+  uploadProps,
+  reserved = false,
+}: HostsUploaderProps) {
   const { t } = useI18n()
   const token = useAuthState((state) => state.token)
 
@@ -39,6 +44,7 @@ export function HostsUploader({ onFinish, uploadProps }: HostsUploaderProps) {
 
     return true
   }
+
   return (
     <div>
       <Upload.Dragger
@@ -48,6 +54,7 @@ export function HostsUploader({ onFinish, uploadProps }: HostsUploaderProps) {
           Authorization: `Bearer ${token}`,
         }}
         beforeUpload={checkFileFormat}
+        data={{ hostReserved: reserved }}
         maxCount={1}
         accept={
           'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'

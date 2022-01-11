@@ -45,7 +45,6 @@ export function TakeoverPanel({ back }: TakeoverPanelProps) {
           <Form.Item
             name="clusterName"
             label={t('form.basic.fields.name')}
-            tooltip={t('tooltip.clusterName')}
             rules={[
               { required: true },
               { min: 8, max: 32, message: t('rules.clusterName.length') },
@@ -56,7 +55,6 @@ export function TakeoverPanel({ back }: TakeoverPanelProps) {
           <Form.Item
             name="dbUser"
             label={t('form.basic.fields.username')}
-            tooltip={t('tooltip.clusterUsername')}
             rules={[{ required: true }]}
           >
             <Input />
@@ -64,7 +62,6 @@ export function TakeoverPanel({ back }: TakeoverPanelProps) {
           <Form.Item
             name="dbPassword"
             label={t('form.basic.fields.password')}
-            tooltip={t('tooltip.password')}
             rules={[{ required: true }]}
           >
             <Input.Password />
@@ -118,7 +115,10 @@ export function TakeoverPanel({ back }: TakeoverPanelProps) {
           </Form.Item>
         </Card>
         <Card title={t('form.resources.title')}>
-          <HostsUploader uploadProps={{ maxCount: undefined }} />
+          <HostsUploader
+            uploadProps={{ maxCount: undefined }}
+            reserved={true}
+          />
         </Card>
       </Form>
       <div className={`${styles.submitter} ${styles.footer}`}>
