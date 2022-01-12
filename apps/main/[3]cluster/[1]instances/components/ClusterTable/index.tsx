@@ -411,11 +411,10 @@ function getColumns(
       key: 'actions',
       valueType: 'option',
       render(_, record) {
-        const { status } = record
-        const bootEnabled = status === ClusterStatus.stopped
+        const { status, maintainStatus } = record
+        const bootEnabled = status === ClusterStatus.stopped && !maintainStatus
         const rebootDisabled =
-          status === ClusterStatus.initializing ||
-          status === ClusterStatus.recovering
+          status === ClusterStatus.running && !maintainStatus
         const stopDisabled = rebootDisabled
 
         return [
