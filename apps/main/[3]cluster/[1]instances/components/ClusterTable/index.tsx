@@ -204,12 +204,23 @@ function getColumns(
 ): ProColumns<ClusterInfo>[] {
   return [
     {
+      title: t('model:cluster.property.id'),
+      key: 'id',
+      hideInTable: true,
+    },
+    {
+      title: t('model:cluster.property.name'),
+      key: 'name',
+      hideInTable: true,
+    },
+    {
       title: `${t('model:cluster.property.id')} / ${t(
         'model:cluster.property.name'
       )}`,
       width: 200,
       fixed: 'left',
       key: 'id+name',
+      hideInSearch: true,
       render: (_, record) => (
         <NameAndID
           id={record.clusterId!}
