@@ -414,7 +414,7 @@ function getColumns(
         const { status, maintainStatus } = record
         const bootEnabled = status === ClusterStatus.stopped && !maintainStatus
         const rebootDisabled =
-          status === ClusterStatus.running && !maintainStatus
+          status !== ClusterStatus.running || !!maintainStatus
         const stopDisabled = rebootDisabled
 
         return [
@@ -423,6 +423,8 @@ function getColumns(
               key="boot"
               title={t('boot.confirm')}
               icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+              cancelButtonProps={{ size: 'middle' }}
+              okButtonProps={{ size: 'middle' }}
               onConfirm={() => bootAction('boot', record.clusterId!)}
             >
               <Button className={styles.actionBtn} type="link">
@@ -435,6 +437,8 @@ function getColumns(
               title={t('reboot.confirm')}
               icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
               disabled={rebootDisabled}
+              cancelButtonProps={{ size: 'middle' }}
+              okButtonProps={{ size: 'middle' }}
               onConfirm={() => bootAction('reboot', record.clusterId!)}
             >
               <Button
@@ -451,6 +455,8 @@ function getColumns(
             title={t('stop.confirm')}
             icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
             disabled={stopDisabled}
+            cancelButtonProps={{ size: 'middle' }}
+            okButtonProps={{ size: 'middle' }}
             onConfirm={() => stopAction(record.clusterId!)}
           >
             <Button
