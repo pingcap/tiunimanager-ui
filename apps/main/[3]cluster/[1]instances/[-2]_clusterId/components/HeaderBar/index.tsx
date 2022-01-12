@@ -179,9 +179,7 @@ export default function HeaderBar() {
             >
               <Switch />
             </Form.Item>
-            <div className="ant-form-item-extra">
-              {t('delete.note.autoBackup')}
-            </div>
+            <div className={styles.itemNote}>{t('delete.note.autoBackup')}</div>
             <Form.Item
               name="keepExistingBackup"
               label={t('delete.options.keepExistingBackup')}
