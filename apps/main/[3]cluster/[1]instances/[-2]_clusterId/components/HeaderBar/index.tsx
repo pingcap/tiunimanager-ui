@@ -65,47 +65,38 @@ export default function HeaderBar() {
         content: t('forceDelete.tips'),
         okType: 'danger',
         async onOk() {
-          return new Promise((resolve, reject) => {
-            deleteCluster.mutateAsync(
-              {
-                payload: {
-                  id: clusterId!,
-                  autoBackup: payload.autoBackup,
-                  keepExistingBackupData: payload.keepExistingBackupData,
-                  force: true,
-                },
-                options: {
-                  actionName: t('forceDelete.name'),
-                },
+          try {
+            await deleteCluster.mutateAsync({
+              payload: {
+                id: clusterId!,
+                autoBackup: payload.autoBackup,
+                keepExistingBackupData: payload.keepExistingBackupData,
+                force: true,
               },
-              {
-                onSuccess(resp) {
-                  resolve(resp.data?.data)
+              options: {
+                actionName: t('forceDelete.name'),
+              },
+            })
 
-                  backToList()
-                },
-                onError() {
-                  reject()
-                },
-                onSettled() {
-                  invalidateClusterDetail(queryClient, clusterId!)
-                },
-              }
-            )
-          })
+            backToList()
+          } catch {
+            return
+          } finally {
+            invalidateClusterDetail(queryClient, clusterId!)
+          }
         },
       })
     }
 
-    const handleDelete = (closeConfirm: () => void) => {
+    const handleDelete = async (closeConfirm: () => void) => {
       const reqPayload = {
         autoBackup: deletionForm.getFieldValue('autoBackup'),
         keepExistingBackupData:
           deletionForm.getFieldValue('keepExistingBackup'),
       }
 
-      deleteCluster.mutateAsync(
-        {
+      try {
+        await deleteCluster.mutateAsync({
           payload: {
             id: clusterId!,
             ...reqPayload,
@@ -114,27 +105,22 @@ export default function HeaderBar() {
             actionName: t('delete.name'),
             skipErrorNotification: true,
           },
-        },
-        {
-          onSuccess() {
-            closeConfirm()
+        })
 
-            backToList()
-          },
-          onError(error: any) {
-            if (error?.response?.status === 409) {
-              handleForceDelete(reqPayload)
-            } else {
-              useErrorNotification(error)
-            }
-
-            closeConfirm()
-          },
-          onSettled() {
-            invalidateClusterDetail(queryClient, clusterId!)
-          },
+        closeConfirm()
+        backToList()
+      } catch (error: any) {
+        if (error?.response?.status === 409) {
+          handleForceDelete(reqPayload)
+        } else {
+          useErrorNotification(error)
         }
-      )
+
+        closeConfirm()
+        deletionForm.resetFields()
+      } finally {
+        invalidateClusterDetail(queryClient, clusterId!)
+      }
     }
 
     const handleScaleOut = () =>
@@ -208,6 +194,7 @@ export default function HeaderBar() {
         confirmInput={{
           expect: 'delete',
         }}
+        onCancel={() => deletionForm.resetFields()}
         onConfirm={handleDelete}
       >
         <Button danger>
