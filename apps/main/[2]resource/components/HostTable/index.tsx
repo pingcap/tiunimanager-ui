@@ -15,6 +15,7 @@ import { TFunction } from 'react-i18next'
 import { usePagination } from '@hooks/usePagination'
 import { DeleteConfirm } from '@/components/DeleteConfirm'
 import { isNumber } from '@/utils/types'
+import { NameAndID } from '@/components/NameAndID'
 
 loadI18n()
 
@@ -123,22 +124,20 @@ function getHostColumns(
 ): ProColumns<HostInfo>[] {
   return [
     {
-      title: t('model:host.property.id'),
-      width: 140,
-      dataIndex: 'hostId',
-      key: 'id',
+      title: `${t('model:host.property.id')} / ${t(
+        'model:host.property.hostName'
+      )}`,
+      width: 200,
+      key: 'id+name',
       hideInSearch: true,
-    },
-    {
-      title: t('model:host.property.hostName'),
-      width: 120,
-      dataIndex: 'hostName',
-      key: 'hostName',
-      hideInSearch: true,
+      fixed: 'left',
+      render: (_, record) => (
+        <NameAndID name={record.hostName} id={record.hostId!} />
+      ),
     },
     {
       title: t('model:host.property.ip'),
-      width: 140,
+      width: 120,
       dataIndex: 'ip',
       key: 'ip',
       hideInSearch: true,
@@ -159,7 +158,7 @@ function getHostColumns(
     },
     {
       title: t('model:host.property.load'),
-      width: 160,
+      width: 110,
       dataIndex: 'loadStat',
       key: 'loadStat',
       valueType: 'select',
@@ -183,7 +182,7 @@ function getHostColumns(
     },
     {
       title: t('columns.location'),
-      width: 200,
+      width: 250,
       key: 'location',
       tooltip: `${t('model:host.property.region')}, ${t(
         'model:host.property.az'
@@ -195,7 +194,7 @@ function getHostColumns(
     },
     {
       title: t('model:host.property.nic'),
-      width: 120,
+      width: 100,
       dataIndex: 'nic',
       key: 'nic',
       hideInSearch: true,
@@ -224,7 +223,7 @@ function getHostColumns(
     },
     {
       title: t('columns.system'),
-      width: 140,
+      width: 120,
       key: 'system',
       render(_, record) {
         return `${record.os} ${record.kernel}`
@@ -233,7 +232,7 @@ function getHostColumns(
     },
     {
       title: t('columns.availableSpec'),
-      width: 130,
+      width: 100,
       key: 'availableSpec',
       render(_, record) {
         return `${record.freeCpuCores}C ${record.freeMemory}G`
@@ -242,14 +241,14 @@ function getHostColumns(
     },
     {
       title: t('columns.spec'),
-      width: 130,
+      width: 100,
       dataIndex: 'spec',
       key: 'spec',
       hideInSearch: true,
     },
     {
       title: t('model:host.property.createTime'),
-      width: 180,
+      width: 150,
       dataIndex: 'createTime',
       key: 'createTime',
       hideInSearch: true,
@@ -259,7 +258,7 @@ function getHostColumns(
     },
     {
       title: t('model:host.property.updateTime'),
-      width: 180,
+      width: 150,
       dataIndex: 'updateTime',
       key: 'updateTime',
       hideInSearch: true,
@@ -269,8 +268,9 @@ function getHostColumns(
     },
     {
       title: t('columns.actions'),
-      width: 120,
+      width: 80,
       key: 'actions',
+      fixed: 'right',
       valueType: 'option',
       render(_, record) {
         return [
@@ -300,7 +300,6 @@ function getHostColumns(
 
 const defaultColumnsSetting: Record<string, ColumnsState> = {
   operator: { show: false },
-  actions: { fixed: 'right' },
   id: { show: false },
   nic: { show: false },
   system: { show: false },

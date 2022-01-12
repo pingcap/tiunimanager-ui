@@ -130,9 +130,7 @@ function useTableColumn() {
   return useMemo(() => getColumns(t, deleteAction), [i18n.language])
 }
 
-const defaultColumnsSetting: Record<string, ColumnsState> = {
-  actions: { fixed: 'right' },
-}
+const defaultColumnsSetting: Record<string, ColumnsState> = {}
 
 function getColumns(
   t: TFunction<''>,
@@ -141,21 +139,33 @@ function getColumns(
   return [
     {
       title: t('model:transport.property.id'),
-      width: 80,
+      width: 200,
       dataIndex: 'recordId',
+      fixed: 'left',
       key: 'id',
       hideInSearch: true,
     },
     {
+      title: t('model:transport.property.clusterId'),
+      width: 200,
+      dataIndex: 'clusterId',
+      key: 'clusterId',
+      render: (_, record) => (
+        <Link to={`${resolveRoute('../instances/')}/${record.clusterId}`}>
+          {record.clusterId}
+        </Link>
+      ),
+    },
+    {
       title: t('model:transport.property.startTime'),
-      width: 160,
+      width: 150,
       dataIndex: 'startTime',
       key: 'startTime',
       valueType: 'dateTime',
     },
     {
       title: t('model:transport.property.endTime'),
-      width: 160,
+      width: 150,
       dataIndex: 'endTime',
       key: 'endTime',
       valueType: 'dateTime',
@@ -197,17 +207,6 @@ function getColumns(
       hideInSearch: true,
     },
     {
-      title: t('model:transport.property.clusterId'),
-      width: 160,
-      dataIndex: 'clusterId',
-      key: 'clusterId',
-      render: (_, record) => (
-        <Link to={`${resolveRoute('../instances/')}/${record.clusterId}`}>
-          {record.clusterId}
-        </Link>
-      ),
-    },
-    {
       title: t('model:transport.property.fileName'),
       width: 160,
       dataIndex: 'zipName',
@@ -216,7 +215,7 @@ function getColumns(
     },
     {
       title: t('model:transport.property.filePath'),
-      width: 180,
+      width: 220,
       key: 'filePath',
       hideInSearch: true,
       render: (_, record) => (
@@ -228,7 +227,7 @@ function getColumns(
     },
     {
       title: t('model:transport.property.comment'),
-      width: 180,
+      width: 220,
       dataIndex: 'comment',
       key: 'comment',
       hideInSearch: true,
@@ -236,6 +235,7 @@ function getColumns(
     {
       title: t('columns.actions'),
       valueType: 'option',
+      fixed: 'right',
       width: 100,
       render: (_, record) => {
         const isError =

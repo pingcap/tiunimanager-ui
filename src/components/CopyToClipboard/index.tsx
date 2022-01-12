@@ -9,15 +9,20 @@ loadI18n()
 export function CopyIconButton({
   text,
   label,
+  float = true,
 }: {
   text: string
   label: string
+  float?: boolean
 }) {
   const { t } = useI18n()
+  const className = float
+    ? `${styles.copyIcon} ${styles.float}`
+    : styles.copyIcon
   return (
     <Tooltip title={t('tip', { label })}>
       <CopyOutlined
-        className={styles.copyIcon}
+        className={className}
         onClick={() => {
           copyToClipboard(text)
           message.success(

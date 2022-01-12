@@ -30,12 +30,6 @@ const defaultColumnsSetting: Record<string, ColumnsState> = {
   id: {
     show: false,
   },
-  operator: {
-    show: false,
-  },
-  actions: {
-    fixed: 'right',
-  },
 }
 
 export interface BackupTableProps {
@@ -177,28 +171,29 @@ function getColumns(
   return [
     {
       title: 'ID',
-      width: 120,
+      width: 200,
       dataIndex: 'id',
       key: 'id',
       hideInSearch: true,
+      fixed: 'left',
     },
     {
       title: t('model:clusterBackup.property.startTime'),
-      width: 120,
+      width: 150,
       dataIndex: 'startTime',
       key: 'startTime',
       valueType: 'dateTime',
     },
     {
       title: t('model:clusterBackup.property.endTime'),
-      width: 120,
+      width: 150,
       dataIndex: 'endTime',
       key: 'endTime',
       valueType: 'dateTime',
     },
     {
       title: t('model:clusterBackup.property.tso'),
-      width: 140,
+      width: 160,
       dataIndex: 'backupTso',
       key: 'backupTso',
       hideInSearch: true,
@@ -221,24 +216,25 @@ function getColumns(
     },
     {
       title: t('model:clusterBackup.property.mode'),
-      width: 60,
+      width: 80,
       key: 'mode',
       hideInSearch: true,
       render: (_, record) => t(`model:clusterBackup.mode.${record.backupMode}`),
     },
-    {
-      title: t('model:clusterBackup.property.operator'),
-      width: 80,
-      dataIndex: ['operator', 'operatorName'],
-      key: 'operator',
-      hideInSearch: true,
-    },
+    // {
+    //   title: t('model:clusterBackup.property.operator'),
+    //   width: 80,
+    //   dataIndex: ['operator', 'operatorName'],
+    //   key: 'operator',
+    //   hideInSearch: true,
+    // },
     {
       title: t('model:clusterBackup.property.size'),
-      width: 100,
+      width: 110,
       key: 'size',
       hideInSearch: true,
-      render: (_, record) => (record.size! < 0 ? '-' : `${record.size} MB`),
+      render: (_, record) =>
+        record.size! < 0 ? '-' : `${record.size!.toFixed(3)} MB`,
     },
     {
       title: t('model:clusterBackup.property.status'),
@@ -268,15 +264,16 @@ function getColumns(
     },
     {
       title: t('model:clusterBackup.property.filepath'),
-      width: 180,
+      width: 200,
       dataIndex: 'filePath',
       key: 'filepath',
       hideInSearch: true,
     },
     {
       title: t('columns.actions'),
-      width: 80,
+      width: 100,
       key: 'actions',
+      fixed: 'right',
       valueType: 'option',
       render(_, record) {
         const disableRestore = record.status !== BackupStatus.success
