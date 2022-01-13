@@ -10,7 +10,6 @@ import {
   PagedResult,
 } from '@/api/model'
 import { CopyIconButton } from '@/components/CopyToClipboard'
-import { Link } from 'react-router-dom'
 import { resolveRoute } from '@pages-macro'
 import { useQueryKnowledge } from '@/api/hooks/knowledge'
 import {
@@ -29,6 +28,7 @@ import { Button } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
 import { useQueryClient } from 'react-query'
 import { mapObj } from '@/utils/obj'
+import { NameAndID } from '@/components/NameAndID'
 
 loadI18n()
 
@@ -204,21 +204,30 @@ function getColumns(
 ): ProColumns<ClusterInfo>[] {
   return [
     {
-      title: 'ID',
-      width: 180,
-      dataIndex: 'clusterId',
+      title: t('model:cluster.property.id'),
       key: 'id',
-      render: (_, record) => (
-        <Link to={`${resolveRoute()}/${record.clusterId}`}>
-          {record.clusterId}
-        </Link>
-      ),
+      hideInTable: true,
     },
     {
       title: t('model:cluster.property.name'),
-      width: 120,
-      dataIndex: 'clusterName',
       key: 'name',
+      hideInTable: true,
+    },
+    {
+      title: `${t('model:cluster.property.name')} / ${t(
+        'model:cluster.property.id'
+      )}`,
+      width: 200,
+      fixed: 'left',
+      key: 'id+name',
+      hideInSearch: true,
+      render: (_, record) => (
+        <NameAndID
+          id={record.clusterId!}
+          name={record.clusterName}
+          link={`${resolveRoute()}/${record.clusterId}`}
+        />
+      ),
     },
     {
       title: t('model:cluster.property.type'),
@@ -237,7 +246,7 @@ function getColumns(
     },
     {
       title: t('model:cluster.property.status'),
-      width: 100,
+      width: 80,
       dataIndex: 'status',
       key: 'status',
       valueType: 'select',
@@ -275,7 +284,7 @@ function getColumns(
     },
     {
       title: t('model:cluster.property.address'),
-      width: 160,
+      width: 200,
       key: 'addresses',
       hideInSearch: true,
       render(dom, record) {
@@ -325,7 +334,7 @@ function getColumns(
     },
     {
       title: t('model:cluster.property.createTime'),
-      width: 180,
+      width: 150,
       dataIndex: 'createTime',
       key: 'createTime',
       hideInSearch: true,
@@ -333,7 +342,7 @@ function getColumns(
     },
     {
       title: t('model:cluster.property.updateTime'),
-      width: 180,
+      width: 150,
       dataIndex: 'updateTime',
       key: 'updateTime',
       hideInSearch: true,
@@ -341,15 +350,15 @@ function getColumns(
     },
     {
       title: t('columns.actions'),
-      width: 120,
+      width: 100,
       key: 'actions',
       valueType: 'option',
+      fixed: 'right',
       render(_, record) {
-        const { status } = record
-        const bootEnabled = status === ClusterStatus.stopped
+        const { status, maintainStatus } = record
+        const bootEnabled = status === ClusterStatus.stopped && !maintainStatus
         const rebootDisabled =
-          status === ClusterStatus.initializing ||
-          status === ClusterStatus.recovering
+          status !== ClusterStatus.running || !!maintainStatus
         const stopDisabled = rebootDisabled
 
         return [
@@ -358,6 +367,8 @@ function getColumns(
               key="boot"
               title={t('boot.confirm')}
               icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+              cancelButtonProps={{ size: 'middle' }}
+              okButtonProps={{ size: 'middle' }}
               onConfirm={() => bootAction('boot', record.clusterId!)}
             >
               <Button className={styles.actionBtn} type="link">
@@ -370,6 +381,8 @@ function getColumns(
               title={t('reboot.confirm')}
               icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
               disabled={rebootDisabled}
+              cancelButtonProps={{ size: 'middle' }}
+              okButtonProps={{ size: 'middle' }}
               onConfirm={() => bootAction('reboot', record.clusterId!)}
             >
               <Button
@@ -386,6 +399,8 @@ function getColumns(
             title={t('stop.confirm')}
             icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
             disabled={stopDisabled}
+            cancelButtonProps={{ size: 'middle' }}
+            okButtonProps={{ size: 'middle' }}
             onConfirm={() => stopAction(record.clusterId!)}
           >
             <Button
@@ -403,7 +418,6 @@ function getColumns(
 }
 
 const defaultColumnsSetting: Record<string, ColumnsState> = {
-  actions: { fixed: 'right' },
   dbPassword: { show: false },
   backup: { show: false },
   updateTime: { show: false },
