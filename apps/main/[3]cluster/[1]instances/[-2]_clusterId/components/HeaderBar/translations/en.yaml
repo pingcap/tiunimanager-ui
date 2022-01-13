@@ -8,6 +8,15 @@ actions:
 delete:
   confirm: Are you sure to delete this cluster?
   name: Delete Cluster
+  options:
+    autoBackup: Perform final backup before deleting the cluster
+    keepExistingBackup: Keep all historical manual backup data
+  note:
+    autoBackup: Deleting the cluster will remove all automatic database backup data. It is recommended to perform a final backup to protect data.
+forceDelete:
+  name: Delete Cluster
+  confirm: This cluster is busy now. Are you sure to force deleting it?
+  tip: Force deleting is dangerous, please be careful.
 backup:
   confirm: 'Are you sure to create backup task for cluster {{ name }} now?'
   name: Backup Cluster

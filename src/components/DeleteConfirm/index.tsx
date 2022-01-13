@@ -10,6 +10,7 @@ export interface DeleteConfirmProps {
   title: ReactNode | (() => ReactNode)
   content?: ReactNode
   disabled?: boolean
+  onCancel?: () => void
   onConfirm: (close: () => void) => void
   confirmInput?: {
     expect: string
@@ -20,10 +21,9 @@ export function DeleteConfirm({
   title,
   content,
   disabled,
+  onCancel,
   onConfirm,
-
   confirmInput,
-
   children,
 }: PropsWithChildren<DeleteConfirmProps>) {
   const { t } = useI18n()
@@ -43,6 +43,14 @@ export function DeleteConfirm({
     setInput('')
   }
 
+  const handleCancel = () => {
+    if (onCancel) {
+      onCancel()
+    }
+
+    close()
+  }
+
   const handleConfirm = () => {
     onConfirm(close)
   }
@@ -54,7 +62,7 @@ export function DeleteConfirm({
       maskClosable={false}
       title={title}
       visible={visible}
-      onCancel={close}
+      onCancel={handleCancel}
     >
       {content}
       {confirmInput && (
