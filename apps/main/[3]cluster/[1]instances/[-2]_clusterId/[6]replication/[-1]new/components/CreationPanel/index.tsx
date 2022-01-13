@@ -476,6 +476,32 @@ const CreationPanel: FC<CreationPanelProps> = ({ clusterId, back }) => {
     form.resetFields()
   }, [form])
 
+  const onFormValuesChange = useCallback(
+    (
+      changedValues: Partial<CreationFormFields>,
+      allValues: CreationFormFields
+    ) => {
+      if (changedValues.tso === null) {
+        form.resetFields(['tso'])
+      } else if (
+        changedValues.downstream &&
+        allValues.downstreamType !== 'kafka'
+      ) {
+        if (
+          changedValues.downstream[allValues.downstreamType]
+            ?.concurrentThreads === null
+        ) {
+          form.resetFields([
+            'downstream',
+            allValues.downstreamType,
+            'concurrentThreads',
+          ])
+        }
+      }
+    },
+    [form]
+  )
+
   return (
     <>
       <Form
@@ -497,6 +523,7 @@ const CreationPanel: FC<CreationPanelProps> = ({ clusterId, back }) => {
             },
           },
         }}
+        onValuesChange={onFormValuesChange}
       >
         <BasicFormBlock />
         <DownstreamFromBlock />
