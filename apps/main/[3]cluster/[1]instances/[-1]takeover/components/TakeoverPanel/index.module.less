@@ -1,0 +1,43 @@
+.panel {
+  padding: 20px;
+  width: 50%;
+  min-width: 720px;
+
+  .footer {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    background: #fff;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: 10px 20px;
+  }
+
+  .submitter {
+    border-top: 1px solid #eaeaea;
+
+    button {
+      width: 100px;
+
+      &:not(:last-child) {
+        margin-right: 32px;
+      }
+    }
+  }
+
+  :global(.ant-card) {
+    width: 100%;
+    margin: 20px 0 30px 0;
+  }
+
+  :global(.ant-card-head-title) {
+    font-weight: bold;
+    user-select: none;
+  }
+
+  :global(.ant-form-item-label) {
+    width: 120px;
+  }
+}

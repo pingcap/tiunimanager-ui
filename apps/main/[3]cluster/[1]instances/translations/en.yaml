@@ -2,3 +2,4 @@ name: Instances
 header:
   title: Instances
   new: New Cluster
+  takeoverr: Take Over

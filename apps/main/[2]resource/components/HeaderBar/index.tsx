@@ -23,7 +23,10 @@ export default function HeaderBar() {
           </Button>
         }
       />
-      <UploadModal visible={uploaderVisible} close={toggleUploaderVisible} />
+      <UploadModal
+        visible={uploaderVisible}
+        close={() => toggleUploaderVisible()}
+      />
     </>
   )
 }

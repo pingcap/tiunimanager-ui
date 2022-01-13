@@ -35,6 +35,7 @@ import {
   ClusterScaleInClusterReq,
   StructsClusterResourceParameterCompute,
   StructsClusterResourceParameterComputeResource,
+  ClusterTakeoverClusterReq,
 } from '#/api'
 import { loadI18nWithNS } from '@i18n-macro'
 
@@ -84,6 +85,7 @@ export type RequestClusterCreate = ClusterCreateClusterReq
 export type RequestClusterParamsUpdate = ClusterUpdateClusterParametersReq
 export type RequestClusterScaleOut = ClusterScaleOutClusterReq
 export type RequestClusterScaleIn = ClusterScaleInClusterReq
+export type RequestClusterTakeover = ClusterTakeoverClusterReq
 
 export { StructsWorkFlowInfoStatusEnum as TaskWorkflowStatus }
 export { StructsWorkFlowNodeInfoStatusEnum as TaskWorkflowSubTaskStatus }
