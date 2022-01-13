@@ -13,3 +13,5 @@ name:
   RestoreExistCluster: 恢复集群
   ModifyParameters: 修改参数
   BuildLogConfig: 重建日志配置
+  ImportHosts: 导入主机
+  DeleteHosts: 删除主机

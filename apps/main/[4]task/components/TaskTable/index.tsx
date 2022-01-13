@@ -1,14 +1,17 @@
-import { ProColumns } from '@ant-design/pro-table'
 import { useMemo, useState } from 'react'
-import { PagedResult, TaskWorkflowInfo, TaskWorkflowStatus } from '@/api/model'
-import HeavyTable from '@/components/HeavyTable'
-import styles from './index.module.less'
+import { useQueryClient } from 'react-query'
 import { TFunction, useTranslation } from 'react-i18next'
+import { ProColumns } from '@ant-design/pro-table'
+import HeavyTable from '@/components/HeavyTable'
 import { usePagination } from '@hooks/usePagination'
-import { useQueryTasks } from '@/api/hooks/task'
+import { PagedResult, TaskWorkflowInfo, TaskWorkflowStatus } from '@/api/model'
+import { invalidateTaskDetail, useQueryTasks } from '@/api/hooks/task'
 import TaskSteps from '../TaskSteps'
 
+import styles from './index.module.less'
+
 export default function TaskTable() {
+  const queryClient = useQueryClient()
   const {
     data,
     isLoading,
@@ -56,7 +59,10 @@ export default function TaskTable() {
         defaultValue: {},
       }}
       options={{
-        reload: () => refetch(),
+        reload: () => {
+          refetch()
+          invalidateTaskDetail(queryClient)
+        },
       }}
     />
   )
