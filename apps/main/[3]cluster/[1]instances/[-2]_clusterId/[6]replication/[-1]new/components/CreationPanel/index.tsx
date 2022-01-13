@@ -486,6 +486,7 @@ const CreationPanel: FC<CreationPanelProps> = ({ clusterId, back }) => {
         scrollToFirstError={true}
         onFinish={onFinish}
         initialValues={{
+          tso: 0,
           downstreamType: ClusterDataReplicationDownstreamType.tidb,
           downstream: {
             mysql: {

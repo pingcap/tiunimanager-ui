@@ -5,7 +5,7 @@ basic:
     tso: Beginning TSO
     filterRule: Filter Rules
   tips:
-    tso: The value of the beginning TSO must be between 0 ~ tikv_gc_save_point
+    tso: The value of the beginning TSO must be from 0 to tikv_gc_save_point. If you enter "0" here, the system will get the beginning TSO from current time.
     filterRule: Each rule is a regular expression
   rules:
     name:

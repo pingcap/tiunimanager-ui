@@ -5,7 +5,7 @@ basic:
     tso: 起始 TSO
     filterRule: 过滤规则
   tips:
-    tso: 同步任务开始的 TSO，取值范围是 0 ～ tikv_gc_save_point
+    tso: 同步任务开始的 TSO，取值范围是 0 ～ tikv_gc_save_point。填入 “0” 则系统将从当前时刻获取起始TSO
     filterRule: 正则表达式
   rules:
     name:
