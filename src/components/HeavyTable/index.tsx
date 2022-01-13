@@ -8,6 +8,9 @@ export default function HeavyTable<T, U, R>({
   search = false,
   size = 'middle',
   showHeader = true,
+  scroll = {
+    x: 1280,
+  },
   ...props
 }: PropsWithChildren<ProTableProps<T, U, R>>) {
   return (
@@ -36,6 +39,7 @@ export default function HeavyTable<T, U, R>({
         persistenceType: 'localStorage',
         ...columnsState,
       }}
+      scroll={scroll}
       {...props}
       toolBarRender={props.toolBarRender}
     />

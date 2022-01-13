@@ -19,7 +19,7 @@ cluster:
     region: Region
   tls:
     on: 启用
-    off: 无
+    off: 未启用
   usage:
     cpu: CPU
     memory: 内存

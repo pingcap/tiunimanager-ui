@@ -102,6 +102,7 @@ function NodeTable({ nodes = [], title, onScaleIn }: NodeTableProps) {
       rowKey="id"
       toolBarRender={false}
       pagination={false}
+      scroll={{}}
       bordered={true}
     />
   )
@@ -121,6 +122,7 @@ function getColumns({
       title: t('model:clusterNode.property.hostIp'),
       width: 140,
       key: 'addresses',
+      fixed: 'left',
       render: (_, record) => record.addresses?.join(', '),
     },
     {
@@ -181,6 +183,7 @@ function getColumns({
       title: t('columns.actions'),
       width: 40,
       key: 'actions',
+      fixed: 'right',
       valueType: 'option',
       render(_, record) {
         if (disableScaleIn) {
