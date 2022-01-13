@@ -124,8 +124,8 @@ function getHostColumns(
 ): ProColumns<HostInfo>[] {
   return [
     {
-      title: `${t('model:host.property.id')} / ${t(
-        'model:host.property.hostName'
+      title: `${t('model:host.property.hostName')} / ${t(
+        'model:host.property.id'
       )}`,
       width: 200,
       key: 'id+name',
@@ -216,10 +216,14 @@ function getHostColumns(
     {
       // only for table
       title: t('model:host.property.purpose'),
-      width: 80,
-      dataIndex: 'purpose',
+      width: 120,
       key: 'purpose-show',
-      render: (_, record) => record,
+      render: (_, record) =>
+        record.purpose
+          ?.split(',')
+          .map((p) => t(`model:host.purpose.${p.toLowerCase()}`))
+          .join(' '),
+      hideInSearch: true,
     },
     {
       title: t('columns.system'),
@@ -234,17 +238,15 @@ function getHostColumns(
       title: t('columns.availableSpec'),
       width: 100,
       key: 'availableSpec',
-      render(_, record) {
-        return `${record.freeCpuCores}C ${record.freeMemory}G`
-      },
+      render: (_, record) => `${record.freeCpuCores}C ${record.freeMemory}G`,
       hideInSearch: true,
     },
     {
       title: t('columns.spec'),
       width: 100,
-      dataIndex: 'spec',
       key: 'spec',
       hideInSearch: true,
+      render: (_, record) => `${record.cpuCores}C ${record.memory}G`,
     },
     {
       title: t('model:host.property.createTime'),

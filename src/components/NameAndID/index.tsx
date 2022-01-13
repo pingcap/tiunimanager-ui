@@ -10,6 +10,7 @@ export interface NameAndIDProps {
 export function NameAndID({ id, name, link }: NameAndIDProps) {
   return (
     <div>
+      <div className={styles.nameLine}>{name || '-'}</div>
       {link ? (
         <Link className={styles.idLine} to={link}>
           {id}
@@ -17,7 +18,6 @@ export function NameAndID({ id, name, link }: NameAndIDProps) {
       ) : (
         <a className={styles.idLine}>{id}</a>
       )}
-      <div className={styles.nameLine}>{name || '-'}</div>
     </div>
   )
 }
