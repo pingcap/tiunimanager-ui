@@ -13,19 +13,21 @@ export const CACHE_TASK_DETAIL = 'task-detail'
  */
 export function useQueryTasks(
   query: {
-    bizId?: string
     page?: number
     pageSize?: number
-    status?: TaskWorkflowStatus
     keyword?: string
+    status?: TaskWorkflowStatus
+    bizId?: string
+    bizType?: string
   },
   options?: PartialUseQueryOptions
 ) {
-  const { bizId, page, pageSize, status, keyword } = query
+  const { page, pageSize, keyword, status, bizId, bizType } = query
 
   return useQuery(
-    [CACHE_TASK, bizId, page, pageSize, status, keyword],
-    () => APIS.Task.workflowGet(bizId, keyword, page, pageSize, status),
+    [CACHE_TASK, page, pageSize, keyword, status, bizId, bizType],
+    () =>
+      APIS.Task.workflowGet(bizId, bizType, keyword, page, pageSize, status),
     options
   )
 }

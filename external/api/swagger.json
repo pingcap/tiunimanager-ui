@@ -3997,6 +3997,11 @@
           },
           {
             "type": "string",
+            "name": "bizType",
+            "in": "query"
+          },
+          {
+            "type": "string",
             "name": "flowName",
             "in": "query"
           },
@@ -7216,6 +7221,9 @@
       "type": "object",
       "properties": {
         "bizId": {
+          "type": "string"
+        },
+        "bizType": {
           "type": "string"
         },
         "createTime": {

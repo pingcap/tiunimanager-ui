@@ -209,9 +209,10 @@ domain:
     zone: Zone
 task:
   property:
-    id: ID
-    name: Name
-    bizId: Cluster ID
+    id: Task ID
+    name: Task Name
+    bizId: Associated Resource ID
+    bizType: Associated Resource Type
     creationTime: Creation Time
     updateTime: Update Time
     operator: Operator
@@ -224,6 +225,9 @@ task:
     finished: Finished
     error: Error
     cancelled: Cancelled
+  bizType:
+    cluster: Cluster
+    host: Host
   operator:
     system: System Automation
 knowledge:
