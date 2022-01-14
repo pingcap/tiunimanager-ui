@@ -8,6 +8,7 @@ import {
   RequestClusterParamsUpdate,
   RequestClusterScaleIn,
   RequestClusterScaleOut,
+  RequestClusterTakeover,
 } from '@/api/model'
 import { AxiosRequestConfig } from 'axios'
 import { withRequestOptions, PartialUseQueryOptions } from '@/api/hooks/utils'
@@ -60,10 +61,28 @@ export async function invalidateClusterDetail(client: QueryClient, id: string) {
   await client.invalidateQueries([CACHE_CLUSTER_DETAIL_KEY, id])
 }
 
-const deleteCluster = withRequestOptions(
-  (payload: { id: string }, options?: AxiosRequestConfig) =>
-    APIS.Clusters.clustersClusterIdDelete(payload.id, undefined, options)
-)
+const deleteCluster = ({
+  payload,
+  options,
+}: {
+  payload: {
+    id: string
+    autoBackup: boolean
+    keepExistingBackupData: boolean
+    force?: boolean
+  }
+  options?: AxiosRequestConfig
+}) =>
+  APIS.Clusters.clustersClusterIdDelete(
+    payload.id,
+    {
+      autoBackup: payload.autoBackup,
+      keepHistoryBackupRecords: payload.keepExistingBackupData,
+      force: payload.force,
+    },
+    options
+  )
+
 export function useDeleteCluster() {
   return useMutation(deleteCluster)
 }
@@ -406,4 +425,17 @@ const scaleInCluster = withRequestOptions(
 
 export function useClusterScaleIn() {
   return useMutation(scaleInCluster)
+}
+
+/**
+ * Cluster Taking Over
+ */
+
+const takeOverCluster = withRequestOptions(
+  (payload: RequestClusterTakeover, options?: AxiosRequestConfig) =>
+    APIS.Clusters.clustersTakeoverPost(payload, options)
+)
+
+export function useClusterTakeover() {
+  return useMutation(takeOverCluster)
 }

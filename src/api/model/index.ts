@@ -35,6 +35,7 @@ import {
   ClusterScaleInClusterReq,
   StructsClusterResourceParameterCompute,
   StructsClusterResourceParameterComputeResource,
+  ClusterTakeoverClusterReq,
   MessageQueryParameterGroupResp,
   MessageUpdateParameterGroupReq,
   MessageCreateParameterGroupReq,
@@ -90,6 +91,7 @@ export type RequestClusterCreate = ClusterCreateClusterReq
 export type RequestClusterParamsUpdate = ClusterUpdateClusterParametersReq
 export type RequestClusterScaleOut = ClusterScaleOutClusterReq
 export type RequestClusterScaleIn = ClusterScaleInClusterReq
+export type RequestClusterTakeover = ClusterTakeoverClusterReq
 
 /**
  * Parameter Group type

@@ -28,6 +28,7 @@ jobs:
       - run: yarn bootstrap
       - run: yarn generate
       - run: yarn release
+      - run: tar -zcvf release.tar.gz dist
       - uses: softprops/action-gh-release@v1
         with:
-          files: dist
+          files: release.tar.gz

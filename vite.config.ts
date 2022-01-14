@@ -9,9 +9,9 @@ import {
   provideComponents,
   provideI18n,
   providePages,
-} from '@ulab/mvp'
+} from './macros'
 import { LANGUAGE_IDS } from './src/i18n'
-import { vitePluginMacro } from 'vite-plugin-macro'
+import { createMacroPlugin } from 'vite-plugin-macro'
 import pluginDel from 'rollup-plugin-delete'
 
 // https://vitejs.dev/config/
@@ -53,20 +53,18 @@ export default defineConfig(({ mode }) => {
         ],
       }),
       pluginYaml(),
-      vitePluginMacro({
+      createMacroPlugin({
         typesPath: './types/macros.d.ts',
-      })
-        .use([
-          provideI18n({
-            languageWhitelist: new Set(LANGUAGE_IDS),
-            defaultLoadGlob: './translations/*.{yaml,yml}',
-            globalNamespaces: new Set(['model', 'task']),
-          }),
-          provideAssets(),
-          providePages(),
-          provideComponents(),
-        ])
-        .toPlugin(),
+      }).use(
+        provideI18n({
+          languageWhitelist: new Set(LANGUAGE_IDS),
+          defaultLoadGlob: './translations/*.{yaml,yml}',
+          globalNamespaces: new Set(['model', 'task']),
+        }),
+        provideAssets(),
+        providePages(),
+        provideComponents()
+      ),
       pluginDel({
         targets: 'dist/mock*',
         hook: 'generateBundle',
