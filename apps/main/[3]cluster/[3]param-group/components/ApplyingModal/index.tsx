@@ -149,23 +149,20 @@ function useFetchAvalibleClusterList({
   const clusterList = data?.data.data?.clusters
 
   const filteredList = useMemo(() => {
-    const versionPattern = /(v\d+)\./i
-    const majorDBVerion = dbVersion?.match(versionPattern)?.[1]?.toLowerCase()
+    const versionPattern = /v(\d+\.){2}\d+/i
+    const isValidVersion = dbVersion ? versionPattern.test(dbVersion) : false
 
-    if (!dbType || !majorDBVerion || !isArray(clusterList)) {
+    if (!dbType || !isValidVersion || !isArray(clusterList)) {
       return []
     }
 
     return clusterList.filter((item) => {
-      const { clusterType, status, maintainStatus } = item
-      const clusterVersion = item.clusterVersion
-        ?.match(versionPattern)?.[1]
-        ?.toLowerCase()
+      const { clusterType, clusterVersion = '', status, maintainStatus } = item
 
       // only online clusters and offline clusters avaliable
       return (
         clusterType &&
-        clusterVersion === majorDBVerion &&
+        dbVersion?.includes(clusterVersion) &&
         status === ClusterStatus.running &&
         !maintainStatus
       )
