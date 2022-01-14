@@ -413,6 +413,17 @@ export function useClusterScaleOut() {
   return useMutation(scaleOutCluster)
 }
 
+const previewScaleOutCluster = withRequestOptions(
+  (
+    { id, ...payload }: RequestClusterScaleOut & { id: string },
+    options?: AxiosRequestConfig
+  ) => APIS.Clusters.clustersClusterIdPreviewScaleOutGet(id, payload, options)
+)
+
+export function usePreviewScaleOutCluster() {
+  return useMutation(previewScaleOutCluster)
+}
+
 const scaleInCluster = withRequestOptions(
   (
     {

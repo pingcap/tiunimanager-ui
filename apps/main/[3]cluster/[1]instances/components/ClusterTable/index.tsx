@@ -214,8 +214,8 @@ function getColumns(
       hideInTable: true,
     },
     {
-      title: `${t('model:cluster.property.name')} / ${t(
-        'model:cluster.property.id'
+      title: `${t('model:cluster.property.id')} / ${t(
+        'model:cluster.property.name'
       )}`,
       width: 200,
       fixed: 'left',

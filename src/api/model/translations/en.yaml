@@ -144,7 +144,7 @@ host:
     reserved: Reserved
 
     ip: IP
-    az: Zone
+    zone: Zone
     region: Region
     rack: Rack
 
