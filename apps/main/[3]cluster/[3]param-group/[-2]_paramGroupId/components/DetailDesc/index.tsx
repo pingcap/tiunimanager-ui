@@ -53,7 +53,7 @@ const DetailDesc: FC<DetailDesc> = ({ data }) => {
     <Descriptions
       className={styles.detailDesc}
       title={t('desc.title')}
-      column={2}
+      column={3}
     >
       <Descriptions.Item label={t('model:paramGroup.property.name')}>
         {data.name}
