@@ -136,6 +136,13 @@ function getHostColumns(
       ),
     },
     {
+      title: t('model:host.property.ip'),
+      width: 120,
+      dataIndex: 'ip',
+      key: 'ip',
+      hideInSearch: true,
+    },
+    {
       title: t('model:host.property.status'),
       width: 80,
       dataIndex: 'status',
@@ -216,13 +223,6 @@ function getHostColumns(
           ?.split(',')
           .map((p) => t(`model:host.purpose.${p.toLowerCase()}`))
           .join(' '),
-      hideInSearch: true,
-    },
-    {
-      title: t('model:host.property.ip'),
-      width: 120,
-      dataIndex: 'ip',
-      key: 'ip',
       hideInSearch: true,
     },
     {
