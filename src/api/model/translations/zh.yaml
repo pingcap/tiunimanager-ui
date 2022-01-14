@@ -144,7 +144,7 @@ host:
     reserved: 保留
 
     ip: IP
-    az: Zone
+    zone: Zone
     region: Region
     rack: 机架
 

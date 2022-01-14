@@ -250,7 +250,8 @@
             "type": "string",
             "example": "CLUSTER_ID_IN_TIEM__22",
             "name": "clusterId",
-            "in": "query"
+            "in": "query",
+            "required": true
           },
           {
             "type": "integer",
@@ -3392,6 +3393,26 @@
         "parameters": [
           {
             "type": "string",
+            "name": "hostIp",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "rack",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "region",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "name": "zone",
+            "in": "query"
+          },
+          {
+            "type": "string",
             "name": "arch",
             "in": "query"
           },
@@ -3466,6 +3487,20 @@
             "default": "false",
             "description": "whether hosts are reserved(won't be allocated) after import",
             "name": "hostReserved",
+            "in": "formData"
+          },
+          {
+            "type": "string",
+            "default": "false",
+            "description": "whether to skip host init steps",
+            "name": "skipHostInit",
+            "in": "formData"
+          },
+          {
+            "type": "string",
+            "default": "false",
+            "description": "whether to ignore warings in init steps",
+            "name": "ignorewarns",
             "in": "formData"
           },
           {
@@ -3955,7 +3990,7 @@
                   "type": "object",
                   "properties": {
                     "data": {
-                      "$ref": "#/definitions/account.UserProfile"
+                      "$ref": "#/definitions/message.UserProfile"
                     }
                   }
                 }
@@ -4300,17 +4335,6 @@
     }
   },
   "definitions": {
-    "account.UserProfile": {
-      "type": "object",
-      "properties": {
-        "tenantId": {
-          "type": "string"
-        },
-        "userName": {
-          "type": "string"
-        }
-      }
-    },
     "cluster.BackupClusterDataReq": {
       "type": "object",
       "properties": {
@@ -4341,6 +4365,16 @@
     },
     "cluster.CloneClusterReq": {
       "type": "object",
+      "required": [
+        "cloneStrategy",
+        "clusterName",
+        "clusterType",
+        "clusterVersion",
+        "cpuArchitecture",
+        "dbPassword",
+        "region",
+        "sourceClusterId"
+      ],
       "properties": {
         "cloneStrategy": {
           "description": "specify clone strategy, include empty, snapshot and sync, default empty(option)",
@@ -4410,6 +4444,7 @@
     },
     "cluster.CreateChangeFeedTaskReq": {
       "type": "object",
+      "required": ["clusterId", "downstreamType", "name"],
       "properties": {
         "clusterId": {
           "type": "string",
@@ -4451,6 +4486,14 @@
     },
     "cluster.CreateClusterReq": {
       "type": "object",
+      "required": [
+        "clusterName",
+        "clusterType",
+        "clusterVersion",
+        "cpuArchitecture",
+        "dbPassword",
+        "region"
+      ],
       "properties": {
         "clusterName": {
           "type": "string"
@@ -5023,6 +5066,15 @@
     },
     "cluster.RestoreNewClusterReq": {
       "type": "object",
+      "required": [
+        "backupId",
+        "clusterName",
+        "clusterType",
+        "clusterVersion",
+        "cpuArchitecture",
+        "dbPassword",
+        "region"
+      ],
       "properties": {
         "backupId": {
           "type": "string"
@@ -5173,6 +5225,16 @@
     },
     "cluster.TakeoverClusterReq": {
       "type": "object",
+      "required": [
+        "TiUPIp",
+        "TiUPPath",
+        "TiUPPort",
+        "TiUPUserName",
+        "TiUPUserPassword",
+        "clusterName",
+        "dbPassword",
+        "dbUser"
+      ],
       "properties": {
         "TiUPIp": {
           "type": "string",
@@ -5263,6 +5325,7 @@
     },
     "cluster.UpdateChangeFeedTaskReq": {
       "type": "object",
+      "required": ["name"],
       "properties": {
         "downstream": {
           "type": "object"
@@ -5754,6 +5817,9 @@
     "message.DeleteHostsReq": {
       "type": "object",
       "properties": {
+        "force": {
+          "type": "boolean"
+        },
         "hostIds": {
           "type": "array",
           "items": {
@@ -5763,7 +5829,15 @@
       }
     },
     "message.DeleteHostsResp": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "flowInfo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/structs.AsyncTaskWorkFlowInfo"
+          }
+        }
+      }
     },
     "message.DeleteImportExportRecordReq": {
       "type": "object"
@@ -5890,7 +5964,11 @@
       "type": "object",
       "properties": {
         "stocks": {
-          "$ref": "#/definitions/structs.Stocks"
+          "description": "map[zone] -\u003e stocks",
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/structs.Stocks"
+          }
         }
       }
     },
@@ -5913,6 +5991,7 @@
     },
     "message.LoginReq": {
       "type": "object",
+      "required": ["userName", "userPassword"],
       "properties": {
         "userName": {
           "type": "string"
@@ -6162,6 +6241,17 @@
         "paramGroupId": {
           "type": "string",
           "example": "1"
+        }
+      }
+    },
+    "message.UserProfile": {
+      "type": "object",
+      "properties": {
+        "tenantId": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
         }
       }
     },
@@ -6541,43 +6631,12 @@
     "structs.ClusterParameterSampleInfo": {
       "type": "object",
       "properties": {
-        "category": {
-          "type": "string",
-          "example": "basic"
-        },
-        "hasApply": {
-          "type": "integer",
-          "enum": [0, 1],
-          "example": 1
-        },
-        "instanceType": {
-          "type": "string",
-          "example": "TiDB"
-        },
-        "name": {
-          "type": "string",
-          "example": "log_level"
-        },
         "paramId": {
           "type": "string",
           "example": "1"
         },
         "realValue": {
           "$ref": "#/definitions/structs.ParameterRealValue"
-        },
-        "systemVariable": {
-          "type": "string",
-          "example": "log.binlog_cache"
-        },
-        "type": {
-          "type": "integer",
-          "enum": [0, 1, 2, 3, 4],
-          "example": 0
-        },
-        "updateSource": {
-          "type": "integer",
-          "enum": [0, 1, 2, 3],
-          "example": 0
         }
       }
     },
@@ -7200,6 +7259,9 @@
         },
         "freeMemory": {
           "type": "integer"
+        },
+        "zone": {
+          "type": "string"
         }
       }
     },

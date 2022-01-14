@@ -34,6 +34,10 @@ export function useQueryHostsList(
     ],
     () =>
       APIS.Resources.resourcesHostsGet(
+        undefined,
+        undefined,
+        undefined,
+        undefined,
         arch,
         hostId,
         loadStat,

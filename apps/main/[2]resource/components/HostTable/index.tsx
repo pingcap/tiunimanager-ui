@@ -124,8 +124,8 @@ function getHostColumns(
 ): ProColumns<HostInfo>[] {
   return [
     {
-      title: `${t('model:host.property.hostName')} / ${t(
-        'model:host.property.id'
+      title: `${t('model:host.property.id')} / ${t(
+        'model:host.property.hostName'
       )}`,
       width: 200,
       key: 'id+name',
@@ -134,13 +134,6 @@ function getHostColumns(
       render: (_, record) => (
         <NameAndID name={record.hostName} id={record.hostId!} />
       ),
-    },
-    {
-      title: t('model:host.property.ip'),
-      width: 120,
-      dataIndex: 'ip',
-      key: 'ip',
-      hideInSearch: true,
     },
     {
       title: t('model:host.property.status'),
@@ -185,7 +178,7 @@ function getHostColumns(
       width: 250,
       key: 'location',
       tooltip: `${t('model:host.property.region')}, ${t(
-        'model:host.property.az'
+        'model:host.property.zone'
       )}, ${t('model:host.property.rack')}`,
       hideInSearch: true,
       render(_, record) {
@@ -223,6 +216,13 @@ function getHostColumns(
           ?.split(',')
           .map((p) => t(`model:host.purpose.${p.toLowerCase()}`))
           .join(' '),
+      hideInSearch: true,
+    },
+    {
+      title: t('model:host.property.ip'),
+      width: 120,
+      dataIndex: 'ip',
+      key: 'ip',
       hideInSearch: true,
     },
     {
