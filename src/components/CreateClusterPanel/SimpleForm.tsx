@@ -574,7 +574,7 @@ function Submitter({
         )
       }
     } catch (e) {
-      // TODO: show err message
+      // NO_OP
     }
   }
 

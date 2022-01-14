@@ -418,7 +418,6 @@ function getColumns(
 }
 
 const defaultColumnsSetting: Record<string, ColumnsState> = {
-  deleteTime: { show: false },
   dbPassword: { show: false },
   backup: { show: false },
   updateTime: { show: false },
