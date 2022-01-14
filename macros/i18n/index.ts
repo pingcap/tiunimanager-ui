@@ -264,7 +264,7 @@ export function provideI18n({
     })
 
   return defineMacroProvider({
-    id: 'mvp:i18n',
+    id: 'm:i18n',
     exports: {
       '@i18n-macro': {
         macros: [loadMacro, loadWithNSMacro, useMacro, getMacro, resolveMacro],
