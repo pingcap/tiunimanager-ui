@@ -501,7 +501,7 @@ const CACHE_CLUSTER_DATA_REPLICATION_DETAIL = 'cluster-data-replication-detail'
  */
 export function useQueryClusterDataReplicationList(
   query: {
-    clusterId?: string
+    clusterId: string
     page?: number
     pageSize?: number
   },
