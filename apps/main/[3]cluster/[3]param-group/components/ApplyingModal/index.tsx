@@ -157,12 +157,12 @@ function useFetchAvalibleClusterList({
     }
 
     return clusterList.filter((item) => {
-      const { clusterType, clusterVersion = '', status, maintainStatus } = item
+      const { clusterType, clusterVersion, status, maintainStatus } = item
 
       // only online clusters and offline clusters avaliable
       return (
         clusterType &&
-        dbVersion?.includes(clusterVersion) &&
+        clusterVersion?.includes(dbVersion!) &&
         status === ClusterStatus.running &&
         !maintainStatus
       )
