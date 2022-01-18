@@ -4,7 +4,7 @@ import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import { ClusterInfo, ClusterLogItem, PagedResult } from '@/api/model'
 import {
   useQueryClusterLogs,
-  UseQueryClusterLogsParams,
+  QueryClusterLogsParams,
 } from '@/api/hooks/cluster'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction } from 'react-i18next'
@@ -148,7 +148,7 @@ function getColumns(t: TFunction<''>) {
 function useFetchLogsData(clusterId: string) {
   const [pagination, setPagination] = usePagination(20)
   const [filters, setFilter] = useState<
-    Omit<UseQueryClusterLogsParams, 'clusterId' | 'from' | 'size'>
+    Omit<QueryClusterLogsParams, 'clusterId' | 'from' | 'size'>
   >({})
   const { data, isLoading, refetch } = useQueryClusterLogs(
     {

@@ -108,8 +108,10 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
     const applyScaleOut = () => {
       scaleOutCluster.mutateAsync(
         {
-          clusterId: cluster.clusterId!,
-          instanceResource: diff,
+          payload: {
+            clusterId: cluster.clusterId!,
+            instanceResource: diff,
+          },
           options: {
             actionName: t('name.scaleOut'),
           },
@@ -125,8 +127,10 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
 
     await previewScaleOutCluster.mutateAsync(
       {
-        id: cluster.clusterId!,
-        instanceResource: diff,
+        payload: {
+          id: cluster.clusterId!,
+          instanceResource: diff,
+        },
         options: {
           actionName: t('name.preview'),
         },

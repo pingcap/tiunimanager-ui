@@ -1,52 +1,65 @@
-import { APIS, apiBasePath } from '@/api/client'
+import { apiBasePath, APIS } from '@/api/client'
 import { QueryClient, useMutation, useQuery } from 'react-query'
 import { HardwareArch, ResourceUnitType } from '@/api/model'
-import { AxiosRequestConfig } from 'axios'
-import { PartialUseQueryOptions, withRequestOptions } from './utils'
+import {
+  Paged,
+  PartialUseQueryOptions,
+  PayloadWithOptions,
+  withRequestId,
+} from './utils'
 
 export const CACHE_HOSTS_LIST_KEY = 'resources-hosts-list'
 export const CACHE_HOST_DETAIL_KEY = 'resources-host-detail'
 export const CACHE_HIERARCHY_KEY = 'resources-hierarchy'
 
+export type QueryHostsListParams = Paged<{
+  arch?: string
+  hostId?: string
+  purpose?: string
+  status?: string
+  loadStat?: string
+
+  // invisible to user
+  // hostIp?: string
+  // rack?: string
+  // zone?: string
+  // region?: string
+}>
+
 export function useQueryHostsList(
-  query: {
-    arch?: string
-    hostId?: string
-    page?: number
-    pageSize?: number
-    purpose?: string
-    status?: string
-    loadStat?: string
-  },
+  params: QueryHostsListParams,
   options?: PartialUseQueryOptions
 ) {
-  const { arch, hostId, page, pageSize, purpose, status, loadStat } = query
-  return useQuery(
-    [
-      CACHE_HOSTS_LIST_KEY,
-      arch,
-      hostId,
-      status,
-      loadStat,
-      purpose,
-      page,
-      pageSize,
-    ],
-    () =>
-      APIS.Resources.resourcesHostsGet(
+  const { arch, hostId, page, pageSize, purpose, status, loadStat } = params
+  return withRequestId((requestId) =>
+    useQuery(
+      [
+        CACHE_HOSTS_LIST_KEY,
         arch,
         hostId,
-        undefined,
+        status,
         loadStat,
+        purpose,
         page,
         pageSize,
-        purpose,
-        undefined,
-        undefined,
-        status,
-        undefined
-      ),
-    options
+      ],
+      () =>
+        APIS.Resources.resourcesHostsGet(
+          arch,
+          hostId,
+          undefined,
+          loadStat,
+          page,
+          pageSize,
+          purpose,
+          undefined,
+          undefined,
+          status,
+          undefined,
+          { requestId }
+        ),
+      options
+    )
   )
 }
 
@@ -61,18 +74,19 @@ export async function invalidateHostDetail(
   await client.invalidateQueries([CACHE_HOST_DETAIL_KEY, hostId])
 }
 
-const deleteHosts = withRequestOptions(
-  (payload: { hostsId: string | string[] }, options?: AxiosRequestConfig) => {
-    return APIS.Resources.resourcesHostsDelete(
-      {
-        hostIds: Array.isArray(payload.hostsId)
-          ? payload.hostsId
-          : [payload.hostsId],
-      },
-      options
-    )
-  }
-)
+const deleteHosts = ({
+  payload,
+  options,
+}: PayloadWithOptions<{ hostsId: string | string[] }>) => {
+  return APIS.Resources.resourcesHostsDelete(
+    {
+      hostIds: Array.isArray(payload.hostsId)
+        ? payload.hostsId
+        : [payload.hostsId],
+    },
+    options
+  )
+}
 
 export function useDeleteHosts() {
   return useMutation(deleteHosts)
@@ -86,18 +100,36 @@ export function getHostsUploadURL() {
   return apiBasePath + '/resources/hosts'
 }
 
+export type QueryResourceHierarchyParams = {
+  type: ResourceUnitType
+  depth: number
+  arch?: HardwareArch
+  hostId?: string
+  loadStat?: string
+  purpose?: string
+  status?: string
+}
+
 export function useQueryResourceHierarchy(
-  query: {
-    type: ResourceUnitType
-    depth: number
-    arch?: HardwareArch
-  },
+  query: QueryResourceHierarchyParams,
   options?: PartialUseQueryOptions
 ) {
-  const { type, depth, arch } = query
-  return useQuery(
-    [CACHE_HIERARCHY_KEY, type, depth, arch],
-    () => APIS.Resources.resourcesHierarchyGet(type, depth, arch),
-    options
+  const { type, depth, arch, hostId, status, loadStat, purpose } = query
+  return withRequestId((requestId) =>
+    useQuery(
+      [CACHE_HIERARCHY_KEY, type, depth, arch],
+      () =>
+        APIS.Resources.resourcesHierarchyGet(
+          type,
+          depth,
+          arch,
+          hostId,
+          loadStat,
+          purpose,
+          status,
+          { requestId }
+        ),
+      options
+    )
   )
 }

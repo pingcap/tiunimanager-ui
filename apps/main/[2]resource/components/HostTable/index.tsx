@@ -95,7 +95,7 @@ function useTableColumn() {
     (hostId) =>
       deleteHosts.mutateAsync(
         {
-          hostsId: hostId,
+          payload: { hostsId: hostId },
           options: {
             actionName: t('delete.name'),
           },

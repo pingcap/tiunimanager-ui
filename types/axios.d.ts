@@ -11,5 +11,8 @@ declare module 'axios' {
     skipSuccessNotification?: boolean
     // the action name displayed in notification
     actionName?: string
+
+    // Request ID
+    requestId?: number
   }
 }

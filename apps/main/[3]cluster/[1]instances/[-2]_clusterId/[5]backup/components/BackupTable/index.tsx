@@ -132,8 +132,10 @@ function useTableColumn({ cluster }: { cluster: ClusterInfo }) {
     (backupId) =>
       deleteBackup.mutateAsync(
         {
-          backupId,
-          clusterId,
+          payload: {
+            backupId,
+            clusterId,
+          },
           options: {
             actionName: t('delete.name'),
           },
