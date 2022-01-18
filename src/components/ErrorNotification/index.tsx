@@ -8,7 +8,11 @@ loadI18n()
 export function useErrorNotification(error: AxiosError) {
   // Note: Notifications do not require response language switching, so use getI18n instead of useI18n
   const t = getI18n()
+  const key = error.config.requestId
+    ? `request-id-${error.config.requestId}`
+    : `${Date.now()}`
   notification.open({
+    key,
     message: error.config.actionName
       ? t('error.title', { name: error.config.actionName })
       : t('error.defaultTitle'),
@@ -21,6 +25,7 @@ export function useErrorNotification(error: AxiosError) {
 
 export function ErrorNotification({ error }: { error: AxiosError }) {
   const code: number = error.response?.data.code || -1
+  const traceId: string | undefined = error.response?.headers['em-x-trace-id']
   const { method, url } = error.config
   const t = getI18n()
   return (
@@ -47,6 +52,12 @@ export function ErrorNotification({ error }: { error: AxiosError }) {
             <div>{t('error.code')}</div>
             <div>{code}</div>
           </div>
+          {traceId && (
+            <div className={styles.item}>
+              <div>{t('error.traceId')}</div>
+              <div>{traceId}</div>
+            </div>
+          )}
           {error.config.method !== 'get' && (
             <div className={styles.item}>
               <div>{t('error.request')}</div>
@@ -59,7 +70,7 @@ export function ErrorNotification({ error }: { error: AxiosError }) {
           )}
           {error.response?.data.message && (
             <div className={styles.item}>
-              <div>{t('error.response')}</div>
+              <div>{t('error.message')}</div>
               <Typography.Paragraph
                 ellipsis={{ rows: 2, expandable: true, symbol: 'more' }}
               >

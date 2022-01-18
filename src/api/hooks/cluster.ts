@@ -150,20 +150,27 @@ export const CACHE_CLUSTER_PARAMS = 'cluster-params'
 
 export type QueryClusterParamsParams = Paged<{
   id: string
+  paramName?: string
 }>
 
 export function useQueryClusterParams(
   params: QueryClusterParamsParams,
   options?: PartialUseQueryOptions
 ) {
-  const { id, page, pageSize } = params
+  const { id, page, pageSize, paramName } = params
   return withRequestId((requestId) =>
     useQuery(
       [CACHE_CLUSTER_PARAMS, id, page, pageSize],
       () =>
-        APIS.ClusterParams.clustersClusterIdParamsGet(id, page, pageSize, {
-          requestId,
-        }),
+        APIS.ClusterParams.clustersClusterIdParamsGet(
+          id,
+          page,
+          pageSize,
+          paramName,
+          {
+            requestId,
+          }
+        ),
       options
     )
   )

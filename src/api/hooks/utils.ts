@@ -4,6 +4,7 @@ import { UseQueryOptions } from 'react-query'
 let nextId = 0
 
 export function withRequestId<R>(fn: (requestId: number) => R): R {
+  if (nextId === Number.MAX_SAFE_INTEGER) nextId = 0
   const requestId = nextId++
   return fn(requestId)
 }
