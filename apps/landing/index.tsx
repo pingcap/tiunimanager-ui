@@ -27,7 +27,7 @@ export default function Login() {
 
   const { handleSubmit, errorMsg, clearErrorMsg, loading } = useLogin(
     (data) => {
-      dispatchLogin(data.token!, data.userName!)
+      dispatchLogin(data.token!, data.userId!)
       push(from)
     },
     () => {

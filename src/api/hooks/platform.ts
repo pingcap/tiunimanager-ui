@@ -1,14 +1,14 @@
 import { APIS } from '@/api/client'
 import { UserLoginRequest } from '@/api/model'
 
-export async function doUserLogin(payload: UserLoginRequest) {
-  return await APIS.Platform.userLoginPost(payload, {
+export function doUserLogin(payload: UserLoginRequest) {
+  return APIS.Platform.userLoginPost(payload, {
     skipNotifications: true,
   })
 }
 
-export async function doUserLogout() {
-  return await APIS.Platform.userLogoutPost({
+export function doUserLogout() {
+  return APIS.Platform.userLogoutPost({
     skipNotifications: true,
   })
 }
