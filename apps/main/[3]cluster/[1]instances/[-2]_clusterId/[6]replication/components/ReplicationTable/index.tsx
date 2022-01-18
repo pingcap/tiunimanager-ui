@@ -177,27 +177,21 @@ function getColumns({
       width: 180,
       key: 'time',
       renderText(text, record) {
-        if (!record.upstreamUpdateTs || !record.downstreamSyncTs) {
+        const { upstreamUpdateUnix, downstreamSyncUnix } = record
+
+        if (!upstreamUpdateUnix || !downstreamSyncUnix) {
           return
         }
 
-        const upstreamTimestamp = Number(
-          (BigInt(record.upstreamUpdateTs) >> 18n).toString()
-        )
-
-        const downstreamTimestamp = Number(
-          (BigInt(record.downstreamSyncTs) >> 18n).toString()
-        )
-
-        return upstreamTimestamp >= downstreamTimestamp
-          ? upstreamTimestamp - downstreamTimestamp
+        return upstreamUpdateUnix >= downstreamSyncUnix
+          ? upstreamUpdateUnix - downstreamSyncUnix
           : undefined
       },
     },
     {
       title: t('columns.actions'),
       valueType: 'option',
-      width: 180,
+      width: 240,
       key: 'action',
       render: (_, record) => {
         const editDisabled =
