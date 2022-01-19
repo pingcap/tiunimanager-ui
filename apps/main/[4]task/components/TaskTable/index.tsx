@@ -71,12 +71,12 @@ export default function TaskTable() {
 function useFetchTaskData() {
   const [pagination, setPagination] = usePagination()
   const [filters, setFilter] = useState<{
-    keyword?: string
     bizId?: string
+    bizType?: string
     status?: TaskWorkflowStatus
   }>({
-    keyword: undefined,
     bizId: undefined,
+    bizType: undefined,
     status: undefined,
   })
   const { data, isLoading, isPreviousData, refetch } = useQueryTasks(
@@ -124,6 +124,7 @@ function getColumns(
       dataIndex: 'name',
       key: 'keyword',
       renderText: (text) => t(`task:name.${text}`, text),
+      hideInSearch: true,
     },
     {
       title: t('model:task.property.status'),
@@ -152,6 +153,17 @@ function getColumns(
           text: t('model:task.status.cancelled'),
           status: 'Default',
         },
+      },
+    },
+    {
+      title: t('model:task.property.bizType'),
+      width: 140,
+      dataIndex: 'bizType',
+      key: 'bizType',
+      valueType: 'select',
+      valueEnum: {
+        cluster: { text: t('model:task.bizType.cluster') },
+        host: { text: t('model:task.bizType.host') },
       },
     },
     {

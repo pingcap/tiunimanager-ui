@@ -54,7 +54,12 @@ export function HostsUploader({
           Authorization: `Bearer ${token}`,
         }}
         beforeUpload={checkFileFormat}
-        data={{ hostReserved: reserved }}
+        data={{
+          hostReserved: reserved,
+          // TODO: remove hard-coded skipHostInit and ignorewarns
+          skipHostInit: false,
+          ignorewarns: false,
+        }}
         maxCount={1}
         accept={
           'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'

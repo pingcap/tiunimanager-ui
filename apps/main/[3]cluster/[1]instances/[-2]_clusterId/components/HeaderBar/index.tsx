@@ -41,8 +41,10 @@ export default function HeaderBar() {
     const handleBackup = () => {
       createBackup.mutateAsync(
         {
-          clusterId,
-          backupMode: ClusterBackupMethod.manual,
+          payload: {
+            clusterId,
+            backupMode: ClusterBackupMethod.manual,
+          },
           options: {
             actionName: t('backup.name'),
           },

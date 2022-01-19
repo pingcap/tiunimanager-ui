@@ -41,7 +41,7 @@ import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import {
   invalidateClusterDetail,
   useClusterScaleOut,
-  usePreviewCreateCluster,
+  usePreviewScaleOutCluster,
 } from '@/api/hooks/cluster'
 import { ColumnsType } from 'antd/lib/table/interface'
 
@@ -61,7 +61,7 @@ export interface ScaleOutPanelProps {
 export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
   const [form] = Form.useForm()
   const queryClient = useQueryClient()
-  const previewScaleOutCluster = usePreviewCreateCluster()
+  const previewScaleOutCluster = usePreviewScaleOutCluster()
   const scaleOutCluster = useClusterScaleOut()
   const knowledgeMap = useKnowledgeMap()
   const { cpuArchitecture: arch, clusterType, clusterVersion, region } = cluster
@@ -108,8 +108,10 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
     const applyScaleOut = () => {
       scaleOutCluster.mutateAsync(
         {
-          clusterId: cluster.clusterId!,
-          instanceResource: diff,
+          payload: {
+            clusterId: cluster.clusterId!,
+            instanceResource: diff,
+          },
           options: {
             actionName: t('name.scaleOut'),
           },
@@ -125,14 +127,13 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
 
     await previewScaleOutCluster.mutateAsync(
       {
-        exclusive: cluster.exclusive,
-        clusterType: cluster.clusterType,
-        clusterVersion: cluster.clusterVersion,
-        resourceParameters: {
+        payload: {
+          id: cluster.clusterId!,
           instanceResource: diff,
         },
         options: {
           actionName: t('name.preview'),
+          skipSuccessNotification: true,
         },
       },
       {

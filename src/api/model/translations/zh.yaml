@@ -164,7 +164,7 @@ host:
     reserved: 保留
 
     ip: IP
-    az: Zone
+    zone: Zone
     region: Region
     rack: 机架
 
@@ -229,21 +229,25 @@ domain:
     zone: Zone
 task:
   property:
-    id: ID
+    id: 任务 ID
     name: 名称
-    bizId: 集群ID
+    bizId: 关联资源 ID
+    bizType: 关联资源类型
     creationTime: 创建时间
     updateTime: 更新时间
     operator: 发起者
     manual: 触发模式
     status: 状态
-    tenantId: 租户ID
+    tenantId: 租户 ID
   status:
     init: 初始化
     processing: 进行中
     finished: 完成
     error: 失败
     cancelled: 已取消
+  bizType:
+    cluster: 集群
+    host: 主机
   operator:
     system: 系统自动
 knowledge:

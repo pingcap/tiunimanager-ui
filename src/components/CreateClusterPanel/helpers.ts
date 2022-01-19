@@ -89,24 +89,24 @@ export function transformAvailableStocksMap(
   const result: AvailableStocksMap = Object.create(null)
   result.regions = []
   result.map = Object.create(null)
-  tree.SubNodes?.forEach((rs) => {
+  tree.subNodes?.forEach((rs) => {
     // region layer
-    result.regions.push(rs.Code!)
+    result.regions.push(rs.code!)
     const regionItem = Object.create(null)
-    regionItem.name = rs.Name!
+    regionItem.name = rs.name!
     regionItem.zones = []
     regionItem.map = Object.create(null)
-    if (rs.SubNodes) {
-      rs.SubNodes.forEach((zs) => {
+    if (rs.subNodes) {
+      rs.subNodes.forEach((zs) => {
         // zone layer
-        regionItem.zones.push(zs.Code)
-        regionItem.map[zs.Code!] = {
-          name: zs.Name!,
-          racks: zs.SubNodes?.map((ks) => ks.Code!) || [],
+        regionItem.zones.push(zs.code)
+        regionItem.map[zs.code!] = {
+          name: zs.name!,
+          racks: zs.subNodes?.map((ks) => ks.code!) || [],
         }
       })
     }
-    result.map[rs.Code!] = regionItem
+    result.map[rs.code!] = regionItem
   })
   return result
 }

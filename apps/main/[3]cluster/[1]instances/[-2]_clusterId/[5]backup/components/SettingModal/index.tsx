@@ -90,10 +90,12 @@ export default function SettingModal({
     const value = await form.validateFields()
     await updateBackupStrategy.mutateAsync(
       {
-        clusterId: clusterId,
-        strategy: {
-          backupDate: value?.backupDate?.join(','),
-          period: value?.period,
+        payload: {
+          clusterId: clusterId,
+          strategy: {
+            backupDate: value?.backupDate?.join(','),
+            period: value?.period,
+          },
         },
         options: {
           actionName: t('update.name'),

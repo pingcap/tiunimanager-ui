@@ -21,7 +21,7 @@ export function TakeoverPanel({ back }: TakeoverPanelProps) {
       const values = await form.validateFields()
       await takeoverCluster.mutateAsync(
         {
-          ...values,
+          payload: values,
           options: {
             actionName: t('actionName'),
           },

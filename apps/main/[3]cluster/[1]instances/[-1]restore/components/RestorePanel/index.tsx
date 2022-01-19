@@ -38,10 +38,13 @@ export function RestorePanel({ back, cluster, backup }: RestorePanelProps) {
   )
 
   const handleSubmit = useCallback(
-    (value: RequestClusterCreate) => {
+    (value: RequestClusterCreate /*& { backupId: string }*/) => {
       restoreCluster.mutateAsync(
         {
-          ...value,
+          payload: {
+            backupId: '', // FIXME: make type happy
+            ...value,
+          },
           options: {
             actionName: t('name'),
           },

@@ -26,8 +26,10 @@ export function ComponentList({ nodes, clusterId }: ComponentListProps) {
     (instanceId: string) => {
       scaleIn.mutateAsync(
         {
-          clusterId,
-          instanceId,
+          payload: {
+            clusterId,
+            instanceId,
+          },
           options: {
             actionName: t('scaleIn.name'),
           },

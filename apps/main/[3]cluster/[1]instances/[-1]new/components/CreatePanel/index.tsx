@@ -30,7 +30,7 @@ export function CreatePanel({ back }: CreatePanelProps) {
     (value: RequestClusterCreate) => {
       createCluster.mutateAsync(
         {
-          ...value,
+          payload: value,
           options: {
             actionName: t('name'),
           },

@@ -1,11 +1,13 @@
 import { useQuery } from 'react-query'
 import { APIS } from '@/api/client'
-import { PartialUseQueryOptions } from '@/api/hooks/utils'
+import { PartialUseQueryOptions, withRequestId } from '@/api/hooks/utils'
 
 export function useQueryKnowledge(options?: PartialUseQueryOptions) {
-  return useQuery(['knowledge'], () => APIS.Knowledge.knowledgesGet(), {
-    cacheTime: Infinity,
-    staleTime: Infinity,
-    ...options,
-  })
+  return withRequestId((requestId) =>
+    useQuery(['knowledge'], () => APIS.Knowledge.knowledgesGet({ requestId }), {
+      cacheTime: Infinity,
+      staleTime: Infinity,
+      ...options,
+    })
+  )
 }

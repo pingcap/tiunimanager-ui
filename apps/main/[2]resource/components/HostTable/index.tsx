@@ -95,7 +95,7 @@ function useTableColumn() {
     (hostId) =>
       deleteHosts.mutateAsync(
         {
-          hostsId: hostId,
+          payload: { hostsId: hostId },
           options: {
             actionName: t('delete.name'),
           },
@@ -124,8 +124,8 @@ function getHostColumns(
 ): ProColumns<HostInfo>[] {
   return [
     {
-      title: `${t('model:host.property.hostName')} / ${t(
-        'model:host.property.id'
+      title: `${t('model:host.property.id')} / ${t(
+        'model:host.property.hostName'
       )}`,
       width: 200,
       key: 'id+name',
@@ -185,7 +185,7 @@ function getHostColumns(
       width: 250,
       key: 'location',
       tooltip: `${t('model:host.property.region')}, ${t(
-        'model:host.property.az'
+        'model:host.property.zone'
       )}, ${t('model:host.property.rack')}`,
       hideInSearch: true,
       render(_, record) {
