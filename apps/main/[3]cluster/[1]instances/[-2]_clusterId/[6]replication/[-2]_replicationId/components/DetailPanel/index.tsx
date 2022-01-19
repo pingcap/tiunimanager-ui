@@ -9,6 +9,7 @@ import {
   ClusterDownstreamMySQL,
   ClusterDownstreamTiDB,
 } from '@/api/model'
+import { formatTimeString } from '@/utils/time'
 
 import styles from './index.module.less'
 
@@ -50,12 +51,10 @@ const getTaskStatus = (taskStatus: ClusterDataReplicationStatus) => {
   }
 }
 
-const getTSODisplay = (tso: number | string) => {
-  const physicalTimestamp = Number((BigInt(tso) >> 18n).toString())
+const getTSODisplay = (tso: string, tsoTimestamp?: number) => {
+  const timeStr = tsoTimestamp ? formatTimeString(tsoTimestamp) : undefined
 
-  return physicalTimestamp
-    ? `${tso}, ${new Date(physicalTimestamp).toLocaleString()}`
-    : '-'
+  return [tso, timeStr].filter((el) => el).join(', ')
 }
 
 const DescItem: FC<{ label: string }> = (props) => (
@@ -97,13 +96,19 @@ const BasicDesc: FC<{ data: ClusterDataReplicationDetail }> = ({ data }) => {
           : '-'}
       </DescItem>
       <DescItem label={t('basic.fields.latestUpstreamTSO')}>
-        {data.upstreamUpdateTs ? getTSODisplay(data.upstreamUpdateTs) : '-'}
+        {data.upstreamUpdateTs
+          ? getTSODisplay(data.upstreamUpdateTs, data.upstreamUpdateUnix)
+          : '-'}
       </DescItem>
       <DescItem label={t('basic.fields.latestFetchTSO')}>
-        {data.downstreamFetchTs ? getTSODisplay(data.downstreamFetchTs) : '-'}
+        {data.downstreamFetchTs
+          ? getTSODisplay(data.downstreamFetchTs, data.downstreamFetchUnix)
+          : '-'}
       </DescItem>
       <DescItem label={t('basic.fields.latestSyncTSO')}>
-        {data.downstreamSyncTs ? getTSODisplay(data.downstreamSyncTs) : '-'}
+        {data.downstreamSyncTs
+          ? getTSODisplay(data.downstreamSyncTs, data.downstreamSyncUnix)
+          : '-'}
       </DescItem>
     </Card>
   )
