@@ -500,18 +500,22 @@ const CACHE_CLUSTER_DATA_REPLICATION_DETAIL = 'cluster-data-replication-detail'
  * @param options react-query useQuery options
  */
 export function useQueryClusterDataReplicationList(
-  query: {
+  query: Paged<{
     clusterId: string
-    page?: number
-    pageSize?: number
-  },
+  }>,
   options?: PartialUseQueryOptions
 ) {
   const { clusterId, page, pageSize } = query
-  return useQuery(
-    [CACHE_CLUSTER_DATA_REPLICATION_LIST, page, pageSize, clusterId],
-    () => APIS.ClusterDataReplication.changefeedsGet(clusterId, page, pageSize),
-    options
+
+  return withRequestId((requestId) =>
+    useQuery(
+      [CACHE_CLUSTER_DATA_REPLICATION_LIST, page, pageSize, clusterId],
+      () =>
+        APIS.ClusterDataReplication.changefeedsGet(clusterId, page, pageSize, {
+          requestId,
+        }),
+      options
+    )
   )
 }
 
@@ -535,10 +539,16 @@ export function useQueryClusterDataReplicationDetail(
   options?: PartialUseQueryOptions
 ) {
   const { id } = query
-  return useQuery(
-    [CACHE_CLUSTER_DATA_REPLICATION_DETAIL, id],
-    () => APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdGet(id),
-    options
+
+  return withRequestId((requestId) =>
+    useQuery(
+      [CACHE_CLUSTER_DATA_REPLICATION_DETAIL, id],
+      () =>
+        APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdGet(id, {
+          requestId,
+        }),
+      options
+    )
   )
 }
 
@@ -549,15 +559,14 @@ export function useQueryClusterDataReplicationDetail(
 const createClusterDataReplication = ({
   payload,
   options,
-}: {
-  payload: {
+}: PayloadWithOptions<
+  {
     downstream:
       | ClusterDownstreamMySQL
       | ClusterDownstreamTiDB
       | ClusterDownstreamKafka
   } & Omit<RequestClusterDataReplicationCreate, 'downstream'>
-  options?: AxiosRequestConfig
-}) => {
+>) => {
   return APIS.ClusterDataReplication.changefeedsPost(payload, options)
 }
 
@@ -575,16 +584,15 @@ export function useCreateClusterDataReplication() {
 const updateClusterDataReplication = ({
   payload,
   options,
-}: {
-  payload: {
+}: PayloadWithOptions<
+  {
     id: string
     downstream:
       | ClusterDownstreamMySQL
       | ClusterDownstreamTiDB
       | ClusterDownstreamKafka
   } & Omit<RequestClusterDataReplicationUpdate, 'downstream'>
-  options?: AxiosRequestConfig
-}) => {
+>) => {
   const { id, ...leftPayload } = payload
 
   return APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdUpdatePost(
@@ -608,10 +616,8 @@ export function useUpdateClusterDataReplication() {
 const deleteClusterDataReplication = ({
   payload: { id },
   options,
-}: {
-  payload: { id: string }
-  options?: AxiosRequestConfig
-}) => APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdDelete(id, options)
+}: PayloadWithOptions<{ id: string }>) =>
+  APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdDelete(id, options)
 
 /**
  * Hook for deleting a cluster data replication task
@@ -627,10 +633,7 @@ export function useDeleteClusterDataReplication() {
 const suspendClusterDataReplication = ({
   payload: { id },
   options,
-}: {
-  payload: { id: string }
-  options?: AxiosRequestConfig
-}) =>
+}: PayloadWithOptions<{ id: string }>) =>
   APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdPausePost(id, options)
 
 /**
@@ -647,10 +650,7 @@ export function useSuspendClusterDataReplication() {
 const resumeClusterDataReplication = ({
   payload: { id },
   options,
-}: {
-  payload: { id: string }
-  options?: AxiosRequestConfig
-}) =>
+}: PayloadWithOptions<{ id: string }>) =>
   APIS.ClusterDataReplication.changefeedsChangeFeedTaskIdResumePost(id, options)
 
 /**
