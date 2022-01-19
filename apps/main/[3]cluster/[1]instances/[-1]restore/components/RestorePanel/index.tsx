@@ -41,8 +41,10 @@ export function RestorePanel({ back, cluster, backup }: RestorePanelProps) {
     (value: RequestClusterCreate /*& { backupId: string }*/) => {
       restoreCluster.mutateAsync(
         {
-          backupId: '', // FIXME: make type happy
-          ...value,
+          payload: {
+            backupId: '', // FIXME: make type happy
+            ...value,
+          },
           options: {
             actionName: t('name'),
           },

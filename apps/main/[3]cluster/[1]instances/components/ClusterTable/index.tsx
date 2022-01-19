@@ -129,7 +129,9 @@ function useTableColumn() {
     (bootType: BootType, clusterId: string) =>
       rebootCluster.mutateAsync(
         {
-          id: clusterId,
+          payload: {
+            id: clusterId,
+          },
           options: {
             actionName: t(`${bootType}.name`),
           },
@@ -150,7 +152,9 @@ function useTableColumn() {
     (clusterId: string) =>
       stopCluster.mutateAsync(
         {
-          id: clusterId,
+          payload: {
+            id: clusterId,
+          },
           options: {
             actionName: t('stop.name'),
           },

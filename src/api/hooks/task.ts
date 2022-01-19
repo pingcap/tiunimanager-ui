@@ -1,10 +1,17 @@
 import { APIS } from '@/api/client'
 import { QueryClient, useQuery } from 'react-query'
 import { TaskWorkflowStatus } from '../model'
-import { PartialUseQueryOptions } from './utils'
+import { Paged, PartialUseQueryOptions, withRequestId } from './utils'
 
 export const CACHE_TASK = 'tasks'
 export const CACHE_TASK_DETAIL = 'task-detail'
+
+export type QueryTasksParams = Paged<{
+  keyword?: string
+  status?: TaskWorkflowStatus
+  bizId?: string
+  bizType?: string
+}>
 
 /**
  * Hook for querying task list
@@ -12,24 +19,25 @@ export const CACHE_TASK_DETAIL = 'task-detail'
  * @param options useQuery options
  */
 export function useQueryTasks(
-  query: {
-    page?: number
-    pageSize?: number
-    keyword?: string
-    status?: TaskWorkflowStatus
-    bizId?: string
-    bizType?: string
-  },
+  query: QueryTasksParams,
   options?: PartialUseQueryOptions
 ) {
   const { page, pageSize, keyword, status, bizId, bizType } = query
 
-  return useQuery(
-    [CACHE_TASK, page, pageSize, keyword, status, bizId, bizType],
-    () =>
-      APIS.Task.workflowGet(bizId, bizType, keyword, page, pageSize, status),
-    options
+  return withRequestId((requestId) =>
+    useQuery(
+      [CACHE_TASK, page, pageSize, keyword, status, bizId, bizType],
+      () =>
+        APIS.Task.workflowGet(bizId, bizType, keyword, page, pageSize, status, {
+          requestId,
+        }),
+      options
+    )
   )
+}
+
+export type QueryTaskDetailParams = {
+  id: string
 }
 
 /**
@@ -38,16 +46,16 @@ export function useQueryTasks(
  * @param options useQuery options
  */
 export function useQueryTaskDetail(
-  query: {
-    id: string
-  },
+  query: QueryTaskDetailParams,
   options?: PartialUseQueryOptions
 ) {
   const { id } = query
-  return useQuery(
-    [CACHE_TASK_DETAIL, id],
-    () => APIS.Task.workflowWorkFlowIdGet(id),
-    options
+  return withRequestId((requestId) =>
+    useQuery(
+      [CACHE_TASK_DETAIL, id],
+      () => APIS.Task.workflowWorkFlowIdGet(id, { requestId }),
+      options
+    )
   )
 }
 

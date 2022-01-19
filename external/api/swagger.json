@@ -1939,7 +1939,7 @@
       }
     },
     "/clusters/{clusterId}/preview-scale-out": {
-      "get": {
+      "post": {
         "security": [
           {
             "ApiKeyAuth": []
@@ -5503,6 +5503,10 @@
           "type": "string",
           "example": "415241823337054209"
         },
+        "startUnix": {
+          "type": "integer",
+          "example": 1642402879000
+        },
         "status": {
           "type": "string",
           "enum": [
@@ -5802,6 +5806,10 @@
         "startTS": {
           "type": "string",
           "example": "415241823337054209"
+        },
+        "startUnix": {
+          "type": "integer",
+          "example": 1642402879000
         },
         "status": {
           "type": "string",
@@ -6560,6 +6568,7 @@
     },
     "message.CreateTenantReq": {
       "type": "object",
+      "required": ["id"],
       "properties": {
         "id": {
           "type": "string"
@@ -6592,6 +6601,7 @@
     },
     "message.CreateUserReq": {
       "type": "object",
+      "required": ["email", "name", "password"],
       "properties": {
         "email": {
           "type": "string"
@@ -6964,6 +6974,9 @@
     "message.LoginResp": {
       "type": "object",
       "properties": {
+        "tenantId": {
+          "type": "string"
+        },
         "token": {
           "type": "string"
         },
@@ -7302,6 +7315,7 @@
     },
     "message.UpdateUserPasswordReq": {
       "type": "object",
+      "required": ["password"],
       "properties": {
         "id": {
           "type": "string"
@@ -7676,6 +7690,11 @@
             "type": "string"
           },
           "example": ["1", " 1000"]
+        },
+        "readOnly": {
+          "type": "integer",
+          "enum": [0, 1],
+          "example": 0
         },
         "realValue": {
           "$ref": "#/definitions/structs.ParameterRealValue"
@@ -8071,6 +8090,11 @@
           },
           "example": ["1", " 1000"]
         },
+        "readOnly": {
+          "type": "integer",
+          "enum": [0, 1],
+          "example": 0
+        },
         "systemVariable": {
           "type": "string",
           "example": "log.log_level"
@@ -8420,13 +8444,16 @@
         "creator": {
           "type": "string"
         },
+        "defaultTenantId": {
+          "type": "string"
+        },
         "email": {
           "type": "string"
         },
         "id": {
           "type": "string"
         },
-        "name": {
+        "names": {
           "type": "array",
           "items": {
             "type": "string"

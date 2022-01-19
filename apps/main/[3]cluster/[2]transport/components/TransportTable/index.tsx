@@ -112,8 +112,10 @@ function useTableColumn() {
     (recordId, clusterId) =>
       deleteTransportRecord.mutateAsync(
         {
-          recordId,
-          clusterId,
+          payload: {
+            recordId,
+            clusterId,
+          },
           options: {
             actionName: t('delete.name'),
           },

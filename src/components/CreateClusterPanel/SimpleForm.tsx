@@ -500,9 +500,10 @@ function Submitter({
       ) {
         await previewCreateCluster.mutateAsync(
           {
-            ...fields,
+            payload: fields,
             options: {
               actionName: t('create.name'),
+              skipSuccessNotification: true,
             },
           },
           {

@@ -7,4 +7,5 @@ error:
   url: URL
   code: Error Code
   request: Request
-  response: Response
+  message: Message
+  traceId: Trace ID

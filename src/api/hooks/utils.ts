@@ -1,10 +1,12 @@
 import { AxiosRequestConfig } from 'axios'
 import { UseQueryOptions } from 'react-query'
 
-export function withRequestOptions<P, R>(
-  fn: (payload: P, options?: AxiosRequestConfig) => R
-): (payload: P & { options?: AxiosRequestConfig }) => R {
-  return ({ options, ...payload }) => fn(payload as any, options)
+let nextId = 0
+
+export function withRequestId<R>(fn: (requestId: number) => R): R {
+  if (nextId === Number.MAX_SAFE_INTEGER) nextId = 0
+  const requestId = nextId++
+  return fn(requestId)
 }
 
 export type PartialUseQueryOptions = Pick<
@@ -21,3 +23,13 @@ export type PartialUseQueryOptions = Pick<
   | 'refetchOnMount'
   | 'retryOnMount'
 >
+
+export type PayloadWithOptions<P> = {
+  payload: P
+  options?: AxiosRequestConfig
+}
+
+export type Paged<T> = T & {
+  pageSize?: number
+  page?: number
+}
