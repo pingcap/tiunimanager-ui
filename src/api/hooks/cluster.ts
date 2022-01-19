@@ -449,7 +449,7 @@ const previewScaleOutCluster = ({
   payload: { id, ...payload },
   options,
 }: PayloadWithOptions<RequestClusterScaleOut & { id: string }>) =>
-  APIS.Clusters.clustersClusterIdPreviewScaleOutGet(id, payload, options)
+  APIS.Clusters.clustersClusterIdPreviewScaleOutPost(id, payload, options)
 
 export function usePreviewScaleOutCluster() {
   return useMutation(previewScaleOutCluster)

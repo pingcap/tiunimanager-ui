@@ -133,6 +133,7 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
         },
         options: {
           actionName: t('name.preview'),
+          skipSuccessNotification: true,
         },
       },
       {

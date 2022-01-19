@@ -103,7 +103,7 @@ export function ExportPanel({ back }: TransportPanelProps) {
       }
       await exportCluster.mutateAsync(
         {
-          ...value,
+          payload: value,
           options: {
             actionName: t('export.title'),
           },
@@ -449,7 +449,7 @@ export function ImportPanel({ back }: TransportPanelProps) {
       if (sourceType === 'local') value.storageType = 'nfs'
       await importCluster.mutateAsync(
         {
-          ...value,
+          payload: value,
           options: {
             actionName: t('import.title'),
           },
