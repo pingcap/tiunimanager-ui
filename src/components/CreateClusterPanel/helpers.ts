@@ -4,6 +4,7 @@ import {
   HardwareArch,
   KnowledgeOfClusterComponent,
   KnowledgeOfClusterType,
+  ProductStatus,
   RequestClusterCreate,
   ResourceTreeNode,
   ResourceUnitType,
@@ -13,6 +14,12 @@ import { useMemo } from 'react'
 import { useQueryResourceHierarchy } from '@/api/hooks/resources'
 import { message } from 'antd'
 import { TFunction } from 'react-i18next'
+import {
+  useQueryProductDetail,
+  useQueryProducts,
+  useQueryZones,
+} from '@/api/hooks/platform'
+import { mapObj } from '@/utils/obj'
 
 export type KnowledgeMap = {
   _types: ClusterType[]
@@ -140,10 +147,10 @@ export function allocateNodes(targetCount: number, zoneCount: number) {
 
 export function processCreateRequest(
   value: RequestClusterCreate,
-  knowledge: Knowledge,
+  componentsKnowledge: ComponentKnowledge[],
   t: TFunction<''>
 ) {
-  if (!value.vendorId || !value.region) return false
+  if (!value.vendor || !value.region) return false
   {
     // remove undefined
     value.resourceParameters!.instanceResource =
@@ -172,51 +179,30 @@ export function processCreateRequest(
   }
   {
     // validate
-    const components = Object.values(
-      knowledge!.vendors[value.vendorId].regions[value.region].products[
-        value.clusterType!
-      ].versions[value.clusterVersion!].components
-    )
-
-    for (const comp of components) {
+    for (const comp of componentsKnowledge) {
       const node = value.resourceParameters!.instanceResource!.find(
         (n) => n.componentType === comp.id
       )!
       if (!node) continue
-      // check exist if required
-      if (comp.required) {
-        if (node.totalNodeCount! === 0) {
-          message.error(
-            t('create.validation.miss', {
-              name: comp.name,
-            })
-          )
-          return false
-        }
-        // check min zone quantity
-        if (comp.minInstance) {
-          if (node.resource!.length! < comp.minInstance) {
-            message.error(
-              t('create.validation.minZone', {
-                name: comp.name,
-                count: comp.minInstance,
-              })
-            )
-            return false
-          }
-        }
+
+      if (node.totalNodeCount! < comp.minInstance) {
+        message.error(
+          t('create.validation.minZone', {
+            name: comp.name,
+            count: comp.minInstance,
+          })
+        )
+        return false
       }
-      // check max zone quantity
-      if (comp.maxInstance) {
-        if (node.resource!.length! > comp.maxInstance) {
-          message.error(
-            t('create.validation.maxZone', {
-              name: comp.name,
-              count: comp.maxInstance,
-            })
-          )
-          return false
-        }
+
+      if (node.totalNodeCount! > comp.maxInstance) {
+        message.error(
+          t('create.validation.maxZone', {
+            name: comp.name,
+            count: comp.maxInstance,
+          })
+        )
+        return false
       }
     }
   }
@@ -227,52 +213,180 @@ export function processCreateRequest(
  * FIXME: REMOVE THIS EVIL FAKE DATA
  */
 
-export function useKnowledge() {
-  return _fake_knowledge
+export function useVendorsAndRegions() {
+  const { data } = useQueryZones()
+  return useMemo<VendorsKnowledge>(() => {
+    const rawVendors = data?.data.data?.vendors
+    const _vendors = rawVendors && Object.keys(rawVendors)
+    const vendors =
+      rawVendors &&
+      mapObj(rawVendors, ({ id, name, regions: rawRegions }, vendorId) => {
+        const _regions = rawRegions && Object.keys(rawRegions)
+        const regions =
+          rawRegions &&
+          mapObj(rawRegions, ({ id, name }, regionId) => ({
+            key: regionId as string,
+            value: {
+              id,
+              name,
+            } as RegionKnowledge,
+          }))
+        return {
+          key: vendorId as string,
+          value: {
+            id,
+            name,
+            _regions: _regions || [],
+            regions: regions || {},
+          } as VendorKnowledge,
+        }
+      })
+    return {
+      _vendors: _vendors || [],
+      vendors: vendors || {},
+    }
+  }, [data])
+}
+
+export function useProducts(vendorId?: string, regionId?: string) {
+  const { data } = useQueryProducts(
+    {
+      vendorId,
+      internalProduct: 0,
+      status: ProductStatus.online,
+    },
+    { enabled: !!vendorId }
+  )
+  return useMemo<ProductsKnowledge>(() => {
+    const rawRegions = data?.data.data?.products // region => product => arch => version
+    if (!rawRegions || !regionId)
+      return {
+        _products: [],
+        products: {},
+      }
+    const rawProducts = rawRegions[regionId] // product => arch => version
+    const _products = Object.keys(rawProducts)
+    const products = mapObj(rawProducts, (rawArch, productId) => {
+      const _archs = Object.keys(rawArch)
+      const archs = mapObj(rawArch, (_, arch) => ({
+        key: arch as string,
+        value: {
+          id: arch,
+          versions: Object.keys(rawArch[arch]),
+        } as ArchKnowledge,
+      }))
+      return {
+        key: productId as string,
+        value: {
+          id: productId,
+          _archs,
+          archs,
+        } as ProductKnowledge,
+      }
+    })
+    return {
+      _products,
+      products,
+    }
+  }, [data, vendorId, regionId])
+}
+
+export function useComponents(
+  vendorId?: string,
+  regionId?: string,
+  productId?: string,
+  version?: string,
+  arch?: string
+) {
+  const { data } = useQueryProductDetail(
+    {
+      vendorId,
+      regionId,
+      productId,
+      internalProduct: 0,
+      status: ProductStatus.online,
+    },
+    { enabled: !!productId }
+  )
+  return useMemo<ComponentKnowledge[]>(() => {
+    const rawComponents =
+      data?.data?.data?.products?.[productId!]?.versions?.[version!]?.arch?.[
+        arch!
+      ]
+    if (!productId || !version || !arch || !rawComponents) return []
+
+    return rawComponents.map((comp) => {
+      const {
+        id,
+        name,
+        maxInstance,
+        minInstance,
+        purposeType,
+        suggestedInstancesCount,
+        availableZones,
+      } = comp
+      return {
+        id: id!,
+        name: name!,
+        maxInstance: maxInstance!,
+        minInstance: minInstance!,
+        purposeType: purposeType!,
+        suggestedInstancesCount: suggestedInstancesCount || [],
+        zones:
+          availableZones?.map((zone) => ({
+            id: zone.zoneId!,
+            name: zone.zoneName!,
+            specs: (zone.specs as SpecKnowledge[]) || [],
+          })) || [],
+      }
+    })
+  }, [data, vendorId, regionId])
 }
 
 export type VendorKnowledge = {
   id: string
   name: string
-  _regions: string[]
-  regions: {
-    [regionId: string]: RegionKnowledge
-  }
-}
+} & RegionsKnowledge
 
-export type RegionKnowledge = {
-  id: string
-  name: string
-  _products: string[]
-  products: {
-    [productId: string]: ProductKnowledge
-  }
-}
-
-export type Knowledge = {
+export type VendorsKnowledge = {
   _vendors: string[]
   vendors: {
     [vendorId: string]: VendorKnowledge
   }
 }
 
-export type ProductKnowledge = {
+export type RegionKnowledge = {
   id: string
   name: string
-  internal: boolean
-  status: string
-  _versions: string[]
-  versions: {
-    [version: string]: VersionKnowledge
+}
+
+export type RegionsKnowledge = {
+  _regions: string[]
+  regions: {
+    [regionId: string]: RegionKnowledge
   }
 }
 
-export type VersionKnowledge = {
-  name: string
-  archs: string[]
-  _components: string[]
-  components: {
-    [componentId: string]: ComponentKnowledge
+export type ProductKnowledge = {
+  id: string
+} & ArchsKnowledge
+
+export type ProductsKnowledge = {
+  _products: string[]
+  products: {
+    [productId: string]: ProductKnowledge
+  }
+}
+
+export type ArchKnowledge = {
+  id: string
+  versions: string[]
+}
+
+export type ArchsKnowledge = {
+  _archs: string[]
+  archs: {
+    [arch: string]: ArchKnowledge
   }
 }
 
@@ -282,20 +396,14 @@ export type ComponentKnowledge = {
   maxInstance: number
   minInstance: number
   purposeType: string
-  required: boolean
-  _zones: string[]
-  zones: {
-    [zoneId: string]: ZoneKnowledge
-  }
+  suggestedInstancesCount: number[]
+  zones: ZoneKnowledge[]
 }
 
 export type ZoneKnowledge = {
   id: string
   name: string
-  _specs: string[]
-  specs: {
-    [specId: string]: SpecKnowledge
-  }
+  specs: SpecKnowledge[]
 }
 
 export type SpecKnowledge = {
@@ -303,397 +411,4 @@ export type SpecKnowledge = {
   cpu: number
   memory: number
   diskType: string
-}
-
-const _fake_tidb_product: ProductKnowledge = {
-  id: 'TiDB',
-  name: 'TiDB',
-  internal: false,
-  status: 'Online',
-  _versions: ['5.2.2', '5.1.0'],
-  versions: {
-    '5.2.2': {
-      name: '5.2.2',
-      archs: ['x86_64', 'ARM64'],
-      _components: ['TiDB', 'TiKV', 'TiFlash', 'PD', 'TiCDC'],
-      components: {
-        TiDB: {
-          id: 'TiDB',
-          name: 'TiDB',
-          minInstance: 1,
-          maxInstance: 10240,
-          purposeType: 'Compute',
-          required: true,
-          _zones: ['us-west-2'],
-          zones: {
-            'us-west-2': {
-              id: 'us-west-2',
-              name: 'us-west-2',
-              _specs: [
-                'c2.g.large',
-                'c2.g.xlarge',
-                'c2.g.2xlarge',
-                'c3.g.large',
-                'c3.g.xlarge',
-              ],
-              specs: {
-                'c2.g.large': {
-                  id: 'c2.g.large',
-                  cpu: 4,
-                  memory: 8,
-                  diskType: 'SSD',
-                },
-                'c2.g.xlarge': {
-                  id: 'c2.g.xlarge',
-                  cpu: 8,
-                  memory: 16,
-                  diskType: 'SSD',
-                },
-                'c2.g.2xlarge': {
-                  id: 'c2.g.2xlarge',
-                  cpu: 16,
-                  memory: 32,
-                  diskType: 'SSD',
-                },
-                'c3.g.large': {
-                  id: 'c3.g.large',
-                  cpu: 8,
-                  memory: 32,
-                  diskType: 'SSD',
-                },
-                'c3.g.xlarge': {
-                  id: 'c3.g.xlarge',
-                  cpu: 16,
-                  memory: 64,
-                  diskType: 'SSD',
-                },
-              },
-            },
-          },
-        },
-        PD: {
-          id: 'PD',
-          name: 'PD',
-          minInstance: 1,
-          maxInstance: 10240,
-          purposeType: 'Schedule',
-          required: true,
-          _zones: ['us-west-2'],
-          zones: {
-            'us-west-2': {
-              id: 'us-west-2',
-              name: 'us-west-2',
-              _specs: ['sd2.g.large', 'sd2.g.xlarge'],
-              specs: {
-                'sd2.g.large': {
-                  id: 'sd2.g.large',
-                  cpu: 4,
-                  memory: 8,
-                  diskType: 'SSD',
-                },
-                'sd2.g.xlarge': {
-                  id: 'sd2.g.xlarge',
-                  cpu: 8,
-                  memory: 16,
-                  diskType: 'SSD',
-                },
-              },
-            },
-          },
-        },
-        TiKV: {
-          id: 'TiKV',
-          name: 'TiKV',
-          minInstance: 1,
-          maxInstance: 10240,
-          purposeType: 'Storage',
-          required: true,
-          _zones: ['us-west-2'],
-          zones: {
-            'us-west-2': {
-              id: 'us-west-2',
-              name: 'us-west-2',
-              _specs: ['s2.g.large', 's2.g.xlarge'],
-              specs: {
-                's2.g.large': {
-                  id: 's2.g.large',
-                  cpu: 8,
-                  memory: 64,
-                  diskType: 'SSD',
-                },
-                's2.g.xlarge': {
-                  id: 's2.g.xlarge',
-                  cpu: 16,
-                  memory: 128,
-                  diskType: 'SSD',
-                },
-              },
-            },
-          },
-        },
-        TiFlash: {
-          id: 'TiFlash',
-          name: 'TiFlash',
-          minInstance: 1,
-          maxInstance: 10240,
-          purposeType: 'Storage',
-          required: false,
-          _zones: ['us-west-2'],
-          zones: {
-            'us-west-2': {
-              id: 'us-west-2',
-              name: 'us-west-2',
-              _specs: ['s2.g.large', 's2.g.xlarge'],
-              specs: {
-                's2.g.large': {
-                  id: 's2.g.large',
-                  cpu: 8,
-                  memory: 64,
-                  diskType: 'SSD',
-                },
-                's2.g.xlarge': {
-                  id: 's2.g.xlarge',
-                  cpu: 16,
-                  memory: 128,
-                  diskType: 'SSD',
-                },
-              },
-            },
-          },
-        },
-        TiCDC: {
-          id: 'TiCDC',
-          name: 'TiCDC',
-          minInstance: 1,
-          maxInstance: 10240,
-          purposeType: 'Schedule',
-          required: false,
-          _zones: ['us-west-2'],
-          zones: {
-            'us-west-2': {
-              id: 'us-west-2',
-              name: 'us-west-2',
-              _specs: ['sd2.g.large', 'sd2.g.xlarge'],
-              specs: {
-                'sd2.g.large': {
-                  id: 'sd2.g.large',
-                  cpu: 4,
-                  memory: 8,
-                  diskType: 'SSD',
-                },
-                'sd2.g.xlarge': {
-                  id: 'sd2.g.xlarge',
-                  cpu: 8,
-                  memory: 16,
-                  diskType: 'SSD',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    '5.1.0': {
-      name: '5.1.0',
-      archs: ['x86_64', 'ARM64'],
-      _components: ['TiDB', 'TiKV', 'TiFlash', 'PD', 'TiCDC'],
-      components: {
-        TiDB: {
-          id: 'TiDB',
-          name: 'TiDB',
-          minInstance: 1,
-          maxInstance: 10240,
-          purposeType: 'Compute',
-          required: true,
-          _zones: ['us-west-2'],
-          zones: {
-            'us-west-2': {
-              id: 'us-west-2',
-              name: 'us-west-2',
-              _specs: [
-                'c2.g.large',
-                'c2.g.xlarge',
-                'c2.g.2xlarge',
-                'c3.g.large',
-                'c3.g.xlarge',
-              ],
-              specs: {
-                'c2.g.large': {
-                  id: 'c2.g.large',
-                  cpu: 4,
-                  memory: 8,
-                  diskType: 'SSD',
-                },
-                'c2.g.xlarge': {
-                  id: 'c2.g.xlarge',
-                  cpu: 8,
-                  memory: 16,
-                  diskType: 'SSD',
-                },
-                'c2.g.2xlarge': {
-                  id: 'c2.g.2xlarge',
-                  cpu: 16,
-                  memory: 32,
-                  diskType: 'SSD',
-                },
-                'c3.g.large': {
-                  id: 'c3.g.large',
-                  cpu: 8,
-                  memory: 32,
-                  diskType: 'SSD',
-                },
-                'c3.g.xlarge': {
-                  id: 'c3.g.xlarge',
-                  cpu: 16,
-                  memory: 64,
-                  diskType: 'SSD',
-                },
-              },
-            },
-          },
-        },
-        PD: {
-          id: 'PD',
-          name: 'PD',
-          minInstance: 1,
-          maxInstance: 10240,
-          purposeType: 'Schedule',
-          required: true,
-          _zones: ['us-west-2'],
-          zones: {
-            'us-west-2': {
-              id: 'us-west-2',
-              name: 'us-west-2',
-              _specs: ['sd2.g.large', 'sd2.g.xlarge'],
-              specs: {
-                'sd2.g.large': {
-                  id: 'sd2.g.large',
-                  cpu: 4,
-                  memory: 8,
-                  diskType: 'SSD',
-                },
-                'sd2.g.xlarge': {
-                  id: 'sd2.g.xlarge',
-                  cpu: 8,
-                  memory: 16,
-                  diskType: 'SSD',
-                },
-              },
-            },
-          },
-        },
-        TiKV: {
-          id: 'TiKV',
-          name: 'TiKV',
-          minInstance: 1,
-          maxInstance: 10240,
-          purposeType: 'Storage',
-          required: true,
-          _zones: ['us-west-2'],
-          zones: {
-            'us-west-2': {
-              id: 'us-west-2',
-              name: 'us-west-2',
-              _specs: ['s2.g.large', 's2.g.xlarge'],
-              specs: {
-                's2.g.large': {
-                  id: 's2.g.large',
-                  cpu: 8,
-                  memory: 64,
-                  diskType: 'SSD',
-                },
-                's2.g.xlarge': {
-                  id: 's2.g.xlarge',
-                  cpu: 16,
-                  memory: 128,
-                  diskType: 'SSD',
-                },
-              },
-            },
-          },
-        },
-        TiFlash: {
-          id: 'TiFlash',
-          name: 'TiFlash',
-          minInstance: 1,
-          maxInstance: 10240,
-          purposeType: 'Storage',
-          required: false,
-          _zones: ['us-west-2'],
-          zones: {
-            'us-west-2': {
-              id: 'us-west-2',
-              name: 'us-west-2',
-              _specs: ['s2.g.large', 's2.g.xlarge'],
-              specs: {
-                's2.g.large': {
-                  id: 's2.g.large',
-                  cpu: 8,
-                  memory: 64,
-                  diskType: 'SSD',
-                },
-                's2.g.xlarge': {
-                  id: 's2.g.xlarge',
-                  cpu: 16,
-                  memory: 128,
-                  diskType: 'SSD',
-                },
-              },
-            },
-          },
-        },
-        TiCDC: {
-          id: 'TiCDC',
-          name: 'TiCDC',
-          minInstance: 1,
-          maxInstance: 10240,
-          purposeType: 'Schedule',
-          required: false,
-          _zones: ['us-west-2'],
-          zones: {
-            'us-west-2': {
-              id: 'us-west-2',
-              name: 'us-west-2',
-              _specs: ['sd2.g.large', 'sd2.g.xlarge'],
-              specs: {
-                'sd2.g.large': {
-                  id: 'sd2.g.large',
-                  cpu: 4,
-                  memory: 8,
-                  diskType: 'SSD',
-                },
-                'sd2.g.xlarge': {
-                  id: 'sd2.g.xlarge',
-                  cpu: 8,
-                  memory: 16,
-                  diskType: 'SSD',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-}
-
-const _fake_knowledge: Knowledge = {
-  _vendors: ['AWS'],
-  vendors: {
-    AWS: {
-      id: 'AWS',
-      name: 'AWS',
-      _regions: ['us-west'],
-      regions: {
-        'us-west': {
-          id: 'us-west',
-          name: 'us-west',
-          _products: ['TiDB'],
-          products: {
-            TiDB: _fake_tidb_product,
-          },
-        },
-      },
-    },
-  },
 }

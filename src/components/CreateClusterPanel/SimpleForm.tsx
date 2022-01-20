@@ -5,10 +5,12 @@ import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction, Trans } from 'react-i18next'
 import {
   ComponentKnowledge,
-  Knowledge,
   processCreateRequest,
+  ProductsKnowledge,
   RegionKnowledge,
-  useKnowledge,
+  useComponents,
+  useProducts,
+  useVendorsAndRegions,
 } from '@/components/CreateClusterPanel/helpers'
 import {
   Button,
@@ -32,10 +34,6 @@ import styles from '@/components/CreateClusterPanel/index.module.less'
 import IntlPopConfirm from '../IntlPopConfirm'
 import { usePreviewCreateCluster } from '@/api/hooks/cluster'
 import { ColumnsType } from 'antd/lib/table/interface'
-import RadioCard from '@/components/RadioCard'
-import AWSLogo from '/vendors/aws.svg'
-import GCPLogo from '/vendors/gcp.svg'
-import LocalLogo from '/vendors/local.svg'
 
 loadI18n()
 
@@ -45,7 +43,7 @@ export interface SimpleFormProps {
   additionalOptions?: ReactNode
   processValue?: (
     value: RequestClusterCreate,
-    knowledge: Knowledge,
+    componentsKnowledge: ComponentKnowledge[],
     t: TFunction<''>
   ) => boolean
 
@@ -62,17 +60,28 @@ export function SimpleForm({
   onSubmit,
   footerClassName,
 }: SimpleFormProps) {
-  const knowledge = useKnowledge()
-
   const [vendorId, setVendorId] = useState<string>()
   const [productId, setProductId] = useState<string>()
   const [productVersion, setProductVersion] = useState<string>()
   const [region, setRegion] = useState<string>()
+  const [arch, setArch] = useState<string>()
+
+  const vendorAndRegions = useVendorsAndRegions()
+  const products = useProducts(vendorId, region)
+  const components = useComponents(
+    vendorId,
+    region,
+    productId,
+    productVersion,
+    arch
+  )
 
   const setVendor = useCallback(
     (vendorId?: string) => {
-      const currentVendorId = vendorId || knowledge._vendors[0]
-      const defaultRegion = knowledge.vendors[currentVendorId]?._regions[0]
+      if (!vendorAndRegions) return
+      const currentVendorId = vendorId || vendorAndRegions._vendors[0]
+      const defaultRegion =
+        vendorAndRegions.vendors[currentVendorId]?._regions[0]
       setVendorId(currentVendorId)
       setRegion(defaultRegion)
       form.setFields([
@@ -86,22 +95,20 @@ export function SimpleForm({
         },
       ])
     },
-    [knowledge, form]
+    [vendorAndRegions, form]
   )
 
   const setProduct = useCallback(
     (productId?: string) => {
-      const currentRegion =
-        vendorId && region
-          ? knowledge.vendors[vendorId]?.regions[region]
-          : undefined
+      if (!products) return
       const currentProduct =
-        currentRegion?.products[productId || currentRegion?._products[0]]
+        products.products[productId || products._products[0]]
       setProductId(currentProduct?.id)
-      const defaultVersion = currentProduct?._versions[0]
-      const defaultArch =
-        defaultVersion && currentProduct?.versions[defaultVersion]?.archs[0]
+      const defaultArch = currentProduct?._archs[0]
+      const defaultVersion =
+        defaultArch && currentProduct?.archs[defaultArch]?.versions[0]
       setProductVersion(defaultVersion)
+      setArch(defaultArch)
       form.setFields([
         {
           name: 'clusterVersion',
@@ -113,39 +120,48 @@ export function SimpleForm({
         },
       ])
     },
-    [knowledge, vendorId, region, form]
+    [products, form]
   )
 
   useEffect(() => {
     setVendor()
-  }, [knowledge])
+  }, [vendorAndRegions])
 
   useEffect(() => {
     setProduct()
-  }, [knowledge, vendorId, region])
+  }, [products])
 
   const { t, i18n } = useI18n()
 
   const vendorSelector = useMemo(
-    () => <VendorSelector selected={vendorId} onSelect={setVendor} />,
-    [vendorId, setVendor]
+    () =>
+      vendorAndRegions && (
+        <VendorSelector
+          vendors={vendorAndRegions._vendors}
+          selected={vendorId}
+          onSelect={setVendor}
+        />
+      ),
+    [vendorId, setVendor, vendorAndRegions]
   )
 
   const regionSelector = useMemo(() => {
-    const regions = vendorId && knowledge?.vendors[vendorId]?.regions
+    const regions = vendorId && vendorAndRegions?.vendors?.[vendorId]?.regions
     return (
-      <RegionSelector
-        regions={regions ? Object.values(regions) : []}
-        selected={region}
-        onSelect={(v) => setRegion(v)}
-      />
+      regions && (
+        <RegionSelector
+          regions={regions ? Object.values(regions) : []}
+          selected={region}
+          onSelect={(v) => setRegion(v)}
+        />
+      )
     )
-  }, [region, knowledge, vendorId])
+  }, [region, vendorAndRegions, vendorId])
 
   const basicOptions = useMemo(
     () =>
       !!productId &&
-      !!productVersion &&
+      !!arch &&
       !!vendorId &&
       !!region && (
         <BasicOptions
@@ -153,37 +169,22 @@ export function SimpleForm({
           onSelectProduct={setProduct}
           onSelectVersion={setProductVersion}
           onSelectRegion={setRegion}
+          onSelectArch={setArch}
           type={productId}
-          version={productVersion}
-          products={knowledge.vendors[vendorId]?.regions[region] || []}
+          arch={arch}
+          products={products}
         />
       ),
-    [productId, productVersion, vendorId, region, knowledge, i18n.language]
+    [productId, arch, vendorId, region, products, i18n.language]
   )
 
-  const nodeOptions = useMemo(() => {
-    const components =
-      !!vendorId &&
-      !!region &&
-      !!productId &&
-      !!productVersion &&
-      knowledge.vendors[vendorId]?.regions[region]?.products[productId]
-        ?.versions[productVersion]?.components
-    return (
-      !!components &&
-      Object.values(components).map((comp, idx) => (
+  const nodeOptions = useMemo(
+    () =>
+      components?.map((comp, idx) => (
         <NodeOptions t={t} key={comp.id} idx={idx} component={comp} />
-      ))
-    )
-  }, [
-    productId,
-    productVersion,
-    region,
-    vendorId,
-    form,
-    knowledge,
-    i18n.language,
-  ])
+      )),
+    [form, components, i18n.language]
+  )
 
   const clusterOptions = useMemo(
     () => productId === 'TiDB' && <ClusterOptions />,
@@ -196,8 +197,8 @@ export function SimpleForm({
   }, [form, setProduct])
 
   const wrappedProcessValue: SimpleFormProps['processValue'] = (v, k, t) => {
-    v.vendorId = vendorId
-    v.region = region
+    v.vendor = vendorId!
+    v.region = region!
     if (processValue) return processValue(v, k, t)
     return true
   }
@@ -223,7 +224,7 @@ export function SimpleForm({
         onSubmit={onSubmit}
         processValue={wrappedProcessValue}
         onReset={onReset}
-        knowledge={knowledge}
+        componentsKnowledge={components}
         form={form}
         footerClassName={footerClassName}
         vendorId={vendorId}
@@ -238,17 +239,19 @@ function BasicOptions({
   t,
   onSelectProduct,
   onSelectVersion,
+  onSelectArch,
   type,
-  version,
+  arch,
   products,
 }: {
   t: TFunction<''>
   onSelectProduct: (type: string) => void
   onSelectVersion: (version: string) => void
   onSelectRegion: (newRegion: string) => void
+  onSelectArch: (newArch: string) => void
   type: string
-  version: string
-  products: RegionKnowledge
+  arch: string
+  products: ProductsKnowledge
 }) {
   return (
     <Card title={t('basic.title')}>
@@ -261,7 +264,7 @@ function BasicOptions({
         <Select onChange={(key) => onSelectProduct(key as any)}>
           {products._products?.map((id) => (
             <Select.Option value={id} key={id}>
-              {products.products[id]?.name}
+              {products.products[id]?.id}
             </Select.Option>
           ))}
         </Select>
@@ -270,13 +273,13 @@ function BasicOptions({
         label={t('basic.fields.version')}
         name="clusterVersion"
         rules={[{ required: true, message: t('basic.rules.version.require') }]}
-        initialValue={version}
       >
         <Select onChange={(key) => onSelectVersion(key as string)}>
           {!!type &&
-            products.products[type]?._versions?.map((v) => (
+            !!arch &&
+            products.products[type]?.archs[arch]?.versions.map((v) => (
               <Select.Option value={v} key={v}>
-                {products.products[type]?.versions[v]?.name}
+                {v}
               </Select.Option>
             ))}
         </Select>
@@ -285,11 +288,11 @@ function BasicOptions({
         name="cpuArchitecture"
         label={t('basic.fields.arch')}
         rules={[{ required: true }]}
+        initialValue={arch}
       >
-        <Radio.Group>
+        <Radio.Group onChange={(e) => onSelectArch(e.target.value)}>
           {!!type &&
-            !!version &&
-            products.products[type]?.versions[version]?.archs.map((a) => (
+            products.products[type]?._archs.map((a) => (
               <Radio.Button value={a} key={a}>
                 {a}
               </Radio.Button>
@@ -309,10 +312,11 @@ function NodeOptions({
   component: ComponentKnowledge
   idx: number
 }) {
+  const required = component.minInstance > 0
   return (
     <Collapse
       collapsible="header"
-      defaultActiveKey={component.required ? ['1'] : []}
+      defaultActiveKey={required ? ['1'] : []}
       className={styles.componentForm}
     >
       <Collapse.Panel
@@ -322,7 +326,7 @@ function NodeOptions({
             {t('nodes.title', {
               name: component.name,
             })}
-            {!component.required && (
+            {!required && (
               <Tag color="default" className={styles.optionalBadge}>
                 {t('nodes.optional')}
               </Tag>
@@ -354,8 +358,7 @@ function NodeOptions({
           <Col span={8}>{t('nodes.fields.amount')}</Col>
         </Row>
         <Divider style={{ margin: '16px 0' }} />
-        {component._zones.map((zoneCode, i) => {
-          const zone = component.zones[zoneCode]
+        {component.zones.map((zone, i) => {
           if (!zone) return undefined
           return (
             <Row key={i} gutter={20}>
@@ -369,7 +372,7 @@ function NodeOptions({
                     i,
                     'zoneCode',
                   ]}
-                  initialValue={zoneCode}
+                  initialValue={zone.id}
                   hidden
                 >
                   <Input />
@@ -386,17 +389,14 @@ function NodeOptions({
                     i,
                     'specCode',
                   ]}
-                  initialValue={zone._specs[0]}
+                  initialValue={zone.specs[0].id}
                 >
                   <Select>
-                    {zone._specs.map((specCode) => {
-                      const spec = zone.specs[specCode]
-                      return (
-                        <Select.Option key={specCode} value={specCode}>
-                          {spec.id} ({spec.cpu}C {spec.memory}G)
-                        </Select.Option>
-                      )
-                    })}
+                    {zone.specs.map((spec) => (
+                      <Select.Option key={spec.id} value={spec.id}>
+                        {spec.id} ({spec.cpu}C {spec.memory}G)
+                      </Select.Option>
+                    ))}
                   </Select>
                 </Form.Item>
               </Col>
@@ -410,12 +410,9 @@ function NodeOptions({
                     i,
                     'count',
                   ]}
-                  initialValue={component.required ? 3 : 0}
+                  initialValue={required ? 3 : 0}
                 >
-                  <InputNumber
-                    min={component.required ? component.minInstance : 0}
-                    max={component.maxInstance}
-                  />
+                  <InputNumber min={0} max={component.maxInstance} />
                 </Form.Item>
               </Col>
             </Row>
@@ -481,7 +478,7 @@ function Submitter({
   onReset,
   onSubmit,
   footerClassName,
-  knowledge,
+  componentsKnowledge,
   processValue,
   form,
   disableSubmit,
@@ -492,7 +489,7 @@ function Submitter({
   processValue?: SimpleFormProps['processValue']
   onSubmit: (data: RequestClusterCreate) => unknown
   footerClassName?: string
-  knowledge: Knowledge
+  componentsKnowledge: ComponentKnowledge[]
   form: FormInstance
   disableSubmit: boolean
   region?: string
@@ -506,11 +503,11 @@ function Submitter({
   const handleSubmit = async () => {
     try {
       const fields = await form.validateFields()
-      fields.vendorId = vendorId
+      fields.vendor = vendorId
       fields.region = region
       if (
-        processCreateRequest(fields, knowledge, t) &&
-        (!processValue || processValue(fields, knowledge, t))
+        processCreateRequest(fields, componentsKnowledge, t) &&
+        (!processValue || processValue(fields, componentsKnowledge, t))
       ) {
         await previewCreateCluster.mutateAsync(
           {
@@ -653,11 +650,12 @@ function getColumns(
 }
 
 type VendorSelectorProps = {
+  vendors: string[]
   selected?: string
   onSelect: (vendor: string) => unknown
 }
 
-function VendorSelector({ selected, onSelect }: VendorSelectorProps) {
+function VendorSelector({ selected, onSelect, vendors }: VendorSelectorProps) {
   const { t } = useI18n()
   // FIXME: vendors should be generated from real data, so should logo urls.
 
@@ -670,33 +668,13 @@ function VendorSelector({ selected, onSelect }: VendorSelectorProps) {
           justifyContent: 'space-around',
         }}
       >
-        <RadioCard
-          checked={selected === 'local'}
-          cover={LocalLogo}
-          onClick={() => {
-            if (selected === 'local') return
-            onSelect('local')
-          }}
-          tooltip={t('vendorSelector.vendors.local')}
-        />
-        <RadioCard
-          checked={selected === 'AWS'}
-          cover={AWSLogo}
-          onClick={() => {
-            if (selected === 'AWS') return
-            onSelect('AWS')
-          }}
-          tooltip={t('vendorSelector.vendors.aws')}
-        />
-        <RadioCard
-          checked={selected === 'GCP'}
-          cover={GCPLogo}
-          onClick={() => {
-            if (selected === 'GCP') return
-            onSelect('GCP')
-          }}
-          tooltip={t('vendorSelector.vendors.gcp')}
-        />
+        <Select onChange={onSelect} value={selected} style={{ width: '100%' }}>
+          {vendors.map((vendorId) => (
+            <Select.Option value={vendorId} key={vendorId}>
+              {t(`vendorSelector.vendors.${vendorId.toLowerCase()}`)}
+            </Select.Option>
+          ))}
+        </Select>
       </Card>
     </div>
   )

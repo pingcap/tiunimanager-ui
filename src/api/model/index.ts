@@ -90,6 +90,11 @@ export type RequestClusterTakeover = ClusterTakeoverClusterReq
 export { StructsWorkFlowInfoStatusEnum as TaskWorkflowStatus }
 export { StructsWorkFlowNodeInfoStatusEnum as TaskWorkflowSubTaskStatus }
 
+export enum ProductStatus {
+  online = 'Online',
+  offline = 'Offline',
+}
+
 export enum HardwareArch {
   x86 = 'X86',
   x86_64 = 'X86_64',
