@@ -1,0 +1,113 @@
+basic:
+  title: 基本信息
+  fields:
+    id: 任务 ID
+    name: 任务名称
+    tso: 起始 TSO
+    filterRule: 过滤规则
+  tips:
+    tso: 同步任务开始的 TSO，取值范围是 0 ～ tikv_gc_save_point。填入 “0” 则系统将从当前时刻获取起始TSO
+    filterRule: 正则表达式
+  rules:
+    name:
+      required: 请填写任务名称
+      length: 长度必须在 1 ~ 20 之间
+    tso:
+      valid: 请填写有效的 TSO
+    filterRule:
+      valid: 请填写有效的忽略规则
+  action:
+    filterRule:
+      add: 新增规则
+downstream:
+  title: 下游配置
+  fields:
+    type: 下游类型
+  rules:
+    type:
+      required: 请选择下游类型
+mysql:
+  fields:
+    url: URL/IP
+    port: 端口
+    user: 用户名
+    password: 密码
+    thread: 并发线程数
+  rules:
+    url:
+      required: 请填写有效的 URL 或 IP 地址
+    port:
+      required: 请填写端口
+    user:
+      required: 请填写用户名
+      length: 长度必须在 3 ~ 20 之间
+    password:
+      required: 请填写密码
+      length: 长度必须在 6 ~ 20 之间
+  tips:
+    url: 格式如 abc.com 或 X.X.X.X
+    thread: 取值范围 1 ～ 128，默认 16
+tidb:
+  fields:
+    url: URL/IP
+    port: 端口
+    user: 用户名
+    password: 密码
+    thread: 并发线程数
+  rules:
+    url:
+      required: 请填写有效的 URL 或 IP 地址
+    port:
+      required: 请填写端口
+    user:
+      required: 请填写用户名
+      length: 长度必须在 3 ~ 20 之间
+    password:
+      required: 请填写密码
+      length: 长度必须在 6 ~ 20 之间
+  tips:
+    url: 格式如 abc.com 或 X.X.X.X
+    thread: 取值范围 1 ～ 128，默认 16
+kafka:
+  fields:
+    url: URL/IP
+    port: 端口
+    version: 版本号
+    clientId: 客户端 ID
+    topic: Topic
+    protocol: 协议
+    partition: Partitions
+    replica: 副本数
+    maxMsgSize: 单条消息大小上限
+    maxMsgNum: 批量消息条数上限
+    dispatchRule: 分发规则
+  placeholder:
+    dispatcher: 规则
+    matcher: 函数
+  rules:
+    url:
+      required: 请填写有效的 URL 或 IP 地址
+    port:
+      required: 请填写端口
+    version:
+      required: 请填写版本号
+    clientId:
+      required: 请填写客户端 ID
+    topic:
+      required: 请填写 Topic
+    protocol:
+      required: 请选择协议
+    dispatchRule:
+      valid: 请填写有效的分发规则
+  tips:
+    url: 格式如 abc.com 或 X.X.X.X
+  action:
+    dispatchRule:
+      add: 新增分发规则
+footer:
+  reset:
+    title: 重置
+    confirm: 确认重置吗?
+  submit:
+    title: 提交
+    confirm: 确认提交吗?
