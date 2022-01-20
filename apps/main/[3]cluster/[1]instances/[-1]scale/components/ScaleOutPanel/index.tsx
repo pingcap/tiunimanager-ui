@@ -56,7 +56,6 @@ export interface ScaleOutPanelProps {
   back: () => void
 }
 
-// TODO: adapt to new knowledge
 export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
   const [form] = Form.useForm()
   const queryClient = useQueryClient()
@@ -64,9 +63,8 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
   const scaleOutCluster = useClusterScaleOut()
   const { cpuArchitecture: arch, clusterType, clusterVersion, region } = cluster
 
-  // TODO
   const components = useComponents(
-    'Local',
+    'Local', // TODO: use cluster.vendor
     region,
     clusterType,
     clusterVersion,
