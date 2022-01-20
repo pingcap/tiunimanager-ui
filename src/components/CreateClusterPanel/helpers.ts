@@ -1,17 +1,5 @@
-import {
-  ClusterType,
-  ClusterVersion,
-  HardwareArch,
-  KnowledgeOfClusterComponent,
-  KnowledgeOfClusterType,
-  ProductStatus,
-  RequestClusterCreate,
-  ResourceTreeNode,
-  ResourceUnitType,
-} from '@/api/model'
-import { useQueryKnowledge } from '@/api/hooks/knowledge'
+import { ProductStatus, RequestClusterCreate } from '@/api/model'
 import { useMemo } from 'react'
-import { useQueryResourceHierarchy } from '@/api/hooks/resources'
 import { message } from 'antd'
 import { TFunction } from 'react-i18next'
 import {
@@ -20,130 +8,6 @@ import {
   useQueryZones,
 } from '@/api/hooks/platform'
 import { mapObj } from '@/utils/obj'
-
-export type KnowledgeMap = {
-  _types: ClusterType[]
-  types: {
-    [typeCode: string]: {
-      _versions: ClusterVersion[]
-      versions: {
-        [versionCode: string]: {
-          archTypes: string[]
-          components: KnowledgeOfClusterComponent[]
-        }
-      }
-    }
-  }
-}
-
-const EmptyKnowledgeMap = { types: {}, _types: [] }
-
-export function transformKnowledgeMap(
-  knowledge: KnowledgeOfClusterType[]
-): KnowledgeMap {
-  const typeMapToVersions: KnowledgeMap['types'] = Object.create(null)
-  knowledge?.forEach((t) => {
-    const versionMapToSpecs: KnowledgeMap['types'][string]['versions'] =
-      Object.create(null)
-    t.versionSpecs!.forEach((s) => {
-      versionMapToSpecs[s.clusterVersion!.code!] = {
-        archTypes: s.archTypes!,
-        components: s.componentSpecs!,
-      }
-    })
-    typeMapToVersions[t.clusterType!.code!] = {
-      _versions: t.versionSpecs!.map((p) => p.clusterVersion!),
-      versions: versionMapToSpecs,
-    }
-  })
-  return {
-    _types: knowledge?.map((t) => t.clusterType!) || [],
-    types: typeMapToVersions,
-  }
-}
-
-export function useKnowledgeMap() {
-  const { data: knowledgeData, isLoading: isKnowledgeLoading } =
-    useQueryKnowledge()
-
-  return useMemo(() => {
-    if (isKnowledgeLoading) return EmptyKnowledgeMap
-    return transformKnowledgeMap(knowledgeData!.data.data!)
-  }, [isKnowledgeLoading, knowledgeData])
-}
-
-export type AvailableStocksMap = {
-  regions: string[]
-  map: {
-    [regionCode: string]: {
-      name: string
-      zones: string[]
-      map: {
-        [zoneCode: string]: {
-          name: string
-          racks: string[]
-        }
-      }
-    }
-  }
-}
-
-const EmptyAvailableStocksMap = { regions: [], map: {} }
-
-export function transformAvailableStocksMap(
-  tree: ResourceTreeNode
-): AvailableStocksMap {
-  const result: AvailableStocksMap = Object.create(null)
-  result.regions = []
-  result.map = Object.create(null)
-  tree.subNodes?.forEach((rs) => {
-    // region layer
-    result.regions.push(rs.code!)
-    const regionItem = Object.create(null)
-    regionItem.name = rs.name!
-    regionItem.zones = []
-    regionItem.map = Object.create(null)
-    if (rs.subNodes) {
-      rs.subNodes.forEach((zs) => {
-        // zone layer
-        regionItem.zones.push(zs.code)
-        regionItem.map[zs.code!] = {
-          name: zs.name!,
-          racks: zs.subNodes?.map((ks) => ks.code!) || [],
-        }
-      })
-    }
-    result.map[rs.code!] = regionItem
-  })
-  return result
-}
-
-export function useAvailableStocks(arch: HardwareArch) {
-  const { data: available, isLoading: isDomainsLoading } =
-    useQueryResourceHierarchy({
-      type: ResourceUnitType.region,
-      depth: 1,
-      arch,
-    })
-  return useMemo(
-    () =>
-      isDomainsLoading
-        ? EmptyAvailableStocksMap
-        : transformAvailableStocksMap(available!.data.data!.root!),
-    [isDomainsLoading, available]
-  )
-}
-
-export function allocateNodes(targetCount: number, zoneCount: number) {
-  const every = Math.floor(targetCount / zoneCount)
-  const rest = targetCount - zoneCount * every
-  return Array.from(
-    {
-      length: zoneCount,
-    },
-    (_, i) => (i < rest ? every + 1 : every)
-  )
-}
 
 export function processCreateRequest(
   value: RequestClusterCreate,
@@ -208,10 +72,6 @@ export function processCreateRequest(
   }
   return true
 }
-
-/**
- * FIXME: REMOVE THIS EVIL FAKE DATA
- */
 
 export function useVendorsAndRegions() {
   const { data } = useQueryZones()
