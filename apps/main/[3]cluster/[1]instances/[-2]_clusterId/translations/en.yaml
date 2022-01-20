@@ -7,3 +7,4 @@ pages:
   alert: Alert
   params: Params
   backup: Backup
+  replication: Data Replication
