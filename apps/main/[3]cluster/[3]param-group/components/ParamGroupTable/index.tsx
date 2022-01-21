@@ -44,6 +44,7 @@ function getColumns({
       width: 200,
       dataIndex: 'name',
       key: 'name',
+      fixed: 'left',
       render: (_, record) => (
         <Link to={`${resolveRoute()}/${record.paramGroupId}`}>
           {record.name}
@@ -110,6 +111,7 @@ function getColumns({
       valueType: 'option',
       width: 200,
       key: 'action',
+      fixed: 'right',
       render: (_, record) => {
         const isBuiltIn = record.hasDefault === ParamGroupCreationType.system
 
