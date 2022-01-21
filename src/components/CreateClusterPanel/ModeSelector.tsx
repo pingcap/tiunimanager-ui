@@ -15,7 +15,7 @@ export type ModeSelectorProps = {
 export function ModeSelector({ mode, onChange }: ModeSelectorProps) {
   const { t } = useI18n()
   return (
-    <div className={styles.modeSelector}>
+    <div className={styles.standardSelector}>
       <Card
         title={t('modeSelector.title')}
         bodyStyle={{

@@ -1,13 +1,32 @@
 basic:
   title: 基础配置
   fields:
+    type: 集群类型
+    arch: 体系架构
+    version: 集群版本
+  rules:
+    type:
+      require: 请选择集群类型
+    version:
+      require: 请选择集群版本
+component:
+  title: '{{ name }} 配置'
+  optional: 可选
+  allocator:
+    title: 快速分配
+    items: '{{ count }} 节点'
+  fields:
+    copies: 副本数
+    nodes: 节点
+    zone: 可用区
+    spec: 规格
+    amount: 数量
+cluster:
+  title: 集群信息
+  fields:
     name: 集群名称
     tags: 集群标签
     password: 数据库密码
-    type: 集群属性
-    tls: 启用TLS
-    region: Region
-    arch: 体系架构
     exclusive: 独占部署
   tooltip:
     name: 大小写字母、数字和连字符，并以字母开头，长度8-32位
@@ -20,20 +39,6 @@ basic:
     password:
       require: 请输入数据库密码
       length: 长度须达到8-32位
-    type:
-      require: 请选择集群类型
-    version:
-      require: 请选择集群版本
-nodes:
-  title: '{{ name }} 配置'
-  optional: 可选
-  allocator:
-    title: 快速分配
-    items: '{{ count }} 节点'
-  fields:
-    zone: 可用区
-    spec: 规格
-    amount: 数量
 footer:
   reset:
     title: 重置
@@ -44,11 +49,12 @@ footer:
 create:
   validation:
     miss: '不能缺失 {{ name }} 节点！'
-    zone: '{{ name }} 至少需要 {{ count }} 个不同 Zone 的节点!'
+    minZone: '{{ name }} 至少需要 {{ count }} 个节点!'
+    maxZone: '{{ name }} 至多拥有 {{ count }} 个节点!'
   name: 创建集群
 
 message:
-  needRegion: 请先选择集群所在 region
+  noZone: 无可用区
 
 modeSelector:
   title: 选择创建模式
@@ -59,9 +65,22 @@ modeSelector:
     title: 标准创建
     description: 你将设置所有配置选项，包括实例所在的机架、主机、规格和数量
 
+vendorSelector:
+  title: 厂商
+  vendors:
+    local: 本地
+    aws: AWS
+    gcp: GCP
+
+regionSelector:
+  title: 区域
+  rules:
+    require: 请选择区域
+
 preview:
+  name: 集群配置预览
   title: 集群配置预览
-  description: '正在 Region <strong>{{ region }}</strong> 中创建 <strong>{{ arch }}</strong> <strong>{{ type }}</strong> <strong>{{ version }}</strong> 集群 <strong>{{ name }}</strong>'
+  description: '正在 <strong>{{ region }}</strong> 中创建 <strong>{{ type }}</strong> <strong>{{ arch }}</strong> <strong>{{ version }}</strong> 集群 <strong>{{ name }}</strong>'
   restoreInfo: '从集群 <strong>{{ clusterId }}</strong> 的备份 <strong>{{ backupId }}</strong> 中初始化数据'
   columns:
     component: 组件

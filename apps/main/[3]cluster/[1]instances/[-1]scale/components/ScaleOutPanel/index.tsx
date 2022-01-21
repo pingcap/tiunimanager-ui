@@ -1,18 +1,15 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import {
   ClusterInfo,
   ClusterPreview,
   ClusterRawTopologyItem,
   ClusterRawTopologyResourceItem,
-  HardwareArch,
-  KnowledgeOfClusterComponent,
 } from '@/api/model'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction } from 'react-i18next'
 import {
-  AvailableStocksMap,
-  useAvailableStocks,
-  useKnowledgeMap,
+  ComponentKnowledge,
+  useComponents,
 } from '@/components/CreateClusterPanel/helpers'
 import {
   Button,
@@ -44,6 +41,7 @@ import {
   usePreviewScaleOutCluster,
 } from '@/api/hooks/cluster'
 import { ColumnsType } from 'antd/lib/table/interface'
+import { removeArrayItem, replaceArrayItem } from '@/utils/arr'
 
 const styles = {
   ...panelStyles,
@@ -63,10 +61,21 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
   const queryClient = useQueryClient()
   const previewScaleOutCluster = usePreviewScaleOutCluster()
   const scaleOutCluster = useClusterScaleOut()
-  const knowledgeMap = useKnowledgeMap()
-  const { cpuArchitecture: arch, clusterType, clusterVersion, region } = cluster
+  const {
+    cpuArchitecture: arch,
+    clusterType,
+    clusterVersion,
+    region,
+    vendor,
+  } = cluster
 
-  const availableStocksMap = useAvailableStocks(arch! as HardwareArch)
+  const components = useComponents(
+    vendor,
+    region,
+    clusterType,
+    clusterVersion,
+    arch
+  )
 
   const { t, i18n } = useI18n()
 
@@ -77,19 +86,13 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
     [cluster, i18n.language]
   )
 
-  const nodeOptions = knowledgeMap.map?.[clusterType!]?.map?.[
-    clusterVersion!
-  ]?.components.map((spec, idx) => (
+  const nodeOptions = components.map((comp, idx) => (
     <NodeOptions
       t={t}
-      key={spec.clusterComponent!.componentType!}
+      key={comp.id!}
       idx={idx}
-      spec={spec}
-      region={region!}
-      availableStocksMap={availableStocksMap}
-      existed={topology.find(
-        (tp) => tp.componentType === spec.clusterComponent!.componentType
-      )}
+      component={comp}
+      existed={topology.find((tp) => tp.componentType === comp.id)}
     />
   ))
 
@@ -99,79 +102,102 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
 
   const columns = useMemo(() => getColumns(t), [i18n.language])
 
-  const onSubmit = useCallback(async () => {
-    const data = (await form.validateFields()) as {
-      instanceResource: RawScaleOutResources[]
-    }
-    const diff = data.instanceResource.map((r) => findDiff(r))
+  const [loadingPreview, setLoadingPreview] = useState(false)
 
-    const applyScaleOut = () => {
-      scaleOutCluster.mutateAsync(
+  const onSubmit = useCallback(async () => {
+    try {
+      const data = (await form.validateFields()) as {
+        instanceResource: RawScaleOutResources[]
+      }
+      setLoadingPreview(true)
+      const diff = data.instanceResource
+        .filter((r) => !!r)
+        .map((r) => findDiff(r))
+
+      // FIXME: remove zone rewrite
+      {
+        diff.forEach((comp) => {
+          comp.resource =
+            comp.resource?.map((r) => ({
+              ...r,
+              zoneCode: `${region},${r.zoneCode}`,
+            })) || []
+        })
+      }
+
+      const applyScaleOut = () => {
+        scaleOutCluster.mutateAsync(
+          {
+            payload: {
+              clusterId: cluster.clusterId!,
+              instanceResource: diff,
+            },
+            options: {
+              actionName: t('name.scaleOut'),
+            },
+          },
+          {
+            onSuccess() {
+              invalidateClusterDetail(queryClient, cluster.clusterId!)
+              back()
+            },
+          }
+        )
+      }
+
+      await previewScaleOutCluster.mutateAsync(
         {
           payload: {
-            clusterId: cluster.clusterId!,
+            id: cluster.clusterId!,
             instanceResource: diff,
           },
           options: {
-            actionName: t('name.scaleOut'),
+            actionName: t('name.preview'),
+            skipSuccessNotification: true,
           },
         },
         {
-          onSuccess() {
-            invalidateClusterDetail(queryClient, cluster.clusterId!)
-            back()
+          onSuccess(resp) {
+            const { stockCheckResult } = resp.data!.data!
+            const data = stockCheckResult!.map((r, id) => ({
+              id,
+              ...r,
+            }))
+            const isSubmittable = data.length && !data.find((r) => !r.enough)
+            Modal.confirm({
+              icon: <></>,
+              width: 800,
+              okButtonProps: {
+                disabled: !isSubmittable,
+              },
+              okText: t('preview.actions.confirm'),
+              content: (
+                <div>
+                  <Table
+                    size="small"
+                    columns={columns}
+                    dataSource={data}
+                    locale={{
+                      emptyText: t('preview.empty'),
+                    }}
+                    rowKey="id"
+                    pagination={false}
+                  />
+                </div>
+              ),
+              onOk() {
+                applyScaleOut()
+              },
+            })
+          },
+          onSettled() {
+            setLoadingPreview(false)
           },
         }
       )
+    } catch (e) {
+      // NO_OP
     }
-
-    await previewScaleOutCluster.mutateAsync(
-      {
-        payload: {
-          id: cluster.clusterId!,
-          instanceResource: diff,
-        },
-        options: {
-          actionName: t('name.preview'),
-          skipSuccessNotification: true,
-        },
-      },
-      {
-        onSuccess(resp) {
-          const { stockCheckResult } = resp.data!.data!
-          const data = stockCheckResult!.map((r, id) => ({
-            id,
-            ...r,
-          }))
-          const isSubmittable = data.length && !data.find((r) => !r.enough)
-          Modal.confirm({
-            icon: <></>,
-            width: 800,
-            okButtonProps: {
-              disabled: !isSubmittable,
-            },
-            okText: t('preview.actions.confirm'),
-            content: (
-              <div>
-                <Table
-                  size="small"
-                  columns={columns}
-                  dataSource={data}
-                  locale={{
-                    emptyText: t('preview.empty'),
-                  }}
-                  rowKey="id"
-                  pagination={false}
-                />
-              </div>
-            ),
-            onOk() {
-              applyScaleOut()
-            },
-          })
-        },
-      }
-    )
   }, [
     previewScaleOutCluster.mutateAsync,
     scaleOutCluster.mutateAsync,
@@ -179,11 +205,6 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
     i18n.language,
     cluster,
   ])
-
-  const submitter = useMemo(
-    () => <Submitter onSubmit={onSubmit} onReset={onReset} />,
-    [onSubmit, onReset]
-  )
 
   return (
     <Layout className={styles.panel}>
@@ -198,7 +219,11 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
         <Row>{basicInfo}</Row>
         {nodeOptions}
       </Form>
-      {submitter}
+      <Submitter
+        onSubmit={onSubmit}
+        onReset={onReset}
+        loading={loadingPreview}
+      />
     </Layout>
   )
 }
@@ -235,31 +260,26 @@ function BasicOptions({
 
 function NodeOptions({
   t,
-  spec,
+  component,
   idx,
-  region,
-  availableStocksMap,
   existed,
 }: {
   t: TFunction<''>
-  spec: KnowledgeOfClusterComponent
+  component: ComponentKnowledge
   idx: number
-  region: string
-  availableStocksMap: AvailableStocksMap
   existed?: ClusterRawTopologyItem
 }) {
-  const componentName = spec.clusterComponent!.componentName!
-  const componentType = spec.clusterComponent!.componentType!
-  const componentRequired = spec.componentConstraint!.componentRequired
-  const suggestedNodeQuantity = componentRequired
-    ? spec.componentConstraint!.suggestedNodeQuantities?.[0] || 1
-    : 0
-  const specCodes = spec.componentConstraint!.availableSpecCodes!
-  const currentRegion = region ? availableStocksMap.map[region] : undefined
+  const required = component.minInstance > 0
+  const [addedZones, setAddedZones] = useState<string[]>([])
+  const addableZones = component.zones.filter(
+    (zone) =>
+      !addedZones.includes(zone.id) &&
+      !existed?.resource?.find((r) => r.zoneCode === zone.id)
+  )
   return (
     <Collapse
       collapsible="header"
-      defaultActiveKey={componentRequired ? ['1'] : []}
+      defaultActiveKey={required ? ['1'] : []}
       className={styles.componentForm}
     >
       <Collapse.Panel
@@ -267,9 +287,9 @@ function NodeOptions({
         header={
           <span>
             {t('nodes.title', {
-              name: componentName,
+              name: component.name,
             })}
-            {!componentRequired && (
+            {!required && (
               <Tag color="default" className={styles.optionalBadge}>
                 {t('nodes.optional')}
               </Tag>
@@ -280,7 +300,7 @@ function NodeOptions({
         <Form.Item
           name={['instanceResource', idx, 'componentType']}
           hidden
-          initialValue={componentType}
+          initialValue={component.id}
         >
           <Input />
         </Form.Item>
@@ -297,173 +317,197 @@ function NodeOptions({
           <Col span={4}>{t('nodes.fields.newAmount')}</Col>
         </Row>
         <Divider style={{ margin: '16px 0' }} />
-        {(!!currentRegion && (
+        {(
           <>
             {existed?.resource?.map((resource, i) => {
-              // FIXME: zone code
-              const zoneCode = `${region},${resource.zoneCode!}`
-              const zone = currentRegion.map[zoneCode]
-              if (specCodes.length === 0) return undefined
+              const zone = component.zones.find(
+                (z) => z.id === resource.zoneCode
+              )
               return (
-                !!zone && (
-                  <Row key={i} gutter={20}>
-                    <Col span={7}>
-                      <Form.Item
-                        name={[
-                          'instanceResource',
-                          idx,
-                          'modifiedResources',
-                          i,
-                          'zoneCode',
-                        ]}
-                        initialValue={zoneCode}
-                        hidden
-                      >
-                        <Input />
-                      </Form.Item>
-                      <div className={styles.zoneName}>{zone.name}</div>
-                    </Col>
-                    <Col span={7}>
-                      <Form.Item
-                        name={[
-                          'instanceResource',
-                          idx,
-                          'modifiedResources',
-                          i,
-                          'specCode',
-                        ]}
-                        initialValue={specCodes[0]}
-                      >
-                        <Select>
-                          {specCodes.map((spec) => (
-                            <Select.Option key={spec} value={spec}>
-                              {spec}
-                            </Select.Option>
-                          ))}
-                        </Select>
-                      </Form.Item>
-                    </Col>
-                    <Col span={4}>
-                      <Form.Item
-                        name={[
-                          'instanceResource',
-                          idx,
-                          'modifiedResources',
-                          i,
-                          'oldCount',
-                        ]}
-                        initialValue={resource.count || 0}
-                      >
-                        <div className={styles.oldAmount}>
-                          {resource.count || 0}
-                        </div>
-                      </Form.Item>
-                    </Col>
-                    <Col span={4}>
-                      <Form.Item
-                        name={[
-                          'instanceResource',
-                          idx,
-                          'modifiedResources',
-                          i,
-                          'count',
-                        ]}
-                        initialValue={resource.count || 0}
-                      >
-                        <InputNumber min={resource.count} />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                )
+                <Row key={i} gutter={20}>
+                  <Col span={7}>
+                    <Form.Item
+                      name={[
+                        'instanceResource',
+                        idx,
+                        'modifiedResources',
+                        i,
+                        'zoneCode',
+                      ]}
+                      initialValue={resource.zoneCode}
+                      hidden
+                    >
+                      <Input />
+                    </Form.Item>
+                    <div className={styles.zoneName}>
+                      {zone?.name || resource.zoneCode}
+                    </div>
+                  </Col>
+                  <Col span={7}>
+                    <Form.Item
+                      name={[
+                        'instanceResource',
+                        idx,
+                        'modifiedResources',
+                        i,
+                        'specCode',
+                      ]}
+                      initialValue={resource.specCode}
+                      hidden
+                    >
+                      <Input />
+                    </Form.Item>
+                    <div className={styles.zoneName}>{resource.specCode}</div>
+                  </Col>
+                  <Col span={4}>
+                    <Form.Item
+                      name={[
+                        'instanceResource',
+                        idx,
+                        'modifiedResources',
+                        i,
+                        'oldCount',
+                      ]}
+                      initialValue={resource.count || 0}
+                    >
+                      <div className={styles.oldAmount}>
+                        {resource.count || 0}
+                      </div>
+                    </Form.Item>
+                  </Col>
+                  <Col span={4}>
+                    <Form.Item
+                      name={[
+                        'instanceResource',
+                        idx,
+                        'modifiedResources',
+                        i,
+                        'count',
+                      ]}
+                      initialValue={resource.count || 0}
+                    >
+                      <InputNumber min={resource.count} />
+                    </Form.Item>
+                  </Col>
+                </Row>
               )
             })}
             <Form.List name={['instanceResource', idx, 'appendResources']}>
               {(fields, { add, remove }) => (
                 <>
-                  {fields.map(({ key, name, fieldKey }) => (
-                    <Row key={key} gutter={20}>
-                      <Col span={7}>
-                        <Form.Item
-                          fieldKey={[fieldKey, 'zoneCode']}
-                          name={[name, 'zoneCode']}
-                          initialValue={currentRegion.zones[0]}
-                        >
-                          <Select>
-                            {currentRegion.zones.map((zoneCode) => (
-                              <Select.Option key={zoneCode} value={zoneCode}>
-                                {currentRegion.map[zoneCode].name}
-                              </Select.Option>
-                            ))}
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                      <Col span={7}>
-                        <Form.Item
-                          fieldKey={[fieldKey, 'specCode']}
-                          name={[name, 'specCode']}
-                          initialValue={specCodes[0]}
-                        >
-                          <Select>
-                            {specCodes.map((spec) => (
-                              <Select.Option key={spec} value={spec}>
-                                {spec}
-                              </Select.Option>
-                            ))}
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                      <Col span={4}>
-                        <Form.Item
-                          fieldKey={[fieldKey, 'oldCount']}
-                          name={[name, 'oldCount']}
-                          initialValue={0}
-                        >
-                          <div className={styles.oldAmount}>{0}</div>
-                        </Form.Item>
-                      </Col>
-                      <Col span={4}>
-                        <Form.Item
-                          fieldKey={[fieldKey, 'count']}
-                          name={[name, 'count']}
-                          initialValue={suggestedNodeQuantity}
-                        >
-                          <InputNumber min={0} />
-                        </Form.Item>
-                      </Col>
-                      <Col span={1}>
-                        <Tooltip title={t('nodes.remove')}>
-                          <MinusCircleOutlined
-                            className={styles.removeBtn}
-                            onClick={() => remove(name)}
-                          />
-                        </Tooltip>
-                      </Col>
-                    </Row>
-                  ))}
-                  <Form.Item>
-                    <Button
-                      type="dashed"
-                      onClick={() => add()}
-                      block
-                      icon={<PlusOutlined />}
-                    >
-                      {t('nodes.add')}
-                    </Button>
-                  </Form.Item>
+                  {fields.map(({ key, name, fieldKey }) => {
+                    const zone = component.zones.find(
+                      (z) => z.id === addedZones[name]
+                    )
+                    return (
+                      <Row key={key} gutter={20}>
+                        <Col span={7}>
+                          <Form.Item
+                            fieldKey={[fieldKey, 'zoneCode']}
+                            name={[name, 'zoneCode']}
+                            initialValue={zone?.id}
+                          >
+                            <Select
+                              onChange={(z: string) =>
+                                setAddedZones(
+                                  replaceArrayItem(addedZones, name, z)
+                                )
+                              }
+                            >
+                              {addableZones.map((zone) => (
+                                <Select.Option key={zone.id} value={zone.id}>
+                                  {zone.name}
+                                </Select.Option>
+                              ))}
+                            </Select>
+                          </Form.Item>
+                        </Col>
+                        <Col span={7}>
+                          <Form.Item
+                            fieldKey={[fieldKey, 'specCode']}
+                            name={[name, 'specCode']}
+                            // FIXME: remove spec rewrite
+                            initialValue={
+                              zone?.specs[0] &&
+                              `${zone.specs[0].cpu}C${zone.specs[0].memory}G`
+                            }
+                          >
+                            <Select>
+                              {zone?.specs.map((spec) => (
+                                <Select.Option
+                                  key={spec.id}
+                                  // FIXME: remove spec rewrite
+                                  value={`${spec.cpu}C${spec.memory}G`}
+                                >
+                                  {spec.id} ({spec.cpu}C {spec.memory}G)
+                                </Select.Option>
+                              ))}
+                            </Select>
+                          </Form.Item>
+                        </Col>
+                        <Col span={4}>
+                          <Form.Item
+                            fieldKey={[fieldKey, 'oldCount']}
+                            name={[name, 'oldCount']}
+                            initialValue={0}
+                          >
+                            <div className={styles.oldAmount}>{0}</div>
+                          </Form.Item>
+                        </Col>
+                        <Col span={4}>
+                          <Form.Item
+                            fieldKey={[fieldKey, 'count']}
+                            name={[name, 'count']}
+                            initialValue={0}
+                          >
+                            <InputNumber min={0} />
+                          </Form.Item>
+                        </Col>
+                        <Col span={1}>
+                          <Tooltip title={t('nodes.remove')}>
+                            <MinusCircleOutlined
+                              className={styles.removeBtn}
+                              onClick={() => {
+                                setAddedZones(removeArrayItem(addedZones, name))
+                                remove(name)
+                              }}
+                            />
+                          </Tooltip>
+                        </Col>
+                      </Row>
+                    )
+                  })}
+                  {addableZones.length > 0 && (
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => {
+                          setAddedZones([...addedZones, addableZones[0].id])
+                          add()
+                        }}
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        {t('nodes.add')}
+                      </Button>
+                    </Form.Item>
+                  )}
                 </>
               )}
             </Form.List>
           </>
-        )) || <Empty description={t('message.noZone')} />}
+        ) || <Empty description={t('message.noZone')} />}
       </Collapse.Panel>
     </Collapse>
   )
 }
 
 function Submitter({
+  loading,
   onReset,
   onSubmit,
 }: {
+  loading: boolean
   onReset: () => unknown
   onSubmit: () => unknown
 }) {
@@ -474,7 +518,7 @@ function Submitter({
       <IntlPopConfirm title={t('footer.reset.confirm')} onConfirm={onReset}>
         <Button size="large">{t('footer.reset.title')}</Button>
       </IntlPopConfirm>
-      <Button size="large" type="primary" onClick={onSubmit}>
+      <Button size="large" type="primary" onClick={onSubmit} loading={loading}>
         {t('footer.submit.title')}
       </Button>
     </div>

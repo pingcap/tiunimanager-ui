@@ -1,5 +1,6 @@
 import { CSSProperties, ReactNode, useMemo } from 'react'
 import styles from './index.module.less'
+import { Tooltip } from 'antd'
 
 interface CheckCardProps {
   onClick?: (e: Event, value?: any) => void
@@ -9,8 +10,10 @@ interface CheckCardProps {
   className?: string
   title?: ReactNode
   description?: ReactNode
+  cover?: string
   value?: any
   bordered?: boolean
+  tooltip?: string
 }
 
 export default function (props: CheckCardProps) {
@@ -23,7 +26,9 @@ export default function (props: CheckCardProps) {
     disabled = false,
     bordered = true,
     value,
+    cover,
     onClick,
+    tooltip,
   } = props
 
   let wrapperClass = styles.radioCard
@@ -45,14 +50,22 @@ export default function (props: CheckCardProps) {
 
     const descriptionDom = description ? (
       <div className={styles.description}>{description}</div>
+    ) : cover ? (
+      <img src={cover} alt="cover" />
     ) : null
 
     return (
-      <div className={styles.content}>
+      <div
+        className={cover ? `${styles.content} ${styles.cover}` : styles.content}
+      >
         {headerDom || descriptionDom ? (
           <>
             {headerDom}
-            {descriptionDom}
+            {tooltip ? (
+              <Tooltip title={tooltip}>{descriptionDom}</Tooltip>
+            ) : (
+              descriptionDom
+            )}
           </>
         ) : null}
       </div>

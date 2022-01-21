@@ -117,7 +117,16 @@ export function useQueryResourceHierarchy(
   const { type, depth, arch, hostId, status, loadStat, purpose } = query
   return withRequestId((requestId) =>
     useQuery(
-      [CACHE_HIERARCHY_KEY, type, depth, arch],
+      [
+        CACHE_HIERARCHY_KEY,
+        type,
+        depth,
+        arch,
+        hostId,
+        loadStat,
+        purpose,
+        status,
+      ],
       () =>
         APIS.Resources.resourcesHierarchyGet(
           type,
