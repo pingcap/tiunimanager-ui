@@ -252,17 +252,17 @@ knowledge:
     column-based-storage: Column Storage Component
 transport:
   property:
-    id: ID
+    id: Task ID
     status: Status
-    clusterId: Cluster
+    clusterId: Cluster ID
     startTime: Start Time
     endTime: End Time
-    type: Type
+    type: Task Type
     storageType: Storage
     fileName: File Name
     filePath: File Path
     fileSize: File Size
-    comment: Comment
+    comment: Remarks
   type:
     import: Import
     export: Export
@@ -272,5 +272,5 @@ transport:
   status:
     initializing: Initializing
     processing: Processing
-    success: Success
+    success: Finished
     failed: Failed

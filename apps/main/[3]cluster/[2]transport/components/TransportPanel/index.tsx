@@ -68,11 +68,7 @@ export function ExportPanel({ back }: TransportPanelProps) {
   const targetOptions = useMemo(
     () => (
       <>
-        <Form.Item
-          name="storageType"
-          label={t('form.storageType')}
-          initialValue="nfs"
-        >
+        <Form.Item name="storageType" label=" " initialValue="nfs">
           <Radio.Group onChange={(e) => setTargetType(e.target.value)}>
             <Radio value="nfs">{t('enum.storageType.nfs')}</Radio>
             <Radio value="s3">{t('enum.storageType.s3')}</Radio>
@@ -407,11 +403,7 @@ export function ImportPanel({ back }: TransportPanelProps) {
 
     return (
       <>
-        <Form.Item
-          name="storageType"
-          label={t('form.storageType')}
-          initialValue="local"
-        >
+        <Form.Item name="storageType" label=" " initialValue="local">
           <Radio.Group
             onChange={(e) => {
               setSourceType(e.target.value)
