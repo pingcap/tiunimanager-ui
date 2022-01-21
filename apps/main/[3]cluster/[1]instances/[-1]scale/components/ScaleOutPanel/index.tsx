@@ -105,84 +105,99 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
   const [loadingPreview, setLoadingPreview] = useState(false)
 
   const onSubmit = useCallback(async () => {
-    setLoadingPreview(true)
-    const data = (await form.validateFields()) as {
-      instanceResource: RawScaleOutResources[]
-    }
-    const diff = data.instanceResource
-      .filter((r) => !!r)
-      .map((r) => findDiff(r))
+    try {
+      const data = (await form.validateFields()) as {
+        instanceResource: RawScaleOutResources[]
+      }
+      setLoadingPreview(true)
+      const diff = data.instanceResource
+        .filter((r) => !!r)
+        .map((r) => findDiff(r))
 
-    const applyScaleOut = () => {
-      scaleOutCluster.mutateAsync(
+      // FIXME: remove zone rewrite
+      {
+        diff.forEach((comp) => {
+          comp.resource =
+            comp.resource?.map((r) => ({
+              ...r,
+              zoneCode: `${region},${r.zoneCode}`,
+            })) || []
+        })
+      }
+
+      const applyScaleOut = () => {
+        scaleOutCluster.mutateAsync(
+          {
+            payload: {
+              clusterId: cluster.clusterId!,
+              instanceResource: diff,
+            },
+            options: {
+              actionName: t('name.scaleOut'),
+            },
+          },
+          {
+            onSuccess() {
+              invalidateClusterDetail(queryClient, cluster.clusterId!)
+              back()
+            },
+          }
+        )
+      }
+
+      await previewScaleOutCluster.mutateAsync(
         {
           payload: {
-            clusterId: cluster.clusterId!,
+            id: cluster.clusterId!,
             instanceResource: diff,
           },
           options: {
-            actionName: t('name.scaleOut'),
+            actionName: t('name.preview'),
+            skipSuccessNotification: true,
           },
         },
         {
-          onSuccess() {
-            invalidateClusterDetail(queryClient, cluster.clusterId!)
-            back()
+          onSuccess(resp) {
+            const { stockCheckResult } = resp.data!.data!
+            const data = stockCheckResult!.map((r, id) => ({
+              id,
+              ...r,
+            }))
+            const isSubmittable = data.length && !data.find((r) => !r.enough)
+            Modal.confirm({
+              icon: <></>,
+              width: 800,
+              okButtonProps: {
+                disabled: !isSubmittable,
+              },
+              okText: t('preview.actions.confirm'),
+              content: (
+                <div>
+                  <Table
+                    size="small"
+                    columns={columns}
+                    dataSource={data}
+                    locale={{
+                      emptyText: t('preview.empty'),
+                    }}
+                    rowKey="id"
+                    pagination={false}
+                  />
+                </div>
+              ),
+              onOk() {
+                applyScaleOut()
+              },
+            })
+          },
+          onSettled() {
+            setLoadingPreview(false)
           },
         }
       )
+    } catch (e) {
+      // NO_OP
     }
-
-    await previewScaleOutCluster.mutateAsync(
-      {
-        payload: {
-          id: cluster.clusterId!,
-          instanceResource: diff,
-        },
-        options: {
-          actionName: t('name.preview'),
-          skipSuccessNotification: true,
-        },
-      },
-      {
-        onSuccess(resp) {
-          const { stockCheckResult } = resp.data!.data!
-          const data = stockCheckResult!.map((r, id) => ({
-            id,
-            ...r,
-          }))
-          const isSubmittable = data.length && !data.find((r) => !r.enough)
-          Modal.confirm({
-            icon: <></>,
-            width: 800,
-            okButtonProps: {
-              disabled: !isSubmittable,
-            },
-            okText: t('preview.actions.confirm'),
-            content: (
-              <div>
-                <Table
-                  size="small"
-                  columns={columns}
-                  dataSource={data}
-                  locale={{
-                    emptyText: t('preview.empty'),
-                  }}
-                  rowKey="id"
-                  pagination={false}
-                />
-              </div>
-            ),
-            onOk() {
-              applyScaleOut()
-            },
-          })
-        },
-        onSettled() {
-          setLoadingPreview(false)
-        },
-      }
-    )
   }, [
     previewScaleOutCluster.mutateAsync,
     scaleOutCluster.mutateAsync,
@@ -337,24 +352,12 @@ function NodeOptions({
                         i,
                         'specCode',
                       ]}
-                      // FIXME: remove spec rewrite
-                      initialValue={
-                        zone?.specs[0] &&
-                        `${zone.specs[0].cpu}C${zone.specs[0].memory}G`
-                      }
+                      initialValue={resource.specCode}
+                      hidden
                     >
-                      <Select>
-                        {zone?.specs.map((spec) => (
-                          <Select.Option
-                            key={spec.id}
-                            // FIXME: remove spec rewrite
-                            value={`${spec.cpu}C${spec.memory}G`}
-                          >
-                            {`${spec.id} (${spec.cpu}C ${spec.memory}G)`}
-                          </Select.Option>
-                        ))}
-                      </Select>
+                      <Input />
                     </Form.Item>
+                    <div className={styles.zoneName}>{resource.specCode}</div>
                   </Col>
                   <Col span={4}>
                     <Form.Item
