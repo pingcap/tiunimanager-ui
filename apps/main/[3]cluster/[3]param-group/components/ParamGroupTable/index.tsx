@@ -108,7 +108,7 @@ function getColumns({
     {
       title: t('columns.actions'),
       valueType: 'option',
-      width: 140,
+      width: 200,
       key: 'action',
       render: (_, record) => {
         const isBuiltIn = record.hasDefault === ParamGroupCreationType.system
