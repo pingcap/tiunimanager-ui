@@ -222,6 +222,7 @@ function getColumns({
         return [
           <IntlPopConfirm
             key="scaleIn"
+            placement="topRight"
             title={title}
             onConfirm={() => onScaleIn(record.id!)}
           >
