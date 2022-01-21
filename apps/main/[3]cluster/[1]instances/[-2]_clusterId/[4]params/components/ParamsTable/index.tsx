@@ -6,6 +6,7 @@ import {
   FormInstance,
   message,
   Modal,
+  Space,
   Table,
   TableColumnsType,
 } from 'antd'
@@ -131,14 +132,14 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
       dataSource={tableData}
       headerTitle={
         paramGroupId ? (
-          <>
-            <span style={{ marginRight: '30px' }}>{t('header.title')}</span>
+          <Space size="middle">
+            <span>{t('header.title')}</span>
             <Link
               to={`${resolveRoute('../../../')}/param-group/${paramGroupId}`}
             >
               {paramGroupId}
             </Link>
-          </>
+          </Space>
         ) : (
           ''
         )
@@ -146,7 +147,7 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
       tooltip={false}
       columns={columns}
       pagination={false}
-      scroll={{ x: 1200, y: 700 }}
+      scroll={{ x: 1600, y: 700 }}
       options={{
         density: false,
         fullScreen: false,
@@ -186,18 +187,21 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
     {
       title: t('model:clusterParam.property.component'),
       width: 100,
+      fixed: 'left',
       dataIndex: 'instanceType',
       editable: false,
     },
     {
       title: t('model:clusterParam.property.category'),
       width: 100,
+      fixed: 'left',
       dataIndex: 'category',
       editable: false,
     },
     {
       title: t('model:clusterParam.property.name'),
       width: 160,
+      fixed: 'left',
       dataIndex: 'name',
       editable: false,
     },
@@ -214,7 +218,7 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
     },
     {
       title: t('model:clusterParam.property.range'),
-      width: 200,
+      width: 180,
       key: 'range',
       renderText(_, record) {
         return isArray(record.range) && record.range.length > 0
@@ -225,13 +229,13 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
     },
     {
       title: t('model:clusterParam.property.default'),
-      width: 160,
+      width: 120,
       dataIndex: 'defaultValue',
       editable: false,
     },
     {
       title: t('model:clusterParam.property.current'),
-      width: 180,
+      width: 120,
       dataIndex: ['realValue', 'clusterValue'],
       // render(_, record, __, action) {
       //   return (
