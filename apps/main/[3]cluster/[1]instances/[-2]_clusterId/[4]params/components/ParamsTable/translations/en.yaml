@@ -5,6 +5,7 @@ actions:
   reset: Reset
   save: Save
   edit: Edit
+  confirm: Confirm
 reset:
   confirm: Are you sure to reset edited params?
 save:

@@ -10,7 +10,7 @@ import {
   TableColumnsType,
 } from 'antd'
 import {
-  EditOutlined,
+  // EditOutlined,
   ExclamationCircleOutlined,
   QuestionCircleOutlined,
   RollbackOutlined,
@@ -130,12 +130,18 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
       loading={isLoading}
       dataSource={tableData}
       headerTitle={
-        <>
-          <span>{t('header.title')}: </span>
-          <Link to={`${resolveRoute('../../../')}/param-group/${paramGroupId}`}>
-            {paramGroupId}
-          </Link>
-        </>
+        paramGroupId ? (
+          <>
+            <span style={{ marginRight: '30px' }}>{t('header.title')}</span>
+            <Link
+              to={`${resolveRoute('../../../')}/param-group/${paramGroupId}`}
+            >
+              {paramGroupId}
+            </Link>
+          </>
+        ) : (
+          ''
+        )
       }
       tooltip={false}
       columns={columns}
@@ -152,6 +158,7 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
       editable={{
         type: 'single',
         form,
+        saveText: t('actions.confirm'),
         actionRender: (_, __, dom) => [dom.save, dom.cancel],
         onSave: async (paramId, editedRow) => {
           setTableData((prev) =>
@@ -183,14 +190,15 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
       editable: false,
     },
     {
-      title: t('model:clusterParam.property.name'),
-      width: 160,
-      dataIndex: 'name',
+      title: t('model:clusterParam.property.category'),
+      width: 100,
+      dataIndex: 'category',
       editable: false,
     },
     {
-      title: t('model:clusterParam.property.desc'),
-      dataIndex: 'description',
+      title: t('model:clusterParam.property.name'),
+      width: 160,
+      dataIndex: 'name',
       editable: false,
     },
     {
@@ -210,7 +218,7 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
       key: 'range',
       renderText(_, record) {
         return isArray(record.range) && record.range.length > 0
-          ? renderRange(record.type!, record.range, record.unit)
+          ? renderRange(record.type!, record.range)
           : null
       },
       editable: false,
@@ -225,19 +233,19 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
       title: t('model:clusterParam.property.current'),
       width: 180,
       dataIndex: ['realValue', 'clusterValue'],
-      render(_, record, __, action) {
-        return (
-          <span
-            onClick={() => {
-              form.resetFields()
-              action?.startEditable(record.paramId!)
-            }}
-            style={{ cursor: 'pointer' }}
-          >
-            <EditOutlined /> {record.realValue?.clusterValue}
-          </span>
-        )
-      },
+      // render(_, record, __, action) {
+      //   return (
+      //     <span
+      //       onClick={() => {
+      //         form.resetFields()
+      //         action?.startEditable(record.paramId!)
+      //       }}
+      //       style={{ cursor: 'pointer' }}
+      //     >
+      //       <EditOutlined /> {record.realValue?.clusterValue}
+      //     </span>
+      //   )
+      // },
     },
     {
       title: t('columns.actions'),
@@ -256,6 +264,11 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
           </a>
         )
       },
+    },
+    {
+      title: t('model:clusterParam.property.desc'),
+      dataIndex: 'description',
+      editable: false,
     },
   ]
   return columns

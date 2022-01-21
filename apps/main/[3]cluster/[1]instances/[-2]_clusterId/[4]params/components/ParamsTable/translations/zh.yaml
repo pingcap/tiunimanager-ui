@@ -5,6 +5,7 @@ actions:
   reset: 重置
   save: 保存更改
   edit: 编辑
+  confirm: 确认
 reset:
   confirm: 确认重置本地修改吗?
 save:
