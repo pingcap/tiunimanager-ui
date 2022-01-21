@@ -103,6 +103,7 @@ clusterBackupStrategy:
 clusterParam:
   property:
     component: Component Name
+    category: Param Category
     name: Param Name
     reboot: Reboot
     desc: Description

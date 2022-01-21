@@ -103,6 +103,7 @@ clusterBackupStrategy:
 clusterParam:
   property:
     component: 组件名称
+    category: 参数类别
     name: 参数名称
     reboot: 重启
     desc: 参数描述
