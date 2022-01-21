@@ -242,9 +242,8 @@ function useSubmitter({
             clusterSpec: dataSource?.clusterSpec,
             note: fields.note,
             params: editedParamList.map((item) => ({
-              paramId: item.paramId,
-              defaultValue: item.defaultValue,
-              note: item.note,
+              paramId: item.paramId!,
+              defaultValue: item.defaultValue!,
             })),
           },
           options: {
