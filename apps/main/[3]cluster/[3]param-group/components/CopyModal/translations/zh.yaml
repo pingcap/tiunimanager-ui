@@ -1,0 +1,18 @@
+modal:
+  title: 复制参数组
+form:
+  fields:
+    name: 参数组名称
+    note: 描述
+  rules:
+    name:
+      required: 请输入参数组名称
+      length: 长度须在 1 ～ 22 位之间
+      duplicate: 不能输入重复的名称
+footer:
+  cancel:
+    text: 取消
+  ok:
+    text: 确认
+message:
+  name: 复制

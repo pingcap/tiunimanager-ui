@@ -1,0 +1,18 @@
+modal:
+  title: Copy Parameter Group
+form:
+  fields:
+    name: Parameter Group Name
+    note: Description
+  rules:
+    name:
+      required: Please enter the parameter group name
+      length: The length must be between 1 ~ 22
+      duplicate: A duplicate name is not allowed
+footer:
+  cancel:
+    text: Cancel
+  ok:
+    text: Confirm
+message:
+  name: Copy

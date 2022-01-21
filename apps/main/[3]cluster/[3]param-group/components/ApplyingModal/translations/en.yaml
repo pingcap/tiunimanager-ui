@@ -1,0 +1,16 @@
+modal:
+  title: Apply Parameter Group
+form:
+  fields:
+    cluster: Choose a Cluster
+    reboot: Restart Now
+  rules:
+    cluster:
+      required: Please choose a cluster
+footer:
+  cancel:
+    text: Cancel
+  ok:
+    text: Confirm
+message:
+  name: Applied

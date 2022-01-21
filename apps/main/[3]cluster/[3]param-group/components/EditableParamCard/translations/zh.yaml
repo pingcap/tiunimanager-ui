@@ -1,0 +1,9 @@
+card:
+  title: 参数列表
+  rules:
+    required: 请输入合法的参数值
+actions:
+  save: 确认
+  edit: 编辑
+columns:
+  actions: 操作

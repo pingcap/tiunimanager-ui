@@ -189,10 +189,10 @@ export async function invalidateClusterParams(
 }
 
 const updateClusterParams = ({
-  payload: { clusterId, ...payload },
+  payload: { clusterId, ...leftPayload },
   options,
 }: PayloadWithOptions<RequestClusterParamsUpdate & { clusterId: string }>) =>
-  APIS.ClusterParams.clustersClusterIdParamsPut(clusterId, payload, options)
+  APIS.ClusterParams.clustersClusterIdParamsPut(clusterId, leftPayload, options)
 
 export function useUpdateClusterParams() {
   return useMutation(updateClusterParams)

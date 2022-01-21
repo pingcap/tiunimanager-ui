@@ -102,12 +102,14 @@ clusterBackupStrategy:
     Sunday: Sunday
 clusterParam:
   property:
-    name: Param Name
-    reboot: Reboot
+    component: Component Name
+    category: Parameter Category
+    name: Parameter Name
+    reboot: Restart
     desc: Description
-    range: Value Range
+    range: Range of Values
     default: Default Value
-    current: Current Value
+    current: Runtime Value
     unit: Unit
     type: Type
   reboot:
@@ -152,6 +154,25 @@ clusterNode:
     running: Running
     recovering: Recovering
     failure: Failure
+paramGroup:
+  property:
+    id: ID
+    name: Name
+    type: Type
+    scope: Scope
+    dbType: Database
+    dbVersion: Database Version
+    clusterSpec: Cluster Specification
+    desc: Description
+  type:
+    system: System Built-in
+    custom: User Custom
+  scope:
+    cluster: Cluster
+    instance: Component
+  dbType:
+    tidb: TiDB
+    dm: DM
 host:
   property:
     id: ID

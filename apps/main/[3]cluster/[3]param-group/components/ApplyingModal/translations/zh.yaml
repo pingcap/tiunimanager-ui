@@ -1,0 +1,16 @@
+modal:
+  title: 应用参数组
+form:
+  fields:
+    cluster: 选择集群
+    reboot: 立即重启
+  rules:
+    cluster:
+      required: 请选择一个集群
+footer:
+  cancel:
+    text: 取消
+  ok:
+    text: 确认
+message:
+  name: 应用参数组

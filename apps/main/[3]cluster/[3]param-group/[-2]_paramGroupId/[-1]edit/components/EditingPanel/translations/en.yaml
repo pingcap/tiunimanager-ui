@@ -1,0 +1,22 @@
+basic:
+  fields:
+    name: Parameter Group Name
+    dbType: Database Type
+    dbVersion: Database Version
+    clusterSpec: Specification Code
+    note: Description
+  rules:
+    name:
+      required: Please enter the parameter group name
+      length: The length must be between 1 ~ 22
+footer:
+  reset:
+    title: Reset
+    confirm: Are you sure to reset?
+  submit:
+    title: Save
+    confirm: Are you sure to save the changes?
+    error:
+      param: Please confirm the editing parameter first
+message:
+  name: Update

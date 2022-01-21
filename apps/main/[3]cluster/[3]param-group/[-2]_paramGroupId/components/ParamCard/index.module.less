@@ -1,0 +1,27 @@
+.param-card {
+  z-index: 0;
+
+  &:global(.ant-card-small) > :global(.ant-card-head) {
+    font-size: 16px;
+    padding: 0 30px;
+
+    :global(.ant-card-head-title) {
+      padding-top: 20px;
+    }
+  }
+
+  & > :global(.ant-card-body) {
+    overflow-x: hidden;
+  }
+
+  .translation-wrapper {
+    display: flex;
+    position: relative;
+    transition: transform 0.2s;
+  }
+
+  .table-wrapper {
+    flex: 0 0 100%;
+    width: 100%;
+  }
+}
