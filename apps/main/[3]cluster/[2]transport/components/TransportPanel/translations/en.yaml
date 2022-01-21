@@ -40,7 +40,7 @@ enum:
     db: Database
     sql: SQL
   storageType:
-    s3: AWS S3
+    s3: AWS S3 Compatible Storage
     nfs: Shared NFS
     local: Local
 tips:
