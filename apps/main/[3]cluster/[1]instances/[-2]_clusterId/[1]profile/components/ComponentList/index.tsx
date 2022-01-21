@@ -190,10 +190,8 @@ function getColumns({
       render(_, record) {
         if (disableScaleIn) {
           return [
-            <Tooltip title={t('scaleIn.disabled')}>
-              <span className="disabled-text-btn" key="scaleIn">
-                {t('actions.scaleIn')}
-              </span>
+            <Tooltip title={t('scaleIn.disabled')} key="scaleIn">
+              <span className="disabled-text-btn">{t('actions.scaleIn')}</span>
             </Tooltip>,
           ]
         }
@@ -222,6 +220,7 @@ function getColumns({
         return [
           <IntlPopConfirm
             key="scaleIn"
+            placement="topRight"
             title={title}
             onConfirm={() => onScaleIn(record.id!)}
           >

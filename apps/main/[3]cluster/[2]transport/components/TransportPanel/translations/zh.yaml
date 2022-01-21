@@ -40,7 +40,7 @@ enum:
     db: 库表
     sql: SQL
   storageType:
-    s3: AWS S3
+    s3: AWS S3 兼容存储
     nfs: TiEM 共享存储
     local: 本地文件
 tips:

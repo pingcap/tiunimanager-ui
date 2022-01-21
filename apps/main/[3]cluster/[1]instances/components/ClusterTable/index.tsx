@@ -369,10 +369,9 @@ function getColumns(
           bootEnabled ? (
             <IntlPopConfirm
               key="boot"
+              placement="topRight"
               title={t('boot.confirm')}
               icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-              cancelButtonProps={{ size: 'middle' }}
-              okButtonProps={{ size: 'middle' }}
               onConfirm={() => bootAction('boot', record.clusterId!)}
             >
               <Button className={styles.actionBtn} type="link">
@@ -382,11 +381,10 @@ function getColumns(
           ) : (
             <IntlPopConfirm
               key="reboot"
+              placement="topRight"
               title={t('reboot.confirm')}
               icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
               disabled={rebootDisabled}
-              cancelButtonProps={{ size: 'middle' }}
-              okButtonProps={{ size: 'middle' }}
               onConfirm={() => bootAction('reboot', record.clusterId!)}
             >
               <Button
@@ -400,11 +398,10 @@ function getColumns(
           ),
           <IntlPopConfirm
             key="stop"
+            placement="topRight"
             title={t('stop.confirm')}
             icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
             disabled={stopDisabled}
-            cancelButtonProps={{ size: 'middle' }}
-            okButtonProps={{ size: 'middle' }}
             onConfirm={() => stopAction(record.clusterId!)}
           >
             <Button

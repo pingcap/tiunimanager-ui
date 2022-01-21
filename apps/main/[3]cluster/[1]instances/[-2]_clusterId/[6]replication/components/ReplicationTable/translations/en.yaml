@@ -1,0 +1,24 @@
+toolbar:
+  new: New
+columns:
+  actions: Actions
+actions:
+  edit: Edit
+  suspend: Suspend
+  resume: Resume
+  delete: Delete
+suspend:
+  confirm: Are you sure to suspend this task?
+  loading: Suspending...
+  name: Suspend
+  fail: 'Failed: {{ msg }}'
+resume:
+  confirm: Are you sure to resume this task?
+  loading: Resuming...
+  name: Resume
+  fail: 'Failed: {{ msg }}'
+delete:
+  confirm: Are you sure to delete this task?
+  loading: Deleting...
+  name: Delete
+  fail: 'Failed: {{ msg }}'

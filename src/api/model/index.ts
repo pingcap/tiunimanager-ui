@@ -36,6 +36,16 @@ import {
   StructsClusterResourceParameterCompute,
   StructsClusterResourceParameterComputeResource,
   ClusterTakeoverClusterReq,
+  ClusterTiDBDownstream,
+  ClusterMysqlDownstream,
+  ClusterKafkaDownstream,
+  ClusterKafkaDownstreamProtocolEnum,
+  ClusterDetailChangeFeedTaskResp,
+  ClusterCreateChangeFeedTaskReq,
+  ClusterUpdateChangeFeedTaskReq,
+  ClusterQueryChangeFeedTaskResp,
+  ClusterQueryChangeFeedTaskRespDownstreamTypeEnum,
+  ClusterQueryChangeFeedTaskRespStatusEnum,
   MessageQueryParameterGroupResp,
   MessageUpdateParameterGroupReq,
   MessageCreateParameterGroupReq,
@@ -59,6 +69,12 @@ export type ClusterComponentNodeInfo = StructsClusterInstanceInfo
 export type ClusterParamItem = StructsClusterParameterInfo
 export type ClusterLogItem = StructsClusterLogItem
 export type ClusterBackupItem = StructsBackupRecord
+
+export type ClusterDataReplicationDetail = ClusterDetailChangeFeedTaskResp
+export type ClusterDataReplicationItem = ClusterQueryChangeFeedTaskResp
+export type ClusterDownstreamKafka = ClusterKafkaDownstream
+export type ClusterDownstreamMySQL = ClusterMysqlDownstream
+export type ClusterDownstreamTiDB = ClusterTiDBDownstream
 
 export type ClusterType = KnowledgeClusterType
 export type ClusterVersion = KnowledgeClusterVersion
@@ -93,6 +109,9 @@ export type RequestClusterScaleOut = ClusterScaleOutClusterReq
 export type RequestClusterScaleIn = ClusterScaleInClusterReq
 export type RequestClusterTakeover = ClusterTakeoverClusterReq
 
+export type RequestClusterDataReplicationCreate = ClusterCreateChangeFeedTaskReq
+export type RequestClusterDataReplicationUpdate = ClusterUpdateChangeFeedTaskReq
+
 /**
  * Parameter Group type
  */
@@ -110,6 +129,11 @@ export type RequestParamGroupApply = MessageApplyParameterGroupReq
  */
 export { StructsWorkFlowInfoStatusEnum as TaskWorkflowStatus }
 export { StructsWorkFlowNodeInfoStatusEnum as TaskWorkflowSubTaskStatus }
+
+export enum ProductStatus {
+  online = 'Online',
+  offline = 'Offline',
+}
 
 export enum HardwareArch {
   x86 = 'X86',
@@ -188,6 +212,18 @@ export enum ClusterOperationStatus {
 export enum ClusterBackupMethod {
   manual = 'manual',
 }
+
+export enum ClusterDataReplicationDownstreamDisplay {
+  tidb = 'TiDB',
+  mysql = 'MySQL',
+  kafka = 'Kafka',
+}
+
+export { ClusterQueryChangeFeedTaskRespDownstreamTypeEnum as ClusterDataReplicationDownstreamType }
+
+export { ClusterQueryChangeFeedTaskRespStatusEnum as ClusterDataReplicationStatus }
+
+export { ClusterKafkaDownstreamProtocolEnum as ClusterDataReplicationKafkaProtocol }
 
 /**
  * Parameter Group Enum

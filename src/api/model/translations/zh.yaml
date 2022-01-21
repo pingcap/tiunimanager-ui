@@ -83,7 +83,7 @@ clusterBackup:
     auto: 自动
   status:
     initializing: 初始化中
-    processing: 处理中
+    processing: 备份中
     success: 成功
     failed: 失败
 clusterBackupStrategy:
@@ -115,6 +115,20 @@ clusterParam:
   reboot:
     true: 需要
     false: 不需要
+clusterDataReplication:
+  property:
+    id: ID
+    name: 任务名称
+    downstream: 下游类型
+    status: 任务状态
+    time: 剩余待同步数据（单位：毫秒）
+  status:
+    initial: 初始化中
+    stopped: 已结束
+    running: 同步中
+    finished: 已完成
+    failed: 失败
+    error: 发生错误
 clusterComponent:
   property:
     name: 名称
@@ -259,12 +273,12 @@ knowledge:
     column-based-storage: 列存组件
 transport:
   property:
-    id: ID
+    id: 任务 ID
     status: 状态
     clusterId: 集群 ID
     startTime: 开始时间
-    endTime: 截至时间
-    type: 类型
+    endTime: 结束时间
+    type: 任务类型
     storageType: 存储
     fileName: 文件名
     filePath: 文件路径
@@ -278,6 +292,6 @@ transport:
     s3: AWS S3
   status:
     initializing: 初始化中
-    processing: 处理中
+    processing: 进行中
     success: 成功
     failed: 失败

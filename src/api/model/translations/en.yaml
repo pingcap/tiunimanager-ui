@@ -83,7 +83,7 @@ clusterBackup:
     auto: Plan
   status:
     initializing: Initializing
-    processing: Processing
+    processing: Backing up
     success: Success
     failed: Failed
 clusterBackupStrategy:
@@ -115,6 +115,20 @@ clusterParam:
   reboot:
     true: Need
     false: No
+clusterDataReplication:
+  property:
+    id: Id
+    name: Name
+    downstream: Downstream
+    status: Status
+    time: 'Left Time(Unit: ms)'
+  status:
+    initial: Initializing
+    stopped: Stopped
+    running: Running
+    finished: Finished
+    failed: Failed
+    error: Error
 clusterComponent:
   property:
     name: Name
@@ -259,17 +273,17 @@ knowledge:
     column-based-storage: Column Storage Component
 transport:
   property:
-    id: ID
+    id: Task ID
     status: Status
-    clusterId: Cluster
+    clusterId: Cluster ID
     startTime: Start Time
     endTime: End Time
-    type: Type
+    type: Task Type
     storageType: Storage
     fileName: File Name
     filePath: File Path
     fileSize: File Size
-    comment: Comment
+    comment: Remarks
   type:
     import: Import
     export: Export
@@ -279,5 +293,5 @@ transport:
   status:
     initializing: Initializing
     processing: Processing
-    success: Success
+    success: Finished
     failed: Failed

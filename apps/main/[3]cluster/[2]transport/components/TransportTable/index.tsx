@@ -148,36 +148,10 @@ function getColumns(
       hideInSearch: true,
     },
     {
-      title: t('model:transport.property.clusterId'),
-      width: 200,
-      dataIndex: 'clusterId',
-      key: 'clusterId',
-      render: (_, record) => (
-        <Link to={`${resolveRoute('../instances/')}/${record.clusterId}`}>
-          {record.clusterId}
-        </Link>
-      ),
-    },
-    {
-      title: t('model:transport.property.startTime'),
-      width: 150,
-      dataIndex: 'startTime',
-      key: 'startTime',
-      valueType: 'dateTime',
-    },
-    {
-      title: t('model:transport.property.endTime'),
-      width: 150,
-      dataIndex: 'endTime',
-      key: 'endTime',
-      valueType: 'dateTime',
-    },
-    {
       title: t('model:transport.property.type'),
       width: 80,
       dataIndex: 'transportType',
       key: 'type',
-      // transport.status === task.status
       hideInSearch: true,
       renderText: (_, record) =>
         t(`model:transport.type.${record.transportType}`),
@@ -209,11 +183,29 @@ function getColumns(
       hideInSearch: true,
     },
     {
-      title: t('model:transport.property.fileName'),
-      width: 160,
-      dataIndex: 'zipName',
-      key: 'fileName',
-      hideInSearch: true,
+      title: t('model:transport.property.clusterId'),
+      width: 200,
+      dataIndex: 'clusterId',
+      key: 'clusterId',
+      render: (_, record) => (
+        <Link to={`${resolveRoute('../instances/')}/${record.clusterId}`}>
+          {record.clusterId}
+        </Link>
+      ),
+    },
+    {
+      title: t('model:transport.property.startTime'),
+      width: 150,
+      dataIndex: 'startTime',
+      key: 'startTime',
+      valueType: 'dateTime',
+    },
+    {
+      title: t('model:transport.property.endTime'),
+      width: 150,
+      dataIndex: 'endTime',
+      key: 'endTime',
+      valueType: 'dateTime',
     },
     {
       title: t('model:transport.property.filePath'),

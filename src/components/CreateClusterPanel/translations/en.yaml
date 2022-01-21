@@ -1,13 +1,32 @@
 basic:
   title: Basic Options
   fields:
+    type: Cluster Type
+    arch: Arch
+    version: Version
+  rules:
+    type:
+      require: Please select the cluster type
+    version:
+      require: Please select the cluster version
+component:
+  title: '{{ name }} Options'
+  optional: Optional
+  allocator:
+    title: Quick Allocate
+    items: '{{ count }} Nodes'
+  fields:
+    copies: Copies
+    nodes: Nodes
+    zone: Available Zone
+    spec: Spec
+    amount: Amount
+cluster:
+  title: Cluster Options
+  fields:
     name: Cluster Name
     tags: Cluster Tags
     password: DB Password
-    type: Cluster Type
-    tls: Enable TLS
-    region: Region
-    arch: Arch
     exclusive: Exclusive
   tooltip:
     name: Upper and lower case letters, numbers and hyphens, starting with a letter, and with length between 8-32
@@ -20,20 +39,6 @@ basic:
     password:
       require: Please enter the database password
       length: The length must be between 8-32
-    type:
-      require: Please select the cluster type
-    version:
-      require: Please select the cluster version
-nodes:
-  title: '{{ name }} Options'
-  optional: Optional
-  allocator:
-    title: Quick Allocate
-    items: '{{ count }} Nodes'
-  fields:
-    zone: Available Zone
-    spec: Spec
-    amount: Amount
 footer:
   reset:
     title: Reset
@@ -44,11 +49,12 @@ footer:
 create:
   validation:
     miss: 'The {{ name }} node cannot be missing！'
-    zone: '{{ name }} requires at least {{ count }} nodes in different zones!'
+    minZone: '{{ name }} requires at least {{ count }} nodes'
+    maxZone: '{{ name }} requires no more than {{ count }} nodes'
   name: Create Cluster
 
 message:
-  needRegion: Please select a region first!
+  noZone: No available zone.
 
 modeSelector:
   title: Select Create Mode
@@ -59,7 +65,20 @@ modeSelector:
     title: Standard Mode
     description: Set all configuration options manually, including the rack, host, specification and quantity of the instances.
 
+vendorSelector:
+  title: Vendor
+  vendors:
+    local: Local
+    aws: AWS
+    gcp: GCP
+
+regionSelector:
+  title: Region
+  rules:
+    require: Please select the region
+
 preview:
+  name: Cluster Preview
   title: Cluster Preview
   description: 'Creating cluster <strong>{{ name }}</strong> of <strong>{{ type }}</strong> <strong>{{ version }}</strong> on <strong>{{ arch }}</strong> hardware in <strong>{{ region }}</strong>.'
   restoreInfo: 'Restore from backup <strong>{{ backupId }}</strong> of cluster <strong>{{ clusterId }}</strong>'
