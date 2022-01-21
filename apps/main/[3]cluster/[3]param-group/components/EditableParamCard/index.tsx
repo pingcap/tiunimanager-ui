@@ -5,7 +5,7 @@ import { Card, Form, FormInstance } from 'antd'
 import { ActionType, ProColumns } from '@ant-design/pro-table'
 import HeavyTable from '@/components/HeavyTable'
 import { ParamItemDetail } from '@/api/model'
-import { EditOutlined } from '@ant-design/icons'
+// import { EditOutlined } from '@ant-design/icons'
 import { isArray } from '@/utils/types'
 
 import styles from './index.module.less'
@@ -19,6 +19,14 @@ function getColumns(
   saveKey: (key: string) => void
 ) {
   const columns: ProColumns<ParamItemDetail>[] = [
+    {
+      title: t('model:clusterParam.property.category'),
+      width: 140,
+      dataIndex: 'category',
+      key: 'category',
+      fixed: 'left',
+      editable: false,
+    },
     {
       title: t('model:clusterParam.property.name'),
       width: 220,
@@ -45,7 +53,7 @@ function getColumns(
       key: 'range',
       renderText(_, record) {
         return isArray(record.range) && record.range.length > 0
-          ? renderRange(record.type!, record.range, record.unit)
+          ? renderRange(record.type!, record.range)
           : null
       },
       editable: false,
@@ -55,20 +63,20 @@ function getColumns(
       width: 160,
       dataIndex: 'defaultValue',
       key: 'defaultValue',
-      render(node, record, idx, action) {
-        return (
-          <span
-            onClick={() => {
-              form.resetFields([record.paramId!])
-              action?.startEditable(record.paramId!)
-              saveKey(record.paramId!)
-            }}
-            style={{ cursor: 'pointer' }}
-          >
-            <EditOutlined /> {record.defaultValue}
-          </span>
-        )
-      },
+      // render(node, record, idx, action) {
+      //   return (
+      //     <span
+      //       onClick={() => {
+      //         form.resetFields([record.paramId!])
+      //         action?.startEditable(record.paramId!)
+      //         saveKey(record.paramId!)
+      //       }}
+      //       style={{ cursor: 'pointer' }}
+      //     >
+      //       <EditOutlined /> {record.defaultValue}
+      //     </span>
+      //   )
+      // },
       formItemProps: () => {
         // const recordValType = config.entity.type
 
@@ -254,6 +262,7 @@ const ParamCard: FC<ParamCardProps> = ({ loading, data, onEdit, onSave }) => {
         editable={{
           type: 'single',
           form: paramForm,
+          saveText: t('actions.save'),
           actionRender: (row, config, dom) => [dom.save, dom.cancel],
           onSave: async (paramId, editedRow) => {
             setTableDataMap((prev) => {

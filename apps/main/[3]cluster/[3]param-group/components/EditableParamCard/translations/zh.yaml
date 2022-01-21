@@ -3,7 +3,7 @@ card:
   rules:
     required: 请输入合法的参数值
 actions:
-  save: 保存更改
+  save: 确认
   edit: 编辑
 columns:
   actions: 操作

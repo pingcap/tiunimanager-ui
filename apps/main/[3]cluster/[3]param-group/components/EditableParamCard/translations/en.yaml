@@ -3,7 +3,7 @@ card:
   rules:
     required: Please input a valid value
 actions:
-  save: Save
+  save: Confirm
   edit: Edit
 columns:
   actions: Actions
