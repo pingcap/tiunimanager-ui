@@ -1,26 +1,46 @@
 import { ParamValueDataType } from '@/api/model'
 
-const rangeRenderMap: Record<
-  number,
-  (range: string[], unit: string) => string
-> = {
-  [ParamValueDataType.int]: (range: string[], unit) =>
-    `${range[0]}${unit} ~ ${range[1]}${unit}`,
-  [ParamValueDataType.string]: (range: string[]) => range.join(', '),
-  [ParamValueDataType.boolean]: (range: string[]) => `${range[0]}, ${range[1]}`,
-  [ParamValueDataType.float]: (range: string[], unit) =>
-    `${range[0]}${unit} ~ ${range[1]}${unit}`,
-  [ParamValueDataType.array]: (range: string[]) => range.join(', '),
-}
+const rangeRenderTable = [
+  {
+    valueType: (type: number) =>
+      [ParamValueDataType.int, ParamValueDataType.float].includes(type),
+    rangeLen: (range: string[]) => range.length === 2,
+    render: (range: string[]) => `${range[0]} ~ ${range[1]}`,
+  },
+  {
+    valueType: (type: number) =>
+      [ParamValueDataType.int, ParamValueDataType.float].includes(type),
+    rangeLen: (range: string[]) => range.length === 1 || range.length > 2,
+    render: (range: string[]) =>
+      range.filter((el) => el !== undefined).join(', '),
+  },
+  {
+    valueType: (type: number) =>
+      [ParamValueDataType.string, ParamValueDataType.array].includes(type),
+    rangeLen: (range: string[]) => range.length > 0,
+    render: (range: string[]) =>
+      range.filter((el) => el !== undefined).join(', '),
+  },
+  {
+    valueType: (type: number) => type === ParamValueDataType.boolean,
+    rangeLen: (range: string[]) => range.length > 0,
+    render: (range: string[]) => {
+      const [first, second] = range
+
+      return [first, second].filter((el) => el !== undefined).join(', ')
+    },
+  },
+]
 
 /**
  * Render parameter range
  * @param type parameter type
  * @param range parameter range
- * @param unit parameter unit
  */
-export const renderRange = (type: number, range: string[], unit = '') => {
-  return range.length === 1
-    ? `${range[0]}${unit}`
-    : rangeRenderMap[type]?.(range, unit)
+export const renderRange = (type: number, range: string[]) => {
+  const target = rangeRenderTable.find(
+    (config) => config.valueType(type) && config.rangeLen(range)
+  )
+
+  return target?.render(range)
 }
