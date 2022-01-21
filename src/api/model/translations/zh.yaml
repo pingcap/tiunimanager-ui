@@ -83,7 +83,7 @@ clusterBackup:
     auto: 自动
   status:
     initializing: 初始化中
-    processing: 处理中
+    processing: 备份中
     success: 成功
     failed: 失败
 clusterBackupStrategy:

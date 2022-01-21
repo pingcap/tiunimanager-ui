@@ -1,28 +1,29 @@
-import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import { useCallback, useMemo, useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { useQueryClient } from 'react-query'
+import { TFunction } from 'react-i18next'
+import { loadI18n, useI18n } from '@i18n-macro'
+import { resolveRoute } from '@pages-macro'
+import { ColumnsState, ProColumns } from '@ant-design/pro-table'
+import { QuestionCircleOutlined } from '@ant-design/icons'
+import HeavyTable from '@/components/HeavyTable'
+import IntlPopConfirm from '@/components/IntlPopConfirm'
 import {
   BackupStatus,
   ClusterBackupItem,
   ClusterInfo,
   PagedResult,
 } from '@/api/model'
-import HeavyTable from '@/components/HeavyTable'
-import { Popconfirm } from 'antd'
-import { QuestionCircleOutlined } from '@ant-design/icons'
 import {
   invalidateClusterBackups,
   useDeleteClusterBackup,
   useQueryClusterBackups,
 } from '@/api/hooks/cluster'
-import { loadI18n, useI18n } from '@i18n-macro'
-import { useQueryClient } from 'react-query'
-import styles from './index.module.less'
-import { TFunction } from 'react-i18next'
 import { getTimestamp } from '@/utils/time'
 import { usePagination } from '@hooks/usePagination'
 import { DeleteConfirm } from '@/components/DeleteConfirm'
-import { resolveRoute } from '@pages-macro'
-import { useHistory } from 'react-router-dom'
+
+import styles from './index.module.less'
 
 loadI18n()
 
@@ -285,8 +286,9 @@ function getColumns(
               {t('actions.restore')}
             </span>
           ) : (
-            <Popconfirm
+            <IntlPopConfirm
               key="restore"
+              placement="topRight"
               title={t('restore.confirm')}
               icon={<QuestionCircleOutlined />}
               onConfirm={async () => {
@@ -294,7 +296,7 @@ function getColumns(
               }}
             >
               <a>{t('actions.restore')}</a>
-            </Popconfirm>
+            </IntlPopConfirm>
           ),
           <DeleteConfirm
             key="delete"
