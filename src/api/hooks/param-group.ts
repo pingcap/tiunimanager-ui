@@ -8,24 +8,26 @@ import {
   RequestParamGroupApply,
 } from '@/api/model'
 import { APIS } from '@/api/client'
-import { PartialUseQueryOptions } from '@/api/hooks/utils'
-import { AxiosRequestConfig } from 'axios'
+import {
+  Paged,
+  PartialUseQueryOptions,
+  PayloadWithOptions,
+  withRequestId,
+} from '@/api/hooks/utils'
 
 const CACHE_PARAM_GROUP_LIST_KEY = 'param-group-list'
 
 const CACHE_PARAM_GROUP_DETAIL_KEY = 'param-group-detail'
 
 export function useQueryParamGroupList(
-  query: {
-    page?: number
-    pageSize?: number
+  query: Paged<{
     name?: string
     dbType?: ParamGroupDBType
     dbVersion?: string
     spec?: string
     creationType?: ParamGroupCreationType
     isParamsIncluded?: boolean
-  },
+  }>,
   options?: PartialUseQueryOptions
 ) {
   const {
@@ -39,30 +41,33 @@ export function useQueryParamGroupList(
     isParamsIncluded,
   } = query
 
-  return useQuery(
-    [
-      CACHE_PARAM_GROUP_LIST_KEY,
-      page,
-      pageSize,
-      name,
-      dbType,
-      dbVersion,
-      spec,
-      creationType,
-      isParamsIncluded,
-    ],
-    () =>
-      APIS.ParamGroup.paramGroupsGet(
-        spec,
-        dbVersion,
+  return withRequestId((requestId) =>
+    useQuery(
+      [
+        CACHE_PARAM_GROUP_LIST_KEY,
+        page,
+        pageSize,
+        name,
         dbType,
+        dbVersion,
+        spec,
         creationType,
         isParamsIncluded,
-        name,
-        page,
-        pageSize
-      ),
-    options
+      ],
+      () =>
+        APIS.ParamGroup.paramGroupsGet(
+          spec,
+          dbVersion,
+          dbType,
+          creationType,
+          isParamsIncluded,
+          name,
+          page,
+          pageSize,
+          { requestId }
+        ),
+      options
+    )
   )
 }
 
@@ -71,25 +76,31 @@ export async function invalidateParamGroupList(client: QueryClient) {
 }
 
 export function useQueryParamGroupDetail(
-  query: { id: string },
+  query: {
+    id: string
+    paramName?: string
+  },
   options?: PartialUseQueryOptions
 ) {
-  const { id } = query
+  const { id, paramName } = query
 
-  return useQuery(
-    [CACHE_PARAM_GROUP_DETAIL_KEY, id],
-    () => APIS.ParamGroup.paramGroupsParamGroupIdGet(id),
-    options
+  return withRequestId((requestId) =>
+    useQuery(
+      [CACHE_PARAM_GROUP_DETAIL_KEY, id],
+      () =>
+        APIS.ParamGroup.paramGroupsParamGroupIdGet(id, paramName, {
+          requestId,
+        }),
+      options
+    )
   )
 }
 
 const createParamGroup = ({
   payload,
   options,
-}: {
-  payload: RequestParamGroupCreate
-  options?: AxiosRequestConfig
-}) => APIS.ParamGroup.paramGroupsPost(payload, options)
+}: PayloadWithOptions<RequestParamGroupCreate>) =>
+  APIS.ParamGroup.paramGroupsPost(payload, options)
 
 export function useCreateParamGroup() {
   return useMutation(createParamGroup)
@@ -98,10 +109,7 @@ export function useCreateParamGroup() {
 const updateParamGroup = ({
   payload: { paramGroupId, ...leftPayload },
   options,
-}: {
-  payload: { paramGroupId: string } & RequestParamGroupUpdate
-  options?: AxiosRequestConfig
-}) =>
+}: PayloadWithOptions<{ paramGroupId: string } & RequestParamGroupUpdate>) =>
   APIS.ParamGroup.paramGroupsParamGroupIdPut(paramGroupId, leftPayload, options)
 
 export function useUpdateParamGroup() {
@@ -111,10 +119,7 @@ export function useUpdateParamGroup() {
 const copyParamGroup = ({
   payload: { paramGroupId, ...leftPayload },
   options,
-}: {
-  payload: { paramGroupId: string } & RequestParamGroupCopy
-  options?: AxiosRequestConfig
-}) =>
+}: PayloadWithOptions<{ paramGroupId: string } & RequestParamGroupCopy>) =>
   APIS.ParamGroup.paramGroupsParamGroupIdCopyPost(
     paramGroupId,
     leftPayload,
@@ -128,10 +133,8 @@ export function useCopyParamGroup() {
 const deleteParamGroup = ({
   payload: { paramGroupId },
   options,
-}: {
-  payload: { paramGroupId: string }
-  options?: AxiosRequestConfig
-}) => APIS.ParamGroup.paramGroupsParamGroupIdDelete(paramGroupId, options)
+}: PayloadWithOptions<{ paramGroupId: string }>) =>
+  APIS.ParamGroup.paramGroupsParamGroupIdDelete(paramGroupId, options)
 
 export function useDeleteParamGroup() {
   return useMutation(deleteParamGroup)
@@ -140,10 +143,7 @@ export function useDeleteParamGroup() {
 const applyParamGroup = ({
   payload: { paramGroupId, ...leftPayload },
   options,
-}: {
-  payload: { paramGroupId: string } & RequestParamGroupApply
-  options?: AxiosRequestConfig
-}) =>
+}: PayloadWithOptions<{ paramGroupId: string } & RequestParamGroupApply>) =>
   APIS.ParamGroup.paramGroupsParamGroupIdApplyPost(
     paramGroupId,
     leftPayload,
