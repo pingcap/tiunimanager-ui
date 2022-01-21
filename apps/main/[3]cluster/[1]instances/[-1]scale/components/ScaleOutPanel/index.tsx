@@ -100,7 +100,9 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
     const data = (await form.validateFields()) as {
       instanceResource: RawScaleOutResources[]
     }
-    const diff = data.instanceResource.map((r) => findDiff(r))
+    const diff = data.instanceResource
+      .filter((r) => !!r)
+      .map((r) => findDiff(r))
 
     const applyScaleOut = () => {
       scaleOutCluster.mutateAsync(
