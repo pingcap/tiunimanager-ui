@@ -83,7 +83,7 @@ clusterBackup:
     auto: Plan
   status:
     initializing: Initializing
-    processing: Processing
+    processing: Backing up
     success: Success
     failed: Failed
 clusterBackupStrategy:
