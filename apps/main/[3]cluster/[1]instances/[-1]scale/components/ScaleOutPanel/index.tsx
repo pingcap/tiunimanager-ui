@@ -61,10 +61,16 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
   const queryClient = useQueryClient()
   const previewScaleOutCluster = usePreviewScaleOutCluster()
   const scaleOutCluster = useClusterScaleOut()
-  const { cpuArchitecture: arch, clusterType, clusterVersion, region } = cluster
+  const {
+    cpuArchitecture: arch,
+    clusterType,
+    clusterVersion,
+    region,
+    vendor,
+  } = cluster
 
   const components = useComponents(
-    'Local', // TODO: use cluster.vendor
+    vendor,
     region,
     clusterType,
     clusterVersion,
@@ -96,7 +102,10 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
 
   const columns = useMemo(() => getColumns(t), [i18n.language])
 
+  const [loadingPreview, setLoadingPreview] = useState(false)
+
   const onSubmit = useCallback(async () => {
+    setLoadingPreview(true)
     const data = (await form.validateFields()) as {
       instanceResource: RawScaleOutResources[]
     }
@@ -169,6 +178,9 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
             },
           })
         },
+        onSettled() {
+          setLoadingPreview(false)
+        },
       }
     )
   }, [
@@ -178,11 +190,6 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
     i18n.language,
     cluster,
   ])
-
-  const submitter = useMemo(
-    () => <Submitter onSubmit={onSubmit} onReset={onReset} />,
-    [onSubmit, onReset]
-  )
 
   return (
     <Layout className={styles.panel}>
@@ -197,7 +204,11 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
         <Row>{basicInfo}</Row>
         {nodeOptions}
       </Form>
-      {submitter}
+      <Submitter
+        onSubmit={onSubmit}
+        onReset={onReset}
+        loading={loadingPreview}
+      />
     </Layout>
   )
 }
@@ -326,11 +337,19 @@ function NodeOptions({
                         i,
                         'specCode',
                       ]}
-                      initialValue={zone?.specs[0].id}
+                      // FIXME: remove spec rewrite
+                      initialValue={
+                        zone?.specs[0] &&
+                        `${zone.specs[0].cpu}C${zone.specs[0].memory}G`
+                      }
                     >
                       <Select>
                         {zone?.specs.map((spec) => (
-                          <Select.Option key={spec.id} value={spec.id}>
+                          <Select.Option
+                            key={spec.id}
+                            // FIXME: remove spec rewrite
+                            value={`${spec.cpu}C${spec.memory}G`}
+                          >
                             {`${spec.id} (${spec.cpu}C ${spec.memory}G)`}
                           </Select.Option>
                         ))}
@@ -404,12 +423,20 @@ function NodeOptions({
                           <Form.Item
                             fieldKey={[fieldKey, 'specCode']}
                             name={[name, 'specCode']}
-                            initialValue={zone?.specs[0]?.id}
+                            // FIXME: remove spec rewrite
+                            initialValue={
+                              zone?.specs[0] &&
+                              `${zone.specs[0].cpu}C${zone.specs[0].memory}G`
+                            }
                           >
                             <Select>
                               {zone?.specs.map((spec) => (
-                                <Select.Option key={spec.id} value={spec.id}>
-                                  {`${spec.id} (${spec.cpu}C ${spec.memory}G)`}
+                                <Select.Option
+                                  key={spec.id}
+                                  // FIXME: remove spec rewrite
+                                  value={`${spec.cpu}C${spec.memory}G`}
+                                >
+                                  {spec.id} ({spec.cpu}C {spec.memory}G)
                                 </Select.Option>
                               ))}
                             </Select>
@@ -473,9 +500,11 @@ function NodeOptions({
 }
 
 function Submitter({
+  loading,
   onReset,
   onSubmit,
 }: {
+  loading: boolean
   onReset: () => unknown
   onSubmit: () => unknown
 }) {
@@ -486,7 +515,7 @@ function Submitter({
       <IntlPopConfirm title={t('footer.reset.confirm')} onConfirm={onReset}>
         <Button size="large">{t('footer.reset.title')}</Button>
       </IntlPopConfirm>
-      <Button size="large" type="primary" onClick={onSubmit}>
+      <Button size="large" type="primary" onClick={onSubmit} loading={loading}>
         {t('footer.submit.title')}
       </Button>
     </div>

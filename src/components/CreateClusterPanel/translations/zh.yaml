@@ -9,13 +9,15 @@ basic:
       require: 请选择集群类型
     version:
       require: 请选择集群版本
-nodes:
+component:
   title: '{{ name }} 配置'
   optional: 可选
   allocator:
     title: 快速分配
     items: '{{ count }} 节点'
   fields:
+    copies: 副本数
+    nodes: 节点
     zone: 可用区
     spec: 规格
     amount: 数量
@@ -76,6 +78,7 @@ regionSelector:
     require: 请选择区域
 
 preview:
+  name: 集群配置预览
   title: 集群配置预览
   description: '正在 <strong>{{ region }}</strong> 中创建 <strong>{{ type }}</strong> <strong>{{ arch }}</strong> <strong>{{ version }}</strong> 集群 <strong>{{ name }}</strong>'
   restoreInfo: '从集群 <strong>{{ clusterId }}</strong> 的备份 <strong>{{ backupId }}</strong> 中初始化数据'

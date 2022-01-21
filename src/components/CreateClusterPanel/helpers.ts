@@ -23,17 +23,13 @@ export function processCreateRequest(
     value.resourceParameters!.instanceResource!.forEach((comp) => {
       // remove count=0
       comp.resource = comp.resource!.filter((item) => item && item.count! > 0)
-
-      // FIXME: remove hardcode
+      // FIXME: remove zone id rewrite
       {
-        comp.resource = comp.resource.map((item) => ({
+        comp.resource = comp.resource!.map((item) => ({
           ...item,
-          diskCapacity: 0,
-          diskType: 'SATA',
-          specCode: '4C8G',
+          zoneCode: `${value.region},${item.zoneCode}`,
         }))
       }
-
       // calculate totalCount
       comp.totalNodeCount = comp.resource!.reduce(
         (count, item) => count + item.count!,

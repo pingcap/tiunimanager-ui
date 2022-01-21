@@ -9,13 +9,15 @@ basic:
       require: Please select the cluster type
     version:
       require: Please select the cluster version
-nodes:
+component:
   title: '{{ name }} Options'
   optional: Optional
   allocator:
     title: Quick Allocate
     items: '{{ count }} Nodes'
   fields:
+    copies: Copies
+    nodes: Nodes
     zone: Available Zone
     spec: Spec
     amount: Amount
@@ -76,6 +78,7 @@ regionSelector:
     require: Please select the region
 
 preview:
+  name: Cluster Preview
   title: Cluster Preview
   description: 'Creating cluster <strong>{{ name }}</strong> of <strong>{{ type }}</strong> <strong>{{ version }}</strong> on <strong>{{ arch }}</strong> hardware in <strong>{{ region }}</strong>.'
   restoreInfo: 'Restore from backup <strong>{{ backupId }}</strong> of cluster <strong>{{ clusterId }}</strong>'

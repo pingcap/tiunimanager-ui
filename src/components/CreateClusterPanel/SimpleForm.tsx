@@ -181,7 +181,7 @@ export function SimpleForm({
   const nodeOptions = useMemo(
     () =>
       components?.map((comp, idx) => (
-        <NodeOptions t={t} key={comp.id} idx={idx} component={comp} />
+        <ComponentOptions t={t} key={comp.id} idx={idx} component={comp} />
       )),
     [form, components, i18n.language]
   )
@@ -303,7 +303,7 @@ function BasicOptions({
   )
 }
 
-function NodeOptions({
+function ComponentOptions({
   t,
   component,
   idx,
@@ -323,12 +323,12 @@ function NodeOptions({
         key={1}
         header={
           <span>
-            {t('nodes.title', {
+            {t('component.title', {
               name: component.name,
             })}
             {!required && (
               <Tag color="default" className={styles.optionalBadge}>
-                {t('nodes.optional')}
+                {t('component.optional')}
               </Tag>
             )}
           </span>
@@ -346,6 +346,22 @@ function NodeOptions({
         >
           <Input />
         </Form.Item>
+        {/* FIXME: remove hard-coded copies options for tikv */}
+        {component.id === 'TiKV' && (
+          <Form.Item
+            name="copies"
+            initialValue={3}
+            label={t('component.fields.copies')}
+          >
+            <Select>
+              {[1, 2, 3, 4, 5].map((count) => (
+                <Select.Option key={count} value={count}>
+                  {count}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        )}
         <Row
           gutter={20}
           style={{
@@ -353,9 +369,9 @@ function NodeOptions({
             fontSize: 16,
           }}
         >
-          <Col span={8}>{t('nodes.fields.zone')}</Col>
-          <Col span={8}>{t('nodes.fields.spec')}</Col>
-          <Col span={8}>{t('nodes.fields.amount')}</Col>
+          <Col span={8}>{t('component.fields.zone')}</Col>
+          <Col span={8}>{t('component.fields.spec')}</Col>
+          <Col span={8}>{t('component.fields.amount')}</Col>
         </Row>
         <Divider style={{ margin: '16px 0' }} />
         {component.zones.map((zone, i) => {
@@ -389,11 +405,19 @@ function NodeOptions({
                     i,
                     'specCode',
                   ]}
-                  initialValue={zone.specs[0].id}
+                  // FIXME: remove spec rewrite
+                  initialValue={
+                    zone.specs[0] &&
+                    `${zone.specs[0].cpu}C${zone.specs[0].memory}G`
+                  }
                 >
                   <Select>
                     {zone.specs.map((spec) => (
-                      <Select.Option key={spec.id} value={spec.id}>
+                      <Select.Option
+                        key={spec.id}
+                        // FIXME: remove spec rewrite
+                        value={`${spec.cpu}C${spec.memory}G`}
+                      >
                         {spec.id} ({spec.cpu}C {spec.memory}G)
                       </Select.Option>
                     ))}
@@ -500,6 +524,8 @@ function Submitter({
 
   const columns = useMemo(() => getColumns(t), [i18n.language])
 
+  const [loadingPreview, setLoadingPreview] = useState(false)
+
   const handleSubmit = async () => {
     try {
       const fields = await form.validateFields()
@@ -509,6 +535,7 @@ function Submitter({
         processCreateRequest(fields, componentsKnowledge, t) &&
         (!processValue || processValue(fields, componentsKnowledge, t))
       ) {
+        setLoadingPreview(true)
         await previewCreateCluster.mutateAsync(
           {
             payload: fields,
@@ -582,6 +609,9 @@ function Submitter({
                 },
               })
             },
+            onSettled() {
+              setLoadingPreview(false)
+            },
           }
         )
       }
@@ -600,6 +630,7 @@ function Submitter({
         type="primary"
         onClick={handleSubmit}
         disabled={disableSubmit}
+        loading={loadingPreview}
       >
         {t('footer.submit.title')}
       </Button>
@@ -657,7 +688,6 @@ type VendorSelectorProps = {
 
 function VendorSelector({ selected, onSelect, vendors }: VendorSelectorProps) {
   const { t } = useI18n()
-  // FIXME: vendors should be generated from real data, so should logo urls.
 
   return (
     <div className={styles.standardSelector}>
