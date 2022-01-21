@@ -12,6 +12,13 @@ import { renderRange } from '../../../components/EditableParamCard/helper'
 function getColumns(t: TFunction<''>) {
   const columns: ProColumns<ParamItemDetail>[] = [
     {
+      title: t('model:clusterParam.property.category'),
+      width: 140,
+      dataIndex: 'category',
+      key: 'category',
+      fixed: 'left',
+    },
+    {
       title: t('model:clusterParam.property.name'),
       width: 220,
       dataIndex: 'name',
@@ -35,7 +42,7 @@ function getColumns(t: TFunction<''>) {
       key: 'range',
       renderText(_, record) {
         return isArray(record.range) && record.range.length > 0
-          ? renderRange(record.type!, record.range, record.unit)
+          ? renderRange(record.type!, record.range)
           : null
       },
     },
