@@ -1,4 +1,14 @@
-import { Button, Checkbox, Col, Form, Modal, Row, Select, Tooltip } from 'antd'
+import {
+  Button,
+  Checkbox,
+  Col,
+  Form,
+  Modal,
+  Row,
+  Select,
+  Space,
+  Tooltip,
+} from 'antd'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { useEffect, useState } from 'react'
 import {
@@ -126,22 +136,23 @@ export default function SettingModal({
       maskClosable={false}
       destroyOnClose={true}
       footer={
-        <div>
-          <Button onClick={handleReset}>{t('reset')}</Button>
-          <span style={{ marginLeft: 8 }}>
-            {changed ? (
-              <Button onClick={handleUpdate} type="primary">
+        changed ? (
+          <Space>
+            <Button onClick={handleReset}>{t('reset')}</Button>
+            <Button onClick={handleUpdate} type="primary">
+              {t('save')}
+            </Button>
+          </Space>
+        ) : (
+          <Space>
+            <Button disabled>{t('reset')}</Button>
+            <Tooltip title={t('noChanges')}>
+              <Button type="primary" disabled>
                 {t('save')}
               </Button>
-            ) : (
-              <Tooltip title={t('noChanges')}>
-                <Button type="primary" disabled>
-                  {t('save')}
-                </Button>
-              </Tooltip>
-            )}
-          </span>
-        </div>
+            </Tooltip>
+          </Space>
+        )
       }
     >
       {isLoading ? (

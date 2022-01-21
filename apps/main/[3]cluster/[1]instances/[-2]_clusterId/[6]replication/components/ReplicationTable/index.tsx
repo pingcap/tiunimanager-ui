@@ -216,6 +216,7 @@ function getColumns({
           ),
           <IntlPopConfirm
             key="suspend"
+            placement="topRight"
             title={t('suspend.confirm')}
             icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
             onConfirm={() => suspendAction(record.id!)}
@@ -231,6 +232,7 @@ function getColumns({
           </IntlPopConfirm>,
           <IntlPopConfirm
             key="resume"
+            placement="topRight"
             title={t('resume.confirm')}
             icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
             onConfirm={() => resumeAction(record.id!)}

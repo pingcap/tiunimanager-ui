@@ -83,7 +83,7 @@ clusterBackup:
     auto: 自动
   status:
     initializing: 初始化中
-    processing: 处理中
+    processing: 备份中
     success: 成功
     failed: 失败
 clusterBackupStrategy:
@@ -252,12 +252,12 @@ knowledge:
     column-based-storage: 列存组件
 transport:
   property:
-    id: ID
+    id: 任务 ID
     status: 状态
     clusterId: 集群 ID
     startTime: 开始时间
-    endTime: 截至时间
-    type: 类型
+    endTime: 结束时间
+    type: 任务类型
     storageType: 存储
     fileName: 文件名
     filePath: 文件路径
@@ -271,6 +271,6 @@ transport:
     s3: AWS S3
   status:
     initializing: 初始化中
-    processing: 处理中
+    processing: 进行中
     success: 成功
     failed: 失败
