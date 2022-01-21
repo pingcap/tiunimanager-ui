@@ -1,10 +1,10 @@
 basic:
   fields:
-    name: Name
+    name: Parameter Group Name
     dbType: Database Type
     dbVersion: Database Version
-    clusterSpec: Cluster Specification
-    note: Note
+    clusterSpec: Specification Code
+    note: Description
   rules:
     name:
       required: Please enter the parameter group name
@@ -12,11 +12,11 @@ basic:
 footer:
   reset:
     title: Reset
-    confirm: Are you sure to reset the form?
+    confirm: Are you sure to reset?
   submit:
-    title: Submit
-    confirm: Are you sure to submit the form?
+    title: Save
+    confirm: Are you sure to save the changes?
     error:
-      param: Please save the editing parameter first
+      param: Please confirm the editing parameter first
 message:
   name: Update

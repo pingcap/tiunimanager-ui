@@ -1,9 +1,9 @@
 modal:
-  title: Copy The Parameter Group
+  title: Copy Parameter Group
 form:
   fields:
-    name: Name
-    note: Note
+    name: Parameter Group Name
+    note: Description
   rules:
     name:
       required: Please enter the parameter group name

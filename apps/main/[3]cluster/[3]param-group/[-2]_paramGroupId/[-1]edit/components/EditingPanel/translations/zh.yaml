@@ -3,7 +3,7 @@ basic:
     name: 参数组名称
     dbType: 数据库类型
     dbVersion: 数据库版本
-    clusterSpec: 集群规格
+    clusterSpec: 规格代码
     note: 描述
   rules:
     name:
@@ -12,11 +12,11 @@ basic:
 footer:
   reset:
     title: 重置
-    confirm: 确认重置表单吗?
+    confirm: 确认重置吗?
   submit:
-    title: 提交
-    confirm: 确认提交表单吗?
+    title: 保存
+    confirm: 确认保存修改吗?
     error:
-      param: 请保存参数后再提交
+      param: 请确认编辑中的参数后再提交
 message:
   name: 修改

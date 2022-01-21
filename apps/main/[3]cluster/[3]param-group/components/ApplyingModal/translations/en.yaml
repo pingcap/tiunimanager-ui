@@ -1,9 +1,9 @@
 modal:
-  title: Use The Parameter Group
+  title: Apply Parameter Group
 form:
   fields:
     cluster: Choose a Cluster
-    reboot: Reboot right now
+    reboot: Restart Now
   rules:
     cluster:
       required: Please choose a cluster
