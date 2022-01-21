@@ -109,7 +109,7 @@ clusterParam:
     desc: 参数描述
     range: 值范围
     default: 默认值
-    current: 运行值
+    current: 运行时值
     unit: 单位
     type: 类型
   reboot:

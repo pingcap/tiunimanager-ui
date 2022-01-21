@@ -103,13 +103,13 @@ clusterBackupStrategy:
 clusterParam:
   property:
     component: Component Name
-    category: Param Category
-    name: Param Name
-    reboot: Reboot
+    category: Parameter Category
+    name: Parameter Name
+    reboot: Restart
     desc: Description
-    range: Value Range
+    range: Range of Values
     default: Default Value
-    current: Current Value
+    current: Runtime Value
     unit: Unit
     type: Type
   reboot:
