@@ -1,14 +1,17 @@
 basic:
-  title: 基础配置
+  title: 数据库基础信息
   fields:
-    type: 集群类型
-    arch: 体系架构
-    version: 集群版本
+    type: 数据库类型
+    arch: CPU 体系架构
+    version: 数据库版本
+    paramGroup: 参数组
   rules:
     type:
-      require: 请选择集群类型
+      require: 请选择数据库类型
     version:
-      require: 请选择集群版本
+      require: 请选择数据库版本
+    paramGroup:
+      require: 请选择参数组
 component:
   title: '{{ name }} 配置'
   optional: 可选
@@ -16,16 +19,17 @@ component:
     title: 快速分配
     items: '{{ count }} 节点'
   fields:
-    copies: 副本数
+    copies: 存储副本数
     nodes: 节点
     zone: 可用区
-    spec: 规格
+    spec: 规格代码
     amount: 数量
 cluster:
-  title: 集群信息
+  title: 集群基础信息
   fields:
     name: 集群名称
     tags: 集群标签
+    user: 数据库用户
     password: 数据库密码
     exclusive: 独占部署
   tooltip:
