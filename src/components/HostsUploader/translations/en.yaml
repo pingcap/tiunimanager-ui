@@ -3,9 +3,9 @@ status:
   success: Start importing hosts successfully!
   fail: 'Fail to start importing: {{ msg }}'
 hint:
-  upload: Click or drag the file to there to upload.
-  format: Currently only .xls or .xlsx files are supported.
-  download: Download template file
+  upload: Click or drag the filea here for uploading
+  format: Support importing hosts in bulk via .xls or .xlsx files
+  download: Download host template
 error:
-  format: Currently only .xls or .xlsx files are supported.
-  size: Currently only support files < 2Gb.
+  format: Only .xls or .xlsx files are supported currently
+  size: Only files smaller than 2Gb can be uploaded currently
