@@ -1,14 +1,17 @@
 columns:
+  cpu: vCPU(Core)
+  memory: Memory(GiB)
+  storage: Storage
   location: Location
-  system: System
-  availableSpec: Available Spec
-  spec: Total Spec
   actions: Actions
+capacity:
+  allocated: Allocated Capacity
+  total: Total Capacity
 actions:
   online: Online
   offline: Offline
   monitor: Monitor
   delete: Delete
 delete:
-  confirm: Are you sure to delete this host?
   name: Delete Host
+  confirm: Are you sure to delete the {{ hostName }} host?
