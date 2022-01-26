@@ -175,39 +175,42 @@ paramGroup:
     dm: DM
 host:
   property:
-    id: ID
+    id: 主机 ID
+    hostName: 主机名称
     reserved: 保留
 
-    ip: IP
-    zone: Zone
-    region: Region
+    ip: 主机网络地址
+    vendor: 厂商
+    region: 区域
+    zone: 可用区
     rack: 机架
 
     status: 状态
     load: 负载
-    purpose: 类型
+    purpose: 主机用途
 
-    hostName: 主机名
     username: 用户名
     password: 密码
 
-    os: 操作系统
-    arch: 系统架构
+    os: 操作系统版本
+    arch: CPU 架构
     kernel: 系统内核
 
     nic: 网卡
-    diskType: 磁盘类型
+    diskType: 存储类型
     cpuCores: CPU 核心
     memory: 内存
 
+    labels: 标签
     createTime: 创建时间
     updateTime: 更新时间
   status:
     init: 初始化
     online: 在线
     offline: 离线
-    deleted: 已删除
     failed: 异常
+    deleting: 删除中
+    deleted: 已删除
   load:
     idle: 空闲中
     used: 使用中
@@ -222,18 +225,21 @@ host:
   disk:
     property:
       id: ID
-      name: 名称
+      name: 磁盘名称
       hostId: 主机ID
-      capacity: 容量
+      capacity: 总容量
       path: 挂载路径
       status: 状态
       type: 类型
       usedBy: 使用者
     status:
-      available: 可用
-      used: 使用中
+      Available: 可分配
+      Reserved: 不可分配
+      InUsed: 使用中
+      Exhaust: 使用中
+      Error: 磁盘损坏
     type:
-      nvme-ssd: NVME SSD
+      nvmessd: NVME SSD
       ssd: SSD
       sata: SATA
 domain:

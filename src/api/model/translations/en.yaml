@@ -175,39 +175,42 @@ paramGroup:
     dm: DM
 host:
   property:
-    id: ID
+    id: Host ID
+    hostName: Host Name
     reserved: Reserved
 
-    ip: IP
-    zone: Zone
+    ip: Host Network Address
+    vendor: Vendor
     region: Region
+    zone: Available Zone
     rack: Rack
 
     status: Status
     load: Load
     purpose: Purpose
 
-    hostName: Host Name
     username: Username
     password: Password
 
-    os: OS System
-    arch: OS Arch
+    os: OS Version
+    arch: CPU Arch
     kernel: OS Kernel
 
     nic: NIC
-    diskType: Disk Type
+    diskType: Storage Type
     cpuCores: CPU Cores
     memory: Memory
 
+    labels: Labels
     createTime: Create Time
     updateTime: Update Time
   status:
-    init: Init
+    init: Initializing
     online: Online
     offline: Offline
-    deleted: Deleted
     failed: Failed
+    deleting: Deleting
+    deleted: Deleted
   load:
     idle: Free
     used: In Use
@@ -222,16 +225,19 @@ host:
   disk:
     property:
       id: ID
-      name: Name
+      name: Disk Name
       hostId: Host ID
-      capacity: Capacity
-      path: Mount Path
+      capacity: Total Capacity
+      path: Mount Point
       status: Status
       type: Type
       usedBy: Used By
     status:
-      available: Available
-      used: Used
+      Available: Available
+      Reserved: Unavailable
+      InUsed: Used
+      Exhaust: Exhausted
+      Error: Error
     type:
       nvme-ssd: NVME SSD
       ssd: SSD
