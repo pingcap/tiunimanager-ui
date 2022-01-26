@@ -1,21 +1,23 @@
+import { useCallback, useMemo, useState } from 'react'
+import { useQueryClient } from 'react-query'
+import { TFunction } from 'react-i18next'
+import { loadI18n, useI18n } from '@i18n-macro'
+import { Tag } from 'antd'
 import { ColumnsState, ProColumns } from '@ant-design/pro-table'
 import HeavyTable from '@/components/HeavyTable'
 import { HostInfo, PagedResult } from '@/api/model'
-import { useCallback, useMemo, useState } from 'react'
 import {
   invalidateHostDetail,
   invalidateHostsList,
   useDeleteHosts,
   useQueryHostsList,
 } from '@/api/hooks/resources'
-import { useQueryClient } from 'react-query'
-import styles from './index.module.less'
-import { loadI18n, useI18n } from '@i18n-macro'
-import { TFunction } from 'react-i18next'
 import { usePagination } from '@hooks/usePagination'
 import { DeleteConfirm } from '@/components/DeleteConfirm'
-import { isNumber } from '@/utils/types'
 import { NameAndID } from '@/components/NameAndID'
+import { isNumber } from '@/utils/types'
+
+import styles from './index.module.less'
 
 loadI18n()
 
@@ -127,7 +129,7 @@ function getHostColumns(
       title: `${t('model:host.property.id')} / ${t(
         'model:host.property.hostName'
       )}`,
-      width: 200,
+      width: 220,
       key: 'id+name',
       hideInSearch: true,
       fixed: 'left',
@@ -144,7 +146,7 @@ function getHostColumns(
     },
     {
       title: t('model:host.property.status'),
-      width: 80,
+      width: 120,
       dataIndex: 'status',
       key: 'status',
       valueType: 'select',
@@ -152,57 +154,15 @@ function getHostColumns(
         Init: { text: t('model:host.status.init'), status: 'Processing' },
         Online: { text: t('model:host.status.online'), status: 'Success' },
         Offline: { text: t('model:host.status.offline'), status: 'Default' },
-        Deleted: { text: t('model:host.status.deleted'), status: 'Error' },
         Failed: { text: t('model:host.status.failed'), status: 'Error' },
+        Deleting: { text: t('model:host.status.failed'), status: 'Error' },
+        Deleted: { text: t('model:host.status.deleted'), status: 'Error' },
       },
-    },
-    {
-      title: t('model:host.property.load'),
-      width: 110,
-      dataIndex: 'loadStat',
-      key: 'loadStat',
-      valueType: 'select',
-      valueEnum: {
-        LoadLess: { text: t('model:host.load.idle'), status: 'Default' },
-        InUsed: { text: t('model:host.load.used'), status: 'Processing' },
-        Exhaust: { text: t('model:host.load.full'), status: 'Warning' },
-        ComputeExhaust: {
-          text: t('model:host.load.computeExhausted'),
-          status: 'Warning',
-        },
-        DiskExhaust: {
-          text: t('model:host.load.storageExhausted'),
-          status: 'Warning',
-        },
-        Exclusive: {
-          text: t('model:host.load.exclusive'),
-          status: 'Processing',
-        },
-      },
-    },
-    {
-      title: t('columns.location'),
-      width: 250,
-      key: 'location',
-      tooltip: `${t('model:host.property.region')}, ${t(
-        'model:host.property.zone'
-      )}, ${t('model:host.property.rack')}`,
-      hideInSearch: true,
-      render(_, record) {
-        return `${record.region}, ${record.az}, ${record.rack}`
-      },
-    },
-    {
-      title: t('model:host.property.nic'),
-      width: 100,
-      dataIndex: 'nic',
-      key: 'nic',
-      hideInSearch: true,
     },
     {
       // only for filter
       title: t('model:host.property.purpose'),
-      width: 80,
+      width: 140,
       dataIndex: 'purpose',
       key: 'purpose',
       valueType: 'select',
@@ -216,57 +176,121 @@ function getHostColumns(
     {
       // only for table
       title: t('model:host.property.purpose'),
-      width: 120,
+      width: 140,
       key: 'purpose-show',
       render: (_, record) =>
         record.purpose
           ?.split(',')
           .map((p) => t(`model:host.purpose.${p.toLowerCase()}`))
-          .join(' '),
+          .join(' / '),
       hideInSearch: true,
     },
     {
-      title: t('columns.system'),
+      title: t('columns.cpu'),
+      width: 140,
+      key: 'cpu',
+      tooltip: `${t('capacity.allocated')} / ${t('capacity.total')}`,
+      render: (_, record) => `${record.usedMemory ?? 0} / ${record.cpuCores}`,
+      hideInSearch: true,
+    },
+    {
+      title: t('columns.memory'),
+      width: 140,
+      key: 'memory',
+      tooltip: `${t('capacity.allocated')} / ${t('capacity.total')}`,
+      render: (_, record) => `${record.usedMemory ?? 0} / ${record.memory}`,
+      hideInSearch: true,
+    },
+    {
+      title: t('model:host.property.diskType'),
+      width: 100,
+      dataIndex: 'diskType',
+      key: 'diskType',
+      render: (_, record) =>
+        t(`model:host.disk.type.${record.diskType?.toLocaleLowerCase()}`, '-'),
+      hideInSearch: true,
+    },
+    {
+      title: t('columns.storage'),
+      width: 240,
+      dataIndex: 'disks',
+      key: 'storage',
+      tooltip: `${t('model:host.disk.property.name')}, ${t(
+        'model:host.disk.property.path'
+      )}, ${t('model:host.disk.property.capacity')}, ${t(
+        'model:host.disk.property.status'
+      )}`,
+      render: (_, record) =>
+        record.disks?.map((item) => (
+          <div key={item.diskId}>
+            {item.name}, {item.path}, {item.capacity}GiB,{' '}
+            {t(`model:host.disk.status.${item.status}`)}
+          </div>
+        )),
+      hideInSearch: true,
+    },
+    {
+      title: t('columns.location'),
+      width: 250,
+      key: 'location',
+      tooltip: `${t('model:host.property.vendor')}, ${t(
+        'model:host.property.region'
+      )}, ${t('model:host.property.zone')}, ${t('model:host.property.rack')}`,
+      render: (_, record) =>
+        [record.vendor, record.region, record.az, record.rack]
+          .filter((el) => el)
+          .join(', '),
+      hideInSearch: true,
+    },
+    {
+      title: t('model:host.property.labels'),
+      width: 200,
+      key: 'labels',
+      dataIndex: 'syslabels',
+      render: (_, record) =>
+        record.sysLabels?.map((label, idx) => <Tag key={idx}>{label}</Tag>),
+      hideInSearch: true,
+    },
+    {
+      title: t('model:host.property.os'),
       width: 120,
-      key: 'system',
-      render(_, record) {
-        return `${record.os} ${record.kernel}`
-      },
+      key: 'os',
+      dataIndex: 'os',
       hideInSearch: true,
     },
     {
-      title: t('columns.availableSpec'),
+      title: t('model:host.property.arch'),
       width: 100,
-      key: 'availableSpec',
-      render: (_, record) => `${record.freeCpuCores}C ${record.freeMemory}G`,
+      dataIndex: 'arch',
+      key: 'arch',
       hideInSearch: true,
     },
     {
-      title: t('columns.spec'),
+      title: t('model:host.property.nic'),
       width: 100,
-      key: 'spec',
+      dataIndex: 'nic',
+      key: 'nic',
       hideInSearch: true,
-      render: (_, record) => `${record.cpuCores}C ${record.memory}G`,
     },
     {
       title: t('model:host.property.createTime'),
       width: 150,
       dataIndex: 'createTime',
       key: 'createTime',
-      hideInSearch: true,
       valueType: 'dateTime',
       renderText: (_, record) =>
         isNumber(record.createTime) ? record.createTime * 1000 : null,
+      hideInSearch: true,
     },
     {
       title: t('model:host.property.updateTime'),
       width: 150,
       dataIndex: 'updateTime',
       key: 'updateTime',
-      hideInSearch: true,
       valueType: 'dateTime',
       renderText: (_, record) =>
         isNumber(record.updateTime) ? record.updateTime * 1000 : null,
+      hideInSearch: true,
     },
     {
       title: t('columns.actions'),
@@ -283,7 +307,8 @@ function getHostColumns(
           // <a key="monitor">{t('actions.monitor')}</a>,
           <DeleteConfirm
             key="delete"
-            title={t('delete.confirm')}
+            title={t('delete.name')}
+            content={t('delete.confirm', { hostName: record.hostName })}
             confirmInput={{
               expect: 'delete',
             }}
@@ -301,8 +326,11 @@ function getHostColumns(
 }
 
 const defaultColumnsSetting: Record<string, ColumnsState> = {
-  operator: { show: false },
   id: { show: false },
+  labels: { show: false },
+  os: { show: false },
+  arch: { show: false },
   nic: { show: false },
-  system: { show: false },
+  createTime: { show: false },
+  updateTime: { show: false },
 }
