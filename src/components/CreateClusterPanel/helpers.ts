@@ -1,4 +1,8 @@
-import { ProductStatus, RequestClusterCreate } from '@/api/model'
+import {
+  ParamGroupDBType,
+  ProductStatus,
+  RequestClusterCreate,
+} from '@/api/model'
 import { useMemo } from 'react'
 import { message } from 'antd'
 import { TFunction } from 'react-i18next'
@@ -7,6 +11,7 @@ import {
   useQueryProducts,
   useQueryZones,
 } from '@/api/hooks/platform'
+import { useQueryParamGroupList } from '@/api/hooks/param-group'
 import { mapObj } from '@/utils/obj'
 
 export function processCreateRequest(
@@ -64,6 +69,19 @@ export function processCreateRequest(
         )
         return false
       }
+
+      // FIXME: remove hard-coded validation for TiKV
+      if (
+        node.componentType === 'TiKV' &&
+        node.totalNodeCount! < value.copies!
+      ) {
+        message.error(
+          t('create.validation.storage.instanceLimit', {
+            name: comp.name,
+          })
+        )
+        return false
+      }
     }
   }
   return true
@@ -115,7 +133,7 @@ export function useProducts(vendorId?: string, regionId?: string) {
   )
   return useMemo<ProductsKnowledge>(() => {
     const rawRegions = data?.data.data?.products // region => product => arch => version
-    if (!rawRegions || !regionId)
+    if (!rawRegions || !regionId || !rawRegions[regionId])
       return {
         _products: [],
         products: {},
@@ -197,6 +215,47 @@ export function useComponents(
       }
     })
   }, [data, vendorId, regionId])
+}
+
+/**
+ * Hook for getting parameter groups for the cluster
+ * @param productType database type. e.g. TiDB
+ * @param productVersion database version. e.g. v5.2.2
+ */
+export function useParamGroups(productType?: string, productVersion?: string) {
+  const dbTypeHashmap: { [k: string]: ParamGroupDBType } = {
+    TiDB: ParamGroupDBType.tidb,
+    DM: ParamGroupDBType.dm,
+  }
+  const dbType = productType ? dbTypeHashmap[productType] : undefined
+
+  const dbVersion = productVersion?.match(/v\d+\.\d+/)?.[0]
+
+  const { data: response, isLoading } = useQueryParamGroupList(
+    {
+      dbType,
+      dbVersion,
+    },
+    {
+      enabled: !!dbType && !!dbVersion,
+      refetchOnWindowFocus: false,
+    }
+  )
+  const data = response?.data.data
+
+  const ret = useMemo(
+    () =>
+      data?.map((el) => ({
+        id: el.paramGroupId!,
+        name: el.name!,
+      })) || [],
+    [data]
+  )
+
+  return {
+    paramGroups: ret,
+    isLoading,
+  }
 }
 
 export type VendorKnowledge = {

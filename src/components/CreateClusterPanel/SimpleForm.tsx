@@ -9,6 +9,7 @@ import {
   ProductsKnowledge,
   RegionKnowledge,
   useComponents,
+  useParamGroups,
   useProducts,
   useVendorsAndRegions,
 } from '@/components/CreateClusterPanel/helpers'
@@ -76,6 +77,9 @@ export function SimpleForm({
     arch
   )
 
+  // Get parameter groups with productId, productVersion
+  const { paramGroups } = useParamGroups(productId, productVersion)
+
   const setVendor = useCallback(
     (vendorId?: string) => {
       if (!vendorAndRegions) return
@@ -131,6 +135,15 @@ export function SimpleForm({
     setProduct()
   }, [products])
 
+  // set a default value of the parameterGroupID item
+  useEffect(() => {
+    if (paramGroups?.length) {
+      form.setFieldsValue({
+        parameterGroupID: paramGroups[0].id,
+      })
+    }
+  }, [paramGroups, form])
+
   const { t, i18n } = useI18n()
 
   const vendorSelector = useMemo(
@@ -173,9 +186,10 @@ export function SimpleForm({
           type={productId}
           arch={arch}
           products={products}
+          paramGroups={paramGroups}
         />
       ),
-    [productId, arch, vendorId, region, products, i18n.language]
+    [productId, arch, vendorId, region, products, paramGroups, i18n.language]
   )
 
   const nodeOptions = useMemo(
@@ -210,6 +224,7 @@ export function SimpleForm({
       <Form
         layout="horizontal"
         hideRequiredMark
+        scrollToFirstError
         colon={false}
         form={form}
         name="create"
@@ -243,6 +258,7 @@ function BasicOptions({
   type,
   arch,
   products,
+  paramGroups,
 }: {
   t: TFunction<''>
   onSelectProduct: (type: string) => void
@@ -252,6 +268,7 @@ function BasicOptions({
   type: string
   arch: string
   products: ProductsKnowledge
+  paramGroups: { id: string; name: string }[]
 }) {
   return (
     <Card title={t('basic.title')}>
@@ -270,6 +287,21 @@ function BasicOptions({
         </Select>
       </Form.Item>
       <Form.Item
+        name="cpuArchitecture"
+        label={t('basic.fields.arch')}
+        rules={[{ required: true }]}
+        initialValue={arch}
+      >
+        <Radio.Group onChange={(e) => onSelectArch(e.target.value)}>
+          {!!type &&
+            products.products[type]?._archs.map((a) => (
+              <Radio.Button value={a} key={a}>
+                {a}
+              </Radio.Button>
+            ))}
+        </Radio.Group>
+      </Form.Item>
+      <Form.Item
         label={t('basic.fields.version')}
         name="clusterVersion"
         rules={[{ required: true, message: t('basic.rules.version.require') }]}
@@ -285,19 +317,19 @@ function BasicOptions({
         </Select>
       </Form.Item>
       <Form.Item
-        name="cpuArchitecture"
-        label={t('basic.fields.arch')}
-        rules={[{ required: true }]}
-        initialValue={arch}
+        label={t('basic.fields.paramGroup')}
+        name="parameterGroupID"
+        rules={[
+          { required: true, message: t('basic.rules.paramGroup.require') },
+        ]}
       >
-        <Radio.Group onChange={(e) => onSelectArch(e.target.value)}>
-          {!!type &&
-            products.products[type]?._archs.map((a) => (
-              <Radio.Button value={a} key={a}>
-                {a}
-              </Radio.Button>
-            ))}
-        </Radio.Group>
+        <Select>
+          {paramGroups.map((item) => (
+            <Select.Option value={item.id} key={item.id}>
+              {item.name}
+            </Select.Option>
+          ))}
+        </Select>
       </Form.Item>
     </Card>
   )
@@ -354,7 +386,7 @@ function ComponentOptions({
             label={t('component.fields.copies')}
           >
             <Select>
-              {[1, 2, 3, 4, 5].map((count) => (
+              {[1, 3, 5, 7].map((count) => (
                 <Select.Option key={count} value={count}>
                   {count}
                 </Select.Option>
@@ -365,7 +397,6 @@ function ComponentOptions({
         <Row
           gutter={20}
           style={{
-            lineHeight: '12px',
             fontSize: 16,
           }}
         >
@@ -373,7 +404,7 @@ function ComponentOptions({
           <Col span={8}>{t('component.fields.spec')}</Col>
           <Col span={8}>{t('component.fields.amount')}</Col>
         </Row>
-        <Divider style={{ margin: '16px 0' }} />
+        <Divider style={{ margin: '12px 0' }} />
         {component.zones.map((zone, i) => {
           if (!zone) return undefined
           return (
@@ -474,6 +505,9 @@ function ClusterOptions() {
           tokenSeparators={[',', ' ']}
           dropdownStyle={{ display: 'none' }}
         />
+      </Form.Item>
+      <Form.Item label={t('cluster.fields.user')}>
+        <span>root</span>
       </Form.Item>
       <Form.Item
         name="dbPassword"

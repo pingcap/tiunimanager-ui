@@ -1,14 +1,17 @@
 basic:
-  title: Basic Options
+  title: Database Basic Information
   fields:
-    type: Cluster Type
-    arch: Arch
-    version: Version
+    type: Database Type
+    arch: CPU Architecture
+    version: Database Version
+    paramGroup: Parameter Group
   rules:
     type:
-      require: Please select the cluster type
+      require: Please select a database type
     version:
-      require: Please select the cluster version
+      require: Please select a database version
+    paramGroup:
+      require: Please select a parameter group
 component:
   title: '{{ name }} Options'
   optional: Optional
@@ -16,17 +19,18 @@ component:
     title: Quick Allocate
     items: '{{ count }} Nodes'
   fields:
-    copies: Copies
+    copies: Number of Storage Replicas
     nodes: Nodes
     zone: Available Zone
-    spec: Spec
-    amount: Amount
+    spec: Specification Code
+    amount: Number of Instances
 cluster:
-  title: Cluster Options
+  title: Cluster Basic Information
   fields:
     name: Cluster Name
-    tags: Cluster Tags
-    password: DB Password
+    tags: Cluster Labels
+    user: Database User
+    password: Database Password
     exclusive: Exclusive
   tooltip:
     name: Upper and lower case letters, numbers and hyphens, starting with a letter, and with length between 8-32
@@ -51,6 +55,8 @@ create:
     miss: 'The {{ name }} node cannot be missing！'
     minZone: '{{ name }} requires at least {{ count }} nodes'
     maxZone: '{{ name }} requires no more than {{ count }} nodes'
+    storage:
+      instanceLimit: 'The number of {{ name }} instance cannot be less then the number of storage replicas'
   name: Create Cluster
 
 message:
@@ -85,8 +91,8 @@ preview:
   columns:
     component: Component
     zone: Zone
-    spec: Spec
-    amount: Amount
+    spec: Specification Code
+    amount: Number of Instances
     status: Status
   status:
     normal: Normal
