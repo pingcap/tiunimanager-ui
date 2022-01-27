@@ -57,9 +57,8 @@ const useActiveStep = (stepLen: number) => {
 type StepMap = Record<string, TaskWorkflowSubTaskInfo>
 
 const getExecutedStepData = (steps: TaskWorkflowSubTaskInfo[]) => {
-  const executedSteps = steps.filter(
-    (step) => ['end', 'fail'].indexOf(step.name!) === -1
-  )
+  const FAILED_STEP_NAME = 'fail'
+  const executedSteps = steps.filter((step) => step.name !== FAILED_STEP_NAME)
   const executedStepMap: StepMap = executedSteps?.reduce((prev, step) => {
     return {
       ...prev,
