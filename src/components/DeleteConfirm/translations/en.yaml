@@ -1,2 +1,2 @@
-tip: 'Please input <strong>{{ expect }}</strong> to confirm.'
-confirm: I understand the consequences, delete it.
+tip: 'Please enter <strong>{{ expect }}</strong> to confirm.'
+confirm: I understand the consequences of deleting it.
