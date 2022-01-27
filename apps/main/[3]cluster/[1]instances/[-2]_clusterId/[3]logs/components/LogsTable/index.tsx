@@ -106,7 +106,7 @@ function getColumns(t: TFunction<''>) {
         tikv: { text: 'TiKV' },
         pd: { text: 'PD' },
         tiflash: { text: 'TiFlash' },
-        cdc: { text: 'TiCDC' },
+        ticdc: { text: 'TiCDC' },
       },
     },
     {
