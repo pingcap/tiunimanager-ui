@@ -234,9 +234,9 @@ host:
       usedBy: 使用者
     status:
       Available: 可分配
-      Reserved: 不可分配
+      Reserved: 系统盘保留
       InUsed: 使用中
-      Exhaust: 使用中
+      Exhaust: 已分配
       Error: 磁盘损坏
     type:
       nvmessd: NVME SSD

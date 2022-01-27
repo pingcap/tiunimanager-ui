@@ -234,12 +234,12 @@ host:
       usedBy: Used By
     status:
       Available: Available
-      Reserved: Unavailable
+      Reserved: Reserved for OS
       InUsed: Used
-      Exhaust: Exhausted
+      Exhaust: Allocated
       Error: Error
     type:
-      nvme-ssd: NVME SSD
+      nvmessd: NVME SSD
       ssd: SSD
       sata: SATA
 domain:
