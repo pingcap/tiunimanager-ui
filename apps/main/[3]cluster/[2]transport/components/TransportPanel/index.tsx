@@ -284,7 +284,7 @@ export function ImportPanel({ back }: TransportPanelProps) {
     }
 
     const localOptions = (
-      <Form.Item label={' '}>
+      <Form.Item>
         <Upload
           name="file"
           action={getFsUploadURL()}
@@ -403,7 +403,7 @@ export function ImportPanel({ back }: TransportPanelProps) {
 
     return (
       <>
-        <Form.Item name="storageType" label=" " initialValue="local">
+        <Form.Item name="storageType" initialValue="local">
           <Radio.Group
             onChange={(e) => {
               setSourceType(e.target.value)

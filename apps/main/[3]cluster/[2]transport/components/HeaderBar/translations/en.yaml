@@ -1,4 +1,4 @@
-title: Transports
+title: Import and Export Data
 actions:
-  import: Import
-  export: Export
+  import: Import Data
+  export: Export Data

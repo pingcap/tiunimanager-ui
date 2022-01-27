@@ -1,14 +1,14 @@
 export:
-  title: Export Cluster Data
+  title: Export Data
   target: Export Target
-  source: Source Database
-  options: Export Options
+  source: Source Cluster
+  options: Options
   submit: Export
 import:
-  title: Import Cluster Data
+  title: Import Data
   source: Data Source
-  target: Target Database
-  options: Import Options
+  target: Target Cluster
+  options: Options
   submit: Import
 form:
   storageType: Storage Type
@@ -21,13 +21,13 @@ form:
     secretAccessKey: Secret Key
   nfs:
     fileName: File Name
-  filetype: File Type
-  filterType: Filter
+  filetype: File Extension
+  filterType: Data Filtering
   condition: Condition
-  comment: Comment
-  cluster: Cluster
-  username: Username
-  password: Password
+  comment: Remarks
+  cluster: Cluster ID
+  username: Database Username
+  password: Database Password
   submit:
     title: Submit
     confirm: Are you sure to submit?
@@ -37,22 +37,21 @@ enum:
     sql: SQL
   filterType:
     none: None
-    db: Database
-    sql: SQL
+    db: Filter by Database
+    sql: Filter by SQL
   storageType:
     s3: AWS S3 Compatible Storage
-    nfs: Shared NFS
-    local: Local
+    nfs: Enterprise Manager Shared Storage
+    local: Local Files
 tips:
   filter:
     db: >-
-      Specify databases and/or tables. Multiple are separated by semicolons,
-      such as dba.tb1; dbB.tb2;
-    sql: Specify the SQL statement to use for filtering
+      Specify databases and tables for data filtering, and separate multiple filters with semicolons. For example: db1.tb1; db2.tb2;
+    sql: Specify the SQL statements for data filtering
   nfs:
-    fileName: Optional. If it's blank, the file name will be automatically generated according to the rules.
+    fileName: If left blank, the file name will be generated automatically
 upload:
-  button: Upload Local File
+  button: Upload Files
   error:
     format: Only .zip files are allowed!
   status:

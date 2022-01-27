@@ -1,14 +1,14 @@
 export:
-  title: 导出集群数据
+  title: 导出数据
   target: 导出目标
-  source: 源数据库
-  options: 导出选项
+  source: 源集群
+  options: 选项
   submit: 创建导出任务
 import:
-  title: 导入集群数据
+  title: 导入数据
   source: 数据源
-  target: 目标数据库
-  options: 导入选项
+  target: 目标集群
+  options: 选项
   submit: 创建导入任务
 form:
   storageType: 存储类型
@@ -21,13 +21,13 @@ form:
     secretAccessKey: Secret Key
   nfs:
     fileName: 文件名
-  filetype: 文件类型
-  filterType: 数据筛选
+  filetype: 文件拓展名
+  filterType: 数据过滤
   condition: 筛选条件
   comment: 备注
-  cluster: 集群
-  username: 用户名
-  password: 密码
+  cluster: 集群 ID
+  username: 数据库用户名
+  password: 数据库密码
   submit:
     title: 确认
     confirm: 确认提交吗?
@@ -37,20 +37,20 @@ enum:
     sql: SQL
   filterType:
     none: 无
-    db: 库表
-    sql: SQL
+    db: 按库表过滤
+    sql: 按 SQL 语句过滤
   storageType:
     s3: AWS S3 兼容存储
-    nfs: TiEM 共享存储
+    nfs: Enterprise Manager 共享存储
     local: 本地文件
 tips:
   filter:
-    db: 指定库表，多个库表用分号分开，例如 dba.tb1; dbB.tb2;
-    sql: 指定用于筛选的 SQL 语句
+    db: 指定数据过滤的库表，多个库表用分号分开。例如： db1.tb1; db2.tb2;
+    sql: 指定数据过滤的 SQL 语句
   nfs:
-    fileName: 可空，若留空，则文件名将按特定规则自动生成
+    fileName: 若留空，将自动生产文件名
 upload:
-  button: 上传本地文件
+  button: 上传文件
   error:
     format: 只能上传 .zip 文件
   status:
