@@ -1,17 +1,21 @@
 name:
   CreateCluster: Create Cluster
-  TakeoverCluster: Takeover Cluster
-  ScaleOutCluster: Scale-out Cluster
-  ScaleInCluster: Scale-in Cluster
+  TakeoverCluster: Take Over Cluster
+  ScaleOutCluster: Scale out Cluster
+  ScaleInCluster: Scale in Cluster
   DeleteCluster: Delete Cluster
   RestartCluster: Restart Cluster
-  StopCluster: Shutdown Cluster
+  StopCluster: Stop Cluster
+  CloneCluster: Clone Cluster
   ImportData: Import Data
   ExportData: Export Data
-  BackupCluster: Backup Cluster
-  RestoreNewCluster: Restore New Cluster
-  RestoreExistCluster: Restore Existed Cluster
+  BackupCluster: Back up Cluster
+  RestoreNewCluster: Restore to New Cluster
+  RestoreExistCluster: Restore to Existed Cluster
   ModifyParameters: Update Parameters
   BuildLogConfig: Rebuild Logs Config
-  ImportHosts: Import Hosts
-  DeleteHosts: Delete Hosts
+  ImportHosts: Import Host
+  ImportHostsWithoutInit: Import Host without Initialization
+  DeleteHosts: Delete Host
+  DeleteHostsByForce: Delete Abnormal Host
+  TakeOverHosts: Import Host from a Taken-over Cluster
