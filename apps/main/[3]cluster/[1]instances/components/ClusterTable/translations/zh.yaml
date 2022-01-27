@@ -22,5 +22,5 @@ stop:
   confirm: 确认停止此集群吗？
   name: 停止集群
 delete:
-  confirm: 确认删除此集群吗?
+  confirm: 确认删除此集群吗？
   name: 删除集群

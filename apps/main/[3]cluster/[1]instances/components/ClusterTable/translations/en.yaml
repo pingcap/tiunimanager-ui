@@ -2,8 +2,8 @@ columns:
   actions: Actions
 actions:
   edit: Edit
-  boot: Boot
-  reboot: Reboot
+  boot: Start
+  reboot: Restart
   stop: Stop
   delete: Delete
 usage:
@@ -13,14 +13,14 @@ usage:
   backup: BAK
   storage: STO
 boot:
-  confirm: Are you sure to boot this cluster?
+  confirm: Are you sure you want to start this cluster?
   success: Boot Cluster
 reboot:
-  confirm: Are you sure to reboot this cluster?
-  success: Reboot Cluster
+  confirm: Are you sure you want to restart this cluster?
+  success: Restart Cluster
 stop:
-  confirm: Are you sure to stop this cluster?
+  confirm: Are you sure you want to stop this cluster?
   name: Stop Cluster
 delete:
-  confirm: Are you sure to delete this cluster?
+  confirm: Are you sure you want to delete this cluster?
   name: Delete Cluster

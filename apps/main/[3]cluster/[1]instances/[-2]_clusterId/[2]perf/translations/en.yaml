@@ -1,5 +1,5 @@
 pages:
-  statement: Statement
-  slow_query: Slow Query
-  keyviz: Keyviz
+  statement: SQL Statements Analysis
+  slow_query: Slow Query Log
+  keyviz: Key Visualizer
   diagnose: Diagnosis

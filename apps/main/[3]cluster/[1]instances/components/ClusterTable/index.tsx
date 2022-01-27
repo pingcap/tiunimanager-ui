@@ -249,6 +249,27 @@ function getColumns(
       hideInSearch: true,
     },
     {
+      title: t('model:cluster.property.address'),
+      width: 200,
+      key: 'addresses',
+      hideInSearch: true,
+      render(dom, record) {
+        return (
+          <span className={styles.addressContainer}>
+            {record.extranetConnectAddresses?.map((a) => (
+              <span key={a}>
+                <CopyIconButton
+                  text={a}
+                  label={t('model:cluster.property.address')}
+                />{' '}
+                {a}
+              </span>
+            ))}
+          </span>
+        )
+      },
+    },
+    {
       title: t('model:cluster.property.status'),
       width: 80,
       dataIndex: 'status',
@@ -285,27 +306,6 @@ function getColumns(
         },
       })),
       hideInSearch: true,
-    },
-    {
-      title: t('model:cluster.property.address'),
-      width: 200,
-      key: 'addresses',
-      hideInSearch: true,
-      render(dom, record) {
-        return (
-          <span className={styles.addressContainer}>
-            {record.extranetConnectAddresses?.map((a) => (
-              <span key={a}>
-                <CopyIconButton
-                  text={a}
-                  label={t('model:cluster.property.address')}
-                />{' '}
-                {a}
-              </span>
-            ))}
-          </span>
-        )
-      },
     },
     {
       title: t('model:cluster.property.tag'),
@@ -419,10 +419,8 @@ function getColumns(
 }
 
 const defaultColumnsSetting: Record<string, ColumnsState> = {
-  dbPassword: { show: false },
-  backup: { show: false },
-  updateTime: { show: false },
-  password: { show: false },
   tag: { show: false },
   tls: { show: false },
+  createTime: { show: false },
+  updateTime: { show: false },
 }

@@ -10,8 +10,8 @@ columns:
 actions:
   scaleIn: Delete
 scaleIn:
-  disabled: You can not scale in this instance.
+  disabled: You can not delete this instance.
   confirm:
-    common: Are you sure to delete the {{ type }} instance on {{ ip }}?
-    pd: 'Are you sure to delete the PD instance on {{ ip }}? <br><caution>Caution: The number of PD nodes must be odd, please be careful</caution>'
+    common: Are you sure you want to delete the {{ type }} instance on {{ ip }}?
+    pd: 'Are you sure you want to delete the PD instance on {{ ip }}? <br><caution>Caution: The number of PD nodes must be odd, please be careful</caution>'
   name: Delete
