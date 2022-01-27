@@ -5,5 +5,5 @@ form:
   password: Password
   submit: Login
 message:
-  error: 'Login in failed: {{ msg }}'
-  success: Login in successfully
+  error: 'Failed to login: {{ msg }}'
+  success: Login successfully
