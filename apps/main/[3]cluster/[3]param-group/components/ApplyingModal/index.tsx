@@ -79,7 +79,7 @@ const ParamGroupApplyingModal: FC<ParamGroupApplyingModalProps> = ({
 
   return (
     <Modal
-      width={600}
+      width={800}
       visible={visible}
       title={t('modal.title')}
       okText={t('footer.ok.text')}
@@ -215,7 +215,7 @@ const FormItemCluster: FC<FormItemClusterProps> = ({
 function getColumns(t: TFunction<''>) {
   return [
     {
-      title: 'ID',
+      title: t('model:cluster.property.id'),
       width: 180,
       dataIndex: 'clusterId',
       key: 'id',
@@ -228,13 +228,13 @@ function getColumns(t: TFunction<''>) {
     },
     {
       title: t('model:cluster.property.type'),
-      width: 80,
+      width: 160,
       dataIndex: 'clusterType',
       key: 'type',
     },
     {
       title: t('model:cluster.property.version'),
-      width: 80,
+      width: 160,
       dataIndex: 'clusterVersion',
       key: 'version',
     },
