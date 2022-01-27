@@ -1,4 +1,4 @@
-name: Resources
+name: Resources Management
 header:
-  title: Resources List
+  title: Resource List
   import: Import Hosts
