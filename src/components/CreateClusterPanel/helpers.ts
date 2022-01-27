@@ -69,6 +69,19 @@ export function processCreateRequest(
         )
         return false
       }
+
+      // FIXME: remove hard-coded validation for TiKV
+      if (
+        node.componentType === 'TiKV' &&
+        node.totalNodeCount! < value.copies!
+      ) {
+        message.error(
+          t('create.validation.storage.instanceLimit', {
+            name: comp.name,
+          })
+        )
+        return false
+      }
     }
   }
   return true

@@ -55,6 +55,8 @@ create:
     miss: '不能缺失 {{ name }} 节点！'
     minZone: '{{ name }} 至少需要 {{ count }} 个节点!'
     maxZone: '{{ name }} 至多拥有 {{ count }} 个节点!'
+    storage:
+      instanceLimit: '{{ name }} 实例数不能少于存储副本数'
   name: 创建集群
 
 message:

@@ -55,6 +55,8 @@ create:
     miss: 'The {{ name }} node cannot be missing！'
     minZone: '{{ name }} requires at least {{ count }} nodes'
     maxZone: '{{ name }} requires no more than {{ count }} nodes'
+    storage:
+      instanceLimit: 'The number of {{ name }} instance cannot be less then the number of storage replicas'
   name: Create Cluster
 
 message:

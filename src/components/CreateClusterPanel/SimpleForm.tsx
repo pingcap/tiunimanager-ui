@@ -224,6 +224,7 @@ export function SimpleForm({
       <Form
         layout="horizontal"
         hideRequiredMark
+        scrollToFirstError
         colon={false}
         form={form}
         name="create"
@@ -385,7 +386,7 @@ function ComponentOptions({
             label={t('component.fields.copies')}
           >
             <Select>
-              {[1, 2, 3, 4, 5].map((count) => (
+              {[1, 3, 5, 7].map((count) => (
                 <Select.Option key={count} value={count}>
                   {count}
                 </Select.Option>
@@ -396,7 +397,6 @@ function ComponentOptions({
         <Row
           gutter={20}
           style={{
-            lineHeight: '12px',
             fontSize: 16,
           }}
         >
@@ -404,7 +404,7 @@ function ComponentOptions({
           <Col span={8}>{t('component.fields.spec')}</Col>
           <Col span={8}>{t('component.fields.amount')}</Col>
         </Row>
-        <Divider style={{ margin: '16px 0' }} />
+        <Divider style={{ margin: '12px 0' }} />
         {component.zones.map((zone, i) => {
           if (!zone) return undefined
           return (
