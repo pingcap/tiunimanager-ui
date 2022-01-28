@@ -46,7 +46,8 @@ export function RestorePanel({ back, cluster, backup }: RestorePanelProps) {
             ...value,
           },
           options: {
-            actionName: t('name'),
+            successMessage: t('message.success'),
+            errorMessage: t('message.failed'),
           },
         },
         {

@@ -28,7 +28,8 @@ export function useSuspendReplicationTask() {
         {
           payload: { id },
           options: {
-            actionName: t('suspend.name'),
+            successMessage: t('suspend.success'),
+            errorMessage: t('suspend.failed'),
           },
         },
         {
@@ -63,7 +64,8 @@ export function useResumeReplicationTask() {
         {
           payload: { id },
           options: {
-            actionName: t('resume.name'),
+            successMessage: t('resume.success'),
+            errorMessage: t('resume.failed'),
           },
         },
         {
@@ -98,7 +100,8 @@ export function useDeleteReplicationTask() {
         {
           payload: { id },
           options: {
-            actionName: t('delete.name'),
+            successMessage: t('delete.success'),
+            errorMessage: t('delete.failed'),
           },
         },
         {

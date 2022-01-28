@@ -32,7 +32,8 @@ export function CreatePanel({ back }: CreatePanelProps) {
         {
           payload: value,
           options: {
-            actionName: t('name'),
+            successMessage: t('message.success'),
+            errorMessage: t('message.failed'),
           },
         },
         {

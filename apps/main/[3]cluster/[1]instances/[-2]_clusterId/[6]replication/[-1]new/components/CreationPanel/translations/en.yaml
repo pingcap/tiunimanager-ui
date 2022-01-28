@@ -1,2 +1,4 @@
 message:
-  name: Create
+  name: Create a data replication task
+  success: The data replication task is created
+  failed: Failed to create a data replication task

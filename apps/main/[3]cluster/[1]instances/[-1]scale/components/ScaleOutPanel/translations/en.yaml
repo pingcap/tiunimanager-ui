@@ -1,11 +1,11 @@
 name:
-  scaleOut: Scale Out Cluster
-  preview: Preview Allocation
+  scaleOut: The scale-out task
+  preview: Preview Scale-out Configuration
 basic:
-  title: Basic Info
+  title: Basic Information
 nodes:
-  title: '{{ name }} Options'
-  add: Add more nodes
+  title: '{{ name }} Configuration'
+  add: Add more available zones
   remove: Remove
   optional: Optional
   allocator:
@@ -13,29 +13,36 @@ nodes:
     items: '{{ count }} Nodes'
   fields:
     zone: Available Zone
-    spec: Spec
-    oldAmount: Old Amount
-    newAmount: New Amount
+    spec: Specification Code
+    oldAmount: Number of Instances (Before)
+    newAmount: Number of Instances (After)
 footer:
   reset:
     title: Reset
-    confirm: Are you sure to reset the form?
+    confirm: Are you sure to reset?
   submit:
     title: Submit
-    confirm: Are you sure to submit the form?
+    confirm: Are you sure to submit?
+actions:
+  scaleOut:
+    success: The cluster scale-out task is created
+    failed: Failed to create a cluster scale-out task
+  preview:
+    failed: Failed to preview the scale-out configuration
 message:
   noZone: no available zone
 preview:
   columns:
-    component: Component
-    zone: Zone
-    spec: Spec
-    amount: Amount
-    status: Status
+    component: Component Name
+    zone: Available Zone
+    spec: Specification Code
+    amount: Number of Instances
+    status: Stock Status
   status:
-    normal: Normal
-    notEnough: Insufficient inventory, please adjust the configuration.
+    normal: Sufficient
+    notEnough: Insufficient. Please adjust the configuration.
   actions:
-    confirm: Confirm Scale Out
+    confirm: Confirm
+    cancel: Back
   empty: No changes.
   fail: 'Fail to preview: {{ msg }}'

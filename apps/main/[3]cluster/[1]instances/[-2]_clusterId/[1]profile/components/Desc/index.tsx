@@ -23,18 +23,14 @@ export function Desc({ cluster }: DescProps) {
       <Descriptions.Item label={t('cluster.property.tag')}>
         {cluster.tags?.join(', ') || ' '}
       </Descriptions.Item>
+      <Descriptions.Item label={t('cluster.property.role')}>
+        -
+      </Descriptions.Item>
       <Descriptions.Item label={t('cluster.property.type')}>
         {cluster.clusterType}
       </Descriptions.Item>
       <Descriptions.Item label={t('cluster.property.version')}>
         {cluster.clusterVersion}
-      </Descriptions.Item>
-      <Descriptions.Item label={t('cluster.property.tls')}>
-        {cluster.tls ? (
-          <Badge status="processing" text={t('cluster.tls.on')} />
-        ) : (
-          <Badge status="default" text={t('cluster.tls.off')} />
-        )}
       </Descriptions.Item>
       <Descriptions.Item label={t('cluster.property.extranetAddress')}>
         {cluster.extranetConnectAddresses?.map((a) => (
@@ -52,8 +48,12 @@ export function Desc({ cluster }: DescProps) {
           </span>
         ))}
       </Descriptions.Item>
-      <Descriptions.Item label={t('cluster.property.createTime')}>
-        {formatTimeString(cluster.createTime!)}
+      <Descriptions.Item label={t('cluster.property.tls')}>
+        {cluster.tls ? (
+          <Badge status="processing" text={t('cluster.tls.on')} />
+        ) : (
+          <Badge status="default" text={t('cluster.tls.off')} />
+        )}
       </Descriptions.Item>
       <Descriptions.Item label={t('cluster.property.status')}>
         {getStatus(t, cluster.status! as ClusterStatus)}
@@ -63,6 +63,27 @@ export function Desc({ cluster }: DescProps) {
           t,
           cluster.maintainStatus! as ClusterOperationStatus
         )}
+      </Descriptions.Item>
+      <Descriptions.Item label={t('cluster.property.storageReplicas')}>
+        {cluster.copies}
+      </Descriptions.Item>
+      <Descriptions.Item label={t('cluster.property.vendor')}>
+        {t(`cluster.vendor.${cluster.vendor?.toLowerCase()}`, cluster.vendor)}
+      </Descriptions.Item>
+      <Descriptions.Item label={t('cluster.property.region')}>
+        {cluster.region}
+      </Descriptions.Item>
+      <Descriptions.Item label={t('cluster.property.exclusive')}>
+        {t(
+          `cluster.exclusive.${cluster.exclusive}`,
+          cluster.exclusive?.toString()
+        )}
+      </Descriptions.Item>
+      <Descriptions.Item label={t('cluster.property.createTime')}>
+        {formatTimeString(cluster.createTime!)}
+      </Descriptions.Item>
+      <Descriptions.Item label={t('cluster.property.updateTime')}>
+        {formatTimeString(cluster.updateTime!)}
       </Descriptions.Item>
     </Descriptions>
   )

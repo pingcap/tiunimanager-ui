@@ -14,10 +14,16 @@ delete:
     keepExistingBackup: 保留手动备份的数据
   note:
     autoBackup: 系统在删除集群时将自动删除数据库自动备份的数据，建议进行一次备份，确保数据不会丢失
+  success: 删除集群任务创建成功
+  failed: 删除集群任务创建失败
 forceDelete:
   name: 删除集群
   confirm: 该集群正在运行其他任务，确认要强制删除吗?
   tips: 强制删除集群可能带来难以预估的影响，请谨慎操作
+  success: 删除集群任务创建成功
+  failed: 删除集群任务创建失败
 backup:
   confirm: '确认备份集群 ID： {{ name }} 的数据吗?'
   name: 备份集群
+  success: 备份集群任务创建成功
+  failed: 备份集群任务创建失败

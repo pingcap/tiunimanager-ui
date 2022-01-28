@@ -36,7 +36,8 @@ const CreationPanel: FC<CreationPanelProps> = ({ clusterId, back }) => {
             downstream: fields.downstream,
           },
           options: {
-            actionName: t('message.name'),
+            successMessage: t('message.success'),
+            errorMessage: t('message.failed'),
           },
         })
 

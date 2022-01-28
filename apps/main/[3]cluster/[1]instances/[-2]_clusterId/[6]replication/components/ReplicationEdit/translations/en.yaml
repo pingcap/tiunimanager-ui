@@ -1,37 +1,37 @@
 basic:
-  title: Basic Info Configuration
+  title: Basic Information
   fields:
-    id: ID
-    name: Name
-    tso: Beginning TSO
+    id: Task ID
+    name: Task Name
+    tso: TSO Value at Start
     filterRule: Filter Rules
   tips:
     tso: The value of the beginning TSO must be from 0 to tikv_gc_save_point. If you enter "0" here, the system will get the beginning TSO from current time.
-    filterRule: Each rule is a regular expression
+    filterRule: Each filter rule is a regular expression
   rules:
     name:
       required: Please enter a task name
-      length: The length must be between 1 ~ 20
+      length: The length of the task name must be between 1 and 20
     tso:
       valid: Please enter a valid TSO
     filterRule:
-      valid: Please enter a valid rule
+      valid: Please enter a valid filter rule
   action:
     filterRule:
-      add: New Rule
+      add: New Filter Rule
 downstream:
-  title: Downstream Configuration
+  title: Downstream Information
   fields:
-    type: Downstream
+    type: Downstream Type
   rules:
     type:
-      required: Please select a downstream
+      required: Please select a downstream type
 mysql:
   fields:
     url: URL/IP
     port: Port
-    user: User Name
-    password: Password
+    user: Database Username
+    password: Database Password
     thread: Number of Concurrent Threads
   rules:
     url:
@@ -39,10 +39,10 @@ mysql:
     port:
       required: Please enter a port
     user:
-      required: Please enter a user name
+      required: Please enter a database username
       length: The length must be between 3 ~ 20
     password:
-      required: Please enter a password
+      required: Please enter a database password
       length: The length must be between 6 ~ 20
   tips:
     url: 'e.g., abc.com or X.X.X.X'
@@ -51,8 +51,8 @@ tidb:
   fields:
     url: URL/IP
     port: Port
-    user: User Name
-    password: Password
+    user: Database Username
+    password: Database Password
     thread: Number of Concurrent Threads
   rules:
     url:
@@ -60,10 +60,10 @@ tidb:
     port:
       required: Please enter a port
     user:
-      required: Please enter a user name
+      required: Please enter a database username
       length: The length must be between 3 ~ 20
     password:
-      required: Please enter a password
+      required: Please enter a database password
       length: The length must be between 6 ~ 20
   tips:
     url: 'e.g., abc.com or X.X.X.X'
@@ -77,12 +77,12 @@ kafka:
     topic: Topic
     protocol: Protocol
     partition: Partitions
-    replica: Number of replicas
-    maxMsgSize: Max size of each message
-    maxMsgNum: Max number of batch messages
-    dispatchRule: Dispatch rules
+    replica: Replicas
+    maxMsgSize: Maximum Size of a Single Message
+    maxMsgNum: Maximum Number of Batch Messages
+    dispatchRule: Distribution Rules
   placeholder:
-    dispatcher: Dispatch Rule
+    dispatcher: Distribution Rule
     matcher: Matcher
   rules:
     url:
@@ -98,12 +98,12 @@ kafka:
     protocol:
       required: Please select a protocol
     dispatchRule:
-      valid: Please enter a valid dispatch rule
+      valid: Please enter a valid distribution rule
   tips:
     url: 'e.g., abc.com or X.X.X.X'
   action:
     dispatchRule:
-      add: New Dispatch Rule
+      add: New Distribution Rule
 footer:
   reset:
     title: Reset

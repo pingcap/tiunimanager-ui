@@ -1,24 +1,27 @@
 toolbar:
-  new: New
+  new: Create
 columns:
   actions: Actions
 actions:
   edit: Edit
-  suspend: Suspend
+  suspend: Pause
   resume: Resume
   delete: Delete
 suspend:
-  confirm: Are you sure to suspend this task?
-  loading: Suspending...
-  name: Suspend
-  fail: 'Failed: {{ msg }}'
+  confirm: Are you sure you want to pause this data replication task?
+  loading: Pausing...
+  name: Pause the data replication task
+  success: The the data replication task is paused
+  failed: Failed to pause the data replication task
 resume:
-  confirm: Are you sure to resume this task?
+  confirm: Are you sure you want to resume this data replication task?
   loading: Resuming...
-  name: Resume
-  fail: 'Failed: {{ msg }}'
+  name: Resume data replication task
+  success: The the data replication task is resumed
+  failed: Failed to resumed the data replication task
 delete:
-  confirm: Are you sure to delete this task?
+  confirm: Are you sure you want to delete the {{ name }} data replication task?
   loading: Deleting...
-  name: Delete
-  fail: 'Failed: {{ msg }}'
+  name: Delete data replication task
+  success: The the data replication task is deleted
+  failed: Failed to delete the data replication task

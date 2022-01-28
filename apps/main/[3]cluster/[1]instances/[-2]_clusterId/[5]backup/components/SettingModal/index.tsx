@@ -108,7 +108,8 @@ export default function SettingModal({
           },
         },
         options: {
-          actionName: t('update.name'),
+          successMessage: t('update.message.success'),
+          errorMessage: t('update.message.failed'),
         },
       },
       {

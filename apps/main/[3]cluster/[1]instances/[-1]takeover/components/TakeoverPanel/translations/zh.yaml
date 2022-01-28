@@ -26,4 +26,6 @@ rules:
     format: IP 格式非法
   clusterName:
     length: 长度须达到 8 ～ 32 位
-actionName: 接管集群
+message:
+  success: 接管集群任务创建成功
+  failed: 接管集群任务创建失败

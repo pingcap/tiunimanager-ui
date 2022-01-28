@@ -1,1 +1,4 @@
 name: 创建集群
+message:
+  success: 创建集群任务创建成功
+  failed: 创建集群任务创建失败

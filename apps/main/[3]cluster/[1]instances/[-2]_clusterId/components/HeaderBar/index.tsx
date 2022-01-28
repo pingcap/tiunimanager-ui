@@ -47,7 +47,8 @@ export default function HeaderBar() {
             backupMode: ClusterBackupMethod.manual,
           },
           options: {
-            actionName: t('backup.name'),
+            successMessage: t('backup.success'),
+            errorMessage: t('backup.failed'),
           },
         },
         {
@@ -77,7 +78,8 @@ export default function HeaderBar() {
                 force: true,
               },
               options: {
-                actionName: t('forceDelete.name'),
+                successMessage: t('forceDelete.success'),
+                errorMessage: t('forceDelete.failed'),
               },
             })
 
@@ -105,7 +107,7 @@ export default function HeaderBar() {
             ...reqPayload,
           },
           options: {
-            actionName: t('delete.name'),
+            successMessage: t('delete.success'),
             skipErrorNotification: true,
           },
         })

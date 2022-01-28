@@ -1,41 +1,48 @@
 name:
-  scaleOut: 集群扩容
-  preview: 预览节点分配
+  scaleOut: 扩容集群任务创建
+  preview: 预览扩容配置
 basic:
   title: 基础信息
 nodes:
   title: '{{ name }} 配置'
-  add: 增加更多节点
+  add: 增加更多可用区
   remove: 移除
   optional: 可选
   allocator:
     title: 快速分配
-    items: '{{ count }} 节点'
+    items: '{{ count }} 实例'
   fields:
     zone: 可用区
-    spec: 规格
-    oldAmount: 原有数量
-    newAmount: 扩容后数量
+    spec: 规格代码
+    oldAmount: 原实例数量
+    newAmount: 目标实例数量
 footer:
   reset:
     title: 重置
-    confirm: 确认重置表单吗?
+    confirm: 确认重置吗?
   submit:
     title: 提交
-    confirm: 确认提交表单吗?
+    confirm: 确认提交吗?
+actions:
+  scaleOut:
+    success: 扩容集群任务创建成功
+    failed: 扩容集群任务创建失败
+  preview:
+    failed: 预览扩容配置失败
 message:
-  noZone: 无可用 Zone
+  noZone: 无可用区
 preview:
   columns:
-    component: 组件
+    component: 组件名称
     zone: 可用区
-    spec: 规格
-    amount: 数量
-    status: 状态
+    spec: 规格代码
+    amount: 实例数量
+    status: 库存状态
   status:
-    normal: 正常
+    normal: 库存正常
     notEnough: 库存不足，请调整配置
   actions:
     confirm: 确认扩容
-  empty: 没有新增节点
+    cancel: 返回
+  empty: 没有新增实例
   fail: '预览失败: {{ msg }}'

@@ -7,10 +7,13 @@ fetch:
   fail: 'Fail to fetch backup strategy: {{ msg }}'
 update:
   name: Update Backup Strategy
+  message:
+    success: The backup strategy is updated
+    failed: Failed to update the backup strategy
 
 form:
-  backupDate: Date
-  period: Time Period
+  backupDate: Backup Period
+  period: Backup Time
 
 week:
   Monday: Monday

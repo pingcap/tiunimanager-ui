@@ -92,7 +92,8 @@ export function ParamsTable({ cluster }: ParamsTableProps) {
                 reboot: rebootNeeded,
               },
               options: {
-                actionName: t('save.name'),
+                successMessage: t('save.message.success'),
+                errorMessage: t('save.message.failed'),
               },
             },
             {
@@ -254,7 +255,7 @@ function getColumns(t: TFunction<''>, form: FormInstance) {
     {
       title: t('columns.actions'),
       valueType: 'option',
-      width: 100,
+      width: 140,
       render: (_, record, __, action) => {
         return (
           <a

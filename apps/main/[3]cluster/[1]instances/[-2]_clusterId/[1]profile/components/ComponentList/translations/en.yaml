@@ -1,6 +1,6 @@
 title: Components
 list:
-  title: '{{ name }} List'
+  title: '{{ name }} Instances'
 
 usage:
   mem: MEM
@@ -13,5 +13,8 @@ scaleIn:
   disabled: You can not delete this instance.
   confirm:
     common: Are you sure you want to delete the {{ type }} instance on {{ ip }}?
-    pd: 'Are you sure you want to delete the PD instance on {{ ip }}? <br><caution>Caution: The number of PD nodes must be odd, please be careful</caution>'
+    pd: 'Are you sure you want to delete the PD instance on {{ ip }}? <br><caution>Caution: The number of PD instances must be odd, please be careful</caution>'
   name: Delete
+  message:
+    success: The scale-in task is created
+    failed: Failed to create a scale-in task

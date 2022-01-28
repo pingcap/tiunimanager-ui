@@ -15,12 +15,20 @@ usage:
 boot:
   confirm: 确认启动此集群吗？
   name: 启动集群
+  success: 启动集群任务创建成功
+  failed: 启动集群任务创建失败
 reboot:
   confirm: 确认重启此集群吗？
   name: 重启集群
+  success: 重启集群任务创建成功
+  failed: 重启集群任务创建失败
 stop:
   confirm: 确认停止此集群吗？
   name: 停止集群
+  success: 停止集群任务创建成功
+  failed: 停止集群任务创建失败
 delete:
   confirm: 确认删除此集群吗？
   name: 删除集群
+  success: 删除集群任务创建成功
+  failed: 删除集群任务创建失败

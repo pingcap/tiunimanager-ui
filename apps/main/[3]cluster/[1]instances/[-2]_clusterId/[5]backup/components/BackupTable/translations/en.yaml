@@ -1,8 +1,11 @@
 delete:
-  confirm: Are you sure to delete this backup?
+  confirm: Are you sure you want to delete the {{ name }} backup files?
   name: Delete Backup
+  message:
+    success: The backup files are deleted
+    failed: Failed to delete the backup files
 restore:
-  confirm: Are you sure to restore cluster from this backup?
+  confirm: Are you sure you want to restore the cluster from this backup?
 columns:
   actions: Actions
 actions:

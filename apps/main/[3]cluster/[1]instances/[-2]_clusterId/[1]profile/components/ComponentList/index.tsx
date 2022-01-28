@@ -31,7 +31,8 @@ export function ComponentList({ nodes, clusterId }: ComponentListProps) {
             instanceId,
           },
           options: {
-            actionName: t('scaleIn.name'),
+            successMessage: t('scaleIn.message.success'),
+            errorMessage: t('scaleIn.message.failed'),
           },
         },
         {

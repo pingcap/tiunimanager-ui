@@ -1,1 +1,4 @@
 name: Create Cluster
+message: 
+  success: The cluster creation task is created
+  failed: Failed to create a cluster creation task

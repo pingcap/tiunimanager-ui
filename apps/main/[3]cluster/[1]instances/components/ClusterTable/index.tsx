@@ -133,7 +133,8 @@ function useTableColumn() {
             id: clusterId,
           },
           options: {
-            actionName: t(`${bootType}.name`),
+            successMessage: t(`${bootType}.success`),
+            errorMessage: t(`${bootType}.failed`),
           },
         },
         {
@@ -156,7 +157,8 @@ function useTableColumn() {
             id: clusterId,
           },
           options: {
-            actionName: t('stop.name'),
+            successMessage: t('stop.success'),
+            errorMessage: t('stop.failed'),
           },
         },
         {

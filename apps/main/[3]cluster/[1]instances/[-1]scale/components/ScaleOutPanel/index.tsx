@@ -133,7 +133,8 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
               instanceResource: diff,
             },
             options: {
-              actionName: t('name.scaleOut'),
+              successMessage: t('actions.scaleOut.success'),
+              errorMessage: t('actions.scaleOut.failed'),
             },
           },
           {
@@ -152,7 +153,7 @@ export function ScaleOutPanel({ back, cluster, topology }: ScaleOutPanelProps) {
             instanceResource: diff,
           },
           options: {
-            actionName: t('name.preview'),
+            errorMessage: t('actions.preview.failed'),
             skipSuccessNotification: true,
           },
         },
@@ -244,14 +245,20 @@ function BasicOptions({
         <Descriptions.Item label={t('model:cluster.property.name')}>
           {cluster.clusterName}
         </Descriptions.Item>
+        <Descriptions.Item label={t('model:cluster.property.vendor')}>
+          {t(
+            `model:cluster.vendor.${cluster.vendor?.toLowerCase()}`,
+            cluster.vendor
+          )}
+        </Descriptions.Item>
+        <Descriptions.Item label={t('model:cluster.property.region')}>
+          {cluster.region}
+        </Descriptions.Item>
         <Descriptions.Item label={t('model:cluster.property.type')}>
           {cluster.clusterType}
         </Descriptions.Item>
         <Descriptions.Item label={t('model:cluster.property.version')}>
           {cluster.clusterVersion}
-        </Descriptions.Item>
-        <Descriptions.Item label={t('model:cluster.property.region')}>
-          {cluster.region}
         </Descriptions.Item>
       </Descriptions>
     </Card>
@@ -307,7 +314,6 @@ function NodeOptions({
         <Row
           gutter={20}
           style={{
-            lineHeight: '12px',
             fontSize: 16,
           }}
         >
@@ -316,7 +322,7 @@ function NodeOptions({
           <Col span={4}>{t('nodes.fields.oldAmount')}</Col>
           <Col span={4}>{t('nodes.fields.newAmount')}</Col>
         </Row>
-        <Divider style={{ margin: '16px 0' }} />
+        <Divider style={{ margin: '12px 0' }} />
         {(
           <>
             {existed?.resource?.map((resource, i) => {
