@@ -2,6 +2,7 @@ cluster:
   property:
     id: Cluster ID
     name: Cluster Name
+    role: Cluster Role
     type: Database Type
     version: Database Version
     status: Status
@@ -16,7 +17,17 @@ cluster:
     deleteTime: Deleted Time
     tls: TLS
     usage: Usage
+    vendor: Vendor
     region: Region
+    storageReplicas: Replicas
+    exclusive: Exclusive
+  exclusive:
+    true: Yes
+    false: No
+  vendor:
+    local: Local Data Center
+    aws: AWS
+    gcp: GCP
   tls:
     on: Enabled
     off: Disabled
@@ -49,27 +60,27 @@ cluster:
 clusterLog:
   property:
     id: ID
+    ip: Instance IP address
     clusterId: Cluster ID
     index: Index
-    ip: IP
-    level: Level
-    message: Message
-    component: Component
-    source: Source
     time: Time
-    took: Took
+    component: Component Name
+    level: Log Level
+    message: Log Content
+    source: Source Files
+    took: Duration
 clusterBackup:
   property:
-    id: ID
-    mode: Mode
-    method: Method
-    type: Type
+    id: Backup ID
     clusterId: Cluster ID
     startTime: Start Time
     endTime: End Time
-    tso: TSO
+    tso: TSO Values at Backup
+    mode: Mode
+    type: Type
+    method: Method
     operator: Operator
-    size: Size
+    size: File Size
     status: Status
     filepath: File Path
   type:
@@ -80,18 +91,18 @@ clusterBackup:
     physical: Physical
   mode:
     manual: Manual
-    auto: Plan
+    auto: Auto
   status:
     initializing: Initializing
     processing: Backing up
-    success: Success
+    success: Finished
     failed: Failed
 clusterBackupStrategy:
   property:
     clusterId: Cluster ID
-    backupDate: Date
-    period: Time Period
     nextBackupTime: Next Backup Time
+    backupDate: Backup Period
+    period: Backup Time
   week:
     Monday: Monday
     Tuesday: Tuesday
@@ -117,11 +128,11 @@ clusterParam:
     false: No
 clusterDataReplication:
   property:
-    id: Id
-    name: Name
+    id: Task Id
+    name: Task Name
     downstream: Downstream
     status: Status
-    time: 'Left Time(Unit: ms)'
+    time: 'Remaining Data to Relication（Unit: MilliSeconds)'
   status:
     initial: Initializing
     stopped: Stopped

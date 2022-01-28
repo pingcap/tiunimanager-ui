@@ -2,6 +2,7 @@ cluster:
   property:
     id: 集群ID
     name: 集群名称
+    role: 集群角色
     type: 数据库类型
     version: 数据库版本
     status: 状态
@@ -16,7 +17,17 @@ cluster:
     deleteTime: 删除时间
     tls: TLS
     usage: 资源使用率
+    vendor: 厂商
     region: 区域
+    storageReplicas: 副本数
+    exclusive: 独占
+  exclusive:
+    true: 是
+    false: 否
+  vendor:
+    local: 本地机房
+    aws: AWS
+    gcp: GCP
   tls:
     on: 开启
     off: 未开启
@@ -49,29 +60,29 @@ cluster:
 clusterLog:
   property:
     id: ID
-    ip: IP
-    clusterId: 集群ID
+    ip: 实例 IP 地址
+    clusterId: 集群 ID
     index: 索引
     time: 时间
-    component: 组件
+    component: 组件名称
     level: 日志级别
     message: 日志内容
     source: 源文件
     took: 耗时
 clusterBackup:
   property:
-    id: ID
-    clusterId: 集群ID
+    id: 备份 ID
+    clusterId: 集群 ID
     startTime: 起始时间
-    endTime: 截止时间
-    tso: TSO
-    mode: 触发模式
+    endTime: 结束时间
+    tso: 备份时的 TSO
+    mode: 模式
     type: 类型
     method: 方式
     operator: 操作者
-    size: 大小
+    size: 文件大小
     status: 状态
-    filepath: 备份文件路径
+    filepath: 文件路径
   type:
     full: 全量
     incr: 增量
@@ -84,13 +95,13 @@ clusterBackup:
   status:
     initializing: 初始化中
     processing: 备份中
-    success: 成功
+    success: 完成
     failed: 失败
 clusterBackupStrategy:
   property:
-    clusterId: 集群ID
+    clusterId: 集群 ID
     nextBackupTime: 下次备份时间
-    backupDate: 备份日期
+    backupDate: 备份周期
     period: 备份时间
   week:
     Monday: 周一
@@ -117,7 +128,7 @@ clusterParam:
     false: 不需要
 clusterDataReplication:
   property:
-    id: ID
+    id: 任务 ID
     name: 任务名称
     downstream: 下游类型
     status: 任务状态
