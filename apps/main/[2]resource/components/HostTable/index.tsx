@@ -99,7 +99,8 @@ function useTableColumn() {
         {
           payload: { hostsId: hostId },
           options: {
-            actionName: t('delete.name'),
+            successMessage: t('delete.success'),
+            errorMessage: t('delete.failed'),
           },
         },
         {

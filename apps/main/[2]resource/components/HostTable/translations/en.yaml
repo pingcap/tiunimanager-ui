@@ -14,5 +14,6 @@ actions:
   delete: Delete
 delete:
   title: Delete Host
-  name: deletion
   confirm: Are you sure you want to delete the {{ hostName }} host?
+  success: The host deletion task is created
+  failed: Failed to create a host deletion task
