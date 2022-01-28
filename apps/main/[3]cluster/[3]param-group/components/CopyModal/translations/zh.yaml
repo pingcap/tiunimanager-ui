@@ -16,3 +16,5 @@ footer:
     text: 确认
 message:
   name: 复制
+  success: 参数组复制成功
+  failed: 参数组复制失败

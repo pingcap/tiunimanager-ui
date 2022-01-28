@@ -16,3 +16,5 @@ footer:
     text: Confirm
 message:
   name: Copy
+  success: The parameter group is copied
+  failed: Failed to copy the parameter group

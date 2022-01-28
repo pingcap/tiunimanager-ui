@@ -146,7 +146,11 @@ function getColumns({
           </a>,
           <DeleteConfirm
             key="delete"
-            title={t('delete.confirm')}
+            title={t('delete.name')}
+            content={t('delete.confirm', { name: record.name })}
+            confirmInput={{
+              expect: 'delete',
+            }}
             onConfirm={async (close) => {
               await deleteAction(record.paramGroupId!)
               close()

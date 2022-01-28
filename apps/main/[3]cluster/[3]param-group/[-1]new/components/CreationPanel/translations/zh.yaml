@@ -26,3 +26,5 @@ footer:
       param: 请确认编辑中的参数后再提交
 message:
   name: 创建
+  success: 参数组创建成功
+  failed: 参数组失败成功

@@ -14,3 +14,5 @@ footer:
     text: Confirm
 message:
   name: Applied
+  success: The parameter group is applied
+  failed: Failed to apply the parameter group

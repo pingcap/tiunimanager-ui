@@ -41,7 +41,8 @@ export function useDeleteParamGroupAction() {
         {
           payload: { paramGroupId },
           options: {
-            actionName: t('message.name'),
+            successMessage: t('delete.success'),
+            errorMessage: t('delete.failed'),
           },
         },
         {

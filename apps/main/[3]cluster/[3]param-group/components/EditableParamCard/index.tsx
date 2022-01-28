@@ -88,7 +88,7 @@ function getColumns(
     {
       title: t('columns.actions'),
       valueType: 'option',
-      width: 100,
+      width: 140,
       render: (node, record, idx, action) => {
         return (
           <a
