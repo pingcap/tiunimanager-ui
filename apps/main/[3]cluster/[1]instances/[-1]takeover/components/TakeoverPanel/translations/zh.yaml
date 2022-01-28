@@ -1,6 +1,6 @@
 form:
   jumpServer:
-    title: 堡垒机配置
+    title: 原集群中控机配置
     fields:
       ip: 主机 IP
       port: SSH 端口
@@ -14,19 +14,16 @@ form:
       username: 数据库用户
       password: 数据库密码
   resources:
-    title: 主机资源导入
+    title: 导入原集群主机
 tooltip:
   user: 拥有 TiUP 执行权限的用户
 footer:
   submit:
     title: 提交
-    confirm: 确认提交表单吗?
+    confirm: 确认提交吗?
 rules:
   ip:
     format: IP 格式非法
   clusterName:
-    length: 长度须达到8-32位
-message:
-  success: 创建接管集群任务成功
-  fail: '创建接管集群任务失败 {{ msg }}'
+    length: 长度须达到 8 ～ 32 位
 actionName: 接管集群
