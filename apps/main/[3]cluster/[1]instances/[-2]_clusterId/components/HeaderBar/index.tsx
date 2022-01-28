@@ -1,5 +1,8 @@
-import { useHistory } from 'react-router-dom'
 import { useMemo } from 'react'
+import { useHistory } from 'react-router-dom'
+import { useQueryClient } from 'react-query'
+import { loadI18n, useI18n } from '@i18n-macro'
+import { resolveRoute } from '@pages-macro'
 import { Button, Form, Modal, Switch } from 'antd'
 import {
   DeleteOutlined,
@@ -7,22 +10,20 @@ import {
   ExclamationCircleOutlined,
   SaveOutlined,
 } from '@ant-design/icons'
-import { CopyIconButton } from '@/components/CopyToClipboard'
-import styles from './index.module.less'
-import { useClusterContext } from '@apps/main/[3]cluster/[1]instances/[-2]_clusterId/context'
 import {
   invalidateClusterBackups,
   invalidateClusterDetail,
   useCreateClusterBackup,
   useDeleteCluster,
 } from '@/api/hooks/cluster'
-import { resolveRoute } from '@pages-macro'
-import { useQueryClient } from 'react-query'
+import { CopyIconButton } from '@/components/CopyToClipboard'
 import Header from '@/components/Header'
-import { loadI18n, useI18n } from '@i18n-macro'
 import { DeleteConfirm } from '@/components/DeleteConfirm'
-import { ClusterBackupMethod } from '@/api/model'
 import { useErrorNotification } from '@/components/ErrorNotification'
+import { ClusterBackupMethod } from '@/api/model'
+import { useClusterContext } from '@apps/main/[3]cluster/[1]instances/[-2]_clusterId/context'
+
+import styles from './index.module.less'
 
 loadI18n()
 
@@ -160,36 +161,41 @@ export default function HeaderBar() {
     const deleteBtn = (
       <DeleteConfirm
         key="delete"
-        title={t('delete.confirm')}
+        title={t('delete.title')}
         content={
-          <Form
-            className={styles.deletionForm}
-            form={deletionForm}
-            colon={false}
-            requiredMark={false}
-            labelAlign="left"
-            initialValues={{
-              autoBackup: true,
-              keepExistingBackup: true,
-            }}
-          >
-            <Form.Item
-              className={styles.noMessageItem}
-              name="autoBackup"
-              label={t('delete.options.autoBackup')}
-              valuePropName="checked"
+          <>
+            <Form
+              className={styles.deletionForm}
+              form={deletionForm}
+              colon={false}
+              requiredMark={false}
+              labelAlign="left"
+              initialValues={{
+                autoBackup: true,
+                keepExistingBackup: true,
+              }}
             >
-              <Switch />
-            </Form.Item>
-            <div className={styles.itemNote}>{t('delete.note.autoBackup')}</div>
-            <Form.Item
-              name="keepExistingBackup"
-              label={t('delete.options.keepExistingBackup')}
-              valuePropName="checked"
-            >
-              <Switch />
-            </Form.Item>
-          </Form>
+              <Form.Item
+                className={styles.noMessageItem}
+                name="autoBackup"
+                label={t('delete.options.autoBackup')}
+                valuePropName="checked"
+              >
+                <Switch />
+              </Form.Item>
+              <div className={styles.itemNote}>
+                {t('delete.note.autoBackup')}
+              </div>
+              <Form.Item
+                name="keepExistingBackup"
+                label={t('delete.options.keepExistingBackup')}
+                valuePropName="checked"
+              >
+                <Switch />
+              </Form.Item>
+            </Form>
+            <div>{t('delete.confirm')}</div>
+          </>
         }
         confirmInput={{
           expect: 'delete',

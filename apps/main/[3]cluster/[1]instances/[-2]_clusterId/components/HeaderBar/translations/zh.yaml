@@ -2,10 +2,11 @@ title: 集群详情
 actions:
   edit: 编辑
   reboot: 重启
-  scaleOut: 集群扩容
-  backup: 立即备份
+  scaleOut: 扩容
+  backup: 手动备份
   delete: 删除
 delete:
+  title: 删除集群
   confirm: 确认删除该集群吗?
   name: 删除集群
   options:
@@ -18,5 +19,5 @@ forceDelete:
   confirm: 该集群正在运行其他任务，确认要强制删除吗?
   tips: 强制删除集群可能带来难以预估的影响，请谨慎操作
 backup:
-  confirm: '确认立即备份集群 {{ name }} 吗?'
-  name: 创建备份
+  confirm: '确认备份集群 ID： {{ name }} 的数据吗?'
+  name: 备份集群
