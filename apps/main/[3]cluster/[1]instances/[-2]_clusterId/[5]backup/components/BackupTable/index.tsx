@@ -27,11 +27,7 @@ import styles from './index.module.less'
 
 loadI18n()
 
-const defaultColumnsSetting: Record<string, ColumnsState> = {
-  id: {
-    show: false,
-  },
-}
+const defaultColumnsSetting: Record<string, ColumnsState> = {}
 
 export interface BackupTableProps {
   cluster: ClusterInfo
