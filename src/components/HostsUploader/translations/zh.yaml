@@ -8,4 +8,4 @@ hint:
   download: 下载主机模板
 error:
   format: 目前仅支持通过 .xls 或 .xlsx 文件批量导入主机
-  size: 目前仅支持上传小于 2Gb 的文件
+  size: 目前仅支持上传小于 2 GB 的文件
