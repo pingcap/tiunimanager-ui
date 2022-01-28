@@ -13,5 +13,6 @@ actions:
   monitor: Monitor
   delete: Delete
 delete:
-  name: Delete Host
-  confirm: Are you sure to delete the {{ hostName }} host?
+  title: Delete Host
+  name: deletion
+  confirm: Are you sure you want to delete the {{ hostName }} host?

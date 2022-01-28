@@ -307,7 +307,7 @@ function getHostColumns(
           // <a key="monitor">{t('actions.monitor')}</a>,
           <DeleteConfirm
             key="delete"
-            title={t('delete.name')}
+            title={t('delete.title')}
             content={t('delete.confirm', { hostName: record.hostName })}
             confirmInput={{
               expect: 'delete',
