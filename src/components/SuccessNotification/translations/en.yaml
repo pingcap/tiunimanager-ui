@@ -1,6 +1,6 @@
 success:
   defaultTitle: Request Successfully
-  title: '{{ name }} Successfully'
-  workflowTitle: 'The {{ name }} task is created successfully'
+  title: '{{ name }} successfully'
+  workflowTitle: '{{ name }} successfully'
   workflowId: Workflow ID
   toDetail: See workflow detail

@@ -9,12 +9,10 @@ loadI18n()
 export function useSuccessNotification(resp: AxiosResponse) {
   // Note: Notifications do not require response language switching, so use getI18n instead of useI18n
   const t = getI18n()
-  const isAsync = !!resp.data.data?.flowInfo || !!resp.data.data?.workFlowId
+
   const workflowId = resp.data.data?.workFlowId
-  const message = resp.config.actionName
-    ? isAsync
-      ? t('success.workflowTitle', { name: resp.config.actionName })
-      : t('success.title', { name: resp.config.actionName })
+  const message = resp.config.successMessage
+    ? resp.config.successMessage
     : t('success.defaultTitle')
   const key = `success_${Date.now()}`
   notification.open({

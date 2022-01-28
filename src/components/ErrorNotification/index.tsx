@@ -13,8 +13,8 @@ export function useErrorNotification(error: AxiosError) {
     : `${Date.now()}`
   notification.open({
     key,
-    message: error.config.actionName
-      ? t('error.title', { name: error.config.actionName })
+    message: error.config.errorMessage
+      ? error.config.errorMessage
       : t('error.defaultTitle'),
     icon: null,
     duration: 0,
