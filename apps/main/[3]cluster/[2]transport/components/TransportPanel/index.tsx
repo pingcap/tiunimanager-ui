@@ -101,7 +101,8 @@ export function ExportPanel({ back }: TransportPanelProps) {
         {
           payload: value,
           options: {
-            actionName: t('export.title'),
+            successMessage: t('export.message.success'),
+            errorMessage: t('export.message.failed'),
           },
         },
         {
@@ -443,7 +444,8 @@ export function ImportPanel({ back }: TransportPanelProps) {
         {
           payload: value,
           options: {
-            actionName: t('import.title'),
+            successMessage: t('import.message.success'),
+            errorMessage: t('import.message.failed'),
           },
         },
         {

@@ -4,12 +4,18 @@ export:
   source: Source Cluster
   options: Options
   submit: Export
+  message:
+    success: The data export task is created
+    failed: Failed to create a data export task
 import:
   title: Import Data
   source: Data Source
   target: Target Cluster
   options: Options
   submit: Import
+  message:
+    success: The data import task is created
+    failed: Failed to create a data import task
 form:
   storageType: Storage Type
   s3:

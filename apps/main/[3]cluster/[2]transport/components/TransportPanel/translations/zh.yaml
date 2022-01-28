@@ -4,12 +4,18 @@ export:
   source: 源集群
   options: 选项
   submit: 创建导出任务
+  message:
+    success: 数据导出任务创建成功
+    failed: 数据导出任务创建成功
 import:
   title: 导入数据
   source: 数据源
   target: 目标集群
   options: 选项
   submit: 创建导入任务
+  message:
+    success: 数据导入任务创建成功
+    failed: 数据导入任务创建成功
 form:
   storageType: 存储类型
   s3:

@@ -117,7 +117,8 @@ function useTableColumn() {
             clusterId,
           },
           options: {
-            actionName: t('delete.name'),
+            successMessage: t('delete.success'),
+            errorMessage: t('delete.failed'),
           },
         },
         {
