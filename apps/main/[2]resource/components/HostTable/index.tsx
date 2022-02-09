@@ -156,7 +156,7 @@ function getHostColumns(
         Online: { text: t('model:host.status.online'), status: 'Success' },
         Offline: { text: t('model:host.status.offline'), status: 'Default' },
         Failed: { text: t('model:host.status.failed'), status: 'Error' },
-        Deleting: { text: t('model:host.status.failed'), status: 'Error' },
+        Deleting: { text: t('model:host.status.deleting'), status: 'Error' },
         Deleted: { text: t('model:host.status.deleted'), status: 'Error' },
       },
     },
