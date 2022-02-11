@@ -9,17 +9,11 @@ import {
   ControllerResultWithPage,
   MessageLoginReq,
   MessageLoginResp,
-  KnowledgeClusterComponent,
-  KnowledgeClusterComponentSpec,
-  KnowledgeClusterVersionSpec,
   MessageQueryWorkFlowDetailResp,
   StructsWorkFlowInfo,
   StructsWorkFlowInfoStatusEnum,
   StructsWorkFlowNodeInfoStatusEnum,
   StructsWorkFlowNodeInfo,
-  KnowledgeClusterType,
-  KnowledgeClusterTypeSpec,
-  KnowledgeClusterVersion,
   ClusterPreviewClusterResp,
   MessageDataExportReq,
   MessageDataImportReq,
@@ -76,10 +70,6 @@ export type ClusterDownstreamKafka = ClusterKafkaDownstream
 export type ClusterDownstreamMySQL = ClusterMysqlDownstream
 export type ClusterDownstreamTiDB = ClusterTiDBDownstream
 
-export type ClusterType = KnowledgeClusterType
-export type ClusterVersion = KnowledgeClusterVersion
-export type ClusterComponent = KnowledgeClusterComponent
-
 export type TransportRecord = StructsDataImportExportRecordInfo
 
 export type HostInfo = StructsHostInfo
@@ -91,10 +81,6 @@ export type ClusterPreview = ClusterPreviewClusterResp
 export type TaskWorkflowInfo = StructsWorkFlowInfo
 export type TaskWorkflowDetailInfo = MessageQueryWorkFlowDetailResp
 export type TaskWorkflowSubTaskInfo = StructsWorkFlowNodeInfo
-
-export type KnowledgeOfClusterType = KnowledgeClusterTypeSpec
-export type KnowledgeOfClusterVersion = KnowledgeClusterVersionSpec
-export type KnowledgeOfClusterComponent = KnowledgeClusterComponentSpec
 
 export type UserLoginRequest = MessageLoginReq
 

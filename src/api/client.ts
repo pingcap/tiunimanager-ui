@@ -16,7 +16,6 @@ import {
   ChangeFeedApi as ClusterDataReplicationApi,
   ParameterGroupApi,
   Configuration,
-  KnowledgeApi,
   PlatformApi,
   ResourceApi,
   TaskApi,
@@ -78,7 +77,6 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
       undefined,
       axiosInstance
     ),
-    Knowledge: new KnowledgeApi(configuration, undefined, axiosInstance),
     Task: new TaskApi(configuration, undefined, axiosInstance),
     Logs: new ClusterLogApi(configuration, undefined, axiosInstance),
     Transport: new ClusterDataTransportApi(
