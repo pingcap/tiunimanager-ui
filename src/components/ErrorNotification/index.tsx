@@ -17,7 +17,7 @@ export function useErrorNotification(error: AxiosError) {
       ? error.config.errorMessage
       : t('error.defaultTitle'),
     icon: null,
-    duration: 0,
+    duration: 5,
     description: <ErrorNotification error={error} />,
     className: styles.notification,
   })

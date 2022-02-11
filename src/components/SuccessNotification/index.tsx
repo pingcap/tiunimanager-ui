@@ -18,7 +18,7 @@ export function useSuccessNotification(resp: AxiosResponse) {
   notification.open({
     message: message,
     icon: null,
-    duration: 5,
+    duration: 4,
     key,
     description: workflowId && (
       <SuccessNotification workflowId={workflowId} notificationKey={key} />
