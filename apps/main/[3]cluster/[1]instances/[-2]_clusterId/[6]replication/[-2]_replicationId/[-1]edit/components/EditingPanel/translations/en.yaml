@@ -1,2 +1,4 @@
 message:
-  name: Update
+  name: update the data replication task
+  success: The the data replication task is updated
+  failed: Failed to update the data replication task

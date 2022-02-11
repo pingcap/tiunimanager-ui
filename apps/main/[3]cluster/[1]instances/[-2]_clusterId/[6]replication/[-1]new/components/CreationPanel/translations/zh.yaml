@@ -1,2 +1,4 @@
 message:
-  name: 创建
+  name: 创建数据复制任务
+  success: 数据复制任务创建成功
+  failed: 数据复制任务创建成功

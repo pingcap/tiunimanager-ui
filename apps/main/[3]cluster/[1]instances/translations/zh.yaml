@@ -1,5 +1,5 @@
-name: 集群实例
+name: 集群
 header:
-  title: 集群实例
+  title: 集群列表
   new: 创建集群
   takeover: 接管集群

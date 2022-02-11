@@ -1,2 +1,4 @@
 message:
-  name: 修改
+  name: 更新数据复制任务
+  success: 数据复制任务修改成功
+  failed: 数据复制任务修改失败

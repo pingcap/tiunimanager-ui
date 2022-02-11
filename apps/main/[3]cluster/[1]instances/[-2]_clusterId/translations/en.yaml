@@ -1,10 +1,10 @@
-name: Details
+name: Cluster Details
 pages:
   profile: Profile
   perf: Performance
   logs: Logs
-  monitor: Monitor
-  alert: Alert
-  params: Params
+  monitor: Monitors
+  alert: Alerts
+  params: Parameters
   backup: Backup
   replication: Data Replication

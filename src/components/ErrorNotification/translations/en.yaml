@@ -1,6 +1,6 @@
 error:
   defaultTitle: Request Failed
-  title: '{{ name }} Failed'
+  title: 'Failed to {{ name }}'
   description: Desciption
   more: More
   method: Method

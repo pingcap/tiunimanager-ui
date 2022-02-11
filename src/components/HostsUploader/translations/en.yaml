@@ -8,4 +8,4 @@ hint:
   download: Download host template
 error:
   format: Only .xls or .xlsx files are supported currently
-  size: Only files smaller than 2Gb can be uploaded currently
+  size: Only files smaller than 2 GB can be uploaded currently

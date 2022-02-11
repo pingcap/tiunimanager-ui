@@ -14,9 +14,11 @@ copy:
   success: 复制成功
   fail: '复制失败: {{ msg }}'
 edit:
-  disabled: 不允许编辑系统内置参数组
+  disabled: 不允许编辑系统默认参数组
 delete:
-  disabled: 不允许删除系统内置参数组
-  confirm: 确认删除此参数组吗?
+  disabled: 不允许删除系统默认参数组
+  confirm: 确认删除 {{ name }} 参数组吗?
   loading: 删除中
-  name: 删除
+  name: 删除参数组
+  success: 参数组删除成功
+  failed: 参数组删除失败

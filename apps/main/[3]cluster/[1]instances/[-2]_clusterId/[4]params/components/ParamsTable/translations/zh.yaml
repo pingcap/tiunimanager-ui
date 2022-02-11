@@ -3,14 +3,14 @@ header:
 actions:
   refresh: 刷新
   reset: 重置
-  save: 保存更改
+  save: 保存
   edit: 编辑
   confirm: 确认
 reset:
-  confirm: 确认重置本地修改吗?
+  confirm: 确定要重置已编辑的参数吗?
 save:
-  nochanges: 没有本地更改
-  confirm: 确认保存下列参数更改吗?
+  nochanges: 没有修改任何参数，请确认是否修改过参数
+  confirm: 确认保存已更改的参数吗?
   name: 更新
   fields:
     component: 组件名称
@@ -21,5 +21,8 @@ save:
   okText:
     normal: 确定
     reboot: 确定并重启
+  message:
+    success: 修改参数任务创建成功
+    failed: 修改参数任务创建失败
 columns:
   actions: 操作

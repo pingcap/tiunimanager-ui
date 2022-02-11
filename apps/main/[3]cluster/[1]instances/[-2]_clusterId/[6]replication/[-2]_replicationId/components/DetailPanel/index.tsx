@@ -59,7 +59,7 @@ const getTSODisplay = (tso: string, tsoTimestamp?: number) => {
 
 const DescItem: FC<{ label: string }> = (props) => (
   <Row className={styles.descRow}>
-    <Col className={styles.descCol} flex="260px">
+    <Col className={styles.descCol} flex="300px">
       <span className={styles.descLabel}>{props.label} :</span>
     </Col>
     <Col flex="auto">{props.children}</Col>

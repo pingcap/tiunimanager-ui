@@ -489,7 +489,7 @@ function ClusterOptions() {
         tooltip={t('cluster.tooltip.name')}
         rules={[
           { required: true, message: t('cluster.rules.name.require') },
-          { min: 8, max: 32, message: t('cluster.rules.name.length') },
+          { min: 4, max: 64, message: t('cluster.rules.name.length') },
         ]}
       >
         <Input />
@@ -515,7 +515,7 @@ function ClusterOptions() {
         tooltip={t('cluster.tooltip.password')}
         rules={[
           { required: true, message: t('cluster.rules.password.require') },
-          { min: 8, max: 32, message: t('cluster.rules.password.length') },
+          { min: 8, max: 64, message: t('cluster.rules.password.length') },
         ]}
       >
         <Input.Password />
@@ -574,7 +574,7 @@ function Submitter({
           {
             payload: fields,
             options: {
-              actionName: t('preview.name'),
+              errorMessage: t('preview.failed'),
               skipSuccessNotification: true,
             },
           },
@@ -596,10 +596,12 @@ function Submitter({
               Modal.confirm({
                 icon: <></>,
                 width: 800,
+                title: t('preview.title'),
                 okButtonProps: {
                   disabled: !isSubmittable,
                 },
                 okText: t('preview.actions.confirm'),
+                cancelText: t('preview.actions.cancel'),
                 content: (
                   <div>
                     <p>

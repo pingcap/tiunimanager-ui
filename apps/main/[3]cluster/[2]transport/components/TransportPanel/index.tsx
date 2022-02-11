@@ -101,7 +101,8 @@ export function ExportPanel({ back }: TransportPanelProps) {
         {
           payload: value,
           options: {
-            actionName: t('export.title'),
+            successMessage: t('export.message.success'),
+            errorMessage: t('export.message.failed'),
           },
         },
         {
@@ -284,7 +285,7 @@ export function ImportPanel({ back }: TransportPanelProps) {
     }
 
     const localOptions = (
-      <Form.Item label={' '}>
+      <Form.Item>
         <Upload
           name="file"
           action={getFsUploadURL()}
@@ -403,7 +404,7 @@ export function ImportPanel({ back }: TransportPanelProps) {
 
     return (
       <>
-        <Form.Item name="storageType" label=" " initialValue="local">
+        <Form.Item name="storageType" initialValue="local">
           <Radio.Group
             onChange={(e) => {
               setSourceType(e.target.value)
@@ -443,7 +444,8 @@ export function ImportPanel({ back }: TransportPanelProps) {
         {
           payload: value,
           options: {
-            actionName: t('import.title'),
+            successMessage: t('import.message.success'),
+            errorMessage: t('import.message.failed'),
           },
         },
         {

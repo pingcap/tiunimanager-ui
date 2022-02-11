@@ -7,19 +7,22 @@ actions:
   edit: Edit
   confirm: Confirm
 reset:
-  confirm: Are you sure to reset edited params?
+  confirm: Are you sure you want to reset edited parameters?
 save:
-  nochanges: No changes
-  confirm: Are you sure to save the following parameter changes?
+  nochanges: No parameters have been modified. Please confirm if any parameters have been modified.
+  confirm: Are you sure you want to save the edited parameters?
   name: Update
   fields:
     component: Component Name
-    name: Param Name
+    name: Parameter Name
     before: Before
     after: After
-    reboot: Reboot
+    reboot: Restart
   okText:
     normal: Confirm
-    reboot: Confirm and Reboot
+    reboot: Confirm and Restart
+  message:
+    success: The parameters update task is created
+    failed: Failed to create a parameters update task
 columns:
   actions: Actions

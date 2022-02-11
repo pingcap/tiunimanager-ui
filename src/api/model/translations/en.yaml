@@ -1,25 +1,36 @@
 cluster:
   property:
-    id: ID
-    name: Name
-    type: Type
-    version: Version
+    id: Cluster ID
+    name: Cluster Name
+    role: Cluster Role
+    type: Database Type
+    version: Database Version
     status: Status
-    operationStatus: Operation Status
-    address: Address
+    operationStatus: Maintenance Status
+    address: Connection Address
     extranetAddress: Extranet Address
     intranetAddress: Intranet Address
     password: Password
-    tag: Tag
-    createTime: Create Time
-    updateTime: Update Time
-    deleteTime: Delete Time
+    tag: Labels
+    createTime: Created Time
+    updateTime: Updated Time
+    deleteTime: Deleted Time
     tls: TLS
     usage: Usage
+    vendor: Vendor
     region: Region
+    storageReplicas: Replicas
+    exclusive: Exclusive
+  exclusive:
+    true: Yes
+    false: No
+  vendor:
+    local: Local Data Center
+    aws: AWS
+    gcp: GCP
   tls:
-    on: ON
-    off: OFF
+    on: Enabled
+    off: Disabled
   usage:
     cpu: CPU
     memory: Memory
@@ -31,45 +42,45 @@ cluster:
     stopped: Stopped
     running: Running
     recovering: Recovering
-    failure: Failure
+    failure: Failed
   operationStatus:
     creating: Creating
     cloning: Cloning
     deleting: Deleting
     stopping: Stopping
     restarting: Restarting
-    backingUp: BackingUp
+    backingUp: Backing Up
     restoring: Restoring
     scalingIn: Scaling In
     scalingOut: Scaling Out
     upgrading: Upgrading
     switching: Switching
     applyingParams: Modifying Params
-    takingOver: Takeover
+    takingOver: Taking over
 clusterLog:
   property:
     id: ID
+    ip: Instance IP address
     clusterId: Cluster ID
     index: Index
-    ip: IP
-    level: Level
-    message: Message
-    component: Component
-    source: Source
     time: Time
-    took: Took
+    component: Component Name
+    level: Log Level
+    message: Log Content
+    source: Source Files
+    took: Duration
 clusterBackup:
   property:
-    id: ID
-    mode: Mode
-    method: Method
-    type: Type
+    id: Backup ID
     clusterId: Cluster ID
     startTime: Start Time
     endTime: End Time
-    tso: TSO
+    tso: TSO Values at Backup
+    mode: Mode
+    type: Type
+    method: Method
     operator: Operator
-    size: Size
+    size: File Size
     status: Status
     filepath: File Path
   type:
@@ -80,18 +91,18 @@ clusterBackup:
     physical: Physical
   mode:
     manual: Manual
-    auto: Plan
+    auto: Auto
   status:
     initializing: Initializing
     processing: Backing up
-    success: Success
+    success: Finished
     failed: Failed
 clusterBackupStrategy:
   property:
     clusterId: Cluster ID
-    backupDate: Date
-    period: Time Period
     nextBackupTime: Next Backup Time
+    backupDate: Backup Period
+    period: Backup Time
   week:
     Monday: Monday
     Tuesday: Tuesday
@@ -113,15 +124,15 @@ clusterParam:
     unit: Unit
     type: Type
   reboot:
-    true: Need
+    true: Yes
     false: No
 clusterDataReplication:
   property:
-    id: Id
-    name: Name
+    id: Task Id
+    name: Task Name
     downstream: Downstream
     status: Status
-    time: 'Left Time(Unit: ms)'
+    time: 'Remaining Data to Relication（Unit: MilliSeconds)'
   status:
     initial: Initializing
     stopped: Stopped
@@ -142,7 +153,7 @@ clusterNode:
     hostIp: Host IP
     ioutil: IOUtil
     iops: IO/s
-    port: Port
+    port: Ports
     role: Role
     spec: Spec
     version: Version
@@ -153,20 +164,20 @@ clusterNode:
     stopped: Stopped
     running: Running
     recovering: Recovering
-    failure: Failure
+    failure: Failed
 paramGroup:
   property:
-    id: ID
-    name: Name
-    type: Type
+    id: Parameter Group ID
+    name: Parameter Group Name
+    type: Parameter Group Type
     scope: Scope
-    dbType: Database
+    dbType: Database Type
     dbVersion: Database Version
-    clusterSpec: Cluster Specification
+    clusterSpec: Specification Code
     desc: Description
   type:
-    system: System Built-in
-    custom: User Custom
+    system: System Default
+    custom: User-defined
   scope:
     cluster: Cluster
     instance: Component
@@ -254,17 +265,17 @@ task:
     name: Task Name
     bizId: Associated Resource ID
     bizType: Associated Resource Type
-    creationTime: Creation Time
-    updateTime: Update Time
+    creationTime: Created Time
+    updateTime: Updated Time
     operator: Operator
     manual: Manual
     status: Status
     tenantId: Tenant ID
   status:
-    init: Init
+    init: Initializing
     processing: Processing
     finished: Finished
-    error: Error
+    error: Failed
     cancelled: Cancelled
   bizType:
     cluster: Cluster
@@ -291,8 +302,8 @@ transport:
     fileSize: File Size
     comment: Remarks
   type:
-    import: Import
-    export: Export
+    import: Import Data
+    export: Export Data
   storageType:
     nfs: Local
     s3: AWS S3

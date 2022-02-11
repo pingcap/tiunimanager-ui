@@ -55,7 +55,8 @@ export function useCopyModal(dataSource?: ParamGroupItem[]) {
             paramGroupId: copyId,
           },
           options: {
-            actionName: t('message.name'),
+            successMessage: t('message.success'),
+            errorMessage: t('message.failed'),
           },
         },
         {

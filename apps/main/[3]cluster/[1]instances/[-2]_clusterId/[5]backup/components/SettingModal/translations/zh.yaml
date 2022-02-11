@@ -7,9 +7,12 @@ fetch:
   fail: '获取集群备份计划失败: {{ msg }}'
 update:
   name: 更新备份计划
+  message:
+    success: 备份计划更新成功
+    failed: 备份计划更新失败
 
 form:
-  backupDate: 备份日期
+  backupDate: 备份周期
   period: 备份时间
 
 week:

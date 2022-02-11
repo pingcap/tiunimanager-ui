@@ -1,5 +1,5 @@
-name: Instances
+name: Clusters
 header:
-  title: Instances
-  new: New Cluster
-  takeoverr: Take Over
+  title: Cluster List
+  new: Create Cluster
+  takeover: Take Over Cluster

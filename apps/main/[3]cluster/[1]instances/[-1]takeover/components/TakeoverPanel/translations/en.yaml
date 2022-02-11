@@ -1,32 +1,31 @@
 form:
   jumpServer:
-    title: Jump Server Options
+    title: Control Machine Configuration of Cluster to be Taken Over
     fields:
-      ip: Host IP
+      ip: Host IP Address
       port: SSH Port
-      user: SSH User
+      user: SSH Username
       password: SSH Password
-      tiupPath: TiUP Path
+      tiupPath: Deployment Path of TiUP
   basic:
-    title: Basic Options
+    title: Basic Configuration
     fields:
       name: Cluster Name
       username: Database Username
       password: Database Password
   resources:
-    title: Hosts Import
+    title: Import Hosts of Cluster to be Taken Over
 tooltip:
-  user: The user which has TiUP execution permission.
+  user: The user who has the execution permission of TiUP
 footer:
   submit:
     title: Submit
-    confirm: Are you sure to submit the form?
+    confirm: Are you sure you want to submit?
 rules:
   ip:
     format: Invalid IP format
   clusterName:
-    length: The length must be between 8-32
+    length: The length must be between 8 and 32
 message:
-  success: Success to takeover clusters
-  fail: 'Fail: {{ msg }}'
-actionName: Take over cluster
+  success: The cluster takeover task is created
+  failed: Failed to create a cluster takeover task

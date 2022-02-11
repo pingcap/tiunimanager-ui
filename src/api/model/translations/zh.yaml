@@ -2,24 +2,35 @@ cluster:
   property:
     id: 集群ID
     name: 集群名称
+    role: 集群角色
+    type: 数据库类型
+    version: 数据库版本
     status: 状态
-    operationStatus: 操作状态
+    operationStatus: 维护状态
     address: 连接地址
     extranetAddress: 外网地址
     intranetAddress: 内网地址
     password: 密码
     tag: 标签
-    version: 版本
-    type: 类型
     createTime: 创建时间
     updateTime: 更新时间
     deleteTime: 删除时间
     tls: TLS
     usage: 资源使用率
-    region: Region
+    vendor: 厂商
+    region: 区域
+    storageReplicas: 副本数
+    exclusive: 独占
+  exclusive:
+    true: 是
+    false: 否
+  vendor:
+    local: 本地机房
+    aws: AWS
+    gcp: GCP
   tls:
-    on: 启用
-    off: 未启用
+    on: 开启
+    off: 未开启
   usage:
     cpu: CPU
     memory: 内存
@@ -49,29 +60,29 @@ cluster:
 clusterLog:
   property:
     id: ID
-    ip: IP
-    clusterId: 集群ID
+    ip: 实例 IP 地址
+    clusterId: 集群 ID
     index: 索引
     time: 时间
-    component: 组件
+    component: 组件名称
     level: 日志级别
     message: 日志内容
     source: 源文件
     took: 耗时
 clusterBackup:
   property:
-    id: ID
-    clusterId: 集群ID
+    id: 备份 ID
+    clusterId: 集群 ID
     startTime: 起始时间
-    endTime: 截止时间
-    tso: TSO
-    mode: 触发模式
+    endTime: 结束时间
+    tso: 备份时的 TSO
+    mode: 模式
     type: 类型
     method: 方式
     operator: 操作者
-    size: 大小
+    size: 文件大小
     status: 状态
-    filepath: 备份文件路径
+    filepath: 文件路径
   type:
     full: 全量
     incr: 增量
@@ -84,13 +95,13 @@ clusterBackup:
   status:
     initializing: 初始化中
     processing: 备份中
-    success: 成功
+    success: 完成
     failed: 失败
 clusterBackupStrategy:
   property:
-    clusterId: 集群ID
+    clusterId: 集群 ID
     nextBackupTime: 下次备份时间
-    backupDate: 备份日期
+    backupDate: 备份周期
     period: 备份时间
   week:
     Monday: 周一
@@ -117,7 +128,7 @@ clusterParam:
     false: 不需要
 clusterDataReplication:
   property:
-    id: ID
+    id: 任务 ID
     name: 任务名称
     downstream: 下游类型
     status: 任务状态
@@ -156,17 +167,17 @@ clusterNode:
     failure: 异常
 paramGroup:
   property:
-    id: ID
+    id: 参数组 ID
     name: 参数组名称
     type: 参数组类别
     scope: 参数组级别
     dbType: 数据库类型
     dbVersion: 数据库版本
-    clusterSpec: 集群规格
+    clusterSpec: 规格代码
     desc: 描述
   type:
-    system: 系统内置
-    custom: 自定义
+    system: 系统默认
+    custom: 用户自定义
   scope:
     cluster: 集群
     instance: 组件
@@ -251,7 +262,7 @@ domain:
 task:
   property:
     id: 任务 ID
-    name: 名称
+    name: 任务名称
     bizId: 关联资源 ID
     bizType: 关联资源类型
     creationTime: 创建时间
@@ -291,13 +302,13 @@ transport:
     fileSize: 文件大小
     comment: 备注
   type:
-    import: 导入
-    export: 导出
+    import: 导入数据
+    export: 导出数据
   storageType:
     nfs: 本地存储
     s3: AWS S3
   status:
-    initializing: 初始化中
+    initializing: 初始化
     processing: 进行中
-    success: 成功
+    success: 完成
     failed: 失败

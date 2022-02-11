@@ -7,4 +7,6 @@ restore-info:
     backupPath: Backup Path
   tips:
     not-editable: You can not change this manually.
-name: Restore Backup
+message:
+  success: The cluster restoring task is created
+  failed: Failed to create a cluster restoring task

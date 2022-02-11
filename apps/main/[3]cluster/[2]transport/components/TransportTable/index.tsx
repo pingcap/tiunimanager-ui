@@ -117,7 +117,8 @@ function useTableColumn() {
             clusterId,
           },
           options: {
-            actionName: t('delete.name'),
+            successMessage: t('delete.success'),
+            errorMessage: t('delete.failed'),
           },
         },
         {
@@ -214,8 +215,11 @@ function getColumns(
       hideInSearch: true,
       render: (_, record) => (
         <span>
-          <CopyIconButton text={record.filePath!} label={t('copy.filePath')} />
-          {record.filePath}
+          <CopyIconButton
+            text={`${record.filePath}/${record.zipName}`}
+            label={t('copy.filePath')}
+          />
+          {record.filePath}/{record.zipName}
         </span>
       ),
     },
@@ -230,7 +234,7 @@ function getColumns(
       title: t('columns.actions'),
       valueType: 'option',
       fixed: 'right',
-      width: 100,
+      width: 160,
       render: (_, record) => {
         const isError =
           record.status === undefined ||

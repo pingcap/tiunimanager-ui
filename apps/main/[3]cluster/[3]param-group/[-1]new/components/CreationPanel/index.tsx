@@ -435,7 +435,8 @@ function useSubmitter({
             })),
           },
           options: {
-            actionName: t('message.name'),
+            successMessage: t('message.success'),
+            errorMessage: t('message.failed'),
           },
         },
         {

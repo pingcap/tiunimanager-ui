@@ -1,5 +1,5 @@
 description:
-  unexecuted: Waiting to run
+  unexecuted: Not started
   executed: 'Start time: {{ startTime }}, duration: {{ duration }} seconds'
 result:
   title: 'Step {{ stepIndex }}: {{ stepName }}'

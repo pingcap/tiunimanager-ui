@@ -23,7 +23,8 @@ export function TakeoverPanel({ back }: TakeoverPanelProps) {
         {
           payload: values,
           options: {
-            actionName: t('actionName'),
+            successMessage: t('message.success'),
+            errorMessage: t('message.failed'),
           },
         },
         {

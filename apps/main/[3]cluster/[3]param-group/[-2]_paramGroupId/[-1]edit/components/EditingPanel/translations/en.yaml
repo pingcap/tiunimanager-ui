@@ -20,3 +20,5 @@ footer:
       param: Please confirm the editing parameter first
 message:
   name: Update
+  success: The parameter group is updated
+  failed: Failed to update the parameter group

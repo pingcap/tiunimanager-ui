@@ -27,11 +27,7 @@ import styles from './index.module.less'
 
 loadI18n()
 
-const defaultColumnsSetting: Record<string, ColumnsState> = {
-  id: {
-    show: false,
-  },
-}
+const defaultColumnsSetting: Record<string, ColumnsState> = {}
 
 export interface BackupTableProps {
   cluster: ClusterInfo
@@ -138,7 +134,8 @@ function useTableColumn({ cluster }: { cluster: ClusterInfo }) {
             clusterId,
           },
           options: {
-            actionName: t('delete.name'),
+            successMessage: t('delete.message.success'),
+            errorMessage: t('delete.message.failed'),
           },
         },
         {
@@ -181,29 +178,8 @@ function getColumns(
       fixed: 'left',
     },
     {
-      title: t('model:clusterBackup.property.startTime'),
-      width: 150,
-      dataIndex: 'startTime',
-      key: 'startTime',
-      valueType: 'dateTime',
-    },
-    {
-      title: t('model:clusterBackup.property.endTime'),
-      width: 150,
-      dataIndex: 'endTime',
-      key: 'endTime',
-      valueType: 'dateTime',
-    },
-    {
-      title: t('model:clusterBackup.property.tso'),
-      width: 160,
-      dataIndex: 'backupTso',
-      key: 'backupTso',
-      hideInSearch: true,
-    },
-    {
       title: t('model:clusterBackup.property.type'),
-      width: 60,
+      width: 100,
       key: 'type',
       hideInSearch: true,
       render: (_, record) =>
@@ -211,7 +187,7 @@ function getColumns(
     },
     {
       title: t('model:clusterBackup.property.method'),
-      width: 60,
+      width: 100,
       key: 'method',
       hideInSearch: true,
       render: (_, record) =>
@@ -219,7 +195,7 @@ function getColumns(
     },
     {
       title: t('model:clusterBackup.property.mode'),
-      width: 80,
+      width: 100,
       key: 'mode',
       hideInSearch: true,
       render: (_, record) => t(`model:clusterBackup.mode.${record.backupMode}`),
@@ -232,16 +208,8 @@ function getColumns(
     //   hideInSearch: true,
     // },
     {
-      title: t('model:clusterBackup.property.size'),
-      width: 110,
-      key: 'size',
-      hideInSearch: true,
-      render: (_, record) =>
-        record.size! < 0 ? '-' : `${record.size!.toFixed(3)} MB`,
-    },
-    {
       title: t('model:clusterBackup.property.status'),
-      width: 80,
+      width: 100,
       dataIndex: 'status',
       key: 'status',
       valueType: 'select',
@@ -266,15 +234,44 @@ function getColumns(
       hideInSearch: true,
     },
     {
-      title: t('model:clusterBackup.property.filepath'),
+      title: t('model:clusterBackup.property.tso'),
       width: 200,
+      dataIndex: 'backupTso',
+      key: 'backupTso',
+      hideInSearch: true,
+    },
+    {
+      title: t('model:clusterBackup.property.startTime'),
+      width: 150,
+      dataIndex: 'startTime',
+      key: 'startTime',
+      valueType: 'dateTime',
+    },
+    {
+      title: t('model:clusterBackup.property.endTime'),
+      width: 150,
+      dataIndex: 'endTime',
+      key: 'endTime',
+      valueType: 'dateTime',
+    },
+    {
+      title: t('model:clusterBackup.property.size'),
+      width: 110,
+      key: 'size',
+      hideInSearch: true,
+      render: (_, record) =>
+        record.size! < 0 ? '-' : `${record.size!.toFixed(3)} MB`,
+    },
+    {
+      title: t('model:clusterBackup.property.filepath'),
+      width: 260,
       dataIndex: 'filePath',
       key: 'filepath',
       hideInSearch: true,
     },
     {
       title: t('columns.actions'),
-      width: 100,
+      width: 180,
       key: 'actions',
       fixed: 'right',
       valueType: 'option',
@@ -300,7 +297,8 @@ function getColumns(
           ),
           <DeleteConfirm
             key="delete"
-            title={t('delete.confirm')}
+            title={t('delete.name')}
+            content={t('delete.confirm', { name: record.id })}
             confirmInput={{
               expect: 'delete',
             }}

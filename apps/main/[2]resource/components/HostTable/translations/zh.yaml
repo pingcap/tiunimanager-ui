@@ -13,5 +13,7 @@ actions:
   monitor: 监控
   delete: 删除
 delete:
-  name: 删除主机
+  title: 删除主机
   confirm: 确认删除 {{ hostName }} 主机吗?
+  success: 删除主机任务创建成功
+  failed: 删除主机任务创建失败

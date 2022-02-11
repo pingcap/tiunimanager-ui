@@ -17,10 +17,9 @@ component:
   optional: 可选
   allocator:
     title: 快速分配
-    items: '{{ count }} 节点'
+    items: '{{ count }} 实例'
   fields:
     copies: 存储副本数
-    nodes: 节点
     zone: 可用区
     spec: 规格代码
     amount: 数量
@@ -33,28 +32,28 @@ cluster:
     password: 数据库密码
     exclusive: 独占部署
   tooltip:
-    name: 大小写字母、数字和连字符，并以字母开头，长度8-32位
-    password: 大小写，可见特殊字符(!@#$%^&*()_+=)，数字三种以上组合，长度8-32位
+    name: 集群名称必须是 4-64 个字符，可包含大小写字母、数字和连字符，并以字母或数字开头
+    password: 密码必须是 8-64 个字符，可包含大小写字母、数字和可见的特殊字符（!@#$%^&*()_+=）
     tags: "使用逗号 ',' 或空格 ' ' 分割不同的标签"
   rules:
     name:
       require: 请输入集群名称
-      length: 长度须达到8-32位
+      length: 集群名称必须是 4-64 个字符
     password:
       require: 请输入数据库密码
-      length: 长度须达到8-32位
+      length: 密码必须是 8-64 个字符
 footer:
   reset:
     title: 重置
-    confirm: 确认重置表单吗?
+    confirm: 确认重置吗?
   submit:
     title: 提交
-    confirm: 确认提交表单吗?
+    confirm: 确认提交吗?
 create:
   validation:
-    miss: '不能缺失 {{ name }} 节点！'
-    minZone: '{{ name }} 至少需要 {{ count }} 个节点!'
-    maxZone: '{{ name }} 至多拥有 {{ count }} 个节点!'
+    miss: '不能缺失 {{ name }} 实例！'
+    minZone: '{{ name }} 至少需要 {{ count }} 个实例!'
+    maxZone: '{{ name }} 至多拥有 {{ count }} 个实例!'
     storage:
       instanceLimit: '{{ name }} 实例数不能少于存储副本数'
   name: 创建集群
@@ -74,7 +73,7 @@ modeSelector:
 vendorSelector:
   title: 厂商
   vendors:
-    local: 本地
+    local: 本地机房
     aws: AWS
     gcp: GCP
 
@@ -85,17 +84,19 @@ regionSelector:
 
 preview:
   name: 集群配置预览
-  title: 集群配置预览
+  title: 集群配置信息
   description: '正在 <strong>{{ region }}</strong> 中创建 <strong>{{ type }}</strong> <strong>{{ arch }}</strong> <strong>{{ version }}</strong> 集群 <strong>{{ name }}</strong>'
   restoreInfo: '从集群 <strong>{{ clusterId }}</strong> 的备份 <strong>{{ backupId }}</strong> 中初始化数据'
   columns:
-    component: 组件
+    component: 组件名称
     zone: 可用区
-    spec: 规格
-    amount: 数量
-    status: 状态
+    spec: 规格代码
+    amount: 实例数量
+    status: 库存状态
   status:
-    normal: 正常
+    normal: 库存正常
     notEnough: 库存不足，请调整配置
   actions:
     confirm: 确认创建
+    cancel: 返回
+  failed: 预览集群配置信息失败

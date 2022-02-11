@@ -99,7 +99,8 @@ function useTableColumn() {
         {
           payload: { hostsId: hostId },
           options: {
-            actionName: t('delete.name'),
+            successMessage: t('delete.success'),
+            errorMessage: t('delete.failed'),
           },
         },
         {
@@ -155,7 +156,7 @@ function getHostColumns(
         Online: { text: t('model:host.status.online'), status: 'Success' },
         Offline: { text: t('model:host.status.offline'), status: 'Default' },
         Failed: { text: t('model:host.status.failed'), status: 'Error' },
-        Deleting: { text: t('model:host.status.failed'), status: 'Error' },
+        Deleting: { text: t('model:host.status.deleting'), status: 'Error' },
         Deleted: { text: t('model:host.status.deleted'), status: 'Error' },
       },
     },
@@ -307,7 +308,7 @@ function getHostColumns(
           // <a key="monitor">{t('actions.monitor')}</a>,
           <DeleteConfirm
             key="delete"
-            title={t('delete.name')}
+            title={t('delete.title')}
             content={t('delete.confirm', { hostName: record.hostName })}
             confirmInput={{
               expect: 'delete',

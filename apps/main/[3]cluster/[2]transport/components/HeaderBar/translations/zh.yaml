@@ -1,4 +1,4 @@
-title: 导入导出
+title: 导入导出数据
 actions:
-  import: 导入
-  export: 导出
+  import: 导入数据
+  export: 导出数据

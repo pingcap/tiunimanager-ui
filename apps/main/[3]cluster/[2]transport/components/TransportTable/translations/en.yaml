@@ -6,6 +6,8 @@ actions:
 delete:
   confirm: Confirm Delete
   name: Delete Transport Record
+  success: The record is deleted
+  failed: Failed to delete the record
 download:
   notSupport: Only exported file in shared storage can be downloaded.
 copy:

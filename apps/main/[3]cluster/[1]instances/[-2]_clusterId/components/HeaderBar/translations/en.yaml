@@ -1,22 +1,29 @@
-title: Cluster Detail
+title: Cluster Details
 actions:
   edit: Edit
-  reboot: Reboot
-  scaleOut: Scale Out
-  backup: Backup
+  reboot: Restart
+  scaleOut: Scale out
+  backup: Manual Backup
   delete: Delete
 delete:
-  confirm: Are you sure to delete this cluster?
-  name: Delete Cluster
+  title: Delete Cluster
+  confirm: Are you sure you want to delete this cluster?
+  name: deletion
   options:
-    autoBackup: Perform final backup before deleting the cluster
-    keepExistingBackup: Keep all historical manual backup data
+    autoBackup: Back up the data before deleting the cluster
+    keepExistingBackup: Retain manually backed up data
   note:
-    autoBackup: Deleting the cluster will remove all automatic database backup data. It is recommended to perform a final backup to protect data.
+    autoBackup: The system will automatically delete the data backed up by the database when the cluster is deleted. It is recommended that you make a backup manually to avoid any data loss.
+  success: The cluster deletion task is created
+  failed: Failed to create a cluster deletion task
 forceDelete:
-  name: Delete Cluster
-  confirm: This cluster is busy now. Are you sure to force deleting it?
+  name: Force Deleting Cluster
+  confirm: This cluster is busy now. Are you sure you want to force deleting it?
   tip: Force deleting is dangerous, please be careful.
+  success: The cluster deletion task is created
+  failed: Failed to create a cluster deletion task
 backup:
-  confirm: 'Are you sure to create backup task for cluster {{ name }} now?'
-  name: Backup Cluster
+  confirm: 'Do you want to back up the data for cluster ID: {{ name }} ?'
+  name: backup
+  success: The cluster backup task is created
+  failed: Failed to create a cluster backup task

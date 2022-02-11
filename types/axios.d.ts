@@ -9,8 +9,12 @@ declare module 'axios' {
     skipErrorNotification?: boolean
     // skip success notification
     skipSuccessNotification?: boolean
-    // the action name displayed in notification
+    // Deprecated. the action name displayed in notification
     actionName?: string
+    // the message displayed in the success notification
+    successMessage?: string
+    // the message displayed in the error notification
+    errorMessage?: string
 
     // Request ID
     requestId?: number

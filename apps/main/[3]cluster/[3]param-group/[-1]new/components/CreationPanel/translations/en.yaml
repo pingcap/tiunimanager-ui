@@ -26,3 +26,5 @@ footer:
       param: Please save the editing parameter first
 message:
   name: Create
+  success: The parameter group is created
+  failed: Failed to create a parameter group

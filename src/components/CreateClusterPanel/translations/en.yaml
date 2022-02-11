@@ -13,14 +13,13 @@ basic:
     paramGroup:
       require: Please select a parameter group
 component:
-  title: '{{ name }} Options'
+  title: '{{ name }} Configuration'
   optional: Optional
   allocator:
     title: Quick Allocate
-    items: '{{ count }} Nodes'
+    items: '{{ count }} Instances'
   fields:
     copies: Number of Storage Replicas
-    nodes: Nodes
     zone: Available Zone
     spec: Specification Code
     amount: Number of Instances
@@ -33,28 +32,28 @@ cluster:
     password: Database Password
     exclusive: Exclusive
   tooltip:
-    name: Upper and lower case letters, numbers and hyphens, starting with a letter, and with length between 8-32
-    password: Upper and lower case letters, visible special characters !@#$%^&*()_+=, numbers, with length between 8-32
-    tags: "You can use comma ',' or space ' ' to separate each tag"
+    name: Cluster name must be 4-64 characters that can only contain numbers, letters, or hyphens. The first character must be a letter or a number.
+    password: 'Password must be 8-64 characters that can only contain numbers, letters, and visible special characters "! @ # $% ^ & * () _ + ="'
+    tags: "Use commas ',' or space ' ' to separate different tags"
   rules:
     name:
       require: Please enter the cluster name
-      length: The length must be between 8-32
+      length: Cluster name must be 4-64 characters
     password:
       require: Please enter the database password
-      length: The length must be between 8-32
+      length: Password must be 8-64 characters
 footer:
   reset:
     title: Reset
-    confirm: Are you sure to reset the form?
+    confirm: Are you sure to reset?
   submit:
     title: Submit
-    confirm: Are you sure to submit the form?
+    confirm: Are you sure to submit?
 create:
   validation:
-    miss: 'The {{ name }} node cannot be missing！'
-    minZone: '{{ name }} requires at least {{ count }} nodes'
-    maxZone: '{{ name }} requires no more than {{ count }} nodes'
+    miss: 'The {{ name }} instance cannot be missing！'
+    minZone: '{{ name }} requires at least {{ count }} instances'
+    maxZone: '{{ name }} requires no more than {{ count }} instances'
     storage:
       instanceLimit: 'The number of {{ name }} instance cannot be less then the number of storage replicas'
   name: Create Cluster
@@ -72,30 +71,32 @@ modeSelector:
     description: Set all configuration options manually, including the rack, host, specification and quantity of the instances.
 
 vendorSelector:
-  title: Vendor
+  title: Vendors
   vendors:
-    local: Local
+    local: Local Data Center
     aws: AWS
     gcp: GCP
 
 regionSelector:
   title: Region
   rules:
-    require: Please select the region
+    require: Please select a region
 
 preview:
   name: Cluster Preview
-  title: Cluster Preview
+  title: Cluster Configuration Information
   description: 'Creating cluster <strong>{{ name }}</strong> of <strong>{{ type }}</strong> <strong>{{ version }}</strong> on <strong>{{ arch }}</strong> hardware in <strong>{{ region }}</strong>.'
   restoreInfo: 'Restore from backup <strong>{{ backupId }}</strong> of cluster <strong>{{ clusterId }}</strong>'
   columns:
-    component: Component
-    zone: Zone
+    component: Component Name
+    zone: Available Zone
     spec: Specification Code
     amount: Number of Instances
-    status: Status
+    status: Stock Status
   status:
-    normal: Normal
-    notEnough: Insufficient inventory, please adjust the configuration.
+    normal: Sufficient
+    notEnough: Insufficient. Please adjust the configuration.
   actions:
     confirm: Confirm
+    cancel: Back
+  failed: Failed to preview the cluster configuration information

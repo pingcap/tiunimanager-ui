@@ -14,9 +14,11 @@ copy:
   success: Successfully create a new parameter group
   fail: 'Failed: {{ msg }}'
 edit:
-  disabled: Only custom parameter groups are editable
+  disabled: Only user-definded parameter groups are editable
 delete:
-  disabled: Only custom parameter groups are deletable
-  confirm: Are you sure to delete this parameter group?
+  disabled: Only user-definded parameter groups are deletable
+  confirm: Are you sure to delete the {{ name }} parameter group?
   loading: Deleting...
-  name: Delete
+  name: Delete Paramater Group
+  success: The paramater group is deleted
+  failed: Failed to delete the paramater group

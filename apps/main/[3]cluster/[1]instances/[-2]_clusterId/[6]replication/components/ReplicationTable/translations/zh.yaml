@@ -8,17 +8,20 @@ actions:
   resume: 恢复
   delete: 删除
 suspend:
-  confirm: 确认暂停此任务吗？
+  confirm: 确认暂停此数据复制任务吗？
   loading: 正在暂停任务
-  name: 暂停
-  fail: '暂停失败: {{ msg }}'
+  name: 暂停数据复制任务
+  success: 数据复制任务暂停成功
+  failed: 数据复制任务暂停成功
 resume:
-  confirm: 确认恢复此任务吗？
+  confirm: 确认恢复此数据复制任务吗？
   loading: 正在恢复任务
-  name: 恢复
-  fail: '恢复失败: {{ msg }}'
+  name: 恢复数据复制任务
+  success: 数据复制任务恢复成功
+  failed: 数据复制任务恢复成功
 delete:
-  confirm: 确认删除此任务吗?
+  confirm: 确认删除 {{ name }} 数据复制任务吗?
   loading: 正在删除
-  name: 删除
-  fail: '删除失败: {{ msg }}'
+  name: 删除数据复制任务
+  success: 数据复制任务删除成功
+  failed: 数据复制任务删除成功

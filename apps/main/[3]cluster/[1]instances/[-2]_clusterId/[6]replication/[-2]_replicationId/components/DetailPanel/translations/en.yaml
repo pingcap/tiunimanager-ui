@@ -1,31 +1,31 @@
 basic:
-  title: Basic Info
+  title: Basic Information
   fields:
-    id: ID
-    name: Name
-    status: Status
-    tso: Beginning TSO
+    id: Task ID
+    name: Task Name
+    status: Task Status
+    tso: TSO Value at Start
     filterRule: Filter Rules
-    latestUpstreamTSO: Latest Upstream TSO
-    latestFetchTSO: Latest Data Fetch TSO
-    latestSyncTSO: Latest Data Sync TSO
+    latestUpstreamTSO: Latest Upstream Time
+    latestFetchTSO: Time of Last Upstream Data Acquisition
+    latestSyncTSO: Time of Last Successful Relication
 downstream:
-  title: Downstream Config
+  title: Downstream Information
   fields:
-    type: Downstream
+    type: Downstream Type
 mysql:
   fields:
     url: URL/IP
     port: Port
-    user: User Name
-    password: Password
+    user: Database Username
+    password: Database Password
     thread: Number of Concurrent Threads
 tidb:
   fields:
     url: URL/IP
     port: Port
-    user: User Name
-    password: Password
+    user: Database Username
+    password: Database Password
     thread: Number of Concurrent Threads
 kafka:
   fields:
@@ -36,10 +36,10 @@ kafka:
     topic: Topic
     protocol: Protocol
     partition: Partitions
-    replica: Number of replicas
-    maxMsgSize: Max size of each message
-    maxMsgNum: Max number of batch messages
-    dispatchRule: Dispatch rules
+    replica: Replicas
+    maxMsgSize: Maximum Size of a Single Message
+    maxMsgNum: Maximum Number of Batch Messages
+    dispatchRule: Distribution rules
   dispatchRule:
     dispatcher: Rule
     matcher: Matcher

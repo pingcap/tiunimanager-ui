@@ -246,7 +246,8 @@ function getColumns({
           </IntlPopConfirm>,
           <DeleteConfirm
             key="delete"
-            title={t('delete.confirm')}
+            title={t('delete.name')}
+            content={t('delete.confirm', { name: record.name })}
             onConfirm={async (close) => {
               await deleteAction(record.id!)
               close()
