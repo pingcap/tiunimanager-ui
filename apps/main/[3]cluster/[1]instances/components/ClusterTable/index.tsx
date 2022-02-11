@@ -6,12 +6,10 @@ import {
   ClusterInfo,
   ClusterOperationStatus,
   ClusterStatus,
-  KnowledgeOfClusterType,
   PagedResult,
 } from '@/api/model'
 import { CopyIconButton } from '@/components/CopyToClipboard'
 import { resolveRoute } from '@pages-macro'
-import { useQueryKnowledge } from '@/api/hooks/knowledge'
 import {
   invalidateClusterDetail,
   invalidateClustersList,
@@ -33,7 +31,7 @@ import { NameAndID } from '@/components/NameAndID'
 loadI18n()
 
 export default function ClusterTable() {
-  const { columns, isKnowledgeLoading } = useTableColumn()
+  const { columns } = useTableColumn()
 
   const {
     data,
@@ -45,12 +43,10 @@ export default function ClusterTable() {
     pagination,
   } = useFetchClustersData()
 
-  const isLoading = isDataLoading || isKnowledgeLoading
-
   return (
     <HeavyTable
       headerTitle={null}
-      loading={isLoading}
+      loading={isDataLoading}
       className={styles.clusterTable}
       dataSource={data?.data?.data?.clusters || []}
       onSubmit={(filters) => {
@@ -119,7 +115,6 @@ type BootType = 'boot' | 'reboot'
 
 function useTableColumn() {
   const { t, i18n } = useI18n()
-  const { data, isLoading } = useQueryKnowledge()
 
   const queryClient = useQueryClient()
   const rebootCluster = useRebootCluster()
@@ -175,30 +170,22 @@ function useTableColumn() {
 
   const columns = useMemo(
     // FIXME: Filter not updated in time
-    () =>
-      getColumns(
-        t,
-        getClusterTypes(data?.data?.data || []),
-        bootAction,
-        stopAction
-      ),
-    [i18n.language, isLoading, bootAction, stopAction]
+    () => getColumns(t, getClusterTypes(), bootAction, stopAction),
+    [i18n.language, bootAction, stopAction]
   )
 
   return {
     columns,
-    isKnowledgeLoading: isLoading,
   }
 }
 
-function getClusterTypes(raw: KnowledgeOfClusterType[]) {
-  const result = {} as ProSchemaValueEnumObj
-  raw.forEach(
-    (r) =>
-      (result[r.clusterType!.code!] = {
-        text: r.clusterType!.name!,
-      })
-  )
+function getClusterTypes() {
+  const result = {
+    TiDB: {
+      text: 'TiDB',
+    },
+  } as ProSchemaValueEnumObj
+
   return result
 }
 
