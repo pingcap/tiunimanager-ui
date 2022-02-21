@@ -48,7 +48,7 @@ export function TakeoverPanel({ back }: TakeoverPanelProps) {
             label={t('form.basic.fields.name')}
             rules={[
               { required: true },
-              { min: 8, max: 32, message: t('rules.clusterName.length') },
+              { min: 4, max: 64, message: t('rules.clusterName.length') },
             ]}
           >
             <Input />
@@ -57,8 +57,9 @@ export function TakeoverPanel({ back }: TakeoverPanelProps) {
             name="dbUser"
             label={t('form.basic.fields.username')}
             rules={[{ required: true }]}
+            initialValue="root"
           >
-            <Input />
+            <Input disabled />
           </Form.Item>
           <Form.Item
             name="dbPassword"
