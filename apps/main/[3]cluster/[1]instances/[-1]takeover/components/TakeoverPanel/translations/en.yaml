@@ -25,7 +25,7 @@ rules:
   ip:
     format: Invalid IP format
   clusterName:
-    length: The length must be between 8 and 32
+    length: The length must be between 4 and 64
 message:
   success: The cluster takeover task is created
   failed: Failed to create a cluster takeover task
