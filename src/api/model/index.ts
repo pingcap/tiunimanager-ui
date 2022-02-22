@@ -237,6 +237,12 @@ export enum ParamValueDataType {
   array = 4,
 }
 
+export enum ParamRangeType {
+  none = 0,
+  continuous = 1,
+  discrete = 2,
+}
+
 export function initModelTranslations() {
   // load translations
   loadI18nWithNS('model')
