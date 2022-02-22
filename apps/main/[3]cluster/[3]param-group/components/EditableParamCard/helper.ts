@@ -1,15 +1,17 @@
-import { ParamValueDataType } from '@/api/model'
+import { ParamValueDataType, ParamRangeType } from '@/api/model'
 
 const rangeRenderTable = [
   {
     valueType: (type: number) =>
       [ParamValueDataType.int, ParamValueDataType.float].includes(type),
+    rangeType: (type: number) => type === ParamRangeType.continuous,
     rangeLen: (range: string[]) => range.length === 2,
     render: (range: string[]) => `${range[0]} ~ ${range[1]}`,
   },
   {
     valueType: (type: number) =>
       [ParamValueDataType.int, ParamValueDataType.float].includes(type),
+    rangeType: (type: number) => type === ParamRangeType.discrete,
     rangeLen: (range: string[]) => range.length === 1 || range.length > 2,
     render: (range: string[]) =>
       range.filter((el) => el !== undefined).join(', '),
@@ -17,12 +19,14 @@ const rangeRenderTable = [
   {
     valueType: (type: number) =>
       [ParamValueDataType.string, ParamValueDataType.array].includes(type),
+    rangeType: (type: number) => type === ParamRangeType.discrete,
     rangeLen: (range: string[]) => range.length > 0,
     render: (range: string[]) =>
       range.filter((el) => el !== undefined).join(', '),
   },
   {
     valueType: (type: number) => type === ParamValueDataType.boolean,
+    rangeType: (type: number) => type === ParamRangeType.discrete,
     rangeLen: (range: string[]) => range.length > 0,
     render: (range: string[]) => {
       const [first, second] = range
@@ -37,9 +41,13 @@ const rangeRenderTable = [
  * @param type parameter type
  * @param range parameter range
  */
-export const renderRange = (type: number, range: string[]) => {
+export const renderRange = (
+  valType: number,
+  range: string[],
+  rangeType: number
+) => {
   const target = rangeRenderTable.find(
-    (config) => config.valueType(type) && config.rangeLen(range)
+    (config) => config.valueType(valType) && config.rangeType(rangeType)
   )
 
   return target?.render(range)
