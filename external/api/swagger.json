@@ -9210,16 +9210,19 @@
           "type": "string",
           "enum": ["in-place", "migration"]
         },
-        "upgradeWay": {
-          "type": "string",
-          "enum": ["offline", "online"]
+        "upgradeWays": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": ["offline", "online"]
         },
         "versions": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "example": ["v5.0.0", "v5.3.0"]
+          "example": ["v5.3.0", "v5.4.0"]
         }
       }
     },
@@ -9232,9 +9235,11 @@
         "name",
         "paramId",
         "range",
+        "rangeType",
         "suggestValue",
         "type",
-        "unit"
+        "unit",
+        "unitOptions"
       ],
       "properties": {
         "category": {
@@ -9268,6 +9273,11 @@
           },
           "example": ["1", " 1000"]
         },
+        "rangeType": {
+          "type": "integer",
+          "enum": [0, 1, 2],
+          "example": 1
+        },
         "suggestValue": {
           "type": "string",
           "example": "30"
@@ -9280,6 +9290,13 @@
         "unit": {
           "type": "string",
           "example": "MB"
+        },
+        "unitOptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": ["KB", "MB", "GB"]
         }
       }
     },
