@@ -41,6 +41,7 @@ import {
   ClusterQueryChangeFeedTaskResp,
   ClusterQueryChangeFeedTaskRespDownstreamTypeEnum,
   ClusterQueryChangeFeedTaskRespStatusEnum,
+  ClusterUpgradeClusterReq,
   MessageQueryParameterGroupResp,
   MessageUpdateParameterGroupReq,
   MessageCreateParameterGroupReq,
@@ -99,6 +100,8 @@ export type RequestClusterClone = ClusterCloneClusterReq
 
 export type RequestClusterDataReplicationCreate = ClusterCreateChangeFeedTaskReq
 export type RequestClusterDataReplicationUpdate = ClusterUpdateChangeFeedTaskReq
+
+export type RequestClusterUpgrade = ClusterUpgradeClusterReq
 
 /**
  * Parameter Group type
