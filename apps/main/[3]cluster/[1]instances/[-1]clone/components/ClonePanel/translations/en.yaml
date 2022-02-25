@@ -1,0 +1,14 @@
+cloneInfo:
+  title: Clone Source
+  fields:
+    clusterId: Cluster ID
+    clusterName: Cluster Name
+    cloneStrategy: Clone Strategy
+  tips:
+    notEditable: You can not change this manually.
+cloneStrategy:
+  sync: Sync
+  snapshot: Snapshot
+message:
+  success: The cluster clone task is created
+  failed: Failed to create a cluster clone task

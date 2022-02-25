@@ -1,0 +1,14 @@
+cloneInfo:
+  title: 克隆源配置
+  fields:
+    clusterId: 源集群 ID
+    clusterName: 源集群名
+    cloneStrategy: 克隆策略
+  tips:
+    notEditable: 这项配置无法手动修改
+cloneStrategy:
+  sync: 全量
+  snapshot: 快照
+message:
+  success: 克隆集群任务创建成功
+  failed: 克隆集群任务创建失败
