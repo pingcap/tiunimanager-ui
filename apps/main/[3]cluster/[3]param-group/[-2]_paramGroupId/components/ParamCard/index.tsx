@@ -42,7 +42,7 @@ function getColumns(t: TFunction<''>) {
       key: 'range',
       renderText(_, record) {
         return isArray(record.range) && record.range.length > 0
-          ? renderRange(record.type!, record.range)
+          ? renderRange(record.type!, record.range, record.rangeType!)
           : null
       },
     },
