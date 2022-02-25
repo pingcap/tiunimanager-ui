@@ -30,6 +30,7 @@ import {
   StructsClusterResourceParameterCompute,
   StructsClusterResourceParameterComputeResource,
   ClusterTakeoverClusterReq,
+  ClusterCloneClusterReq,
   ClusterTiDBDownstream,
   ClusterMysqlDownstream,
   ClusterKafkaDownstream,
@@ -94,6 +95,7 @@ export type RequestClusterParamsUpdate = ClusterUpdateClusterParametersReq
 export type RequestClusterScaleOut = ClusterScaleOutClusterReq
 export type RequestClusterScaleIn = ClusterScaleInClusterReq
 export type RequestClusterTakeover = ClusterTakeoverClusterReq
+export type RequestClusterClone = ClusterCloneClusterReq
 
 export type RequestClusterDataReplicationCreate = ClusterCreateChangeFeedTaskReq
 export type RequestClusterDataReplicationUpdate = ClusterUpdateChangeFeedTaskReq
@@ -198,6 +200,19 @@ export enum ClusterOperationStatus {
 export enum ClusterBackupMethod {
   manual = 'manual',
 }
+
+/**
+ * Cluster clone Enums
+ */
+
+export enum ClusterCloneStrategy {
+  sync = 'CDCSync',
+  snapshot = 'Snapshot',
+}
+
+/**
+ * Cluster Data Replication Enums
+ */
 
 export enum ClusterDataReplicationDownstreamDisplay {
   tidb = 'TiDB',
