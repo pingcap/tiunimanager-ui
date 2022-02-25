@@ -5,29 +5,27 @@ const rangeRenderTable = [
     valueType: (type: number) =>
       [ParamValueDataType.int, ParamValueDataType.float].includes(type),
     rangeType: (type: number) => type === ParamRangeType.continuous,
-    rangeLen: (range: string[]) => range.length === 2,
     render: (range: string[]) => `${range[0]} ~ ${range[1]}`,
   },
   {
     valueType: (type: number) =>
       [ParamValueDataType.int, ParamValueDataType.float].includes(type),
     rangeType: (type: number) => type === ParamRangeType.discrete,
-    rangeLen: (range: string[]) => range.length === 1 || range.length > 2,
     render: (range: string[]) =>
       range.filter((el) => el !== undefined).join(', '),
   },
   {
     valueType: (type: number) =>
       [ParamValueDataType.string, ParamValueDataType.array].includes(type),
-    rangeType: (type: number) => type === ParamRangeType.discrete,
-    rangeLen: (range: string[]) => range.length > 0,
+    rangeType: (type: number) =>
+      type === ParamRangeType.discrete || type === ParamRangeType.none,
     render: (range: string[]) =>
       range.filter((el) => el !== undefined).join(', '),
   },
   {
     valueType: (type: number) => type === ParamValueDataType.boolean,
-    rangeType: (type: number) => type === ParamRangeType.discrete,
-    rangeLen: (range: string[]) => range.length > 0,
+    rangeType: (type: number) =>
+      type === ParamRangeType.discrete || type === ParamRangeType.none,
     render: (range: string[]) => {
       const [first, second] = range
 
