@@ -1,0 +1,14 @@
+cloneInfo:
+  title: 克隆信息
+  fields:
+    clusterId: 源集群 ID
+    clusterName: 源集群名称
+    cloneStrategy: 克隆策略
+  tips:
+    cloneStrategy: "全量：克隆集群并与源集群建立主备关系，主集群实时向备集群同步数据。<br>快照：克隆集群，但不建立主备关系。"
+cloneStrategy:
+  sync: 全量
+  snapshot: 快照
+message:
+  success: 克隆集群任务创建成功
+  failed: 克隆集群任务创建失败

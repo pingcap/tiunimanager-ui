@@ -2,6 +2,7 @@ title: Cluster Details
 actions:
   edit: Edit
   reboot: Restart
+  clone: Clone Cluster
   scaleOut: Scale out
   backup: Manual Backup
   delete: Delete

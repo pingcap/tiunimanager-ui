@@ -1,0 +1,35 @@
+.panel {
+  .footer {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    background: #fff;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: 10px 20px;
+  }
+
+  :global(.ant-input-disabled) {
+    background: #fafafa;
+    color: rgba(0, 0, 0, .6)
+  }
+}
+
+.clone-card {
+  width: 60%;
+  min-width: 800px;
+  padding: 10px 20px;
+
+  :global(.ant-card-head-title) {
+    font-weight: bold;
+    user-select: none;
+  }
+}
+
+.clone-form {
+  :global(.ant-form-item-label) {
+    width: 200px;
+  }
+}

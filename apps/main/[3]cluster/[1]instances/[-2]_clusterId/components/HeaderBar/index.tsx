@@ -8,6 +8,7 @@ import {
   DeleteOutlined,
   DeploymentUnitOutlined,
   ExclamationCircleOutlined,
+  ForkOutlined,
   SaveOutlined,
 } from '@ant-design/icons'
 import {
@@ -137,6 +138,22 @@ export default function HeaderBar() {
           from: history.location.pathname,
         },
       })
+
+    const handleClone = () =>
+      history.push({
+        pathname: resolveRoute('../clone'),
+        state: {
+          cluster: info,
+          from: history.location.pathname,
+        },
+      })
+
+    const cloneBtn = (
+      <Button key="clone" onClick={handleClone} disabled={!info?.clusterId}>
+        <ForkOutlined /> {t('actions.clone')}
+      </Button>
+    )
+
     const scaleOutBtn = (
       <Button
         key="scaleOut"
@@ -211,7 +228,7 @@ export default function HeaderBar() {
       </DeleteConfirm>
     )
 
-    const actions = [scaleOutBtn, backupBtn, deleteBtn]
+    const actions = [cloneBtn, scaleOutBtn, backupBtn, deleteBtn]
     return (
       <Header
         onBack={backToList}

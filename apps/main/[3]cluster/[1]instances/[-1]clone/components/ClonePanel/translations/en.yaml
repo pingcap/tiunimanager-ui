@@ -1,0 +1,14 @@
+cloneInfo:
+  title: Clone Information
+  fields:
+    clusterId: Source Cluster ID
+    clusterName: Source Cluster Name
+    cloneStrategy: Clone Strategy
+  tips:
+    cloneStrategy: "Full: Clone the cluster and establish a master-standby relationship with the source cluster, and the master cluster synchronizes data to the standby cluster in real time. <br>Snapshot: Clone clusters without establishing a master-standby relationship."
+cloneStrategy:
+  sync: Full
+  snapshot: Snapshot
+message:
+  success: The cluster clone task is created
+  failed: Failed to create a cluster clone task
