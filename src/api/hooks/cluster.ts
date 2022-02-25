@@ -14,6 +14,7 @@ import {
   RequestClusterScaleIn,
   RequestClusterScaleOut,
   RequestClusterTakeover,
+  RequestClusterClone,
 } from '@/api/model'
 import { AxiosRequestConfig } from 'axios'
 import {
@@ -471,6 +472,20 @@ const scaleInCluster = ({
 
 export function useClusterScaleIn() {
   return useMutation(scaleInCluster)
+}
+
+/**
+ * Cluster Clone
+ */
+
+const cloneCluster = ({
+  payload,
+  options,
+}: PayloadWithOptions<RequestClusterClone>) =>
+  APIS.Clusters.clustersClonePost(payload, options)
+
+export function useClusterClone() {
+  return useMutation(cloneCluster)
 }
 
 /**
