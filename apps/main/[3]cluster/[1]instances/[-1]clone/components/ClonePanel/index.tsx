@@ -1,6 +1,7 @@
 import { FC, useCallback, useMemo } from 'react'
 import { Card, Form, Input, Layout, Radio } from 'antd'
 import { useQueryClient } from 'react-query'
+import { Trans } from 'react-i18next'
 import { loadI18n, useI18n } from '@i18n-macro'
 import {
   ClusterCloneStrategy,
@@ -72,21 +73,16 @@ const ClonePanel: FC<ClonePanelProps> = ({ back, cluster }) => {
             name="clone"
             className={styles.cloneForm}
           >
-            <Form.Item
-              label={t('cloneInfo.fields.clusterId')}
-              tooltip={t('cloneInfo.tips.notEditable')}
-            >
+            <Form.Item label={t('cloneInfo.fields.clusterId')}>
               <Input disabled={true} value={cluster.clusterId} />
             </Form.Item>
-            <Form.Item
-              label={t('cloneInfo.fields.clusterName')}
-              tooltip={t('cloneInfo.tips.notEditable')}
-            >
+            <Form.Item label={t('cloneInfo.fields.clusterName')}>
               <Input disabled={true} value={cluster.clusterName} />
             </Form.Item>
             <Form.Item
               name="cloneStrategy"
               label={t('cloneInfo.fields.cloneStrategy')}
+              tooltip={<Trans t={t} i18nKey="cloneInfo.tips.cloneStrategy" />}
               initialValue={ClusterCloneStrategy.sync}
             >
               <Radio.Group>

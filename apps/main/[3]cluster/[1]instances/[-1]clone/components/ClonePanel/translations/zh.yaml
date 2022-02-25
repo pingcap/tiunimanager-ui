@@ -1,11 +1,11 @@
 cloneInfo:
-  title: 克隆源配置
+  title: 克隆信息
   fields:
     clusterId: 源集群 ID
-    clusterName: 源集群名
+    clusterName: 源集群名称
     cloneStrategy: 克隆策略
   tips:
-    notEditable: 这项配置无法手动修改
+    cloneStrategy: "全量：克隆集群并与源集群建立主备关系，主集群实时向备集群同步数据。<br>快照：克隆集群，但不建立主备关系。"
 cloneStrategy:
   sync: 全量
   snapshot: 快照
