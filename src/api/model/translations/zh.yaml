@@ -165,6 +165,13 @@ clusterNode:
     running: 运行中
     recovering: 恢复中
     failure: 异常
+clusterUpgrade:
+  upgradeType:
+    inPlace: 原地升级
+    migration: 迁移数据升级
+  upgradeMethod:
+    online: 滚动升级
+    offline: 强制重启升级
 paramGroup:
   property:
     id: 参数组 ID
