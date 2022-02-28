@@ -1,0 +1,29 @@
+steps:
+  basic: Basic Configuration
+  paramsConfig: Compare and Merge configuration parameters
+  preview: Confirm the configuration parameters after merging
+basic:
+  fields:
+    clusterId: Cluster ID
+    clusterName: Cluster Name
+    currentVersion: Current Version
+    targetVersion: Target Version
+    upgradeType: Upgrade Type
+    upgradeMethod: Upgrade Method
+  rules:
+    targetVersion:
+      required: Please select a target version
+paramsConfig:
+  columns:
+    currentValue: Original Version Value
+    newValue: New Version Value
+    pick: Select Value
+    final: Parameter Value
+actions:
+  previous: Previous
+  next: Next
+  cancel: Cancel
+  confirm: Confirm
+message:
+  success: The cluster version upgrade task is created
+  failed: Failed to create a cluster version upgrade task

@@ -1,0 +1,29 @@
+steps:
+  basic: 基础配置
+  paramsConfig: 对比和合并配置参数
+  preview: 确认合并后的配置参数
+basic:
+  fields:
+    clusterId: 集群 ID
+    clusterName: 集群名称
+    currentVersion: 当前版本
+    targetVersion: 目标版本
+    upgradeType: 升级类型
+    upgradeMethod: 升级方式
+  rules:
+    targetVersion:
+      required: 请选择目标版本
+paramsConfig:
+  columns:
+    currentValue: 原版本值
+    newValue: 新版本值
+    pick: 选择参数值
+    final: 参数值
+actions:
+  previous: 上一步
+  next: 下一步
+  cancel: 取消
+  confirm: 确认
+message:
+  success: 集群版本升级任务创建成功
+  failed: 集群版本升级任务创建失败
