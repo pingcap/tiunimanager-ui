@@ -11,9 +11,14 @@ import { trimTrailingSlash } from '@/utils/path'
 
 const Layout: FC = ({ children }) => {
   const { clusterId } = useParams<{ clusterId: string }>()
-  const { data, isLoading, isError, error } = useQueryClusterDetail({
-    id: clusterId,
-  })
+  const { data, isLoading, isError, error } = useQueryClusterDetail(
+    {
+      id: clusterId,
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  )
 
   const history = useHistory()
   const { t, i18n } = useI18n()
