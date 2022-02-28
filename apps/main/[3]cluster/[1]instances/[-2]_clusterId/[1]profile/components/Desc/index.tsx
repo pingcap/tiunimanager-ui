@@ -1,10 +1,17 @@
-import { Badge, Descriptions } from 'antd'
-import { CopyIconButton } from '@/components/CopyToClipboard'
-import { formatTimeString } from '@/utils/time'
-import { ClusterInfo, ClusterOperationStatus, ClusterStatus } from '@/api/model'
-import styles from './index.module.less'
+import { useCallback } from 'react'
 import { TFunction, useTranslation } from 'react-i18next'
+import { useHistory } from 'react-router-dom'
+import { Badge, Button, Descriptions, Space } from 'antd'
+import { resolveRoute } from '@pages-macro'
+import { loadI18n, useI18n } from '@i18n-macro'
+import { formatTimeString } from '@/utils/time'
 import { getKeyByValue } from '@/utils/obj'
+import { ClusterInfo, ClusterOperationStatus, ClusterStatus } from '@/api/model'
+import { CopyIconButton } from '@/components/CopyToClipboard'
+
+import styles from './index.module.less'
+
+loadI18n()
 
 export type DescProps = {
   cluster: ClusterInfo
@@ -30,7 +37,12 @@ export function Desc({ cluster }: DescProps) {
         {cluster.clusterType}
       </Descriptions.Item>
       <Descriptions.Item label={t('cluster.property.version')}>
-        {cluster.clusterVersion}
+        {cluster.clusterId && cluster.clusterVersion && (
+          <VersionItem
+            clusterId={cluster.clusterId}
+            clusterVersion={cluster.clusterVersion}
+          />
+        )}
       </Descriptions.Item>
       <Descriptions.Item label={t('cluster.property.extranetAddress')}>
         {cluster.extranetConnectAddresses?.map((a) => (
@@ -86,6 +98,31 @@ export function Desc({ cluster }: DescProps) {
         {formatTimeString(cluster.updateTime!)}
       </Descriptions.Item>
     </Descriptions>
+  )
+}
+
+type VersionItemProps = {
+  clusterId: string
+  clusterVersion: string
+}
+
+function VersionItem({ clusterId, clusterVersion }: VersionItemProps) {
+  const history = useHistory()
+
+  const handleClick = useCallback(
+    () => history.push(resolveRoute('../upgrade', clusterId)),
+    [history]
+  )
+
+  const { t } = useI18n()
+
+  return (
+    <Space>
+      {clusterVersion}
+      <Button type="link" size="small" onClick={handleClick}>
+        {t('actions.upgrade')}
+      </Button>
+    </Space>
   )
 }
 
