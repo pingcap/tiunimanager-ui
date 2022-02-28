@@ -42,6 +42,8 @@ import {
   ClusterQueryChangeFeedTaskRespDownstreamTypeEnum,
   ClusterQueryChangeFeedTaskRespStatusEnum,
   ClusterUpgradeClusterReq,
+  ClusterUpgradeClusterReqUpgradeWayEnum,
+  StructsProductUpgradeVersionConfigDiffItem,
   MessageQueryParameterGroupResp,
   MessageUpdateParameterGroupReq,
   MessageCreateParameterGroupReq,
@@ -71,6 +73,9 @@ export type ClusterDataReplicationItem = ClusterQueryChangeFeedTaskResp
 export type ClusterDownstreamKafka = ClusterKafkaDownstream
 export type ClusterDownstreamMySQL = ClusterMysqlDownstream
 export type ClusterDownstreamTiDB = ClusterTiDBDownstream
+
+export type ClusterUpgradeParamDiffItem =
+  StructsProductUpgradeVersionConfigDiffItem
 
 export type TransportRecord = StructsDataImportExportRecordInfo
 
@@ -228,6 +233,17 @@ export { ClusterQueryChangeFeedTaskRespDownstreamTypeEnum as ClusterDataReplicat
 export { ClusterQueryChangeFeedTaskRespStatusEnum as ClusterDataReplicationStatus }
 
 export { ClusterKafkaDownstreamProtocolEnum as ClusterDataReplicationKafkaProtocol }
+
+/**
+ * Cluster Upgrade Enums
+ */
+
+export enum ClusterUpgradeType {
+  inPlace = 'in-place',
+  migration = 'migration',
+}
+
+export { ClusterUpgradeClusterReqUpgradeWayEnum as ClusterUpgradeMethod }
 
 /**
  * Parameter Group Enum
