@@ -836,7 +836,7 @@
         }
       }
     },
-    "/clusters/:clusterId/upgrade": {
+    "/clusters/{clusterId}/upgrade": {
       "post": {
         "security": [
           {
@@ -906,7 +906,7 @@
         }
       }
     },
-    "/clusters/:clusterId/upgrade/diff": {
+    "/clusters/{clusterId}/upgrade/diff": {
       "get": {
         "security": [
           {
@@ -974,7 +974,7 @@
         }
       }
     },
-    "/clusters/:clusterId/upgrade/path": {
+    "/clusters/{clusterId}/upgrade/path": {
       "get": {
         "security": [
           {
