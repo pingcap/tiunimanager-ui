@@ -15,6 +15,7 @@ import {
   Table,
   TableColumnsType,
 } from 'antd'
+import { UpOutlined } from '@ant-design/icons'
 import { ProColumns } from '@ant-design/pro-table'
 import HeavyTable from '@/components/HeavyTable'
 import {
@@ -194,7 +195,7 @@ function getParamsConfigColumns(t: TFunction<''>) {
     },
     {
       title: t('model:clusterParam.property.name'),
-      width: 180,
+      width: 200,
       dataIndex: 'name',
       key: 'name',
       editable: false,
@@ -215,7 +216,6 @@ function getParamsConfigColumns(t: TFunction<''>) {
     },
     {
       title: t('paramsConfig.columns.pick'),
-      width: 120,
       key: 'final',
       dataIndex: 'suggestValue',
       valueType: 'radio',
@@ -300,8 +300,19 @@ const ParamsConfig: FC<ParamsConfigProps> = ({
         setting: false,
         reload: false,
       }}
-      rowKey="paramId"
       scroll={{ y: 600 }}
+      rowKey="paramId"
+      expandable={{
+        expandIcon: ({ expanded, onExpand, record }) => (
+          <UpOutlined
+            className={styles.expandIcon}
+            rotate={expanded ? 0 : 90}
+            onClick={(e) => onExpand(record, e)}
+          />
+        ),
+        rowExpandable: (record) => !!record.description,
+        expandedRowRender: (record) => record.description,
+      }}
       editable={{
         type: 'multiple',
         editableKeys,
@@ -334,7 +345,7 @@ function getParamsPreviewColumns(t: TFunction<''>) {
     },
     {
       title: t('model:clusterParam.property.name'),
-      width: 180,
+      width: 200,
       dataIndex: 'name',
       key: 'name',
     },
@@ -363,10 +374,22 @@ const ConfigPreview: FC<ConfigPreviewProps> = ({ className, data }) => {
     <Table
       className={className}
       dataSource={data}
-      pagination={false}
-      rowKey="paramId"
       columns={columns}
+      pagination={false}
       scroll={{ y: 600 }}
+      rowKey="paramId"
+      expandable={{
+        columnWidth: 20,
+        expandIcon: ({ expanded, onExpand, record }) => (
+          <UpOutlined
+            className={styles.expandIcon}
+            rotate={expanded ? 0 : 90}
+            onClick={(e) => onExpand(record, e)}
+          />
+        ),
+        rowExpandable: (record) => !!record.description,
+        expandedRowRender: (record) => record.description,
+      }}
     />
   )
 }
