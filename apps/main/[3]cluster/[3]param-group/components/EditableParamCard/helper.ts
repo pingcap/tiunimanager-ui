@@ -21,9 +21,9 @@ const rangeRenderTable = [
 ]
 
 /**
- * Render parameter range
- * @param type parameter type
- * @param range parameter range
+ * Render the parameter range
+ * @param range parameter range value
+ * @param rangeType parameter range type
  */
 export const renderRange = (range: string[], rangeType: number) => {
   const target = rangeRenderTable.find((config) => config.rangeType(rangeType))
