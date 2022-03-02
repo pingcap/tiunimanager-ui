@@ -1,52 +1,32 @@
-import { ParamValueDataType, ParamRangeType } from '@/api/model'
+import { ParamRangeType } from '@/api/model'
 
 const rangeRenderTable = [
   {
-    valueType: (type: number) =>
-      [ParamValueDataType.int, ParamValueDataType.float].includes(type),
     rangeType: (type: number) => type === ParamRangeType.continuous,
-    render: (range: string[]) => `${range[0]} ~ ${range[1]}`,
+    render: (range: string[]) => {
+      const [start, end] = range
+
+      return [start, end].filter((el) => el !== undefined).join(' ~ ')
+    },
   },
   {
-    valueType: (type: number) =>
-      [ParamValueDataType.int, ParamValueDataType.float].includes(type),
     rangeType: (type: number) => type === ParamRangeType.discrete,
     render: (range: string[]) =>
       range.filter((el) => el !== undefined).join(', '),
   },
   {
-    valueType: (type: number) =>
-      [ParamValueDataType.string, ParamValueDataType.array].includes(type),
-    rangeType: (type: number) =>
-      type === ParamRangeType.discrete || type === ParamRangeType.none,
-    render: (range: string[]) =>
-      range.filter((el) => el !== undefined).join(', '),
-  },
-  {
-    valueType: (type: number) => type === ParamValueDataType.boolean,
-    rangeType: (type: number) =>
-      type === ParamRangeType.discrete || type === ParamRangeType.none,
-    render: (range: string[]) => {
-      const [first, second] = range
-
-      return [first, second].filter((el) => el !== undefined).join(', ')
-    },
+    rangeType: (type: number) => type === ParamRangeType.none,
+    render: () => undefined,
   },
 ]
 
 /**
- * Render parameter range
- * @param type parameter type
- * @param range parameter range
+ * Render the parameter range
+ * @param range parameter range value
+ * @param rangeType parameter range type
  */
-export const renderRange = (
-  valType: number,
-  range: string[],
-  rangeType: number
-) => {
-  const target = rangeRenderTable.find(
-    (config) => config.valueType(valType) && config.rangeType(rangeType)
-  )
+export const renderRange = (range: string[], rangeType: number) => {
+  const target = rangeRenderTable.find((config) => config.rangeType(rangeType))
 
   return target?.render(range)
 }

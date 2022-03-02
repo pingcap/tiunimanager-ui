@@ -53,7 +53,7 @@ function getColumns(
       key: 'range',
       renderText(_, record) {
         return isArray(record.range) && record.range.length > 0
-          ? renderRange(record.type!, record.range, record.rangeType!)
+          ? renderRange(record.range, record.rangeType!)
           : null
       },
       editable: false,
