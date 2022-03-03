@@ -5,7 +5,7 @@ cloneInfo:
     clusterName: 源集群名称
     cloneStrategy: 克隆策略
   tips:
-    cloneStrategy: "全量：克隆集群并与源集群建立主备关系，主集群实时向备集群同步数据。<br>快照：克隆集群，但不建立主备关系。"
+    cloneStrategy: "全量：克隆集群并与源集群建立主备关系，主集群实时向备集群同步数据。<br>快照：克隆集群，但不建立主备关系。<br>当前集群为备集群时，只能进行快照克隆。"
 cloneStrategy:
   sync: 全量
   snapshot: 快照

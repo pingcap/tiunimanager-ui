@@ -62,6 +62,9 @@ const ClonePanel: FC<ClonePanelProps> = ({ back, cluster }) => {
   )
 
   const cloneInfo = useMemo(() => {
+    // The "sync" strategy is disabled on slave clusters
+    const syncDisabled = !!cluster.relations?.masters?.length
+
     return (
       <div className={styles.cloneCard}>
         <Card title={t('cloneInfo.title')}>
@@ -72,6 +75,11 @@ const ClonePanel: FC<ClonePanelProps> = ({ back, cluster }) => {
             form={cloneForm}
             name="clone"
             className={styles.cloneForm}
+            initialValues={{
+              cloneStrategy: syncDisabled
+                ? ClusterCloneStrategy.snapshot
+                : ClusterCloneStrategy.sync,
+            }}
           >
             <Form.Item label={t('cloneInfo.fields.clusterId')}>
               <Input disabled={true} value={cluster.clusterId} />
@@ -83,10 +91,12 @@ const ClonePanel: FC<ClonePanelProps> = ({ back, cluster }) => {
               name="cloneStrategy"
               label={t('cloneInfo.fields.cloneStrategy')}
               tooltip={<Trans t={t} i18nKey="cloneInfo.tips.cloneStrategy" />}
-              initialValue={ClusterCloneStrategy.sync}
             >
               <Radio.Group>
-                <Radio value={ClusterCloneStrategy.sync}>
+                <Radio
+                  value={ClusterCloneStrategy.sync}
+                  disabled={syncDisabled}
+                >
                   {t('cloneStrategy.sync')}
                 </Radio>
                 <Radio value={ClusterCloneStrategy.snapshot}>
