@@ -1,2 +1,5 @@
 actions:
   upgrade: 升级
+roles:
+  master: 主集群
+  slave: 备集群

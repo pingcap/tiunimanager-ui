@@ -1,2 +1,5 @@
 actions:
   upgrade: Upgrade
+roles:
+  master: Master Cluster
+  slave: Standby Cluster

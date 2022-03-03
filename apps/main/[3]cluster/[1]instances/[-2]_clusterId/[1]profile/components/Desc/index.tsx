@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { TFunction, useTranslation } from 'react-i18next'
 import { useHistory } from 'react-router-dom'
 import { Badge, Button, Descriptions, Space } from 'antd'
@@ -6,7 +6,12 @@ import { resolveRoute } from '@pages-macro'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { formatTimeString } from '@/utils/time'
 import { getKeyByValue } from '@/utils/obj'
-import { ClusterInfo, ClusterOperationStatus, ClusterStatus } from '@/api/model'
+import {
+  ClusterInfo,
+  ClusterOperationStatus,
+  ClusterRelations,
+  ClusterStatus,
+} from '@/api/model'
 import { CopyIconButton } from '@/components/CopyToClipboard'
 
 import styles from './index.module.less'
@@ -31,7 +36,7 @@ export function Desc({ cluster }: DescProps) {
         {cluster.tags?.join(', ') || ' '}
       </Descriptions.Item>
       <Descriptions.Item label={t('cluster.property.role')}>
-        -
+        <RoleDesc relations={cluster.relations} />
       </Descriptions.Item>
       <Descriptions.Item label={t('cluster.property.type')}>
         {cluster.clusterType}
@@ -99,6 +104,27 @@ export function Desc({ cluster }: DescProps) {
       </Descriptions.Item>
     </Descriptions>
   )
+}
+
+interface RoleDescProps {
+  relations?: ClusterRelations
+}
+
+function RoleDesc({ relations }: RoleDescProps) {
+  const { t } = useI18n()
+
+  const { masters, slaves } = relations || {}
+  const role = useMemo(() => {
+    if (masters?.length) {
+      return t('roles.slave')
+    } else if (slaves?.length) {
+      return t('roles.master')
+    } else {
+      return '-'
+    }
+  }, [masters, slaves])
+
+  return <span>{role}</span>
 }
 
 type VersionItemProps = {
