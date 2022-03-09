@@ -15,6 +15,7 @@ import {
   RequestClusterScaleOut,
   RequestClusterTakeover,
   RequestClusterClone,
+  RequestClusterUpgrade,
 } from '@/api/model'
 import { AxiosRequestConfig } from 'axios'
 import {
@@ -673,4 +674,90 @@ const resumeClusterDataReplication = ({
  */
 export function useResumeClusterDataReplication() {
   return useMutation(resumeClusterDataReplication)
+}
+
+/**
+ * Cluster Upgrade
+ */
+
+const CACHE_CLUSTER_UPGRADE_PATH = 'cluster-upgrade-path'
+const CACHE_CLUSTER_UPGRADE_DIFF = 'cluster-upgrade-diff'
+
+/**
+ * Hook for querying cluster upgrade path
+ * @param query query filter
+ * @param options react-query useQuery options
+ */
+export function useQueryClusterUpgradePath(
+  query: {
+    clusterId: string
+  },
+  options?: PartialUseQueryOptions
+) {
+  const { clusterId } = query
+
+  return withRequestId((requestId) =>
+    useQuery(
+      [CACHE_CLUSTER_UPGRADE_PATH, clusterId],
+      () =>
+        APIS.ClusterUpgrade.clustersClusterIdUpgradePathGet(clusterId, {
+          requestId,
+        }),
+      options
+    )
+  )
+}
+
+/**
+ * Hook for querying cluster upgrade diff
+ * @param query query filter
+ * @param options react-query useQuery options
+ */
+export function useQueryClusterUpgradeDiff(
+  query: {
+    clusterId: string
+    targetVersion: string
+  },
+  options?: PartialUseQueryOptions
+) {
+  const { clusterId, targetVersion } = query
+
+  return withRequestId((requestId) =>
+    useQuery(
+      [CACHE_CLUSTER_UPGRADE_DIFF, clusterId, targetVersion],
+      () =>
+        APIS.ClusterUpgrade.clustersClusterIdUpgradeDiffGet(
+          clusterId,
+          targetVersion,
+          {
+            requestId,
+          }
+        ),
+      options
+    )
+  )
+}
+
+/**
+ * Create a cluster upgrade task
+ * @param payload upgrade payload
+ */
+const upgradeCluster = ({
+  payload,
+  options,
+}: PayloadWithOptions<{ clusterId: string } & RequestClusterUpgrade>) => {
+  const { clusterId, ...leftPayload } = payload
+
+  return APIS.ClusterUpgrade.clustersClusterIdUpgradePost(
+    clusterId,
+    leftPayload,
+    options
+  )
+}
+
+/**
+ * Hook for creating a cluster upgrade task
+ */
+export function useUpgradeCluster() {
+  return useMutation(upgradeCluster)
 }

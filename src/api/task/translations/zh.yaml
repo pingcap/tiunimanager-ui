@@ -19,3 +19,5 @@ name:
   DeleteHosts: 删除主机
   DeleteHostsByForce: 删除异常主机
   TakeOverHosts: 导入被接管集群主机
+  OfflineInPlaceUpgradeCluster: 强制重启升级
+  OnlineInPlaceUpgradeCluster: 滚动升级

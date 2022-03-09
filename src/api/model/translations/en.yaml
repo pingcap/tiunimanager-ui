@@ -165,6 +165,13 @@ clusterNode:
     running: Running
     recovering: Recovering
     failure: Failed
+clusterUpgrade:
+  upgradeType:
+    inPlace: In-Place Upgrade
+    migration: Migration Data Upgrade
+  upgradeMethod:
+    online: Rolling Upgrade
+    offline: Forced Upgrade and Restart
 paramGroup:
   property:
     id: Parameter Group ID

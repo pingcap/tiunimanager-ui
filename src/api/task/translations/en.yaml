@@ -19,3 +19,5 @@ name:
   DeleteHosts: Delete Host
   DeleteHostsByForce: Delete Abnormal Host
   TakeOverHosts: Import Host from a Taken-over Cluster
+  OfflineInPlaceUpgradeCluster: Forced Upgrade and Restart
+  OnlineInPlaceUpgradeCluster: Rolling Upgrade
