@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { TFunction, useTranslation } from 'react-i18next'
 import { useHistory } from 'react-router-dom'
 import { Badge, Button, Descriptions, Space } from 'antd'
@@ -13,6 +13,7 @@ import {
   ClusterStatus,
 } from '@/api/model'
 import { CopyIconButton } from '@/components/CopyToClipboard'
+import { useClusterRoleSwitchover } from './Switchover'
 
 import styles from './index.module.less'
 
@@ -36,7 +37,14 @@ export function Desc({ cluster }: DescProps) {
         {cluster.tags?.join(', ') || ' '}
       </Descriptions.Item>
       <Descriptions.Item label={t('cluster.property.role')}>
-        <RoleDesc relations={cluster.relations} />
+        {cluster.clusterId && cluster.relations ? (
+          <RoleDesc
+            clusterId={cluster.clusterId}
+            relations={cluster.relations}
+          />
+        ) : (
+          '-'
+        )}
       </Descriptions.Item>
       <Descriptions.Item label={t('cluster.property.type')}>
         {cluster.clusterType}
@@ -107,24 +115,28 @@ export function Desc({ cluster }: DescProps) {
 }
 
 interface RoleDescProps {
-  relations?: ClusterRelations
+  clusterId: string
+  relations: ClusterRelations
 }
 
-function RoleDesc({ relations }: RoleDescProps) {
+function RoleDesc({ clusterId, relations }: RoleDescProps) {
   const { t } = useI18n()
 
-  const { masters, slaves } = relations || {}
-  const role = useMemo(() => {
-    if (masters?.length) {
-      return t('roles.slave')
-    } else if (slaves?.length) {
-      return t('roles.master')
-    } else {
-      return '-'
-    }
-  }, [masters, slaves])
+  const { isCurrentSlave, role, onSwitchover } = useClusterRoleSwitchover(
+    clusterId,
+    relations
+  )
 
-  return <span>{role}</span>
+  return isCurrentSlave ? (
+    <Space>
+      <span>{role}</span>
+      <Button type="link" size="small" onClick={onSwitchover}>
+        {t('actions.switchover')}
+      </Button>
+    </Space>
+  ) : (
+    <span>{role}</span>
+  )
 }
 
 type VersionItemProps = {

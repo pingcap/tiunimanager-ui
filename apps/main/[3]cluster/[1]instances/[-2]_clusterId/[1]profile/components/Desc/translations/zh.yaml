@@ -1,5 +1,21 @@
 actions:
   upgrade: 升级
+  switchover: 切换
 roles:
   master: 主集群
   slave: 备集群
+switchover:
+  title: 主备集群切换
+  content:
+    origin: 原主集群 ID
+    new: 新主集群 ID
+  options:
+    forced: 强制切换
+  actions:
+    confirm: 确认
+message:
+  switchoverCheck:
+    failed: 集群角色切换校验异常
+  switchover:
+    failed: 集群角色切换任务创建失败
+    success: 集群角色切换任务创建成功
