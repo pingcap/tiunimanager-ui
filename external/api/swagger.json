@@ -4540,180 +4540,6 @@
         }
       }
     },
-    "/specs/": {
-      "get": {
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "description": "queries all specs information",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "tags": ["platform"],
-        "summary": "queries all specs information",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/controller.CommonResult"
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "$ref": "#/definitions/message.QuerySpecsResp"
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "schema": {
-              "$ref": "#/definitions/controller.CommonResult"
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "schema": {
-              "$ref": "#/definitions/controller.CommonResult"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "schema": {
-              "$ref": "#/definitions/controller.CommonResult"
-            }
-          }
-        }
-      },
-      "post": {
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "description": "created specs",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "tags": ["platform"],
-        "summary": "created  specs",
-        "parameters": [
-          {
-            "description": "create specs request parameter",
-            "name": "CreateSpecsReq",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/message.CreateSpecsReq"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/controller.CommonResult"
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "$ref": "#/definitions/message.CreateSpecsResp"
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "schema": {
-              "$ref": "#/definitions/controller.CommonResult"
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "schema": {
-              "$ref": "#/definitions/controller.CommonResult"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "schema": {
-              "$ref": "#/definitions/controller.CommonResult"
-            }
-          }
-        }
-      },
-      "delete": {
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ],
-        "description": "deleted specs",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "tags": ["platform"],
-        "summary": "deleted  specs",
-        "parameters": [
-          {
-            "description": "delete specs request parameter",
-            "name": "DeleteSpecsReq",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/message.DeleteSpecsReq"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "allOf": [
-                {
-                  "$ref": "#/definitions/controller.CommonResult"
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "$ref": "#/definitions/message.DeleteSpecsResp"
-                    }
-                  }
-                }
-              ]
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "schema": {
-              "$ref": "#/definitions/controller.CommonResult"
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "schema": {
-              "$ref": "#/definitions/controller.CommonResult"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "schema": {
-              "$ref": "#/definitions/controller.CommonResult"
-            }
-          }
-        }
-      }
-    },
     "/tenant": {
       "get": {
         "security": [
@@ -7359,20 +7185,6 @@
     "message.CreateRoleResp": {
       "type": "object"
     },
-    "message.CreateSpecsReq": {
-      "type": "object",
-      "properties": {
-        "specs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/structs.SpecInfo"
-          }
-        }
-      }
-    },
-    "message.CreateSpecsResp": {
-      "type": "object"
-    },
     "message.CreateTenantReq": {
       "type": "object",
       "required": ["id"],
@@ -7624,20 +7436,6 @@
       "type": "object"
     },
     "message.DeleteRoleResp": {
-      "type": "object"
-    },
-    "message.DeleteSpecsReq": {
-      "type": "object",
-      "properties": {
-        "specIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "message.DeleteSpecsResp": {
       "type": "object"
     },
     "message.DeleteTenantReq": {
@@ -8028,17 +7826,6 @@
           "type": "array",
           "items": {
             "type": "string"
-          }
-        }
-      }
-    },
-    "message.QuerySpecsResp": {
-      "type": "object",
-      "properties": {
-        "specs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/structs.SpecInfo"
           }
         }
       }
