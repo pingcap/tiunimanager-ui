@@ -761,3 +761,42 @@ const upgradeCluster = ({
 export function useUpgradeCluster() {
   return useMutation(upgradeCluster)
 }
+
+/**********************
+ * Cluster Role Switch
+ **********************/
+
+type RequestClusterRoleSwitchover = {
+  sourceClusterId: string
+  targetClusterId: string
+  checkOnly?: boolean
+  forced?: boolean
+}
+
+/**
+ * Create a cluster role switchover task
+ * @param payload payload of switchover
+ */
+const switchoverClusterRole = ({
+  payload,
+  options,
+}: PayloadWithOptions<RequestClusterRoleSwitchover>) => {
+  const { sourceClusterId, targetClusterId, checkOnly, forced } = payload
+
+  return APIS.ClusterRoleSwitchover.clustersSwitchoverPost(
+    {
+      sourceClusterID: sourceClusterId,
+      targetClusterID: targetClusterId,
+      onlyCheck: checkOnly,
+      force: forced,
+    },
+    options
+  )
+}
+
+/**
+ * Hook for creating a cluster role switchover task
+ */
+export function useSwitchoverClusterRole() {
+  return useMutation(switchoverClusterRole)
+}
