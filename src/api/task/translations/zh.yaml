@@ -21,3 +21,6 @@ name:
   TakeOverHosts: 导入被接管集群主机
   OfflineInPlaceUpgradeCluster: 强制重启升级
   OnlineInPlaceUpgradeCluster: 滚动升级
+  SwitchoverNormal: 切换主备集群
+  SwitchoverForce: 强制切换主备集群
+  SwitchoverForceWithMasterUnavailable: 强制切换主备集群
