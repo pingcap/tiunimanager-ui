@@ -19,11 +19,15 @@ const CACHE_ZONES = 'platform-zones'
 
 export function useQueryZones(options?: PartialUseQueryOptions) {
   return withRequestId((requestId) =>
-    useQuery([CACHE_ZONES], () => APIS.Platform.zonesTreeGet({ requestId }), {
-      cacheTime: Infinity,
-      staleTime: Infinity,
-      ...options,
-    })
+    useQuery(
+      [CACHE_ZONES],
+      () => APIS.Vendor.vendorsAvailableGet({ requestId }),
+      {
+        cacheTime: Infinity,
+        staleTime: Infinity,
+        ...options,
+      }
+    )
   )
 }
 
@@ -42,7 +46,7 @@ export function useQueryProducts(
   const { internalProduct, status, vendorId } = payload
   return useQuery(
     [CACHE_PRODUCTS, vendorId, internalProduct, status],
-    () => APIS.Platform.productsGet(internalProduct, status, vendorId),
+    () => APIS.Product.productsAvailableGet(internalProduct, status, vendorId),
     {
       cacheTime: Infinity,
       staleTime: Infinity,
@@ -77,7 +81,7 @@ export function useQueryProductDetail(
         vendorId,
       ],
       () =>
-        APIS.Platform.productsDetailGet(
+        APIS.Product.productsDetailGet(
           internalProduct,
           productId,
           regionId,
@@ -94,10 +98,12 @@ export function useQueryProductDetail(
   )
 }
 
-;(window as any).useQueryZones = APIS.Platform.zonesTreeGet.bind(APIS.Platform)
-;(window as any).useQueryProducts = APIS.Platform.productsGet.bind(
-  APIS.Platform
+;(window as any).useQueryZones = APIS.Vendor.vendorsAvailableGet.bind(
+  APIS.Vendor
 )
-;(window as any).useQueryProductDetail = APIS.Platform.productsDetailGet.bind(
-  APIS.Platform
+;(window as any).useQueryProducts = APIS.Product.productsAvailableGet.bind(
+  APIS.Product
+)
+;(window as any).useQueryProductDetail = APIS.Product.productsDetailGet.bind(
+  APIS.Product
 )

@@ -17,10 +17,12 @@ import {
   ClusterUpgradeApi,
   SwitchoverApi as ClusterRoleSwitchoverApi,
   ParameterGroupApi,
-  Configuration,
+  VendorApi,
+  ProductApi,
   PlatformApi,
   ResourceApi,
   TaskApi,
+  Configuration,
 } from '#/api'
 import { onErrorResponse, onSuccessResponse } from '@/api/interceptors'
 import { initErrorTranslations } from '#/error'
@@ -52,6 +54,8 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
 
   return readonly({
     Platform: new PlatformApi(configuration, undefined, axiosInstance),
+    Vendor: new VendorApi(configuration, undefined, axiosInstance),
+    Product: new ProductApi(configuration, undefined, axiosInstance),
     Resources: new ResourceApi(configuration, undefined, axiosInstance),
     Clusters: new ClusterApi(configuration, undefined, axiosInstance),
     ClustersImport: new ClusterImportApi(
