@@ -1,0 +1,14 @@
+steps:
+  dataCenter: Data Center
+  productComponent: Product Components
+  productVersion: Product Versions
+actions:
+  previous: Previous
+  next: Next
+  cancel: Cancel
+  finish: Finish
+message:
+  dataCenter:
+    failed: Failed to update the Data Center configuration
+  product:
+    failed: Failed to finish the configuration

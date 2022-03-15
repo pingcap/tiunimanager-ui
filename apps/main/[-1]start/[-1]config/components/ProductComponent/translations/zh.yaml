@@ -1,0 +1,20 @@
+product:
+  name: 产品
+fields:
+  id: 组件 ID
+  name: 组件名称
+  purpose: 组件用途
+  instanceRange: 实例数范围
+  instanceCount: 可选的实例个数
+  portNum: 每实例端口个数
+  portRange: 端口范围
+form:
+  rules:
+    startPort:
+      invalid: 请填写有效的起始端口
+    endPort:
+      invalid: 请填写有效的结束端口
+purpose:
+  compute: 计算
+  storage: 存储
+  schedule: 调度

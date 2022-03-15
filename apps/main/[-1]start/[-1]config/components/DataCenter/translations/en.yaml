@@ -1,0 +1,54 @@
+vendor:
+  name: Vendor
+panel:
+  region: Region
+  spec: Instance Specification
+vendorFields:
+  id: Vendor ID
+  name: Vendor Name
+regionFields:
+  id: Region ID
+  name: Region Name
+  zone: Available Zone
+zoneFields:
+  id: ID
+  name: Name
+specFields:
+  id: Specification Code
+  name: Specification Name
+  cpu: Core Number of CPU
+  memory: Memory Size (GiB)
+form:
+  rules:
+    vendorName:
+      invalid: Please enter a valid Vendor Name
+    regionId:
+      invalid: Please enter a valid Region ID
+      duplicate: The Region Name is duplicate
+    regionName:
+      invalid: Please enter a valid Region Name
+    zoneId:
+      invalid: Please enter a valid Available Zone ID
+      duplicate: The Available Zone ID is duplicate
+    zoneName:
+      invalid: Please enter a valid Available Zone Name
+    specId:
+      invalid: Please enter a valid Specification Code
+      duplicate: The Specification Code is duplicate
+    specName:
+      invalid: Please enter a valid Specification Name
+    specCPU:
+      required: Please enter the core number of CPU
+    specMemory:
+      required: Please enter the Memory size
+actions:
+  region:
+    add: New Region
+  zone:
+    add: New Available Zone
+  spec:
+    add: New Instance Specification
+purpose:
+  compute: Compute Instance
+  storage: Storage Instance
+  schedule: Schedule Instance

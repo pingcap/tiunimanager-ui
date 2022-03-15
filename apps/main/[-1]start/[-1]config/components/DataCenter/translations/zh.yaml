@@ -1,0 +1,54 @@
+vendor:
+  name: 厂商
+panel:
+  region: 区域
+  spec: 实例规格
+vendorFields:
+  id: 厂商 ID
+  name: 厂商名称
+regionFields:
+  id: 区域 ID
+  name: 区域名称
+  zone: 可用区
+zoneFields:
+  id: ID
+  name: 名称
+specFields:
+  id: 规格代码
+  name: 规格名称
+  cpu: CPU 核数
+  memory: 内存大小 (GiB)
+form:
+  rules:
+    vendorName:
+      invalid: 请输入有效的厂商名称
+    regionId:
+      invalid: 请输入有效的区域 ID
+      duplicate: 区域 ID 重复
+    regionName:
+      invalid: 请输入有效的区域名称
+    zoneId:
+      invalid: 请输入有效的可用区 ID
+      duplicate: 可用区 ID 重复
+    zoneName:
+      invalid: 请输入有效的可用区名称
+    specId:
+      invalid: 请输入有效的规格代码
+      duplicate: 规格代码重复
+    specName:
+      invalid: 请输入有效的规格名称
+    specCPU:
+      required: 请输入 CPU 核数
+    specMemory:
+      required: 请输入内存大小
+actions:
+  region:
+    add: 新增区域
+  zone:
+    add: 新增可用区
+  spec:
+    add: 新增实例规格
+purpose:
+  compute: 计算实例
+  storage: 存储实例
+  schedule: 调度实例
