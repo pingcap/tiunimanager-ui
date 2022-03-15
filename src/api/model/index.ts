@@ -1,4 +1,9 @@
 import {
+  StructsVendorConfigInfo,
+  StructsRegionConfigInfo,
+  StructsZoneInfo,
+  StructsSpecInfo,
+  StructsProductConfigInfo,
   ClusterBackupClusterDataReq,
   ClusterCreateClusterReq,
   ClusterQueryClusterDetailResp,
@@ -110,6 +115,21 @@ export type RequestClusterDataReplicationCreate = ClusterCreateChangeFeedTaskReq
 export type RequestClusterDataReplicationUpdate = ClusterUpdateChangeFeedTaskReq
 
 export type RequestClusterUpgrade = ClusterUpgradeClusterReq
+
+/**
+ * Platform - Data Center
+ */
+
+export type DataCenterItemInfo = StructsVendorConfigInfo
+export type DCRegionItemInfo = StructsRegionConfigInfo
+export type DCZoneItemInfo = StructsZoneInfo
+export type DCSpecItemInfo = StructsSpecInfo
+
+/**
+ * Platform - Products
+ */
+
+export type ProductItemInfo = StructsProductConfigInfo
 
 /**
  * Parameter Group type
