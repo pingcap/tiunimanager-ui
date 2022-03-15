@@ -1,0 +1,17 @@
+name: Get Started
+header:
+  title: Get Started with TiDB Enterprise Manager
+  desc: Finish the following config to start your TiDB database management
+steps:
+  dataCenter:
+    title: Data Center
+    desc: Configure Vendors, Regions, Aavailable Zones and Instances Specification
+  productComponent:
+    title: Product Components
+    desc: Configure the basic information of product components
+  productVersion:
+    title: Product Versions
+    desc: Enable or disable the product versions
+actions:
+  skip: Skip for now
+  begin: Begin
