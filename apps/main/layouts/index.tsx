@@ -9,6 +9,7 @@ export interface MainLayoutProps {
   logo?: ReactNode
 
   menuItems: IMenuItem<IPageMeta>[]
+  siderDisabled?: boolean
 }
 
 const COLLAPSED_WIDTH = 80
@@ -19,9 +20,14 @@ const MainLayout: FC<MainLayoutProps> = (props) => {
     children,
     // logo,
     menuItems,
+    siderDisabled = false,
   } = props || {}
 
   const [marginWidth, setMarginWidth] = useState(EXPANDED_WIDTH)
+
+  if (siderDisabled) {
+    return <Layout className={styles.blankLayout}>{children}</Layout>
+  }
 
   return (
     <Layout>
