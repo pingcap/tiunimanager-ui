@@ -54,6 +54,24 @@ const DataCenterConfig: FC<DataCenterConfigProps> = ({
 }) => {
   const { t, i18n } = useI18n()
 
+  const specsInfo = useMemo(
+    () => [
+      {
+        key: 'compute',
+        title: t('purpose.compute'),
+      },
+      {
+        key: 'storage',
+        title: t('purpose.storage'),
+      },
+      {
+        key: 'schedule',
+        title: t('purpose.schedule'),
+      },
+    ],
+    [i18n.language]
+  )
+
   const localCenterData = useMemo(() => {
     const local = data.find((item) => item.id === 'Local') || {}
 
@@ -98,24 +116,6 @@ const DataCenterConfig: FC<DataCenterConfigProps> = ({
     }
   }, [data])
 
-  const specsInfo = useMemo(
-    () => [
-      {
-        key: 'compute',
-        title: t('purpose.compute'),
-      },
-      {
-        key: 'storage',
-        title: t('purpose.storage'),
-      },
-      {
-        key: 'schedule',
-        title: t('purpose.schedule'),
-      },
-    ],
-    [i18n.language]
-  )
-
   const handleFinish = useCallback(
     (values: LocalCenterField) => {
       const mergedSpecs = Object.values(values.purpose)
@@ -132,7 +132,7 @@ const DataCenterConfig: FC<DataCenterConfigProps> = ({
         onFinish([mergedLocalValues])
       }
     },
-    [onFinish]
+    [onFinish, localCenterData]
   )
 
   useEffect(() => {
