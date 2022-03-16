@@ -276,9 +276,13 @@ function getColumns(
       fixed: 'right',
       valueType: 'option',
       render(_, record) {
-        const disableRestore = record.status !== BackupStatus.success
+        const restoreDisabled = record.status !== BackupStatus.success
+        const deleteDisabled =
+          record.status !== BackupStatus.success &&
+          record.status !== BackupStatus.failed
+
         return [
-          disableRestore ? (
+          restoreDisabled ? (
             <span className="disabled-text-btn" key="restore">
               {t('actions.restore')}
             </span>
@@ -295,20 +299,26 @@ function getColumns(
               <a>{t('actions.restore')}</a>
             </IntlPopConfirm>
           ),
-          <DeleteConfirm
-            key="delete"
-            title={t('delete.name')}
-            content={t('delete.confirm', { name: record.id })}
-            confirmInput={{
-              expect: 'delete',
-            }}
-            onConfirm={async (close) => {
-              await deleteAction(record.id!)
-              close()
-            }}
-          >
-            <span className="danger-link">{t('actions.delete')}</span>
-          </DeleteConfirm>,
+          deleteDisabled ? (
+            <span className="disabled-text-btn" key="delete">
+              {t('actions.delete')}
+            </span>
+          ) : (
+            <DeleteConfirm
+              key="delete"
+              title={t('delete.name')}
+              content={t('delete.confirm', { name: record.id })}
+              confirmInput={{
+                expect: 'delete',
+              }}
+              onConfirm={async (close) => {
+                await deleteAction(record.id!)
+                close()
+              }}
+            >
+              <span className="danger-link">{t('actions.delete')}</span>
+            </DeleteConfirm>
+          ),
         ]
       },
     },
