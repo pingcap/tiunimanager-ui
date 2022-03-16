@@ -2,8 +2,8 @@ product:
   name: Product
 form:
   fields:
-    amd64: X86_64 Arch
-    arm64: ARM64 Arch
+    amd64: X86_64 Architecture
+    arm64: ARM64 Architecture
   rules:
     version:
       required: Please select a product version at least
