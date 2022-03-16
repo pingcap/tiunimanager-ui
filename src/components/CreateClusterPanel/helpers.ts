@@ -141,7 +141,17 @@ export function useProducts(vendorId?: string, regionId?: string) {
     const rawProducts = rawRegions[regionId] // product => arch => version
     const _products = Object.keys(rawProducts)
     const products = mapObj(rawProducts, (rawArch, productId) => {
-      const _archs = Object.keys(rawArch)
+      const _archs = Object.keys(rawArch).sort((a, b) => {
+        const result = [a, b].filter((el) => el.toLowerCase().includes('x86'))
+
+        if (!result.length || result.length > 1) {
+          return 0
+        }
+
+        const [target] = result
+
+        return target === a ? -1 : 1
+      })
       const archs = mapObj(rawArch, (_, arch) => ({
         key: arch as string,
         value: {
