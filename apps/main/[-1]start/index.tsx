@@ -53,11 +53,11 @@ export default function () {
             />
           </Steps>
           <Space>
-            <Button type="link" onClick={handleSkip}>
-              {t('actions.skip')}
-            </Button>
             <Button type="primary" onClick={handleBegin}>
               {t('actions.begin')}
+            </Button>
+            <Button type="link" onClick={handleSkip}>
+              {t('actions.skip')}
             </Button>
           </Space>
         </div>
