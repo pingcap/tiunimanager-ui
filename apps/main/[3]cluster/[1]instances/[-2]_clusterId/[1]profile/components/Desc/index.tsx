@@ -6,8 +6,14 @@ import { resolveRoute } from '@pages-macro'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { formatTimeString } from '@/utils/time'
 import { getKeyByValue } from '@/utils/obj'
-import { ClusterInfo, ClusterOperationStatus, ClusterStatus } from '@/api/model'
+import {
+  ClusterInfo,
+  ClusterOperationStatus,
+  ClusterRelations,
+  ClusterStatus,
+} from '@/api/model'
 import { CopyIconButton } from '@/components/CopyToClipboard'
+import { useClusterRoleSwitchover } from './Switchover'
 
 import styles from './index.module.less'
 
@@ -31,7 +37,14 @@ export function Desc({ cluster }: DescProps) {
         {cluster.tags?.join(', ') || ' '}
       </Descriptions.Item>
       <Descriptions.Item label={t('cluster.property.role')}>
-        -
+        {cluster.clusterId && cluster.relations ? (
+          <RoleDesc
+            clusterId={cluster.clusterId}
+            relations={cluster.relations}
+          />
+        ) : (
+          '-'
+        )}
       </Descriptions.Item>
       <Descriptions.Item label={t('cluster.property.type')}>
         {cluster.clusterType}
@@ -98,6 +111,31 @@ export function Desc({ cluster }: DescProps) {
         {formatTimeString(cluster.updateTime!)}
       </Descriptions.Item>
     </Descriptions>
+  )
+}
+
+interface RoleDescProps {
+  clusterId: string
+  relations: ClusterRelations
+}
+
+function RoleDesc({ clusterId, relations }: RoleDescProps) {
+  const { t } = useI18n()
+
+  const { isCurrentSlave, role, onSwitchover } = useClusterRoleSwitchover(
+    clusterId,
+    relations
+  )
+
+  return isCurrentSlave ? (
+    <Space>
+      <span>{role}</span>
+      <Button type="link" size="small" onClick={onSwitchover}>
+        {t('actions.switchover')}
+      </Button>
+    </Space>
+  ) : (
+    <span>{role}</span>
   )
 }
 

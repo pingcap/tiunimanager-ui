@@ -44,6 +44,7 @@ import {
   ClusterUpgradeClusterReq,
   ClusterUpgradeClusterReqUpgradeWayEnum,
   StructsProductUpgradeVersionConfigDiffItem,
+  StructsClusterRelations,
   MessageQueryParameterGroupResp,
   MessageUpdateParameterGroupReq,
   MessageCreateParameterGroupReq,
@@ -76,6 +77,8 @@ export type ClusterDownstreamTiDB = ClusterTiDBDownstream
 
 export type ClusterUpgradeParamDiffItem =
   StructsProductUpgradeVersionConfigDiffItem
+
+export type ClusterRelations = StructsClusterRelations
 
 export type TransportRecord = StructsDataImportExportRecordInfo
 

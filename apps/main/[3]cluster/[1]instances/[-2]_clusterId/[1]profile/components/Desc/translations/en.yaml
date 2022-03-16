@@ -1,2 +1,21 @@
 actions:
   upgrade: Upgrade
+  switchover: Switchover
+roles:
+  master: Master Cluster
+  slave: Standby Cluster
+switchover:
+  title: Master-Standby Cluster Switchover
+  content:
+    origin: Origin Master Cluster ID
+    new: New Master Cluster ID
+  options:
+    forced: Forced Switchover
+  actions:
+    confirm: Confirm
+message:
+  switchoverCheck:
+    failed: Switchover check failed
+  switchover:
+    failed: Failed to create a cluster role switchover task
+    success: The cluster role switchover task is created

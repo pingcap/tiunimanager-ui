@@ -15,6 +15,7 @@ import {
   ClusterParametersApi,
   ChangeFeedApi as ClusterDataReplicationApi,
   ClusterUpgradeApi,
+  SwitchoverApi as ClusterRoleSwitchoverApi,
   ParameterGroupApi,
   Configuration,
   PlatformApi,
@@ -79,6 +80,11 @@ function initApis(basePath: string, axiosInstance: AxiosInstance) {
       axiosInstance
     ),
     ClusterUpgrade: new ClusterUpgradeApi(
+      configuration,
+      undefined,
+      axiosInstance
+    ),
+    ClusterRoleSwitchover: new ClusterRoleSwitchoverApi(
       configuration,
       undefined,
       axiosInstance

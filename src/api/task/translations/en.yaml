@@ -21,3 +21,6 @@ name:
   TakeOverHosts: Import Host from a Taken-over Cluster
   OfflineInPlaceUpgradeCluster: Forced Upgrade and Restart
   OnlineInPlaceUpgradeCluster: Rolling Upgrade
+  SwitchoverNormal: Master-Standby Cluster  Switchover
+  SwitchoverForce: Master-Standby Cluster Forced Switchover
+  SwitchoverForceWithMasterUnavailable: Master-Standby Cluster Forced Switchover
