@@ -73,9 +73,8 @@ const ProductComponentConfig: FC<ProductComponentConfigProps> = ({
       hideRequiredMark
       scrollToFirstError
       name="productComponent"
-      labelAlign="left"
-      labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
+      labelCol={{ span: 6 }}
+      wrapperCol={{ span: 18 }}
       className={className}
       form={form}
       initialValues={data}
