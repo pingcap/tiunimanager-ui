@@ -1,7 +1,16 @@
+import { QueryClient, useMutation, useQuery } from 'react-query'
+import {
+  PartialUseQueryOptions,
+  PayloadWithOptions,
+  withRequestId,
+} from '@/api/hooks/utils'
 import { APIS } from '@/api/client'
-import { ProductStatus, UserLoginRequest } from '@/api/model'
-import { PartialUseQueryOptions, withRequestId } from '@/api/hooks/utils'
-import { useQuery } from 'react-query'
+import {
+  DataCenterItemInfo,
+  ProductItemInfo,
+  ProductStatus,
+  UserLoginRequest,
+} from '@/api/model'
 
 export function doUserLogin(payload: UserLoginRequest) {
   return APIS.Platform.userLoginPost(payload, {
@@ -15,15 +24,158 @@ export function doUserLogout() {
   })
 }
 
+/**************
+ * System Info
+ **************/
+
+/**
+ * The query cache key for the system info
+ */
+const CACHE_SYSTEM_INFO = 'system-info'
+
+/**
+ * Hook for querying the system info
+ * @param options useQuery options
+ */
+export function useQuerySystemInfo(options?: PartialUseQueryOptions) {
+  return withRequestId((requestId) =>
+    useQuery(
+      [CACHE_SYSTEM_INFO],
+      () => APIS.Platform.systemInfoGet(true, { requestId }),
+      {
+        cacheTime: Infinity,
+        staleTime: Infinity,
+        refetchOnWindowFocus: false,
+        ...options,
+      }
+    )
+  )
+}
+
+export async function invalidateSystemInfo(client: QueryClient) {
+  await client.invalidateQueries(CACHE_SYSTEM_INFO)
+}
+
+/**************
+ * Data Center
+ **************/
+
+/**
+ * The query cache key for the data center configs
+ */
+const CACHE_DATA_CENTER_CONFIG = 'data-center-config'
+
+/**
+ * Hook for querying the data center configs
+ * @param options useQuery options
+ */
+export function useQueryDataCenterConfig(
+  query?: { vendors: string[] },
+  options?: PartialUseQueryOptions
+) {
+  return withRequestId((requestId) =>
+    useQuery(
+      [CACHE_DATA_CENTER_CONFIG, query?.vendors],
+      () => APIS.Vendor.vendorsGet(query?.vendors, { requestId }),
+      {
+        refetchOnWindowFocus: false,
+        ...options,
+      }
+    )
+  )
+}
+
+/**
+ * Update the data center configs
+ * @param payload updating payload
+ */
+const updateDataCenterConfig = ({
+  payload,
+  options,
+}: PayloadWithOptions<DataCenterItemInfo[]>) =>
+  APIS.Vendor.vendorsPost(
+    {
+      vendors: payload,
+    },
+    options
+  )
+
+/**
+ * Hook for updating the data center configs
+ */
+export function useUpdateDataCenterConfig() {
+  return useMutation(updateDataCenterConfig)
+}
+
+/**************
+ * Products
+ **************/
+
+/**
+ * The query cache key for the product configs
+ */
+const CACHE_PRODUCT_CONFIG = 'product-config'
+
+/**
+ * Hook for querying the product configs
+ * @param options useQuery options
+ */
+export function useQueryProductConfig(
+  query?: { products: string[] },
+  options?: PartialUseQueryOptions
+) {
+  return withRequestId((requestId) =>
+    useQuery(
+      [CACHE_PRODUCT_CONFIG, query?.products],
+      () => APIS.Product.productsGet(query?.products, { requestId }),
+      {
+        refetchOnWindowFocus: false,
+        ...options,
+      }
+    )
+  )
+}
+
+/**
+ * Update the product configs
+ * @param payload update payload
+ */
+const updateProductConfig = ({
+  payload,
+  options,
+}: PayloadWithOptions<ProductItemInfo[]>) =>
+  APIS.Product.productsPost(
+    {
+      products: payload,
+    },
+    options
+  )
+
+/**
+ * Hook for updating the product configs
+ */
+export function useUpdateProductConfig() {
+  return useMutation(updateProductConfig)
+}
+
+/******************
+ * [Deprecated]
+ * Zones, Products
+ ******************/
+
 const CACHE_ZONES = 'platform-zones'
 
 export function useQueryZones(options?: PartialUseQueryOptions) {
   return withRequestId((requestId) =>
-    useQuery([CACHE_ZONES], () => APIS.Platform.zonesTreeGet({ requestId }), {
-      cacheTime: Infinity,
-      staleTime: Infinity,
-      ...options,
-    })
+    useQuery(
+      [CACHE_ZONES],
+      () => APIS.Vendor.vendorsAvailableGet({ requestId }),
+      {
+        cacheTime: Infinity,
+        staleTime: Infinity,
+        ...options,
+      }
+    )
   )
 }
 
@@ -42,7 +194,7 @@ export function useQueryProducts(
   const { internalProduct, status, vendorId } = payload
   return useQuery(
     [CACHE_PRODUCTS, vendorId, internalProduct, status],
-    () => APIS.Platform.productsGet(internalProduct, status, vendorId),
+    () => APIS.Product.productsAvailableGet(internalProduct, status, vendorId),
     {
       cacheTime: Infinity,
       staleTime: Infinity,
@@ -77,7 +229,7 @@ export function useQueryProductDetail(
         vendorId,
       ],
       () =>
-        APIS.Platform.productsDetailGet(
+        APIS.Product.productsDetailGet(
           internalProduct,
           productId,
           regionId,
@@ -94,10 +246,12 @@ export function useQueryProductDetail(
   )
 }
 
-;(window as any).useQueryZones = APIS.Platform.zonesTreeGet.bind(APIS.Platform)
-;(window as any).useQueryProducts = APIS.Platform.productsGet.bind(
-  APIS.Platform
+;(window as any).useQueryZones = APIS.Vendor.vendorsAvailableGet.bind(
+  APIS.Vendor
 )
-;(window as any).useQueryProductDetail = APIS.Platform.productsDetailGet.bind(
-  APIS.Platform
+;(window as any).useQueryProducts = APIS.Product.productsAvailableGet.bind(
+  APIS.Product
+)
+;(window as any).useQueryProductDetail = APIS.Product.productsDetailGet.bind(
+  APIS.Product
 )

@@ -1,0 +1,17 @@
+name: 开始
+header:
+  title: 欢迎使用 TiDB Enterprise Manager
+  desc: 完成以下配置，开始 TiDB 数据库管理
+steps:
+  dataCenter:
+    title: 数据中心
+    desc: 配置厂商、区域、可用区与实例规格
+  productComponent:
+    title: 产品组件
+    desc: 配置产品组件基本信息
+  productVersion:
+    title: 产品版本
+    desc: 启用或禁用产品版本
+actions:
+  skip: 暂时跳过
+  begin: 开始

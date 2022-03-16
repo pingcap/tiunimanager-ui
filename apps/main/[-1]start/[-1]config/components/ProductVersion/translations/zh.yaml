@@ -1,0 +1,9 @@
+product:
+  name: 产品
+form:
+  fields:
+    amd64: X86_64 架构
+    arm64: ARM64 架构
+  rules:
+    version:
+      required: 请选择至少一个产品版本

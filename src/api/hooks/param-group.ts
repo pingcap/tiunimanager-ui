@@ -78,19 +78,25 @@ export async function invalidateParamGroupList(client: QueryClient) {
 export function useQueryParamGroupDetail(
   query: {
     id: string
+    instanceType?: string
     paramName?: string
   },
   options?: PartialUseQueryOptions
 ) {
-  const { id, paramName } = query
+  const { id, instanceType, paramName } = query
 
   return withRequestId((requestId) =>
     useQuery(
-      [CACHE_PARAM_GROUP_DETAIL_KEY, id],
+      [CACHE_PARAM_GROUP_DETAIL_KEY, id, instanceType, paramName],
       () =>
-        APIS.ParamGroup.paramGroupsParamGroupIdGet(id, paramName, {
-          requestId,
-        }),
+        APIS.ParamGroup.paramGroupsParamGroupIdGet(
+          id,
+          instanceType,
+          paramName,
+          {
+            requestId,
+          }
+        ),
       options
     )
   )

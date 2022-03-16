@@ -1,0 +1,54 @@
+.wrapper {
+  background-color: #fff;
+  min-height: 100vh;
+}
+
+.layout {
+  display: flex;
+  min-width: 1000px;
+  max-width: 1600px;
+  width: max-content;
+  margin: 0 auto;
+  padding: 40px 20px 20px;
+}
+
+.main {
+  width: 520px;
+}
+
+.header {
+  margin-bottom: 40px;
+
+  > .header-title {
+    font-size: 26px;
+    margin-bottom: 4px;
+  }
+
+  > .header-desc {
+    font-size: 14px;
+    color: #717171;
+  }
+}
+
+.content:global(.ant-steps-vertical) {
+  padding-top: 20px;
+
+  > :global(.ant-steps-item) {
+    :global(.ant-steps-item-content) {
+      min-height: 120px;
+
+      > :global(.ant-steps-item-title) {
+        color: #333;
+      }
+    }
+  }
+}
+
+.aside {
+  flex: 1;
+  padding-top: 140px;
+
+  .bg-img {
+    width: 420px;
+  }
+}

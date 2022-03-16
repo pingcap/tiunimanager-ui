@@ -1,0 +1,20 @@
+product:
+  name: Product
+fields:
+  id: Component ID
+  name: Component Name
+  purpose: Component Purpose
+  instanceRange: Range of Number of instances
+  instanceCount: Available Number of Instances
+  portNum: Number of Ports per Instance
+  portRange: Range of Ports
+form:
+  rules:
+    startPort:
+      invalid: Please enter a valid start port
+    endPort:
+      invalid: Please enter a valid end port
+purpose:
+  compute: Compute
+  storage: Storage
+  schedule: Schedule
