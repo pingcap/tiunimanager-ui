@@ -93,7 +93,7 @@ export function useDeleteHosts() {
 }
 
 export function getHostsTemplateURL() {
-  return apiBasePath + '/resources/hosts-template/'
+  return apiBasePath + '/resources/hosts-template'
 }
 
 export function getHostsUploadURL() {
