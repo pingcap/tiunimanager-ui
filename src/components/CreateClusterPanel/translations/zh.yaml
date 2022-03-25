@@ -5,7 +5,7 @@ basic:
     arch: CPU 体系架构
     version: 数据库版本
     paramGroup: 参数组
-    allocation: 分配方式
+    allocation: 资源分配方式
   rules:
     type:
       require: 请选择数据库类型
@@ -68,6 +68,7 @@ create:
 
 message:
   noZone: 无可用区
+  noHost: 没有可分配的主机
 
 modeSelector:
   title: 选择创建模式
@@ -92,7 +93,7 @@ regionSelector:
 
 allocation:
   zone: 自动分配
-  host: 指定主机
+  host: 手工分配
 
 preview:
   name: 集群配置预览

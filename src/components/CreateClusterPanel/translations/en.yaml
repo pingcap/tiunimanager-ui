@@ -5,7 +5,7 @@ basic:
     arch: CPU Architecture
     version: Database Version
     paramGroup: Parameter Group
-    allocation: Allocation Type
+    allocation: Resource Allocation Type
   rules:
     type:
       require: Please select a database type
@@ -67,7 +67,8 @@ create:
   name: Create Cluster
 
 message:
-  noZone: No available zone.
+  noZone: No available zones
+  noHost: No available hosts
 
 modeSelector:
   title: Select Create Mode
@@ -92,7 +93,7 @@ regionSelector:
 
 allocation:
   zone: Automatic
-  host: Host Specified
+  host: Manual
 
 preview:
   name: Cluster Preview

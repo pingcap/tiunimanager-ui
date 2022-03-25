@@ -647,7 +647,7 @@ function ComponentOptionsForHost({
           </Form.Item>
         )}
         {isEmpty ? (
-          <Empty description={t('message.noZone')} />
+          <Empty description={t('message.noHost')} />
         ) : (
           <Form.List
             name={[
