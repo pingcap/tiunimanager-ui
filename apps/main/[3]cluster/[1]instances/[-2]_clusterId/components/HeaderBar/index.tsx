@@ -149,7 +149,7 @@ export default function HeaderBar() {
       })
 
     const cloneBtn = (
-      <Button key="clone" onClick={handleClone} disabled={!info?.clusterId}>
+      <Button key="clone" onClick={handleClone} disabled={!instanceResource}>
         <ForkOutlined /> {t('actions.clone')}
       </Button>
     )
