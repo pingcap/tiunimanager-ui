@@ -21,10 +21,10 @@ import {
   Switch,
   Table,
   Tag,
+  TableColumnsType,
 } from 'antd'
 import { FormInstance } from '@ant-design/pro-form'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { ColumnsType } from 'antd/lib/table/interface'
 import { loadI18n, useI18n } from '@i18n-macro'
 import { ClusterPreview, RequestClusterCreate } from '@/api/model'
 import { usePreviewCreateCluster } from '@/api/hooks/cluster'
@@ -74,7 +74,7 @@ export function SimpleForm({
   const [productVersion, setProductVersion] = useState<string>()
   const [region, setRegion] = useState<string>()
   const [arch, setArch] = useState<string>()
-  const [, setAllocationType] = useState<string>('SpecificZone')
+  const [allocationType, setAllocationType] = useState<string>('SpecificZone')
 
   const vendorAndRegions = useVendorsAndRegions()
   const products = useProducts(vendorId, region)
@@ -297,6 +297,7 @@ export function SimpleForm({
         footerClassName={footerClassName}
         vendorId={vendorId}
         region={region}
+        allocationType={allocationType}
         disableSubmit={!productId}
       />
     </>
@@ -722,11 +723,21 @@ function ComponentOptionsForHost({
                       >
                         <Input />
                       </Form.Item>
-                      <Form.Item label={t('component.fields.host')}>
+                      <Form.Item
+                        colon
+                        labelAlign="right"
+                        labelCol={{ span: 4 }}
+                        label={t('component.fields.host')}
+                      >
                         {zoneLabel} - {hostLabel}
                       </Form.Item>
                       {!isDiskSpecified && (
-                        <Form.Item label={t('component.fields.instance')}>
+                        <Form.Item
+                          colon
+                          labelAlign="right"
+                          labelCol={{ span: 4 }}
+                          label={t('component.fields.instance')}
+                        >
                           <Form.List name={[hostField.name, 'instances']}>
                             {(specFields, { add, remove }, { errors }) => (
                               <>
@@ -789,7 +800,12 @@ function ComponentOptionsForHost({
                         </Form.Item>
                       )}
                       {isDiskSpecified && (
-                        <Form.Item label={t('component.fields.instance')}>
+                        <Form.Item
+                          colon
+                          labelAlign="right"
+                          labelCol={{ span: 4 }}
+                          label={t('component.fields.instance')}
+                        >
                           <Form.List name={[hostField.name, 'instances']}>
                             {(specFields, { add, remove }, { errors }) => (
                               <>
@@ -805,9 +821,10 @@ function ComponentOptionsForHost({
                                       specField.name,
                                     ]) || {}
 
-                                  const diskName = validDisks.find(
-                                    (disk) => disk.diskId === diskId
-                                  )?.name
+                                  const currentDisk =
+                                    validDisks.find(
+                                      (disk) => disk.diskId === diskId
+                                    ) || {}
 
                                   return (
                                     <div key={specField.key}>
@@ -826,10 +843,15 @@ function ComponentOptionsForHost({
                                         align="baseline"
                                         size="large"
                                       >
-                                        <div>
+                                        <Form.Item
+                                          label={t('component.fields.disk')}
+                                        >
+                                          {currentDisk.name}, {currentDisk.path}
+                                        </Form.Item>
+                                        {/* <div>
                                           {t('component.fields.disk')}{' '}
-                                          {diskName}
-                                        </div>
+                                          {currentDisk.name}, {currentDisk.path}
+                                        </div> */}
                                         <Form.Item
                                           fieldKey={[
                                             specField.name,
@@ -907,7 +929,7 @@ function ComponentOptionsForHost({
                                         >
                                           {restDisks.map((disk) => (
                                             <Menu.Item key={disk.diskId}>
-                                              {disk.name}
+                                              {disk.name}, {disk.path}
                                             </Menu.Item>
                                           ))}
                                         </Menu>
@@ -1058,6 +1080,7 @@ function Submitter({
   disableSubmit,
   region,
   vendorId,
+  allocationType,
 }: {
   onReset: () => unknown
   processValue?: SimpleFormProps['processValue']
@@ -1068,11 +1091,16 @@ function Submitter({
   disableSubmit: boolean
   region?: string
   vendorId?: string
+  allocationType: string
 }) {
   const { t, i18n } = useI18n()
   const previewCreateCluster = usePreviewCreateCluster()
 
-  const columns = useMemo(() => getColumns(t), [i18n.language])
+  const columns = useMemo(() => {
+    return allocationType === 'SpecificHost'
+      ? getManualColumns(t)
+      : getAutoColumns(t)
+  }, [i18n.language, allocationType])
 
   const [loadingPreview, setLoadingPreview] = useState(false)
 
@@ -1190,9 +1218,11 @@ function Submitter({
   )
 }
 
-function getColumns(
+function getAutoColumns(
   t: TFunction<''>
-): ColumnsType<Exclude<ClusterPreview['stockCheckResult'], undefined>[number]> {
+): TableColumnsType<
+  Exclude<ClusterPreview['stockCheckResult'], undefined>[number]
+> {
   return [
     {
       title: t('preview.columns.component'),
@@ -1206,6 +1236,69 @@ function getColumns(
       dataIndex: 'zoneCode',
       key: 'zone',
     },
+    {
+      title: t('preview.columns.spec'),
+      width: 80,
+      dataIndex: 'specCode',
+      key: 'spec',
+    },
+    {
+      title: t('preview.columns.amount'),
+      width: 60,
+      dataIndex: 'count',
+      key: 'amount',
+    },
+    {
+      title: t('preview.columns.status'),
+      width: 140,
+      key: 'status',
+      render: (_, record) =>
+        record.enough ? (
+          t('preview.status.normal')
+        ) : (
+          <span style={{ color: 'red' }}>{t('preview.status.notEnough')}</span>
+        ),
+    },
+  ]
+}
+
+function getManualColumns(
+  t: TFunction<''>
+): TableColumnsType<
+  Exclude<ClusterPreview['stockCheckResult'], undefined>[number]
+> {
+  return [
+    {
+      title: t('preview.columns.component'),
+      width: 80,
+      dataIndex: 'componentName',
+      key: 'type',
+    },
+    {
+      title: t('preview.columns.zone'),
+      width: 80,
+      dataIndex: 'zoneCode',
+      key: 'zone',
+    },
+    {
+      title: t('preview.columns.host'),
+      width: 80,
+      dataIndex: 'hostIp',
+      key: 'host',
+    },
+    // {
+    //   title: t('preview.columns.diskType'),
+    //   width: 80,
+    //   dataIndex: 'diskType',
+    //   key: 'diskType',
+    // },
+    // {
+    //   title: t('preview.columns.diskId'),
+    //   width: 60,
+    //   dataIndex: 'diskId',
+    //   key: 'diskId',
+    //   render: (value) => value || '-',
+    // },
     {
       title: t('preview.columns.spec'),
       width: 80,

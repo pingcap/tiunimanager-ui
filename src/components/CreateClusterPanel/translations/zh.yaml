@@ -103,6 +103,9 @@ preview:
   columns:
     component: 组件名称
     zone: 可用区
+    host: 主机
+    diskType: 磁盘类型
+    diskId: 磁盘 ID
     spec: 规格代码
     amount: 实例数量
     status: 库存状态

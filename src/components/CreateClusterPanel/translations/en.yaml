@@ -103,6 +103,9 @@ preview:
   columns:
     component: Component Name
     zone: Available Zone
+    host: Host
+    diskType: Disk Type
+    diskId: Disk ID
     spec: Specification Code
     amount: Number of Instances
     status: Stock Status
