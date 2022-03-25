@@ -5,6 +5,7 @@ basic:
     arch: CPU Architecture
     version: Database Version
     paramGroup: Parameter Group
+    allocation: Allocation Type
   rules:
     type:
       require: Please select a database type
@@ -23,6 +24,13 @@ component:
     zone: Available Zone
     spec: Specification Code
     amount: Number of Instances
+    host: Host
+    instance: Instances
+    disk: Disk
+  actions:
+    addHost: New Instances At Host
+    addInstance: New Instance
+    addDisk: New Instances At Disk
 cluster:
   title: Cluster Basic Information
   fields:
@@ -81,6 +89,10 @@ regionSelector:
   title: Region
   rules:
     require: Please select a region
+
+allocation:
+  zone: Automatic
+  host: Host Specified
 
 preview:
   name: Cluster Preview

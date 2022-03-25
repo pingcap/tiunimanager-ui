@@ -5,6 +5,7 @@ basic:
     arch: CPU 体系架构
     version: 数据库版本
     paramGroup: 参数组
+    allocation: 分配方式
   rules:
     type:
       require: 请选择数据库类型
@@ -23,6 +24,13 @@ component:
     zone: 可用区
     spec: 规格代码
     amount: 数量
+    host: 主机
+    instance: 实例规格
+    disk: 磁盘
+  actions:
+    addHost: 选择主机添加实例
+    addInstance: 新增实例
+    addDisk: 选择磁盘新增实例
 cluster:
   title: 集群基础信息
   fields:
@@ -81,6 +89,10 @@ regionSelector:
   title: 区域
   rules:
     require: 请选择区域
+
+allocation:
+  zone: 自动分配
+  host: 指定主机
 
 preview:
   name: 集群配置预览
