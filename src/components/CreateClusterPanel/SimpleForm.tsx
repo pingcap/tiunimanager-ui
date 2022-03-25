@@ -1,19 +1,5 @@
-import { FormInstance } from '@ant-design/pro-form'
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
-import { ClusterPreview, RequestClusterCreate } from '@/api/model'
-import { loadI18n, useI18n } from '@i18n-macro'
 import { TFunction, Trans } from 'react-i18next'
-import {
-  ComponentKnowledge,
-  processCreateRequest,
-  ProductsKnowledge,
-  RegionKnowledge,
-  useComponents,
-  useHostOptions,
-  useParamGroups,
-  useProducts,
-  useVendorsAndRegions,
-} from '@/components/CreateClusterPanel/helpers'
 import {
   Button,
   Card,
@@ -36,11 +22,27 @@ import {
   Table,
   Tag,
 } from 'antd'
+import { FormInstance } from '@ant-design/pro-form'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { ColumnsType } from 'antd/lib/table/interface'
-import IntlPopConfirm from '../IntlPopConfirm'
+import { loadI18n, useI18n } from '@i18n-macro'
+import { ClusterPreview, RequestClusterCreate } from '@/api/model'
 import { usePreviewCreateCluster } from '@/api/hooks/cluster'
-import styles from '@/components/CreateClusterPanel/index.module.less'
+import { isNumber } from '@/utils/types'
+import IntlPopConfirm from '../IntlPopConfirm'
+import {
+  ComponentKnowledge,
+  processCreateRequest,
+  ProductsKnowledge,
+  RegionKnowledge,
+  useComponents,
+  useHostOptions,
+  useParamGroups,
+  useProducts,
+  useVendorsAndRegions,
+} from './helpers'
+
+import styles from './index.module.less'
 
 loadI18n()
 
@@ -669,12 +671,17 @@ function ComponentOptionsForHost({
                       hostField.name,
                     ]) || {}
 
-                  const specsAtZone =
-                    zones.find((zone) => zone.id === zoneCode)?.specs || []
-
                   const currentHost = hostsForZones.find(
                     (host) => host.ip === hostIp
                   )
+
+                  const specsForHost =
+                    zones
+                      .find((zone) => zone.id === zoneCode)
+                      ?.specs.filter(
+                        (spec) => spec.diskType === currentHost?.diskType
+                      ) || []
+
                   const diskCount = currentHost?.availableDiskCount || 0
                   const validDisks =
                     currentHost?.disks?.filter(
@@ -708,6 +715,13 @@ function ComponentOptionsForHost({
                       >
                         <Input />
                       </Form.Item>
+                      <Form.Item
+                        fieldKey={[hostField.fieldKey, 'diskType']}
+                        name={[hostField.name, 'diskType']}
+                        hidden
+                      >
+                        <Input />
+                      </Form.Item>
                       <Form.Item label={t('component.fields.host')}>
                         {zoneLabel} - {hostLabel}
                       </Form.Item>
@@ -728,7 +742,7 @@ function ComponentOptionsForHost({
                                         name={[specField.name, 'specCode']}
                                       >
                                         <Select>
-                                          {specsAtZone.map((spec) => (
+                                          {specsForHost.map((spec) => (
                                             <Select.Option
                                               key={spec.id}
                                               // FIXME: remove spec rewrite
@@ -755,10 +769,13 @@ function ComponentOptionsForHost({
                                     type="dashed"
                                     icon={<PlusOutlined />}
                                     onClick={() => {
+                                      const { cpu, memory } =
+                                        specsForHost[0] || {}
                                       add({
-                                        specCode: specsAtZone[0]
-                                          ? `${specsAtZone[0].cpu}C${specsAtZone[0].memory}G`
-                                          : '',
+                                        specCode:
+                                          isNumber(cpu) && isNumber(memory)
+                                            ? `${cpu}C${memory}G`
+                                            : '',
                                       })
                                     }}
                                   >
@@ -822,7 +839,7 @@ function ComponentOptionsForHost({
                                           label={t('component.fields.spec')}
                                         >
                                           <Select>
-                                            {specsAtZone.map((spec) => (
+                                            {specsForHost.map((spec) => (
                                               <Select.Option
                                                 key={spec.id}
                                                 // FIXME: remove spec rewrite
@@ -875,10 +892,15 @@ function ComponentOptionsForHost({
                                       return (
                                         <Menu
                                           onClick={({ key: diskId }) => {
+                                            const { cpu, memory } =
+                                              specsForHost[0] || {}
+
                                             add({
-                                              specCode: specsAtZone[0]
-                                                ? `${specsAtZone[0].cpu}C${specsAtZone[0].memory}G`
-                                                : '',
+                                              specCode:
+                                                isNumber(cpu) &&
+                                                isNumber(memory)
+                                                  ? `${cpu}C${memory}G`
+                                                  : '',
                                               diskId,
                                             })
                                           }}
@@ -916,28 +938,38 @@ function ComponentOptionsForHost({
                       const [zoneId, hostIp] = value || []
                       const [zoneLabel, hostLabel] =
                         selectedOptions?.map((item) => item.label) || []
-                      const specsAtZone =
-                        zones.find((zone) => zone.id === zoneId)?.specs || []
-                      const disks =
-                        hostsForZones
-                          .find((host) => host.ip === hostIp)
-                          ?.disks?.filter(
-                            (disk) => disk.status?.toLowerCase() === 'available'
+
+                      const currentHost = hostsForZones.find(
+                        (host) => host.ip === hostIp
+                      )
+                      const specsForHost =
+                        zones
+                          .find((zone) => zone.id === zoneId)
+                          ?.specs?.filter(
+                            (spec) => spec.diskType === currentHost?.diskType
                           ) || []
+                      const { cpu: defaultCPU, memory: defaultMemory } =
+                        specsForHost[0] || {}
+
+                      const disks =
+                        currentHost?.disks?.filter(
+                          (disk) => disk.status?.toLowerCase() === 'available'
+                        ) || []
+                      const { diskId: defaultDiskId } = disks[0] || {}
 
                       add({
                         zoneCode: zoneId,
                         zoneLabel,
                         hostIp,
                         hostLabel,
+                        diskType: currentHost?.diskType,
                         instances: [
                           {
-                            specCode: specsAtZone[0]
-                              ? `${specsAtZone[0].cpu}C${specsAtZone[0].memory}G`
-                              : '',
-                            diskId: isDiskSpecified
-                              ? disks[0]?.diskId
-                              : undefined,
+                            specCode:
+                              isNumber(defaultCPU) && isNumber(defaultMemory)
+                                ? `${defaultCPU}C${defaultMemory}G`
+                                : '',
+                            diskId: isDiskSpecified ? defaultDiskId : undefined,
                           },
                         ],
                       })

@@ -37,6 +37,7 @@ export function processCreateRequest(
               zoneCode: host.zoneCode,
               hostIp: host.hostIp,
               specCode: el.specCode,
+              diskType: host.diskType,
               ...diskHashmap,
             }
           })
@@ -336,15 +337,27 @@ export function useHostOptions(
   }, [purpose, rawHostList])
 
   const { zonesWithHosts, hostsForZones } = useMemo(() => {
+    const hostDiskTypes = validHostList
+      .map((host) => host.diskType)
+      .filter((diskType) => diskType)
+    const hostDiskTypeSet = new Set(hostDiskTypes as string[])
+
     const zonesWithHosts = zones
       ?.map((zone) => {
-        const hostsAtZone = validHostList.filter((host) => host.az === zone.id)
+        const specDiskTypes = zone.specs.map((spec) => spec.diskType)
 
         return {
           id: zone.id,
           name: zone.name,
-          hosts: hostsAtZone,
-          specs: zone.specs,
+          hosts: validHostList.filter(
+            (host) =>
+              host.az === zone.id &&
+              host.diskType &&
+              specDiskTypes.includes(host.diskType)
+          ),
+          specs: zone.specs.filter((spec) =>
+            hostDiskTypeSet.has(spec.diskType)
+          ),
         }
       })
       .filter((zone) => zone.hosts.length > 0 && zone.specs.length > 0)
@@ -441,6 +454,7 @@ export type ResourceForHost = {
   zoneLabel: string
   hostIp: string
   hostLabel: string
+  diskType: string
   instances: {
     specCode: string
     diskId?: string
