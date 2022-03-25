@@ -44,6 +44,48 @@
       text-align: center;
     }
   }
+
+  .component-for-host:global(.ant-collapse-ghost) {
+    background-color: #fff;
+
+    :global(.ant-collapse-content) {
+      > :global(.ant-collapse-content-box) {
+        padding: 20px;
+      }
+    }
+  }
+
+  .host-block {
+    border: #d9d9d9 1px dashed;
+    padding-right: 20px;
+    margin-bottom: 20px;
+  }
+
+  .host-block-action-bar {
+    padding: 6px 0 6px 20px;
+    text-align: right;
+    color: #999;
+    font-size: 16px;
+  }
+
+  .instance-action-icon {
+    color: #999;
+    font-size: 16px;
+  }
+
+  .instance-field {
+    width: 100%;
+
+    > :global(.ant-space-item) {
+      &:only-of-type, &:not(:last-of-type) {
+        flex: 1;
+      }
+    }
+  }
+
+  .instance-disk-field {
+    width: 100%;
+  }
 }
 
 .zone-name {

@@ -9,6 +9,7 @@ import {
   ProductsKnowledge,
   RegionKnowledge,
   useComponents,
+  useHostOptions,
   useParamGroups,
   useProducts,
   useVendorsAndRegions,
@@ -16,25 +17,30 @@ import {
 import {
   Button,
   Card,
+  Cascader,
   Col,
   Collapse,
   Divider,
+  Dropdown,
   Empty,
   Form,
   Input,
   InputNumber,
+  Menu,
   Modal,
   Radio,
   Row,
   Select,
+  Space,
   Switch,
   Table,
   Tag,
 } from 'antd'
-import styles from '@/components/CreateClusterPanel/index.module.less'
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { ColumnsType } from 'antd/lib/table/interface'
 import IntlPopConfirm from '../IntlPopConfirm'
 import { usePreviewCreateCluster } from '@/api/hooks/cluster'
-import { ColumnsType } from 'antd/lib/table/interface'
+import styles from '@/components/CreateClusterPanel/index.module.less'
 
 loadI18n()
 
@@ -66,6 +72,7 @@ export function SimpleForm({
   const [productVersion, setProductVersion] = useState<string>()
   const [region, setRegion] = useState<string>()
   const [arch, setArch] = useState<string>()
+  const [, setAllocationType] = useState<string>('SpecificZone')
 
   const vendorAndRegions = useVendorsAndRegions()
   const products = useProducts(vendorId, region)
@@ -181,8 +188,8 @@ export function SimpleForm({
           t={t}
           onSelectProduct={setProduct}
           onSelectVersion={setProductVersion}
-          onSelectRegion={setRegion}
           onSelectArch={setArch}
+          onSelectAllocationType={setAllocationType}
           type={productId}
           arch={arch}
           products={products}
@@ -192,12 +199,56 @@ export function SimpleForm({
     [productId, arch, vendorId, region, products, paramGroups, i18n.language]
   )
 
-  const nodeOptions = useMemo(
+  const nodeOptionsForZone = useMemo(
     () =>
       components?.map((comp, idx) => (
-        <ComponentOptions t={t} key={comp.id} idx={idx} component={comp} />
+        <ComponentOptionsForZone
+          t={t}
+          key={comp.id}
+          idx={idx}
+          component={comp}
+        />
       )),
-    [form, components, i18n.language]
+    [components, i18n.language]
+  )
+
+  const nodeOptionsForHost = useMemo(
+    () =>
+      components?.map((comp, idx) => (
+        <ComponentOptionsForHost
+          key={comp.id}
+          form={form}
+          idx={idx}
+          component={comp}
+          region={region}
+          arch={arch}
+        />
+      )),
+    [form, components, region, arch]
+  )
+
+  const nodeOptions = useMemo(
+    () => (
+      <Form.Item<RequestClusterCreate>
+        noStyle
+        shouldUpdate={(prevValues, currentValues) =>
+          prevValues.resourceParameters?.requestResourceMode !==
+          currentValues.resourceParameters?.requestResourceMode
+        }
+      >
+        {(form) => {
+          const allocationType: string = form.getFieldValue([
+            'resourceParameters',
+            'requestResourceMode',
+          ])
+
+          return allocationType === 'SpecificHost'
+            ? nodeOptionsForHost
+            : nodeOptionsForZone
+        }}
+      </Form.Item>
+    ),
+    [nodeOptionsForZone, nodeOptionsForHost]
   )
 
   const clusterOptions = useMemo(
@@ -255,6 +306,7 @@ function BasicOptions({
   onSelectProduct,
   onSelectVersion,
   onSelectArch,
+  onSelectAllocationType,
   type,
   arch,
   products,
@@ -263,8 +315,8 @@ function BasicOptions({
   t: TFunction<''>
   onSelectProduct: (type: string) => void
   onSelectVersion: (version: string) => void
-  onSelectRegion: (newRegion: string) => void
   onSelectArch: (newArch: string) => void
+  onSelectAllocationType: (allocationType: string) => void
   type: string
   arch: string
   products: ProductsKnowledge
@@ -331,11 +383,26 @@ function BasicOptions({
           ))}
         </Select>
       </Form.Item>
+      <Form.Item
+        name={['resourceParameters', 'requestResourceMode']}
+        label={t('basic.fields.allocation')}
+        rules={[{ required: true }]}
+        initialValue="SpecificZone"
+      >
+        <Radio.Group onChange={(e) => onSelectAllocationType(e.target.value)}>
+          <Radio.Button value="SpecificZone" key="zone">
+            {t('allocation.zone')}
+          </Radio.Button>
+          <Radio.Button value="SpecificHost" key="host">
+            {t('allocation.host')}
+          </Radio.Button>
+        </Radio.Group>
+      </Form.Item>
     </Card>
   )
 }
 
-function ComponentOptions({
+function ComponentOptionsForZone({
   t,
   component,
   idx,
@@ -473,6 +540,423 @@ function ComponentOptions({
             </Row>
           )
         }) || <Empty description={t('message.noZone')} />}
+      </Collapse.Panel>
+    </Collapse>
+  )
+}
+
+function ComponentOptionsForHost({
+  region,
+  arch,
+  component,
+  idx,
+  form,
+}: {
+  region?: string
+  arch?: string
+  component: ComponentKnowledge
+  idx: number
+  form: FormInstance<RequestClusterCreate>
+}) {
+  const { t } = useI18n()
+
+  const tikvReplicaOptions = [1, 3, 5, 7]
+  const required = component.minInstance > 0
+  const isDiskSpecified = component.purposeType.toLowerCase() === 'storage'
+
+  const { zonesWithHosts: zones, hostsForZones } = useHostOptions(
+    region,
+    arch,
+    component.purposeType,
+    component.zones
+  )
+  const isEmpty = !zones.length
+
+  const [hostSelectState, setHostSelectState] = useState<{
+    [k: string]: boolean
+  }>({})
+
+  const hostOptions = useMemo(() => {
+    const restHosts = hostsForZones.filter((host) => !hostSelectState[host.ip!])
+    const options = zones
+      .map((zone) => {
+        const hosts = restHosts.filter((host) => host.az === zone.id)
+
+        return {
+          value: zone.id,
+          label: zone.name,
+          children: hosts.map((host) => ({
+            value: host.ip,
+            label: `${host.ip} (${host.hostName})`,
+          })),
+        }
+      })
+      .filter((zoneOption) => zoneOption.children.length > 0)
+
+    return options
+  }, [zones, hostsForZones, hostSelectState])
+
+  return (
+    <Collapse
+      collapsible="header"
+      defaultActiveKey={required ? ['1'] : []}
+      className={styles.componentForHost}
+      ghost
+    >
+      <Collapse.Panel
+        key={1}
+        header={
+          <span>
+            {t('component.title', {
+              name: component.name,
+            })}
+            {!required && (
+              <Tag color="default" className={styles.optionalBadge}>
+                {t('component.optional')}
+              </Tag>
+            )}
+          </span>
+        }
+      >
+        <Form.Item
+          name={[
+            'resourceParameters',
+            'instanceResource',
+            idx,
+            'componentType',
+          ]}
+          hidden
+          initialValue={component.id}
+        >
+          <Input />
+        </Form.Item>
+        {/* FIXME: remove hard-coded copies options for tikv */}
+        {component.id === 'TiKV' && (
+          <Form.Item
+            name="copiesForHost"
+            label={t('component.fields.copies')}
+            initialValue={3}
+          >
+            <Select>
+              {tikvReplicaOptions.map((count) => (
+                <Select.Option key={count} value={count}>
+                  {count}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        )}
+        {isEmpty ? (
+          <Empty description={t('message.noZone')} />
+        ) : (
+          <Form.List
+            name={[
+              'resourceParameters',
+              'instanceResource',
+              idx,
+              'resourceForHost',
+            ]}
+          >
+            {(hostFields, { add, remove }, { errors }) => (
+              <>
+                {hostFields.map((hostField) => {
+                  const { zoneCode, zoneLabel, hostIp, hostLabel } =
+                    form.getFieldValue([
+                      'resourceParameters',
+                      'instanceResource',
+                      idx,
+                      'resourceForHost',
+                      hostField.name,
+                    ]) || {}
+
+                  const specsAtZone =
+                    zones.find((zone) => zone.id === zoneCode)?.specs || []
+
+                  const currentHost = hostsForZones.find(
+                    (host) => host.ip === hostIp
+                  )
+                  const diskCount = currentHost?.availableDiskCount || 0
+                  const validDisks =
+                    currentHost?.disks?.filter(
+                      (disk) => disk.status?.toLowerCase() === 'available'
+                    ) || []
+
+                  return (
+                    <div key={hostField.key} className={styles.hostBlock}>
+                      <div className={styles.hostBlockActionBar}>
+                        <MinusCircleOutlined
+                          onClick={() => {
+                            remove(hostField.name)
+                            setHostSelectState((state) => ({
+                              ...state,
+                              [hostIp]: false,
+                            }))
+                          }}
+                        />
+                      </div>
+                      <Form.Item
+                        fieldKey={[hostField.fieldKey, 'zoneCode']}
+                        name={[hostField.name, 'zoneCode']}
+                        hidden
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        fieldKey={[hostField.fieldKey, 'hostIp']}
+                        name={[hostField.name, 'hostIp']}
+                        hidden
+                      >
+                        <Input />
+                      </Form.Item>
+                      <Form.Item label={t('component.fields.host')}>
+                        {zoneLabel} - {hostLabel}
+                      </Form.Item>
+                      {!isDiskSpecified && (
+                        <Form.Item label={t('component.fields.instance')}>
+                          <Form.List name={[hostField.name, 'instances']}>
+                            {(specFields, { add, remove }, { errors }) => (
+                              <>
+                                {specFields.map((specField) => (
+                                  <div key={specField.key}>
+                                    <Space
+                                      className={styles.instanceField}
+                                      align="baseline"
+                                      size="large"
+                                    >
+                                      <Form.Item
+                                        fieldKey={[specField.name, 'specCode']}
+                                        name={[specField.name, 'specCode']}
+                                      >
+                                        <Select>
+                                          {specsAtZone.map((spec) => (
+                                            <Select.Option
+                                              key={spec.id}
+                                              // FIXME: remove spec rewrite
+                                              value={`${spec.cpu}C${spec.memory}G`}
+                                            >
+                                              {spec.id} ({spec.cpu}C{' '}
+                                              {spec.memory}
+                                              G)
+                                            </Select.Option>
+                                          ))}
+                                        </Select>
+                                      </Form.Item>
+                                      {specFields.length > 1 ? (
+                                        <MinusCircleOutlined
+                                          className={styles.instanceActionIcon}
+                                          onClick={() => remove(specField.name)}
+                                        />
+                                      ) : null}
+                                    </Space>
+                                  </div>
+                                ))}
+                                {specFields.length < diskCount && (
+                                  <Button
+                                    type="dashed"
+                                    icon={<PlusOutlined />}
+                                    onClick={() => {
+                                      add({
+                                        specCode: specsAtZone[0]
+                                          ? `${specsAtZone[0].cpu}C${specsAtZone[0].memory}G`
+                                          : '',
+                                      })
+                                    }}
+                                  >
+                                    {t('component.actions.addInstance')}
+                                  </Button>
+                                )}
+                                <Form.ErrorList errors={errors} />
+                              </>
+                            )}
+                          </Form.List>
+                        </Form.Item>
+                      )}
+                      {isDiskSpecified && (
+                        <Form.Item label={t('component.fields.instance')}>
+                          <Form.List name={[hostField.name, 'instances']}>
+                            {(specFields, { add, remove }, { errors }) => (
+                              <>
+                                {specFields.map((specField) => {
+                                  const { diskId } =
+                                    form.getFieldValue([
+                                      'resourceParameters',
+                                      'instanceResource',
+                                      idx,
+                                      'resourceForHost',
+                                      hostField.name,
+                                      'instances',
+                                      specField.name,
+                                    ]) || {}
+
+                                  const diskName = validDisks.find(
+                                    (disk) => disk.diskId === diskId
+                                  )?.name
+
+                                  return (
+                                    <div key={specField.key}>
+                                      <Form.Item
+                                        fieldKey={[
+                                          specField.fieldKey,
+                                          'diskId',
+                                        ]}
+                                        name={[specField.name, 'diskId']}
+                                        hidden
+                                      >
+                                        <Input />
+                                      </Form.Item>
+                                      <Space
+                                        className={styles.instanceDiskField}
+                                        align="baseline"
+                                        size="large"
+                                      >
+                                        <div>
+                                          {t('component.fields.disk')}{' '}
+                                          {diskName}
+                                        </div>
+                                        <Form.Item
+                                          fieldKey={[
+                                            specField.name,
+                                            'specCode',
+                                          ]}
+                                          name={[specField.name, 'specCode']}
+                                          label={t('component.fields.spec')}
+                                        >
+                                          <Select>
+                                            {specsAtZone.map((spec) => (
+                                              <Select.Option
+                                                key={spec.id}
+                                                // FIXME: remove spec rewrite
+                                                value={`${spec.cpu}C${spec.memory}G`}
+                                              >
+                                                {spec.id} ({spec.cpu}C{' '}
+                                                {spec.memory}
+                                                G)
+                                              </Select.Option>
+                                            ))}
+                                          </Select>
+                                        </Form.Item>
+                                        {specFields.length > 1 ? (
+                                          <MinusCircleOutlined
+                                            className={
+                                              styles.instanceActionIcon
+                                            }
+                                            onClick={() =>
+                                              remove(specField.name)
+                                            }
+                                          />
+                                        ) : null}
+                                      </Space>
+                                    </div>
+                                  )
+                                })}
+                                {specFields.length < diskCount && (
+                                  <Dropdown
+                                    overlay={() => {
+                                      const instanceValues: {
+                                        specCode: string
+                                        diskId: string
+                                      }[] =
+                                        form.getFieldValue([
+                                          'resourceParameters',
+                                          'instanceResource',
+                                          idx,
+                                          'resourceForHost',
+                                          hostField.name,
+                                          'instances',
+                                        ]) || []
+                                      const selectedDisks = instanceValues
+                                        .map((item) => item.diskId)
+                                        .filter((el) => el)
+                                      const restDisks = validDisks.filter(
+                                        (disk) =>
+                                          !selectedDisks.includes(disk.diskId!)
+                                      )
+
+                                      return (
+                                        <Menu
+                                          onClick={({ key: diskId }) => {
+                                            add({
+                                              specCode: specsAtZone[0]
+                                                ? `${specsAtZone[0].cpu}C${specsAtZone[0].memory}G`
+                                                : '',
+                                              diskId,
+                                            })
+                                          }}
+                                        >
+                                          {restDisks.map((disk) => (
+                                            <Menu.Item key={disk.diskId}>
+                                              {disk.name}
+                                            </Menu.Item>
+                                          ))}
+                                        </Menu>
+                                      )
+                                    }}
+                                  >
+                                    <Button
+                                      type="dashed"
+                                      icon={<PlusOutlined />}
+                                    >
+                                      {t('component.actions.addDisk')}
+                                    </Button>
+                                  </Dropdown>
+                                )}
+                                <Form.ErrorList errors={errors} />
+                              </>
+                            )}
+                          </Form.List>
+                        </Form.Item>
+                      )}
+                    </div>
+                  )
+                })}
+                {hostOptions.length > 0 && (
+                  <Cascader
+                    options={hostOptions}
+                    onChange={(value, selectedOptions) => {
+                      const [zoneId, hostIp] = value || []
+                      const [zoneLabel, hostLabel] =
+                        selectedOptions?.map((item) => item.label) || []
+                      const specsAtZone =
+                        zones.find((zone) => zone.id === zoneId)?.specs || []
+                      const disks =
+                        hostsForZones
+                          .find((host) => host.ip === hostIp)
+                          ?.disks?.filter(
+                            (disk) => disk.status?.toLowerCase() === 'available'
+                          ) || []
+
+                      add({
+                        zoneCode: zoneId,
+                        zoneLabel,
+                        hostIp,
+                        hostLabel,
+                        instances: [
+                          {
+                            specCode: specsAtZone[0]
+                              ? `${specsAtZone[0].cpu}C${specsAtZone[0].memory}G`
+                              : '',
+                            diskId: isDiskSpecified
+                              ? disks[0]?.diskId
+                              : undefined,
+                          },
+                        ],
+                      })
+                      setHostSelectState((state) => ({
+                        ...state,
+                        [hostIp]: true,
+                      }))
+                    }}
+                  >
+                    <Button type="dashed" icon={<PlusOutlined />}>
+                      {t('component.actions.addHost')}
+                    </Button>
+                  </Cascader>
+                )}
+                <Form.ErrorList errors={errors} />
+              </>
+            )}
+          </Form.List>
+        )}
       </Collapse.Panel>
     </Collapse>
   )
