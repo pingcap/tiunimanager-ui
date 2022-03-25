@@ -25,6 +25,8 @@ export type DescProps = {
 
 export function Desc({ cluster }: DescProps) {
   const { t } = useTranslation('model')
+  const isClusterRunning = cluster.status === ClusterStatus.running
+
   return (
     <Descriptions size="small" column={3} className={styles.desc}>
       <Descriptions.Item label={t('cluster.property.id')}>
@@ -41,6 +43,7 @@ export function Desc({ cluster }: DescProps) {
           <RoleDesc
             clusterId={cluster.clusterId}
             relations={cluster.relations}
+            actionEnabled={isClusterRunning}
           />
         ) : (
           '-'
@@ -51,9 +54,10 @@ export function Desc({ cluster }: DescProps) {
       </Descriptions.Item>
       <Descriptions.Item label={t('cluster.property.version')}>
         {cluster.clusterId && cluster.clusterVersion && (
-          <VersionItem
+          <VersionDesc
             clusterId={cluster.clusterId}
             clusterVersion={cluster.clusterVersion}
+            actionEnabled={isClusterRunning}
           />
         )}
       </Descriptions.Item>
@@ -117,9 +121,10 @@ export function Desc({ cluster }: DescProps) {
 interface RoleDescProps {
   clusterId: string
   relations: ClusterRelations
+  actionEnabled: boolean
 }
 
-function RoleDesc({ clusterId, relations }: RoleDescProps) {
+function RoleDesc({ clusterId, relations, actionEnabled }: RoleDescProps) {
   const { t } = useI18n()
 
   const { isCurrentSlave, role, onSwitchover } = useClusterRoleSwitchover(
@@ -127,7 +132,7 @@ function RoleDesc({ clusterId, relations }: RoleDescProps) {
     relations
   )
 
-  return isCurrentSlave ? (
+  return isCurrentSlave && actionEnabled ? (
     <Space>
       <span>{role}</span>
       <Button type="link" size="small" onClick={onSwitchover}>
@@ -135,16 +140,21 @@ function RoleDesc({ clusterId, relations }: RoleDescProps) {
       </Button>
     </Space>
   ) : (
-    <span>{role}</span>
+    <>{role}</>
   )
 }
 
-type VersionItemProps = {
+interface VersionDescProps {
   clusterId: string
   clusterVersion: string
+  actionEnabled: boolean
 }
 
-function VersionItem({ clusterId, clusterVersion }: VersionItemProps) {
+function VersionDesc({
+  clusterId,
+  clusterVersion,
+  actionEnabled,
+}: VersionDescProps) {
   const history = useHistory()
 
   const handleClick = useCallback(
@@ -154,13 +164,15 @@ function VersionItem({ clusterId, clusterVersion }: VersionItemProps) {
 
   const { t } = useI18n()
 
-  return (
+  return actionEnabled ? (
     <Space>
       {clusterVersion}
       <Button type="link" size="small" onClick={handleClick}>
         {t('actions.upgrade')}
       </Button>
     </Space>
+  ) : (
+    <>{clusterVersion}</>
   )
 }
 
