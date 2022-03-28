@@ -329,7 +329,7 @@ export function useHostOptions(
     return rawHostList.filter(
       (host) =>
         host.loadStat &&
-        ['idle', 'inused'].includes(host.loadStat.toLowerCase()) &&
+        ['loadLess', 'inused'].includes(host.loadStat.toLowerCase()) &&
         isNumber(host.availableDiskCount) &&
         host.availableDiskCount > 0 &&
         host.purpose?.includes(purpose || '')
