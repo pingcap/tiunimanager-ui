@@ -1,20 +1,24 @@
 form:
   jumpServer:
-    title: Control Machine Configuration of Cluster to be Taken Over
+    title: Control Machine Configuration of the Cluster that will be taken over
     fields:
       ip: Host IP Address
       port: SSH Port
       user: SSH Username
       password: SSH Password
       tiupPath: Deployment Path of TiUP
+    tooltip:
+      tiupPath: 'The ".tiup" directory on the cluster that will be taken over. The path do not end with "/", e.g. "/root/.tipup"'
   basic:
     title: Basic Configuration
     fields:
       name: Cluster Name
       username: Database Username
       password: Database Password
+    tooltip:
+      password: 'For security reasons, please set the database password before taking over the cluster'
   resources:
-    title: Import Hosts of Cluster to be Taken Over
+    title: Import Hosts of the Cluster that will be taken over
 tooltip:
   user: The user who has the execution permission of TiUP
 footer:

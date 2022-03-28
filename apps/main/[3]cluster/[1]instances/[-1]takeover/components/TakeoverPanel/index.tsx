@@ -65,6 +65,7 @@ export function TakeoverPanel({ back }: TakeoverPanelProps) {
             name="dbPassword"
             label={t('form.basic.fields.password')}
             rules={[{ required: true }]}
+            extra={t('form.basic.tooltip.password')}
           >
             <Input.Password />
           </Form.Item>
@@ -112,6 +113,7 @@ export function TakeoverPanel({ back }: TakeoverPanelProps) {
             name="TiUPPath"
             label={t('form.jumpServer.fields.tiupPath')}
             rules={[{ required: true }]}
+            tooltip={t('form.jumpServer.tooltip.tiupPath')}
           >
             <Input />
           </Form.Item>
