@@ -13,6 +13,7 @@ export const CACHE_HOST_DETAIL_KEY = 'resources-host-detail'
 export const CACHE_HIERARCHY_KEY = 'resources-hierarchy'
 
 export type QueryHostsListParams = Paged<{
+  region?: string
   arch?: string
   hostId?: string
   purpose?: string
@@ -23,18 +24,19 @@ export type QueryHostsListParams = Paged<{
   // hostIp?: string
   // rack?: string
   // zone?: string
-  // region?: string
 }>
 
 export function useQueryHostsList(
   params: QueryHostsListParams,
   options?: PartialUseQueryOptions
 ) {
-  const { arch, hostId, page, pageSize, purpose, status, loadStat } = params
+  const { region, arch, hostId, page, pageSize, purpose, status, loadStat } =
+    params
   return withRequestId((requestId) =>
     useQuery(
       [
         CACHE_HOSTS_LIST_KEY,
+        region,
         arch,
         hostId,
         status,
@@ -53,7 +55,7 @@ export function useQueryHostsList(
           pageSize,
           purpose,
           undefined,
-          undefined,
+          region,
           status,
           undefined,
           { requestId }

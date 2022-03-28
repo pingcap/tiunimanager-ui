@@ -12,7 +12,9 @@ import {
   useQueryZones,
 } from '@/api/hooks/platform'
 import { useQueryParamGroupList } from '@/api/hooks/param-group'
+import { useQueryHostsList } from '@/api/hooks/resources'
 import { mapObj } from '@/utils/obj'
+import { isArray, isNumber } from '@/utils/types'
 
 export function processCreateRequest(
   value: RequestClusterCreate,
@@ -20,6 +22,39 @@ export function processCreateRequest(
   t: TFunction<''>
 ) {
   if (!value.vendor || !value.region) return false
+
+  if (value.resourceParameters?.requestResourceMode === 'SpecificHost') {
+    value.copies = (value.resourceParameters as any).manual.replica
+    value.resourceParameters = {
+      requestResourceMode: value.resourceParameters.requestResourceMode,
+      instanceResource: value.resourceParameters.instanceResource?.map(
+        (comp) => {
+          const resourceForHost: ResourceForHost[] | undefined = (comp as any)
+            .resourceForHost
+          const resource = resourceForHost?.flatMap((host) => {
+            return host.instances.map((el) => {
+              const diskHashmap = el.diskId ? { diskId: el.diskId } : {}
+
+              return {
+                count: 1,
+                zoneCode: host.zoneCode,
+                hostIp: host.hostIp,
+                specCode: el.specCode,
+                diskType: host.diskType,
+                ...diskHashmap,
+              }
+            })
+          })
+
+          return {
+            componentType: comp.componentType,
+            resource: resource || [],
+          }
+        }
+      ),
+    }
+  }
+
   {
     // remove undefined
     value.resourceParameters!.instanceResource =
@@ -89,8 +124,9 @@ export function processCreateRequest(
 
 export function useVendorsAndRegions() {
   const { data } = useQueryZones()
+  const rawVendors = data?.data.data?.vendors
+
   return useMemo<VendorsKnowledge>(() => {
-    const rawVendors = data?.data.data?.vendors
     const _vendors = rawVendors && Object.keys(rawVendors)
     const vendors =
       rawVendors &&
@@ -119,7 +155,7 @@ export function useVendorsAndRegions() {
       _vendors: _vendors || [],
       vendors: vendors || {},
     }
-  }, [data])
+  }, [rawVendors])
 }
 
 export function useProducts(vendorId?: string, regionId?: string) {
@@ -131,8 +167,10 @@ export function useProducts(vendorId?: string, regionId?: string) {
     },
     { enabled: !!vendorId }
   )
+
+  const rawRegions = data?.data.data?.products // region => product => arch => version
+
   return useMemo<ProductsKnowledge>(() => {
-    const rawRegions = data?.data.data?.products // region => product => arch => version
     if (!rawRegions || !regionId || !rawRegions[regionId])
       return {
         _products: [],
@@ -172,7 +210,7 @@ export function useProducts(vendorId?: string, regionId?: string) {
       _products,
       products,
     }
-  }, [data, vendorId, regionId])
+  }, [rawRegions, regionId])
 }
 
 export function useComponents(
@@ -224,7 +262,7 @@ export function useComponents(
           })) || [],
       }
     })
-  }, [data, vendorId, regionId])
+  }, [data, regionId, productId, version, arch])
 }
 
 /**
@@ -265,6 +303,82 @@ export function useParamGroups(productType?: string, productVersion?: string) {
   return {
     paramGroups: ret,
     isLoading,
+  }
+}
+
+export function useHostOptions(
+  regionId?: string,
+  arch?: string,
+  purpose?: string,
+  zones?: ZoneKnowledge[]
+) {
+  const { data, isLoading } = useQueryHostsList(
+    {
+      region: regionId,
+      arch,
+      status: 'Online',
+    },
+    {
+      enabled: !!regionId && !!arch,
+      refetchOnWindowFocus: false,
+    }
+  )
+
+  const rawHostList = data?.data.data?.hosts
+
+  const validHostList = useMemo(() => {
+    if (!isArray(rawHostList) || !rawHostList.length) {
+      return []
+    }
+
+    return rawHostList.filter(
+      (host) =>
+        host.loadStat &&
+        ['loadless', 'inused'].includes(host.loadStat.toLowerCase()) &&
+        isNumber(host.availableDiskCount) &&
+        host.availableDiskCount > 0 &&
+        host.purpose?.includes(purpose || '')
+    )
+  }, [purpose, rawHostList])
+
+  const { zonesWithHosts, hostsForZones } = useMemo(() => {
+    const hostDiskTypes = validHostList
+      .map((host) => host.diskType)
+      .filter((diskType) => diskType)
+    const hostDiskTypeSet = new Set(hostDiskTypes as string[])
+
+    const zonesWithHosts = zones
+      ?.map((zone) => {
+        const specDiskTypes = zone.specs.map((spec) => spec.diskType)
+
+        return {
+          id: zone.id,
+          name: zone.name,
+          hosts: validHostList.filter(
+            (host) =>
+              host.az === zone.id &&
+              host.diskType &&
+              specDiskTypes.includes(host.diskType)
+          ),
+          specs: zone.specs.filter((spec) =>
+            hostDiskTypeSet.has(spec.diskType)
+          ),
+        }
+      })
+      .filter((zone) => zone.hosts.length > 0 && zone.specs.length > 0)
+
+    const hostsForZones = zonesWithHosts?.flatMap((zone) => zone.hosts)
+
+    return {
+      zonesWithHosts: zonesWithHosts || [],
+      hostsForZones: hostsForZones || [],
+    }
+  }, [zones, validHostList])
+
+  return {
+    loading: isLoading,
+    zonesWithHosts,
+    hostsForZones,
   }
 }
 
@@ -336,4 +450,18 @@ export type SpecKnowledge = {
   cpu: number
   memory: number
   diskType: string
+  zoneId: string
+  zoneName: string
+}
+
+export type ResourceForHost = {
+  zoneCode: string
+  zoneLabel: string
+  hostIp: string
+  hostLabel: string
+  diskType: string
+  instances: {
+    specCode: string
+    diskId?: string
+  }[]
 }

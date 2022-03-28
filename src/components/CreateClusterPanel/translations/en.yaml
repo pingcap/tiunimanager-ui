@@ -5,6 +5,7 @@ basic:
     arch: CPU Architecture
     version: Database Version
     paramGroup: Parameter Group
+    allocation: Resource Allocation Type
   rules:
     type:
       require: Please select a database type
@@ -23,6 +24,15 @@ component:
     zone: Available Zone
     spec: Specification Code
     amount: Number of Instances
+    host: Host
+    instance: Instances
+    disk: Disk
+  tooltip:
+    instance: '1 instance per line.<br>The current host has {{ count }} allocatable disks, each of which can be assigned 1 instance.'
+  actions:
+    addHost: New Instances At Host
+    addInstance: New Instance
+    addDisk: New Instances At Disk
 cluster:
   title: Cluster Basic Information
   fields:
@@ -59,7 +69,8 @@ create:
   name: Create Cluster
 
 message:
-  noZone: No available zone.
+  noZone: No available zones
+  noHost: No available hosts
 
 modeSelector:
   title: Select Create Mode
@@ -82,6 +93,10 @@ regionSelector:
   rules:
     require: Please select a region
 
+allocation:
+  zone: Automatic
+  host: Manual
+
 preview:
   name: Cluster Preview
   title: Cluster Configuration Information
@@ -90,6 +105,9 @@ preview:
   columns:
     component: Component Name
     zone: Available Zone
+    host: Host
+    diskType: Disk Type
+    diskId: Disk ID
     spec: Specification Code
     amount: Number of Instances
     status: Stock Status

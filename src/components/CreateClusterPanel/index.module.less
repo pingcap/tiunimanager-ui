@@ -44,6 +44,74 @@
       text-align: center;
     }
   }
+
+  .component-for-host:global(.ant-collapse-ghost) {
+    background-color: #fff;
+
+    :global(.ant-collapse-content) {
+      > :global(.ant-collapse-content-box) {
+        padding: 20px;
+      }
+    }
+
+    :global(.ant-form-item-label) {
+      width: initial;
+    }
+  }
+
+  .host-block {
+    border: #d9d9d9 1px dashed;
+    padding-right: 20px;
+    margin-bottom: 20px;
+  }
+
+  .host-block-action-bar {
+    padding: 6px 0 6px 20px;
+    text-align: right;
+    color: #999;
+    font-size: 16px;
+  }
+
+  .instance-action-icon {
+    color: #999;
+    font-size: 16px;
+  }
+
+  .generic-instance-field {
+    width: 100%;
+
+    > :global(.ant-space-item) {
+      &:only-of-type, &:not(:last-of-type) {
+        flex: 1;
+      }
+    }
+  }
+
+  .storage-instance-field {
+    width: 100%;
+
+    > :global(.ant-space-item) {
+      &:first-of-type {
+        flex: 1;
+      }
+
+      &:nth-of-type(2) {
+        flex: 2;
+      }
+    }
+  }
+
+  .storage-instance-disk {
+    :global(.ant-form-item-control-input-content) {
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .storage-instance-spec {
+    :global(.ant-form-item-control-input-content) {
+      max-width: 210px;
+    }
+  }
 }
 
 .zone-name {
