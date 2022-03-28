@@ -874,16 +874,10 @@ function ComponentOptionsForHost({
                                             ))}
                                           </Select>
                                         </Form.Item>
-                                        {specFields.length > 1 ? (
-                                          <MinusCircleOutlined
-                                            className={
-                                              styles.instanceActionIcon
-                                            }
-                                            onClick={() =>
-                                              remove(specField.name)
-                                            }
-                                          />
-                                        ) : null}
+                                        <MinusCircleOutlined
+                                          className={styles.instanceActionIcon}
+                                          onClick={() => remove(specField.name)}
+                                        />
                                       </Space>
                                     </div>
                                   )
