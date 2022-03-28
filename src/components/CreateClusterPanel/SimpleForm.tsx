@@ -737,6 +737,15 @@ function ComponentOptionsForHost({
                           labelAlign="right"
                           labelCol={{ span: 4 }}
                           label={t('component.fields.instance')}
+                          tooltip={
+                            <Trans
+                              t={t}
+                              i18nKey="component.tooltip.instance"
+                              values={{
+                                count: validDisks.length,
+                              }}
+                            />
+                          }
                         >
                           <Form.List name={[hostField.name, 'instances']}>
                             {(specFields, { add, remove }, { errors }) => (
@@ -805,6 +814,15 @@ function ComponentOptionsForHost({
                           labelAlign="right"
                           labelCol={{ span: 4 }}
                           label={t('component.fields.instance')}
+                          tooltip={
+                            <Trans
+                              t={t}
+                              i18nKey="component.tooltip.instance"
+                              values={{
+                                count: validDisks.length,
+                              }}
+                            />
+                          }
                         >
                           <Form.List name={[hostField.name, 'instances']}>
                             {(specFields, { add, remove }, { errors }) => (

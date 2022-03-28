@@ -27,6 +27,8 @@ component:
     host: 主机
     instance: 实例规格
     disk: 磁盘
+  tooltip:
+    instance: '1 行代表 1 个实例。<br>当前主机有 {{ count }} 块可分配的磁盘，每块磁盘可分配 1 个实例。'
   actions:
     addHost: 选择主机添加实例
     addInstance: 新增实例

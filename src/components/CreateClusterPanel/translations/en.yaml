@@ -27,6 +27,8 @@ component:
     host: Host
     instance: Instances
     disk: Disk
+  tooltip:
+    instance: '1 instance per line.<br>The current host has {{ count }} allocatable disks, each of which can be assigned 1 instance.'
   actions:
     addHost: New Instances At Host
     addInstance: New Instance
