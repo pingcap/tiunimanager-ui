@@ -7,12 +7,16 @@ form:
       user: SSH 用户名
       password: SSH 密码
       tiupPath: TiUP 部署路径
+    tooltip:
+      tiupPath: '原集群 ".tiup" 目录。路径结尾不含 "/", 例如 "/root/.tiup"'
   basic:
     title: 基本配置
     fields:
       name: 集群名称
       username: 数据库用户
       password: 数据库密码
+    tooltip:
+      password: '出于安全考虑，接管集群前请先设置好原集群数据库密码'
   resources:
     title: 导入原集群主机
 tooltip:
