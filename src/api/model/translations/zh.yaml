@@ -55,8 +55,9 @@ cluster:
     scalingOut: 扩容中
     upgrading: 升级中
     switching: 切换中
-    applyingParams: 应用参数中
+    applyingParams: 修改参数中
     takingOver: 接管中
+    beingCloned: 被克隆中
 clusterLog:
   property:
     id: ID
