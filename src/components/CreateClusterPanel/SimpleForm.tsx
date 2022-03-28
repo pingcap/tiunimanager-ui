@@ -753,7 +753,7 @@ function ComponentOptionsForHost({
                                 {specFields.map((specField) => (
                                   <div key={specField.key}>
                                     <Space
-                                      className={styles.instanceField}
+                                      className={styles.genericInstanceField}
                                       align="baseline"
                                       size="large"
                                     >
@@ -857,16 +857,18 @@ function ComponentOptionsForHost({
                                         <Input />
                                       </Form.Item>
                                       <Space
-                                        className={styles.instanceDiskField}
+                                        className={styles.storageInstanceField}
                                         align="baseline"
                                         size="large"
                                       >
                                         <Form.Item
+                                          className={styles.storageInstanceDisk}
                                           label={t('component.fields.disk')}
                                         >
                                           {currentDisk.name}, {currentDisk.path}
                                         </Form.Item>
                                         <Form.Item
+                                          className={styles.storageInstanceSpec}
                                           fieldKey={[
                                             specField.name,
                                             'specCode',

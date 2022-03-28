@@ -77,7 +77,7 @@
     font-size: 16px;
   }
 
-  .instance-field {
+  .generic-instance-field {
     width: 100%;
 
     > :global(.ant-space-item) {
@@ -87,8 +87,30 @@
     }
   }
 
-  .instance-disk-field {
+  .storage-instance-field {
     width: 100%;
+
+    > :global(.ant-space-item) {
+      &:first-of-type {
+        flex: 1;
+      }
+
+      &:nth-of-type(2) {
+        flex: 2;
+      }
+    }
+  }
+
+  .storage-instance-disk {
+    :global(.ant-form-item-control-input-content) {
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .storage-instance-spec {
+    :global(.ant-form-item-control-input-content) {
+      max-width: 210px;
+    }
   }
 }
 
