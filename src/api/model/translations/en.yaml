@@ -55,8 +55,9 @@ cluster:
     scalingOut: Scaling Out
     upgrading: Upgrading
     switching: Switching
-    applyingParams: Modifying Params
+    applyingParams: Updating Parameters
     takingOver: Taking over
+    beingCloned: Being Cloned
 clusterLog:
   property:
     id: ID
