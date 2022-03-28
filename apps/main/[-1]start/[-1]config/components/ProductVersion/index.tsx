@@ -116,16 +116,16 @@ const ProductVersionConfig: FC<ProductVersionConfigProps> = ({
             label: el.version,
           }))
 
-        const arm64Options = allVersions
-          .filter(
-            (el) =>
-              el.productId === product.productId &&
-              el.arch === HardwareArch.arm64
-          )
-          .map((el) => ({
-            value: el.version,
-            label: el.version,
-          }))
+        // const arm64Options = allVersions
+        //   .filter(
+        //     (el) =>
+        //       el.productId === product.productId &&
+        //       el.arch === HardwareArch.arm64
+        //   )
+        //   .map((el) => ({
+        //     value: el.version,
+        //     label: el.version,
+        //   }))
 
         return (
           <Card
@@ -153,7 +153,7 @@ const ProductVersionConfig: FC<ProductVersionConfigProps> = ({
             >
               <Checkbox.Group options={amd64Options} />
             </Form.Item>
-            <Form.Item
+            {/* <Form.Item
               style={{ padding: '0 24px' }}
               name={[prodIdx, 'arch', 'arm64']}
               label={t('form.fields.arm64')}
@@ -165,7 +165,7 @@ const ProductVersionConfig: FC<ProductVersionConfigProps> = ({
               ]}
             >
               <Checkbox.Group options={arm64Options} />
-            </Form.Item>
+            </Form.Item> */}
           </Card>
         )
       })}
