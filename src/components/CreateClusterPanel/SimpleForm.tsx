@@ -848,10 +848,6 @@ function ComponentOptionsForHost({
                                         >
                                           {currentDisk.name}, {currentDisk.path}
                                         </Form.Item>
-                                        {/* <div>
-                                          {t('component.fields.disk')}{' '}
-                                          {currentDisk.name}, {currentDisk.path}
-                                        </div> */}
                                         <Form.Item
                                           fieldKey={[
                                             specField.name,
