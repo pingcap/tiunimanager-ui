@@ -226,6 +226,7 @@ export enum ClusterOperationStatus {
   switching = 'Switching',
   applyingParams = 'ModifyParameterRestarting',
   takingOver = 'Takeover',
+  beingCloned = 'BeingCloned',
 }
 
 export enum ClusterBackupMethod {
