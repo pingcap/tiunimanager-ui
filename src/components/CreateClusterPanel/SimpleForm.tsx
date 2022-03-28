@@ -636,7 +636,7 @@ function ComponentOptionsForHost({
         {/* FIXME: remove hard-coded copies options for tikv */}
         {component.id === 'TiKV' && (
           <Form.Item
-            name="copiesForHost"
+            name={['resourceParameters', 'manual', 'replica']}
             label={t('component.fields.copies')}
             initialValue={3}
           >

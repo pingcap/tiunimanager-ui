@@ -24,30 +24,35 @@ export function processCreateRequest(
   if (!value.vendor || !value.region) return false
 
   if (value.resourceParameters?.requestResourceMode === 'SpecificHost') {
-    value.copies = (value as any).copiesForHost
-    value.resourceParameters.instanceResource =
-      value.resourceParameters.instanceResource?.map((comp) => {
-        const resourceForHost: ResourceForHost[] = (comp as any).resourceForHost
-        const resource = resourceForHost.flatMap((host) => {
-          return host.instances.map((el) => {
-            const diskHashmap = el.diskId ? { diskId: el.diskId } : {}
+    value.copies = (value.resourceParameters as any).manual.replica
+    value.resourceParameters = {
+      requestResourceMode: value.resourceParameters.requestResourceMode,
+      instanceResource: value.resourceParameters.instanceResource?.map(
+        (comp) => {
+          const resourceForHost: ResourceForHost[] | undefined = (comp as any)
+            .resourceForHost
+          const resource = resourceForHost?.flatMap((host) => {
+            return host.instances.map((el) => {
+              const diskHashmap = el.diskId ? { diskId: el.diskId } : {}
 
-            return {
-              count: 1,
-              zoneCode: host.zoneCode,
-              hostIp: host.hostIp,
-              specCode: el.specCode,
-              diskType: host.diskType,
-              ...diskHashmap,
-            }
+              return {
+                count: 1,
+                zoneCode: host.zoneCode,
+                hostIp: host.hostIp,
+                specCode: el.specCode,
+                diskType: host.diskType,
+                ...diskHashmap,
+              }
+            })
           })
-        })
 
-        return {
-          componentType: comp.componentType,
-          resource,
+          return {
+            componentType: comp.componentType,
+            resource: resource || [],
+          }
         }
-      })
+      ),
+    }
   }
 
   {
