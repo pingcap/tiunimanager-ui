@@ -192,8 +192,9 @@ function getStatus(t: TFunction<'model'>, status: ClusterStatus) {
       return <Badge status="default" text={t('model:cluster.status.stopped')} />
     case ClusterStatus.failure:
       return <Badge status="error" text={t('model:cluster.status.failure')} />
+    default:
+      return '-'
   }
-  return 'unknown'
 }
 
 function getOperationStatus(
