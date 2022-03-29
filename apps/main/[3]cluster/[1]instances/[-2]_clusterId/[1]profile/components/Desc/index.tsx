@@ -61,17 +61,23 @@ export function Desc({ cluster }: DescProps) {
           />
         )}
       </Descriptions.Item>
-      <Descriptions.Item label={t('cluster.property.extranetAddress')}>
+      <Descriptions.Item
+        className={styles.addressList}
+        label={t('cluster.property.extranetAddress')}
+      >
         {cluster.extranetConnectAddresses?.map((a) => (
-          <span className={styles.address} key={a}>
+          <span key={a}>
             <CopyIconButton text={a} label={t('cluster.property.address')} />{' '}
             {a}
           </span>
         ))}
       </Descriptions.Item>
-      <Descriptions.Item label={t('cluster.property.intranetAddress')}>
+      <Descriptions.Item
+        className={styles.addressList}
+        label={t('cluster.property.intranetAddress')}
+      >
         {cluster.intranetConnectAddresses?.map((a) => (
-          <span className={styles.address} key={a}>
+          <span key={a}>
             <CopyIconButton text={a} label={t('cluster.property.address')} />{' '}
             {a}
           </span>
@@ -192,8 +198,9 @@ function getStatus(t: TFunction<'model'>, status: ClusterStatus) {
       return <Badge status="default" text={t('model:cluster.status.stopped')} />
     case ClusterStatus.failure:
       return <Badge status="error" text={t('model:cluster.status.failure')} />
+    default:
+      return '-'
   }
-  return 'unknown'
 }
 
 function getOperationStatus(
