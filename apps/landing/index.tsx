@@ -12,6 +12,8 @@ import { doUserLogin } from '@/api/hooks/platform'
 import { Logo } from '@/components/Logo'
 import { AxiosError } from 'axios'
 
+import loginBgImg from '/img/background/login.svg'
+
 export default function Login() {
   const { t } = useI18n()
   const {
@@ -37,19 +39,18 @@ export default function Login() {
   )
 
   return (
-    <Layout
-      style={{
-        minHeight: '100vh',
-      }}
-    >
-      <Card className={styles.container} bordered={false}>
+    <Layout className={styles.layout}>
+      <Card
+        className={`${styles.container} ${styles.formContainer}`}
+        bordered={false}
+      >
         <Form
           className={styles.form}
           onFinish={handleSubmit}
           layout="vertical"
           form={refForm}
         >
-          <Logo size="common" className={styles.logo} logoWidth={200} />
+          <Logo type="common" className={styles.logo} logoWidth={140} />
           <Form.Item name="username" rules={[{ required: true }]}>
             <Input
               prefix={<UserOutlined />}
@@ -94,6 +95,9 @@ export default function Login() {
             </a>
           </LanguageDropdown>
         </div>
+      </Card>
+      <Card className={styles.container} bordered={false}>
+        <img className={styles.bgImg} src={loginBgImg} alt="Landing" />
       </Card>
     </Layout>
   )
