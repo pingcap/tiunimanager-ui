@@ -77,6 +77,23 @@ export default defineConfig(({ mode }) => {
       preprocessorOptions: {
         less: {
           javascriptEnabled: true,
+          modifyVars: {
+            'primary-color': '#3A40E1',
+            'text-color': '#565656',
+            'border-color-base': '#E9EAEE',
+            'border-color-split': '#E9EAEE',
+            'heading-color': '#565656',
+            'layout-body-background': '#F7F8F9',
+            'layout-header-background': '#2C2C2C',
+            'page-header-back-color': '#2C2C2C',
+            'menu-dark-color': '#E9EAEE',
+            'menu-dark-inline-submenu-bg': '#2C2C2C',
+            'table-header-bg': '#E9EAEE',
+            'border-radius-base': '6px',
+            'height-base': '40px',
+            'height-lg': '48px',
+            'btn-padding-horizontal-base': '23px',
+          },
         },
       },
     },
