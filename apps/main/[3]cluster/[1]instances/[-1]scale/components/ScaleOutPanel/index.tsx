@@ -509,6 +509,8 @@ function ComponentOptionsForZone({
                     const zone = component.zones.find(
                       (z) => z.id === addedZones[name]
                     )
+                    const zoneOptions = addableZones.concat(zone ? [zone] : [])
+
                     return (
                       <Row key={key} gutter={20}>
                         <Col span={7}>
@@ -524,7 +526,7 @@ function ComponentOptionsForZone({
                                 )
                               }
                             >
-                              {addableZones.map((zone) => (
+                              {zoneOptions.map((zone) => (
                                 <Select.Option key={zone.id} value={zone.id}>
                                   {zone.name}
                                 </Select.Option>
