@@ -5,7 +5,7 @@ import { resolveRoute } from '@pages-macro'
 import { useI18n } from '@i18n-macro'
 import { useSystemState } from '@store/system'
 
-import startImg from '/background/start.svg'
+import startImg from '/img/background/start.svg'
 import styles from './index.module.less'
 
 export default function () {
