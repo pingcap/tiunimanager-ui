@@ -3,11 +3,13 @@ name:
   preview: Preview Scale-out Configuration
 basic:
   title: Basic Information
+  fields:
+    allocation: Resource Allocation Type
 nodes:
   title: '{{ name }} Configuration'
+  optional: Optional
   add: Add more available zones
   remove: Remove
-  optional: Optional
   allocator:
     title: Quick Allocate
     items: '{{ count }} Nodes'
@@ -16,6 +18,18 @@ nodes:
     spec: Specification Code
     oldAmount: Number of Instances (Before)
     newAmount: Number of Instances (After)
+manualNodes:
+  fields:
+    host: Host
+    instance: Instances
+    disk: Disk
+    spec: Specification Code
+  tooltip:
+    instance: '1 instance per line.<br>The current host has {{ count }} allocatable disks, each of which can be assigned 1 instance.'
+  actions:
+    addHost: New Instances At Host
+    addInstance: New Instance
+    addDisk: New Instances At Disk
 footer:
   reset:
     title: Reset
@@ -29,12 +43,19 @@ actions:
     failed: Failed to create a cluster scale-out task
   preview:
     failed: Failed to preview the scale-out configuration
+allocation:
+  zone: Automatic
+  host: Manual
 message:
-  noZone: no available zone
+  noZone: no available zones
+  noHost: No available hosts
 preview:
   columns:
     component: Component Name
     zone: Available Zone
+    host: Host
+    diskType: Disk Type
+    diskId: Disk ID
     spec: Specification Code
     amount: Number of Instances
     status: Stock Status

@@ -30,7 +30,7 @@ loadI18n()
 
 export default function HeaderBar() {
   const history = useHistory()
-  const { info, instanceResource } = useClusterContext()
+  const { info, instanceResource, topology } = useClusterContext()
   const createBackup = useCreateClusterBackup()
   const deleteCluster = useDeleteCluster()
   const queryClient = useQueryClient()
@@ -135,6 +135,7 @@ export default function HeaderBar() {
         state: {
           cluster: info,
           topology: instanceResource,
+          topologyDetails: topology,
           from: history.location.pathname,
         },
       })
