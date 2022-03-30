@@ -209,9 +209,10 @@ export function SimpleForm({
           key={comp.id}
           idx={idx}
           component={comp}
+          form={form}
         />
       )),
-    [components, i18n.language]
+    [components, i18n.language, form]
   )
 
   const nodeOptionsForHost = useMemo(
@@ -409,12 +410,34 @@ function ComponentOptionsForZone({
   t,
   component,
   idx,
+  form,
 }: {
   t: TFunction<''>
   component: ComponentKnowledge
   idx: number
+  form: FormInstance<RequestClusterCreate>
 }) {
   const required = component.minInstance > 0
+
+  useEffect(() => {
+    const nameList = component.zones
+      .map((_, zoneIdx) =>
+        ['zoneCode', 'specCode', 'count'].map((fieldName) => [
+          'resourceParameters',
+          'instanceResource',
+          idx,
+          'resource',
+          zoneIdx,
+          fieldName,
+        ])
+      )
+      .flat()
+
+    if (form) {
+      form.resetFields(nameList)
+    }
+  }, [component.zones, idx, form])
+
   return (
     <Collapse
       collapsible="header"
