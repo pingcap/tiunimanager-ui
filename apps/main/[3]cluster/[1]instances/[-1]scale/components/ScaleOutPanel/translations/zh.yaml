@@ -3,11 +3,13 @@ name:
   preview: 预览扩容配置
 basic:
   title: 基础信息
+  fields:
+    allocation: 资源分配方式
 nodes:
   title: '{{ name }} 配置'
+  optional: 可选
   add: 增加更多可用区
   remove: 移除
-  optional: 可选
   allocator:
     title: 快速分配
     items: '{{ count }} 实例'
@@ -16,6 +18,18 @@ nodes:
     spec: 规格代码
     oldAmount: 原实例数量
     newAmount: 目标实例数量
+manualNodes:
+  fields:
+    host: 主机
+    instance: 实例规格
+    disk: 磁盘
+    spec: 规格代码
+  tooltip:
+    instance: '1 行代表 1 个实例。<br>当前主机有 {{ count }} 块可分配的磁盘，每块磁盘可分配 1 个实例。'
+  actions:
+    addHost: 选择主机添加实例
+    addInstance: 新增实例
+    addDisk: 选择磁盘新增实例
 footer:
   reset:
     title: 重置
@@ -29,12 +43,19 @@ actions:
     failed: 扩容集群任务创建失败
   preview:
     failed: 预览扩容配置失败
+allocation:
+  zone: 自动分配
+  host: 手工分配
 message:
   noZone: 无可用区
+  noHost: 没有可分配的主机
 preview:
   columns:
     component: 组件名称
     zone: 可用区
+    host: 主机
+    diskType: 磁盘类型
+    diskId: 磁盘 ID
     spec: 规格代码
     amount: 实例数量
     status: 库存状态
