@@ -1,24 +1,27 @@
-import commonLogo from '/logo/common.svg'
-import smallLogo from '/logo/small.svg'
+import commonLogo from '/img/logo/common.svg'
+import commonLightLogo from '/img/logo/common-light.svg'
+import smallLogo from '/img/logo/small.svg'
+
+const logoHashmap = {
+  common: commonLogo,
+  commonLight: commonLightLogo,
+  small: smallLogo,
+}
 
 export type LogoProps = {
   className?: string
   logoWidth?: number
-  size?: 'common' | 'small'
+  type?: 'common' | 'commonLight' | 'small'
 }
 
 export function Logo({
   className,
-  size = 'common',
+  type = 'common',
   logoWidth = 200,
 }: LogoProps) {
   return (
     <div className={className}>
-      <img
-        src={size === 'common' ? commonLogo : smallLogo}
-        alt="logo"
-        width={logoWidth}
-      />
+      <img src={logoHashmap[type]} alt="logo" width={logoWidth} />
     </div>
   )
 }
