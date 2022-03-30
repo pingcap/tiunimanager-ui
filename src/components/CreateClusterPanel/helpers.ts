@@ -316,7 +316,6 @@ export function useHostOptions(
     {
       region: regionId,
       arch,
-      status: 'Online',
     },
     {
       enabled: !!regionId && !!arch,
@@ -324,15 +323,16 @@ export function useHostOptions(
     }
   )
 
-  const rawHostList = data?.data.data?.hosts
+  const rawHostList = useMemo(() => {
+    const hosts = data?.data.data?.hosts
+
+    return isArray(hosts) && hosts.length ? hosts : []
+  }, [data?.data.data?.hosts])
 
   const validHostList = useMemo(() => {
-    if (!isArray(rawHostList) || !rawHostList.length) {
-      return []
-    }
-
     return rawHostList.filter(
       (host) =>
+        host.status === 'Online' &&
         host.loadStat &&
         ['loadless', 'inused'].includes(host.loadStat.toLowerCase()) &&
         isNumber(host.availableDiskCount) &&
@@ -377,6 +377,7 @@ export function useHostOptions(
 
   return {
     loading: isLoading,
+    rawHostList,
     zonesWithHosts,
     hostsForZones,
   }
@@ -457,11 +458,13 @@ export type SpecKnowledge = {
 export type ResourceForHost = {
   zoneCode: string
   zoneLabel: string
+  hostId?: string
   hostIp: string
   hostLabel: string
   diskType: string
   instances: {
     specCode: string
     diskId?: string
+    existing?: boolean
   }[]
 }
