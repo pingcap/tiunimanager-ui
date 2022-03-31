@@ -164,6 +164,7 @@ function getColumns(
       valueEnum: {
         cluster: { text: t('model:task.bizType.cluster') },
         host: { text: t('model:task.bizType.host') },
+        checkReport: { text: t('model:task.bizType.checkReport') },
       },
     },
     {

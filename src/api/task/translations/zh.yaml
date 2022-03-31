@@ -24,3 +24,5 @@ name:
   SwitchoverNormal: 切换主备集群
   SwitchoverForce: 强制切换主备集群
   SwitchoverForceWithMasterUnavailable: 强制切换主备集群
+  CheckPlatform: 平台巡检
+  CheckCluster: 集群巡检
