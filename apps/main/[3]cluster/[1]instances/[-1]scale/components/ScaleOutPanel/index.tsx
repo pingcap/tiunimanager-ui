@@ -700,6 +700,7 @@ function ComponentOptionsForHost({
 
         if (!prev[hostId]) {
           return {
+            ...prev,
             [hostId]: {
               zoneCode: node.zoneCode,
               zoneLabel: node.zoneLabel,
@@ -862,84 +863,106 @@ function ComponentOptionsForHost({
                         }
                       >
                         <Form.List name={[hostField.name, 'instances']}>
-                          {(specFields, { add, remove }, { errors }) => (
-                            <>
-                              {specFields.map((specField) => {
-                                const { existing } =
-                                  form.getFieldValue([
-                                    'instanceResource',
-                                    idx,
-                                    'resourceForHost',
-                                    hostField.name,
-                                    'instances',
-                                    specField.name,
-                                  ]) || {}
+                          {(specFields, { add, remove }, { errors }) => {
+                            const specFieldValues: ResourceForHost['instances'] =
+                              form.getFieldValue([
+                                'instanceResource',
+                                idx,
+                                'resourceForHost',
+                                hostField.name,
+                                'instances',
+                              ]) || []
+                            const specAddable =
+                              specFieldValues.filter(
+                                (field) => !field?.existing
+                              ).length < diskCount
 
-                                return existing ? (
-                                  <Form.Item
-                                    key={specField.key}
-                                    fieldKey={[specField.name, 'specCode']}
-                                    name={[specField.name, 'specCode']}
-                                  >
-                                    <Input disabled />
-                                  </Form.Item>
-                                ) : (
-                                  <div key={specField.key}>
-                                    <Space
-                                      className={styles.genericInstanceField}
-                                      align="baseline"
-                                      size="large"
+                            return (
+                              <>
+                                {specFields.map((specField) => {
+                                  const { existing } =
+                                    form.getFieldValue([
+                                      'instanceResource',
+                                      idx,
+                                      'resourceForHost',
+                                      hostField.name,
+                                      'instances',
+                                      specField.name,
+                                    ]) || {}
+
+                                  return existing ? (
+                                    <Form.Item
+                                      key={specField.key}
+                                      fieldKey={[specField.name, 'specCode']}
+                                      name={[specField.name, 'specCode']}
                                     >
-                                      <Form.Item
-                                        fieldKey={[specField.name, 'specCode']}
-                                        name={[specField.name, 'specCode']}
+                                      <Input disabled />
+                                    </Form.Item>
+                                  ) : (
+                                    <div key={specField.key}>
+                                      <Space
+                                        className={styles.genericInstanceField}
+                                        align="baseline"
+                                        size="large"
                                       >
-                                        <Select>
-                                          {specsForHost.map((spec) => (
-                                            <Select.Option
-                                              key={spec.id}
-                                              // FIXME: remove spec rewrite
-                                              value={`${spec.cpu}C${spec.memory}G`}
-                                            >
-                                              {spec.id} ({spec.cpu}C{' '}
-                                              {spec.memory}
-                                              G)
-                                            </Select.Option>
-                                          ))}
-                                        </Select>
-                                      </Form.Item>
-                                      {specFields.length > 1 ? (
-                                        <MinusCircleOutlined
-                                          className={styles.instanceActionIcon}
-                                          onClick={() => remove(specField.name)}
-                                        />
-                                      ) : null}
-                                    </Space>
-                                  </div>
-                                )
-                              })}
-                              {specFields.length < diskCount && (
-                                <Button
-                                  type="dashed"
-                                  icon={<PlusOutlined />}
-                                  onClick={() => {
-                                    const { cpu, memory } =
-                                      specsForHost[0] || {}
-                                    add({
-                                      specCode:
-                                        isNumber(cpu) && isNumber(memory)
-                                          ? `${cpu}C${memory}G`
-                                          : '',
-                                      existing: false,
-                                    })
-                                  }}
-                                >
-                                  {t('manualNodes.actions.addInstance')}
-                                </Button>
-                              )}
-                              <Form.ErrorList errors={errors} />
-                            </>
-                          )}
+                                        <Form.Item
+                                          fieldKey={[
+                                            specField.name,
+                                            'specCode',
+                                          ]}
+                                          name={[specField.name, 'specCode']}
+                                        >
+                                          <Select>
+                                            {specsForHost.map((spec) => (
+                                              <Select.Option
+                                                key={spec.id}
+                                                // FIXME: remove spec rewrite
+                                                value={`${spec.cpu}C${spec.memory}G`}
+                                              >
+                                                {spec.id} ({spec.cpu}C{' '}
+                                                {spec.memory}
+                                                G)
+                                              </Select.Option>
+                                            ))}
+                                          </Select>
+                                        </Form.Item>
+                                        {specFields.length > 1 ? (
+                                          <MinusCircleOutlined
+                                            className={
+                                              styles.instanceActionIcon
+                                            }
+                                            onClick={() =>
+                                              remove(specField.name)
+                                            }
+                                          />
+                                        ) : null}
+                                      </Space>
+                                    </div>
+                                  )
+                                })}
+                                {specAddable && (
+                                  <Button
+                                    type="dashed"
+                                    icon={<PlusOutlined />}
+                                    onClick={() => {
+                                      const { cpu, memory } =
+                                        specsForHost[0] || {}
+                                      add({
+                                        specCode:
+                                          isNumber(cpu) && isNumber(memory)
+                                            ? `${cpu}C${memory}G`
+                                            : '',
+                                        existing: false,
+                                      })
+                                    }}
+                                  >
+                                    {t('manualNodes.actions.addInstance')}
+                                  </Button>
+                                )}
+                                <Form.ErrorList errors={errors} />
+                              </>
+                            )
+                          }}
                         </Form.List>
                       </Form.Item>
                     )}
@@ -960,64 +983,68 @@ function ComponentOptionsForHost({
                         }
                       >
                         <Form.List name={[hostField.name, 'instances']}>
-                          {(specFields, { add, remove }, { errors }) => (
-                            <>
-                              {specFields.map((specField) => {
-                                const { diskId, existing } =
-                                  form.getFieldValue([
-                                    'instanceResource',
-                                    idx,
-                                    'resourceForHost',
-                                    hostField.name,
-                                    'instances',
-                                    specField.name,
-                                  ]) || {}
+                          {(specFields, { add, remove }, { errors }) => {
+                            const specFieldValues: ResourceForHost['instances'] =
+                              form.getFieldValue([
+                                'instanceResource',
+                                idx,
+                                'resourceForHost',
+                                hostField.name,
+                                'instances',
+                              ]) || []
+                            const specAddable =
+                              specFieldValues.filter(
+                                (field) => !field?.existing
+                              ).length < diskCount
 
-                                const currentDisk =
-                                  currentHost?.disks?.find(
-                                    (disk) => disk.diskId === diskId
-                                  ) || {}
+                            return (
+                              <>
+                                {specFields.map((specField) => {
+                                  const { diskId, existing } =
+                                    form.getFieldValue([
+                                      'instanceResource',
+                                      idx,
+                                      'resourceForHost',
+                                      hostField.name,
+                                      'instances',
+                                      specField.name,
+                                    ]) || {}
 
-                                return (
-                                  <div key={specField.key}>
-                                    <Form.Item
-                                      fieldKey={[specField.fieldKey, 'diskId']}
-                                      name={[specField.name, 'diskId']}
-                                      hidden
-                                    >
-                                      <Input />
-                                    </Form.Item>
-                                    <Space
-                                      className={`${
-                                        styles.storageInstanceField
-                                      } ${
-                                        existing
-                                          ? styles.existingNodeFormItem
-                                          : ''
-                                      }`}
-                                      align="baseline"
-                                      size="large"
-                                    >
+                                  const currentDisk =
+                                    currentHost?.disks?.find(
+                                      (disk) => disk.diskId === diskId
+                                    ) || {}
+
+                                  return (
+                                    <div key={specField.key}>
                                       <Form.Item
-                                        className={styles.storageInstanceDisk}
-                                        label={t('manualNodes.fields.disk')}
+                                        fieldKey={[
+                                          specField.fieldKey,
+                                          'diskId',
+                                        ]}
+                                        name={[specField.name, 'diskId']}
+                                        hidden
                                       >
-                                        {currentDisk.name}, {currentDisk.path}
+                                        <Input />
                                       </Form.Item>
-                                      {existing ? (
+                                      <Space
+                                        className={`${
+                                          styles.storageInstanceField
+                                        } ${
+                                          existing
+                                            ? styles.existingNodeFormItem
+                                            : ''
+                                        }`}
+                                        align="baseline"
+                                        size="large"
+                                      >
                                         <Form.Item
-                                          className={styles.storageInstanceSpec}
-                                          fieldKey={[
-                                            specField.name,
-                                            'specCode',
-                                          ]}
-                                          name={[specField.name, 'specCode']}
-                                          label={t('manualNodes.fields.spec')}
+                                          className={styles.storageInstanceDisk}
+                                          label={t('manualNodes.fields.disk')}
                                         >
-                                          <Input disabled />
+                                          {currentDisk.name}, {currentDisk.path}
                                         </Form.Item>
-                                      ) : (
-                                        <>
+                                        {existing ? (
                                           <Form.Item
                                             className={
                                               styles.storageInstanceSpec
@@ -1029,89 +1056,114 @@ function ComponentOptionsForHost({
                                             name={[specField.name, 'specCode']}
                                             label={t('manualNodes.fields.spec')}
                                           >
-                                            <Select>
-                                              {specsForHost.map((spec) => (
-                                                <Select.Option
-                                                  key={spec.id}
-                                                  // FIXME: remove spec rewrite
-                                                  value={`${spec.cpu}C${spec.memory}G`}
-                                                >
-                                                  {spec.id} ({spec.cpu}C{' '}
-                                                  {spec.memory}
-                                                  G)
-                                                </Select.Option>
-                                              ))}
-                                            </Select>
+                                            <Input disabled />
                                           </Form.Item>
-                                          <MinusCircleOutlined
-                                            className={
-                                              styles.instanceActionIcon
-                                            }
-                                            onClick={() =>
-                                              remove(specField.name)
-                                            }
-                                          />
-                                        </>
-                                      )}
-                                    </Space>
-                                  </div>
-                                )
-                              })}
-                              {specFields.length < diskCount && (
-                                <Dropdown
-                                  overlay={() => {
-                                    const instanceValues: {
-                                      specCode: string
-                                      diskId: string
-                                    }[] =
-                                      form.getFieldValue([
-                                        'instanceResource',
-                                        idx,
-                                        'resourceForHost',
-                                        hostField.name,
-                                        'instances',
-                                      ]) || []
-                                    const selectedDisks = instanceValues
-                                      .map((item) => item.diskId)
-                                      .filter((el) => el)
-                                    const restDisks = validDisks.filter(
-                                      (disk) =>
-                                        !selectedDisks.includes(disk.diskId!)
-                                    )
+                                        ) : (
+                                          <>
+                                            <Form.Item
+                                              className={
+                                                styles.storageInstanceSpec
+                                              }
+                                              fieldKey={[
+                                                specField.name,
+                                                'specCode',
+                                              ]}
+                                              name={[
+                                                specField.name,
+                                                'specCode',
+                                              ]}
+                                              label={t(
+                                                'manualNodes.fields.spec'
+                                              )}
+                                            >
+                                              <Select>
+                                                {specsForHost.map((spec) => (
+                                                  <Select.Option
+                                                    key={spec.id}
+                                                    // FIXME: remove spec rewrite
+                                                    value={`${spec.cpu}C${spec.memory}G`}
+                                                  >
+                                                    {spec.id} ({spec.cpu}C{' '}
+                                                    {spec.memory}
+                                                    G)
+                                                  </Select.Option>
+                                                ))}
+                                              </Select>
+                                            </Form.Item>
+                                            <MinusCircleOutlined
+                                              className={
+                                                styles.instanceActionIcon
+                                              }
+                                              onClick={() =>
+                                                remove(specField.name)
+                                              }
+                                            />
+                                          </>
+                                        )}
+                                      </Space>
+                                    </div>
+                                  )
+                                })}
+                                {specAddable && (
+                                  <Dropdown
+                                    overlay={() => {
+                                      const instanceValues: {
+                                        specCode: string
+                                        diskId: string
+                                      }[] =
+                                        form.getFieldValue([
+                                          'instanceResource',
+                                          idx,
+                                          'resourceForHost',
+                                          hostField.name,
+                                          'instances',
+                                        ]) || []
+                                      const selectedDisks = instanceValues
+                                        .map((item) => item.diskId)
+                                        .filter((el) => el)
+                                      const restDisks = validDisks.filter(
+                                        (disk) =>
+                                          !selectedDisks.includes(disk.diskId!)
+                                      )
 
-                                    return (
-                                      <Menu
-                                        onClick={({ key: diskId }) => {
-                                          const { cpu, memory } =
-                                            specsForHost[0] || {}
+                                      return (
+                                        <Menu
+                                          onClick={({ key: diskId }) => {
+                                            const { cpu, memory } =
+                                              specsForHost[0] || {}
 
-                                          add({
-                                            specCode:
-                                              isNumber(cpu) && isNumber(memory)
-                                                ? `${cpu}C${memory}G`
-                                                : '',
-                                            diskId,
-                                            existing: false,
-                                          })
-                                        }}
-                                      >
-                                        {restDisks.map((disk) => (
-                                          <Menu.Item key={disk.diskId}>
-                                            {disk.name}, {disk.path}
-                                          </Menu.Item>
-                                        ))}
-                                      </Menu>
-                                    )
-                                  }}
-                                >
-                                  <Button type="dashed" icon={<PlusOutlined />}>
-                                    {t('manualNodes.actions.addDisk')}
-                                  </Button>
-                                </Dropdown>
-                              )}
-                              <Form.ErrorList errors={errors} />
-                            </>
-                          )}
+                                            add({
+                                              specCode:
+                                                isNumber(cpu) &&
+                                                isNumber(memory)
+                                                  ? `${cpu}C${memory}G`
+                                                  : '',
+                                              diskId,
+                                              existing: false,
+                                            })
+                                          }}
+                                        >
+                                          {restDisks.map((disk) => (
+                                            <Menu.Item key={disk.diskId}>
+                                              {disk.name}, {disk.path}
+                                            </Menu.Item>
+                                          ))}
+                                        </Menu>
+                                      )
+                                    }}
+                                  >
+                                    <Button
+                                      type="dashed"
+                                      icon={<PlusOutlined />}
+                                    >
+                                      {t('manualNodes.actions.addDisk')}
+                                    </Button>
+                                  </Dropdown>
+                                )}
+                                <Form.ErrorList errors={errors} />
+                              </>
+                            )
+                          }}
                         </Form.List>
                       </Form.Item>
                     )}
