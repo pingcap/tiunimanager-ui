@@ -16,6 +16,7 @@ import {
 } from '@/api/model'
 import {
   invalidateClusterBackups,
+  useCancelClusterBackup,
   useDeleteClusterBackup,
   useQueryClusterBackups,
 } from '@/api/hooks/cluster'
@@ -122,9 +123,9 @@ function useTableColumn({ cluster }: { cluster: ClusterInfo }) {
   const clusterId = cluster.clusterId!
   const { t, i18n } = useI18n()
   const history = useHistory()
+  const queryClient = useQueryClient()
 
   const deleteBackup = useDeleteClusterBackup()
-  const queryClient = useQueryClient()
   const deleteAction = useCallback(
     (backupId) =>
       deleteBackup.mutateAsync(
@@ -147,6 +148,29 @@ function useTableColumn({ cluster }: { cluster: ClusterInfo }) {
     [queryClient, deleteBackup.mutateAsync, clusterId]
   )
 
+  const cancelBackup = useCancelClusterBackup()
+  const cancelAction = useCallback(
+    (backupId) =>
+      cancelBackup.mutateAsync(
+        {
+          payload: {
+            backupId,
+            clusterId,
+          },
+          options: {
+            successMessage: t('cancel.message.success'),
+            errorMessage: t('cancel.message.failed'),
+          },
+        },
+        {
+          onSettled() {
+            return invalidateClusterBackups(queryClient, clusterId)
+          },
+        }
+      ),
+    [queryClient, cancelBackup.mutateAsync, clusterId]
+  )
+
   const restoreAction = useCallback(
     (backup: ClusterBackupItem) => {
       history.push({
@@ -158,15 +182,16 @@ function useTableColumn({ cluster }: { cluster: ClusterInfo }) {
   )
 
   return useMemo(
-    () => getColumns(t, restoreAction, deleteAction),
-    [i18n.language, deleteAction]
+    () => getColumns(t, restoreAction, deleteAction, cancelAction),
+    [i18n.language, deleteAction, cancelAction, restoreAction]
   )
 }
 
 function getColumns(
   t: TFunction<''>,
   restoreAction: (backup: ClusterBackupItem) => any,
-  deleteAction: (backupId: string) => any
+  deleteAction: (backupId: string) => any,
+  cancelAction: (backupId: string) => any
 ): ProColumns<ClusterBackupItem>[] {
   return [
     {
@@ -280,8 +305,24 @@ function getColumns(
         const deleteDisabled =
           record.status !== BackupStatus.success &&
           record.status !== BackupStatus.failed
+        const cancelDisabled =
+          record.status !== BackupStatus.initializing &&
+          record.status !== BackupStatus.processing
 
         return [
+          cancelDisabled ? null : (
+            <IntlPopConfirm
+              key="cancel"
+              placement="topRight"
+              title={t('cancel.confirm')}
+              icon={<QuestionCircleOutlined />}
+              onConfirm={async () => {
+                await cancelAction(record.id!)
+              }}
+            >
+              <a>{t('actions.cancel')}</a>
+            </IntlPopConfirm>
+          ),
           restoreDisabled ? (
             <span className="disabled-text-btn" key="restore">
               {t('actions.restore')}

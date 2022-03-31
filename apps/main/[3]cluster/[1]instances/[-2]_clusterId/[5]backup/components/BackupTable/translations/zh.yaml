@@ -4,6 +4,11 @@ delete:
   message:
     success: 备份文件删除成功
     failed: 备份文件删除失败
+cancel:
+  confirm: 确认取消该备份吗?
+  message:
+    success: 备份取消成功
+    failed: 备份取消失败
 restore:
   confirm: 确认使用该备份恢复集群吗?
 columns:
@@ -11,3 +16,4 @@ columns:
 actions:
   restore: 恢复
   delete: 删除
+  cancel: 取消
