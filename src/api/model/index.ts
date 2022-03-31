@@ -9,6 +9,7 @@ import {
   ClusterQueryClusterDetailResp,
   ClusterRestoreNewClusterReq,
   ClusterSaveBackupStrategyReq,
+  ClusterCancelBackupReq,
   ClusterUpdateClusterParametersReq,
   ControllerCommonResult,
   ControllerResultWithPage,
@@ -102,6 +103,7 @@ export type UserLoginRequest = MessageLoginReq
 export type RequestBackupCreate = ClusterBackupClusterDataReq
 export type RequestBackupStrategyUpdate = ClusterSaveBackupStrategyReq
 export type RequestBackupRestore = ClusterRestoreNewClusterReq
+export type RequestBackupCancel = ClusterCancelBackupReq
 export type RequestTransportExport = MessageDataExportReq
 export type RequestTransportImport = MessageDataImportReq
 export type RequestClusterCreate = ClusterCreateClusterReq
