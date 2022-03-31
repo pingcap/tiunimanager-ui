@@ -38,8 +38,8 @@ export default defineConfig(({ mode }) => {
       vitePluginHtml({
         inject: {
           injectData: {
-            title: env.VITE_TITLE || 'TiCP Demo',
-            description: env.VITE_DESCRIPTION || 'Just a demo now.',
+            title: env.VITE_TITLE || 'TiEM',
+            description: env.VITE_DESCRIPTION || 'TiDB Enterprise Manager',
           },
         },
         minify: true,
