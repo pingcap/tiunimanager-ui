@@ -7,6 +7,7 @@ import {
   RequestBackupCreate,
   RequestBackupRestore,
   RequestBackupStrategyUpdate,
+  RequestBackupCancel,
   RequestClusterCreate,
   RequestClusterDataReplicationCreate,
   RequestClusterDataReplicationUpdate,
@@ -382,6 +383,19 @@ const restoreClusterBackup = ({
 
 export function useRestoreClusterBackup() {
   return useMutation(restoreClusterBackup)
+}
+
+/**
+ * Cancel a cluster backup task
+ */
+const cancelClusterBackup = ({
+  payload,
+  options,
+}: PayloadWithOptions<RequestBackupCancel>) =>
+  APIS.ClusterBackups.backupsCancelPost(payload, options)
+
+export function useCancelClusterBackup() {
+  return useMutation(cancelClusterBackup)
 }
 
 /**

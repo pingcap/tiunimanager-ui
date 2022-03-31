@@ -173,7 +173,7 @@
         "description": "cancel backup",
         "consumes": ["application/json"],
         "produces": ["application/json"],
-        "tags": ["cancel cluster backup"],
+        "tags": ["cluster backup"],
         "summary": "cancel backup",
         "parameters": [
           {
