@@ -24,3 +24,5 @@ name:
   SwitchoverNormal: Master-Standby Cluster  Switchover
   SwitchoverForce: Master-Standby Cluster Forced Switchover
   SwitchoverForceWithMasterUnavailable: Master-Standby Cluster Forced Switchover
+  CheckPlatform: Platform Inspection
+  CheckCluster: Cluster Inspection
