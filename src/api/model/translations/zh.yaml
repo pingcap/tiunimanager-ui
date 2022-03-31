@@ -288,6 +288,7 @@ task:
   bizType:
     cluster: 集群
     host: 主机
+    checkReport: 巡检报告
   operator:
     system: 系统自动
 knowledge:

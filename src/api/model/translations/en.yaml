@@ -288,6 +288,7 @@ task:
   bizType:
     cluster: Cluster
     host: Host
+    checkReport: Inspection Report
   operator:
     system: System Automation
 knowledge:
