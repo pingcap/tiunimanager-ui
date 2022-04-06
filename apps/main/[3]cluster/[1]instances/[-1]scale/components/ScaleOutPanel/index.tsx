@@ -323,7 +323,7 @@ function BasicOptions({
   onAllocationTypeChange: (allocationType: string) => void
 }) {
   return (
-    <Card title={t('basic.title')}>
+    <Card title={t('basic.title')} bordered={false}>
       <Descriptions size="small" column={2} className={styles.desc}>
         <Descriptions.Item label={t('model:cluster.property.id')}>
           {cluster.clusterId}
