@@ -241,7 +241,11 @@ const DownstreamConfig: FC<DownstreamConfigProps> = ({ mode }) => {
   const { t } = useI18n()
 
   return (
-    <Card className={styles.formCard} title={t('downstream.title')}>
+    <Card
+      className={styles.formCard}
+      title={t('downstream.title')}
+      bordered={false}
+    >
       <Form.Item
         name="downstreamType"
         label={t('downstream.fields.type')}
