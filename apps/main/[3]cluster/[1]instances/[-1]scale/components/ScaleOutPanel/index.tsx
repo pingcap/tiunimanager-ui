@@ -392,6 +392,7 @@ function ComponentOptionsForZone({
       collapsible="header"
       defaultActiveKey={required ? ['1'] : []}
       className={styles.componentForm}
+      ghost
     >
       <Collapse.Panel
         key={1}
