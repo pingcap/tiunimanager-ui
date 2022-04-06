@@ -62,7 +62,7 @@ export function RestorePanel({ back, cluster, backup }: RestorePanelProps) {
 
   const restoreInfo = useMemo(() => {
     return (
-      <Card title={t('restore-info.title')}>
+      <Card title={t('restore-info.title')} bordered={false}>
         <Form.Item
           label={t('restore-info.fields.clusterId')}
           tooltip={t('restore-info.tips.not-editable')}
