@@ -2,7 +2,7 @@
 if (import.meta.env.DEV) await import('@/devtools')
 
 // init error tracking tools
-if (import.meta.env.PROD) await import('@/track')
+import '@/track'
 
 // bootstrap application
 import bootstrap from '@/bootstrap'
