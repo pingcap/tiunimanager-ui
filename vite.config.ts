@@ -115,6 +115,7 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       target: ['chrome67', 'firefox68', 'edge79', 'safari14'],
+      cssCodeSplit: false,
     },
     server: {
       ...proxy,
