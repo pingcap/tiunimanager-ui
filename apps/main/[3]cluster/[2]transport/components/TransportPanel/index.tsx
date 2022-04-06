@@ -113,10 +113,14 @@ export function ExportPanel({ back }: TransportPanelProps) {
       )
     }
 
-    const target = <Card title={t('export.target')}>{targetOptions}</Card>
+    const target = (
+      <Card title={t('export.target')} bordered={false}>
+        {targetOptions}
+      </Card>
+    )
 
     const source = (
-      <Card title={t('export.source')}>
+      <Card title={t('export.source')} bordered={false}>
         <Form.Item
           name="clusterId"
           label={t('form.cluster')}
@@ -138,7 +142,7 @@ export function ExportPanel({ back }: TransportPanelProps) {
     )
 
     const options = (
-      <Card title={t('export.options')}>
+      <Card title={t('export.options')} bordered={false}>
         <Form.Item
           name="fileType"
           label={t('form.filetype')}
@@ -456,10 +460,14 @@ export function ImportPanel({ back }: TransportPanelProps) {
       )
     }
 
-    const source = <Card title={t('import.source')}>{sourceOptions}</Card>
+    const source = (
+      <Card title={t('import.source')} bordered={false}>
+        {sourceOptions}
+      </Card>
+    )
 
     const target = (
-      <Card title={t('import.target')}>
+      <Card title={t('import.target')} bordered={false}>
         <Form.Item
           name="clusterId"
           label={t('form.cluster')}
@@ -481,7 +489,7 @@ export function ImportPanel({ back }: TransportPanelProps) {
     )
 
     const options = (
-      <Card title={t('import.options')}>
+      <Card title={t('import.options')} bordered={false}>
         <Form.Item name="comment" label={t('form.comment')}>
           <Input.TextArea />
         </Form.Item>
