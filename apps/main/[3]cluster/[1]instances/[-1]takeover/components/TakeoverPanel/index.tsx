@@ -42,7 +42,7 @@ export function TakeoverPanel({ back }: TakeoverPanelProps) {
   return (
     <Layout className={styles.panel}>
       <Form colon={false} requiredMark={false} form={form}>
-        <Card title={t('form.basic.title')}>
+        <Card title={t('form.basic.title')} bordered={false}>
           <Form.Item
             name="clusterName"
             label={t('form.basic.fields.name')}
@@ -70,7 +70,7 @@ export function TakeoverPanel({ back }: TakeoverPanelProps) {
             <Input.Password />
           </Form.Item>
         </Card>
-        <Card title={t('form.jumpServer.title')}>
+        <Card title={t('form.jumpServer.title')} bordered={false}>
           <Form.Item
             name="TiUPIp"
             label={t('form.jumpServer.fields.ip')}
@@ -118,7 +118,7 @@ export function TakeoverPanel({ back }: TakeoverPanelProps) {
             <Input />
           </Form.Item>
         </Card>
-        <Card title={t('form.resources.title')}>
+        <Card title={t('form.resources.title')} bordered={false}>
           <HostsUploader
             uploadProps={{ maxCount: undefined }}
             reserved={true}
