@@ -237,6 +237,7 @@ const ParamCard: FC<ParamCardProps> = ({ loading, data, onEdit, onSave }) => {
       className={styles.paramCard}
       title={t('card.title')}
       size="small"
+      bordered={false}
       tabList={tabList}
       activeTabKey={activeTab}
       tabProps={{ size: 'middle' }}

@@ -129,6 +129,7 @@ const ParamCard: FC<ParamCardProps> = ({ data }) => {
       tabList={tabList}
       tabProps={{ size: 'middle' }}
       bodyStyle={{ transform: 'translation()' }}
+      bordered={false}
       onTabChange={(key) => {
         setActiveTab(key)
       }}
