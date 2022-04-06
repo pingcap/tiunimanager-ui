@@ -18,6 +18,7 @@ export function ModeSelector({ mode, onChange }: ModeSelectorProps) {
     <div className={styles.standardSelector}>
       <Card
         title={t('modeSelector.title')}
+        bordered={false}
         bodyStyle={{
           display: 'flex',
           justifyContent: 'space-around',

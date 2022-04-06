@@ -327,7 +327,7 @@ function BasicOptions({
   paramGroups: { id: string; name: string }[]
 }) {
   return (
-    <Card title={t('basic.title')}>
+    <Card title={t('basic.title')} bordered={false}>
       <Form.Item
         label={t('basic.fields.type')}
         name="clusterType"
@@ -443,6 +443,7 @@ function ComponentOptionsForZone({
       collapsible="header"
       defaultActiveKey={required ? ['1'] : []}
       className={styles.componentForm}
+      ghost
     >
       <Collapse.Panel
         key={1}
@@ -1053,7 +1054,7 @@ function ClusterOptions() {
   const { t } = useI18n()
 
   return (
-    <Card title={t('cluster.title')}>
+    <Card title={t('cluster.title')} bordered={false}>
       <Form.Item
         name="clusterName"
         label={t('cluster.fields.name')}
@@ -1375,6 +1376,7 @@ function VendorSelector({ selected, onSelect, vendors }: VendorSelectorProps) {
           display: 'flex',
           justifyContent: 'space-around',
         }}
+        bordered={false}
       >
         <Select onChange={onSelect} value={selected} style={{ width: '100%' }}>
           {vendors.map((vendorId) => (
@@ -1405,6 +1407,7 @@ function RegionSelector({ regions, selected, onSelect }: RegionSelectorProps) {
           display: 'flex',
           justifyContent: 'space-around',
         }}
+        bordered={false}
       >
         <Select onChange={onSelect} value={selected} style={{ width: '100%' }}>
           {regions.map((r) => (
