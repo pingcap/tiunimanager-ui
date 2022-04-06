@@ -114,7 +114,7 @@ export default defineConfig(({ mode }) => {
       jsxInject: `import React from 'react'`,
     },
     build: {
-      target: 'es2020',
+      target: ['chrome67', 'firefox68', 'edge79', 'safari14'],
     },
     server: {
       ...proxy,
