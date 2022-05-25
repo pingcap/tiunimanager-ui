@@ -17,4 +17,12 @@ interface ImportMetaEnv {
   VITE_MONITOR_URL: string
   VITE_TRACER_URL: string
   VITE_ALERT_URL: string
+
+  // app info
+  VITE_APP_NAME: string
+  VITE_APP_VERSION: string
+  VITE_APP_DEPLOY_ENV: string
+
+  // error tracking
+  VITE_SENTRY_DSN: string
 }

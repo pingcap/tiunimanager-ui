@@ -21,6 +21,8 @@
     "@ant-design/icons": "^4.7.0",
     "@ant-design/pro-form": "^1.42.1",
     "@ant-design/pro-table": "^2.54.4",
+    "@sentry/react": "^6.19.4",
+    "@sentry/tracing": "^6.19.4",
     "ace-builds": "^1.4.12",
     "antd": "^4.16.13",
     "axios": "^0.21.1",
@@ -89,5 +91,6 @@
   "eslintIgnore": [
     "dist/*",
     "generated/*"
-  ]
+  ],
+  "packageManager": "yarn@1.22.18"
 }
