@@ -67,14 +67,14 @@ const SideMenu: FC<SideMenuProps> = ({
       width={width}
       className={styles.sider}
       collapsedWidth={collapsedWidth}
-      theme="light"
+      theme="dark"
       collapsible
       collapsed={collapsed}
       trigger={null}
     >
-      <Logo className={styles.logo} logoWidth={140} />
+      <Logo className={styles.logo} type="commonLight" logoWidth={100} />
       <Menu
-        theme="light"
+        theme="dark"
         mode="inline"
         className={styles.menu}
         selectedKeys={[selectedKey]}

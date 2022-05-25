@@ -67,7 +67,7 @@ const ClonePanel: FC<ClonePanelProps> = ({ back, cluster }) => {
 
     return (
       <div className={styles.cloneCard}>
-        <Card title={t('cloneInfo.title')}>
+        <Card title={t('cloneInfo.title')} bordered={false}>
           <Form
             hideRequiredMark
             scrollToFirstError

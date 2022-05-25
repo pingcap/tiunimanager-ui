@@ -21,7 +21,7 @@ const BasicInfoConfig: FC<BasicInfoConfigProps> = ({ mode, staticData }) => {
   const { t } = useI18n()
 
   return (
-    <Card className={styles.formCard} title={t('basic.title')}>
+    <Card className={styles.formCard} title={t('basic.title')} bordered={false}>
       {taskId ? (
         <Form.Item label={t('basic.fields.id')}>{taskId}</Form.Item>
       ) : null}

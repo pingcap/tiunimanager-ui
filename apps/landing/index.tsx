@@ -12,6 +12,8 @@ import { doUserLogin } from '@/api/hooks/platform'
 import { Logo } from '@/components/Logo'
 import { AxiosError } from 'axios'
 
+import loginBgImg from '/img/background/login.svg'
+
 export default function Login() {
   const { t } = useI18n()
   const {
@@ -37,65 +39,69 @@ export default function Login() {
   )
 
   return (
-    <Layout
-      style={{
-        minHeight: '100vh',
-      }}
-    >
-      <Card className={styles.container} bordered={false}>
-        <Form
-          className={styles.form}
-          onFinish={handleSubmit}
-          layout="vertical"
-          form={refForm}
+    <div className={styles.wrapper}>
+      <Layout className={styles.layout}>
+        <Card
+          className={`${styles.container} ${styles.formContainer}`}
+          bordered={false}
         >
-          <Logo size="common" className={styles.logo} logoWidth={200} />
-          <Form.Item name="username" rules={[{ required: true }]}>
-            <Input
-              prefix={<UserOutlined />}
-              size="large"
-              placeholder={t('form.username')}
-              disabled={loading}
-            />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            {...(errorMsg && {
-              help: t('message.error', { msg: errorMsg }),
-              validateStatus: 'error',
-            })}
+          <Form
+            className={styles.form}
+            onFinish={handleSubmit}
+            layout="vertical"
+            form={refForm}
           >
-            <Input
-              prefix={<KeyOutlined />}
-              placeholder={t('form.password')}
-              type="password"
-              size="large"
-              disabled={loading}
-              onInput={clearErrorMsg}
-              ref={refPassword}
-            />
-          </Form.Item>
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              size="large"
-              loading={loading}
-              block
+            <Logo type="common" className={styles.logo} logoWidth={140} />
+            <Form.Item name="username" rules={[{ required: true }]}>
+              <Input
+                prefix={<UserOutlined />}
+                size="large"
+                placeholder={t('form.username')}
+                disabled={loading}
+              />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              {...(errorMsg && {
+                help: t('message.error', { msg: errorMsg }),
+                validateStatus: 'error',
+              })}
             >
-              {t('form.submit')}
-            </Button>
-          </Form.Item>
-        </Form>
-        <div className={styles.toolbar}>
-          <LanguageDropdown className={styles.switchLanguage}>
-            <a>
-              {t('switch_language')} <DownOutlined />
-            </a>
-          </LanguageDropdown>
-        </div>
-      </Card>
-    </Layout>
+              <Input
+                prefix={<KeyOutlined />}
+                placeholder={t('form.password')}
+                type="password"
+                size="large"
+                disabled={loading}
+                onInput={clearErrorMsg}
+                ref={refPassword}
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                size="large"
+                loading={loading}
+                block
+              >
+                {t('form.submit')}
+              </Button>
+            </Form.Item>
+          </Form>
+          <div className={styles.toolbar}>
+            <LanguageDropdown className={styles.switchLanguage}>
+              <a>
+                {t('switch_language')} <DownOutlined />
+              </a>
+            </LanguageDropdown>
+          </div>
+        </Card>
+        <Card className={styles.container} bordered={false}>
+          <img className={styles.bgImg} src={loginBgImg} alt="Landing" />
+        </Card>
+      </Layout>
+    </div>
   )
 }
 

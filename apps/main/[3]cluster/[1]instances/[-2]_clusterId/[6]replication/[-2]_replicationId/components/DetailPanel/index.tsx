@@ -76,7 +76,7 @@ const BasicDesc: FC<{ data: ClusterDataReplicationDetail }> = ({ data }) => {
   const filterRuleList = data.rules?.filter((rule) => rule)
 
   return (
-    <Card className={styles.descCard} title={t('basic.title')}>
+    <Card className={styles.descCard} title={t('basic.title')} bordered={false}>
       <DescItem label={t('basic.fields.id')}>{data.id}</DescItem>
       <DescItem label={t('basic.fields.name')}>{data.name}</DescItem>
       <DescItem label={t('basic.fields.status')}>
@@ -197,7 +197,11 @@ const DownstreamDesc: FC<{ data: ClusterDataReplicationDetail }> = ({
   }
 
   return (
-    <Card className={styles.descCard} title={t('downstream.title')}>
+    <Card
+      className={styles.descCard}
+      title={t('downstream.title')}
+      bordered={false}
+    >
       <DescItem label={t('downstream.fields.type')}>
         {data.downstreamType}
       </DescItem>
