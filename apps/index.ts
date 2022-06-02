@@ -6,10 +6,12 @@ export default function prepareApps() {
   return mountRouter(
     [
       loadRoutes<IPageMeta>('./landing', '/login'),
+      loadRoutes<IPageMeta>('./user', '/user'),
       loadRoutes<IPageMeta>('./main', '/'),
     ],
     {
       noSession: '/login',
+      noSafeSession: '/user/password',
       noPermission: '/login',
     }
   )

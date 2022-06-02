@@ -1,0 +1,13 @@
+name: 重置密码
+switch_language: 更换语言
+form:
+  resetTips: 密码已过期，请重置密码
+  password: 新密码
+  submit: 重置密码
+rules:
+  password: 密码必须是 6 - 20 个字符，必须包含大写字母、小写字母和数字的组合，可包含特殊字符 ~!@#$%^&*
+result:
+  login: 重新登入
+message:
+  error: '重置密码失败: {{ msg }}'
+  success: 重置密码成功
