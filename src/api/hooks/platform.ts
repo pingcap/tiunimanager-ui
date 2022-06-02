@@ -24,6 +24,17 @@ export function doUserLogout() {
   })
 }
 
+export function resetUserPassword(payload: {
+  userId: string
+  password: string
+}) {
+  return APIS.Platform.usersUserIdPasswordPost(
+    payload.userId,
+    { id: payload.userId, password: payload.password },
+    { skipNotifications: true }
+  )
+}
+
 /**************
  * System Info
  **************/
