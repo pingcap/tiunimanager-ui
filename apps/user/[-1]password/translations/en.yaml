@@ -1,0 +1,13 @@
+name: Reset Password
+switch_language: Switch Language
+form:
+  resetTips: Your password is expired, please reset it
+  password: New Password
+  submit: Reset
+rules:
+  password: 'Password must be 8 to 20 characters that must contain uppercase letters, lowercase letters and numbers, and may contain visible special characters !@#$%^&*'
+result:
+  login: Back to Sign in
+message:
+  error: 'Failed to reset your password: {{ msg }}'
+  success: Your password has been reset

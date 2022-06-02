@@ -1,0 +1,86 @@
+.wrapper {
+  background: #F7F8F9;
+}
+
+.layout {
+  min-height: 100vh;
+  width: fit-content;
+  margin: auto;
+  flex-direction: row;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  max-width: 100vw;
+  min-height: 100vh;
+
+  &:global(.ant-card) {
+    background: #F7F8F9;
+  }
+
+  :global(.ant-card-body) {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding-left: 60px;
+    padding-right: 60px;
+  }
+
+  &.form-container {
+    :global(.ant-card-body) {
+      width: 480px;
+    }
+  }
+
+  .form {
+    width: 100%;
+  }
+
+  .toolbar {
+    align-self: flex-end;
+    .switch-language {
+      span {
+        margin-left: 4px;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .password-tip {
+    font-size: 16px;
+    margin-bottom: 16px;
+
+    .password-tip-icon {
+      color: #faad14;
+      margin-right: 8px;
+    }
+  }
+}
+
+.reset-result {
+  width: 100%;
+  margin-bottom: 24px;
+
+  .reset-result-title {
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 16px;
+
+    .reset-result-icon {
+      color: #52c41a;
+      margin-right: 8px;
+    }
+  }
+}
+
+.logo {
+  width: 100%;
+  margin-bottom: 100px;
+}
+
+.bgImg {
+  width: 540px;
+}
