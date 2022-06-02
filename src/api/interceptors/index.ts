@@ -8,9 +8,16 @@ export const onErrorResponse = (error: AxiosError) => {
   if (!error.config.skipNotifications && !error.config.skipErrorNotification) {
     useErrorNotification(error)
   }
+
   if (error.response?.status === 401) {
     getAuthState().logout()
+  } else if (
+    error.response?.status === 400 &&
+    error.response?.data?.code === 70615
+  ) {
+    getAuthState().resetPasswordExpired()
   }
+
   return Promise.reject(error)
 }
 
