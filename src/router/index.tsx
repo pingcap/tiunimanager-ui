@@ -14,8 +14,9 @@ import {
 } from '@/router/helper'
 
 function getCurrentRoutePath() {
-  if (import.meta.env.DEV) return window.location.hash.slice(1)
-  else return window.location.pathname
+  // if (import.meta.env.DEV) return window.location.hash.slice(1)
+  // else return window.location.pathname
+  return window.location.pathname
 }
 
 export interface RoleGuard {
@@ -23,6 +24,9 @@ export interface RoleGuard {
   noPermission: string
   // not logged in
   noSession: string
+  // logged in and no safe session
+  // e.g. user password expired
+  noSafeSession: string
 }
 
 export default function mountRouter(
@@ -95,14 +99,21 @@ function genRouteProp(
     redirect && typeof redirect === 'function'
       ? guard
         ? () => {
-            const [session, location] = useSessionLocation()
+            const { session, location } = useSessionLocation()
+
             return (
               checkRole(role, guard, session) ||
-              checkRedirect(redirect, session, location) ||
+              checkRedirect(redirect, session.sessionId, location) ||
               comp()
             )
           }
-        : () => checkRedirect(redirect, ...useSessionLocation()) || comp()
+        : () => {
+            const { session, location } = useSessionLocation()
+
+            return (
+              checkRedirect(redirect, session.sessionId, location) || comp()
+            )
+          }
       : guard
       ? () => checkRole(role, guard, useSession()) || comp()
       : comp
@@ -114,32 +125,64 @@ function genRouteProp(
   }
 }
 
-function useSessionLocation(): [string, Location<RouteState>] {
-  return [useSession(), useLocationWithState()]
+function useSessionLocation() {
+  const session = useSession()
+  const location = useLocationWithState()
+
+  return {
+    session,
+    location,
+  }
 }
 
-function useSession(): string {
-  return useAuthState((state) => state.session)
+function useSession() {
+  const sessionId = useAuthState((state) => state.session)
+  const safe = useAuthState((state) => !state.passwordExpired)
+
+  return {
+    sessionId,
+    safe,
+  }
 }
 
-function checkRole(role: Role[], guard: RoleGuard, session: string) {
-  if (role[0] === 'user' && !session)
+function checkRole(
+  role: Role[],
+  guard: RoleGuard,
+  session: { sessionId: string; safe: boolean }
+) {
+  const { sessionId, safe } = session
+  const currentPath = getCurrentRoutePath()
+  const isNoSafeSessionPath = currentPath === guard.noSafeSession
+
+  if (role[0] === 'user' && !sessionId) {
+    const validFromPath = isNoSafeSessionPath ? '/' : currentPath
+
     return (
       <Redirect
         to={{
           pathname: guard.noSession,
-          state: { from: getCurrentRoutePath() } as RouteState,
+          state: { from: validFromPath } as RouteState,
         }}
       />
     )
+  } else if (sessionId && !safe && !isNoSafeSessionPath) {
+    return (
+      <Redirect
+        to={{
+          pathname: guard.noSafeSession,
+          state: { from: currentPath } as RouteState,
+        }}
+      />
+    )
+  }
 }
 
 function checkRedirect(
   redirect: Redirector,
-  session: string,
+  sessionId: string,
   location: Location<RouteState>
 ) {
-  const res = redirect(session, location)
+  const res = redirect(sessionId, location)
   if (res)
     return (
       <Redirect
