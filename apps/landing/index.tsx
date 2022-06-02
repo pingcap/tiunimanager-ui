@@ -29,8 +29,25 @@ export default function Login() {
 
   const { handleSubmit, errorMsg, clearErrorMsg, loading } = useLogin(
     (data) => {
-      dispatchLogin(data.token!, data.userId!)
-      push(from)
+      if (data.passwordExpired) {
+        dispatchLogin(
+          {
+            token: data.token!,
+            session: data.userId!,
+            passwordExpired: true,
+          },
+          {
+            persisted: false,
+          }
+        )
+      } else {
+        dispatchLogin({
+          token: data.token!,
+          session: data.userId!,
+          passwordExpired: false,
+        })
+        push(from)
+      }
     },
     () => {
       refForm.setFieldsValue({ password: '' })
@@ -45,13 +62,13 @@ export default function Login() {
           className={`${styles.container} ${styles.formContainer}`}
           bordered={false}
         >
+          <Logo type="common" className={styles.logo} logoWidth={140} />
           <Form
             className={styles.form}
             onFinish={handleSubmit}
             layout="vertical"
             form={refForm}
           >
-            <Logo type="common" className={styles.logo} logoWidth={140} />
             <Form.Item name="username" rules={[{ required: true }]}>
               <Input
                 prefix={<UserOutlined />}
@@ -67,10 +84,9 @@ export default function Login() {
                 validateStatus: 'error',
               })}
             >
-              <Input
+              <Input.Password
                 prefix={<KeyOutlined />}
                 placeholder={t('form.password')}
-                type="password"
                 size="large"
                 disabled={loading}
                 onInput={clearErrorMsg}
