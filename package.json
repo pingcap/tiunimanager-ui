@@ -1,5 +1,6 @@
 {
   "private": true,
+  "license": "Apache-2.0",
   "scripts": {
     "dev": "vite",
     "dev:mock": "cross-env VITE_MOCK=1 vite",
