@@ -17,8 +17,8 @@ Is this linked to an open issue, or another pull request? Link it here. e.g. Rel
 
 <!-- Please check the one that applies to this PR. Update "[ ]" to "[x]" to check a box. -->
 
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Bug fix (change which fixes an issue)
+- [ ] New feature (change which adds functionality)
 - [ ] Refactoring (no functional changes, no api changes)
 - [ ] Code style update (formatting, local variables)
 - [ ] Build related changes
