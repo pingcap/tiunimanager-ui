@@ -1,5 +1,5 @@
-<p style="text-align: center;">
-  <img src="./public/img/logo/common.svg" alt="logo" height="100px">
+<p align="center">
+  <img src="./public/img/logo/common.svg" alt="logo" height="140px">
 </p>
 
 # TiEM UI
