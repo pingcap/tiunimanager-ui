@@ -33,7 +33,7 @@ We want to fix all the issues as soon as possible, but before fixing a bug, we n
 
 Unfortunately, we are not able to investigate / fix bugs without clear steps to reproduce the behavior, so if we don't hear back from you, we are going to close an issue that doesn't have enough info to be reproduced.
 
-You can file new issues by selecting from our [new issue templates](issue-template) and filling out the issue template.
+You can file new issues by selecting from our [new issue templates][issue-template] and filling out the issue template.
 
 ### <a name="submit-pr"></a> Submitting a Pull Request (PR)
 
@@ -67,7 +67,7 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 
 ### Reviewing a Pull Request
 
-The tiem-ui team reserves the right not to accept pull requests from community members who haven't been good citizens of the community. Such behavior includes not following the [code of conduct](./CODE_OF_CONDUCT.md) and applies within or outside our managed channels.
+The tiem-ui team reserves the right not to accept pull requests from community members who haven't been good citizens of the community. Such behavior includes not following the [Code of Conduct](./CODE_OF_CONDUCT.md) and applies within or outside our managed channels.
 
 #### Addressing review feedback
 
