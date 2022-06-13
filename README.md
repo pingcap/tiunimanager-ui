@@ -1,6 +1,9 @@
-<!--<p align="center">
-  <img src="./public/img/logo/common.svg" alt="logo" height="140px">
-</p>-->
+<p align="center">
+  <br>
+  <img src="./public/img/logo/common.svg" alt="logo" height="80px">
+  <br>
+  <br>
+</p>
 
 # TiUniManager UI
 
