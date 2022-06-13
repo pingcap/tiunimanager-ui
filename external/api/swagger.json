@@ -311,7 +311,7 @@
         "parameters": [
           {
             "type": "string",
-            "example": "CLUSTER_ID_IN_TIEM__22",
+            "example": "CLUSTER_ID_IN_EM__22",
             "name": "clusterId",
             "in": "query",
             "required": true
@@ -6471,7 +6471,7 @@
       "properties": {
         "clusterId": {
           "type": "string",
-          "example": "CLUSTER_ID_IN_TIEM__22"
+          "example": "CLUSTER_ID_IN_EM__22"
         },
         "downstream": {
           "type": "object"
@@ -6503,7 +6503,7 @@
       "properties": {
         "id": {
           "type": "string",
-          "example": "TASK_ID_IN_TIEM____22"
+          "example": "TASK_ID_IN_EM____22"
         }
       }
     },
@@ -6601,7 +6601,7 @@
       "properties": {
         "id": {
           "type": "string",
-          "example": "TASK_ID_IN_TIEM____22"
+          "example": "TASK_ID_IN_EM____22"
         },
         "status": {
           "type": "string",
@@ -6648,7 +6648,7 @@
       "properties": {
         "clusterId": {
           "type": "string",
-          "example": "CLUSTER_ID_IN_TIEM__22"
+          "example": "CLUSTER_ID_IN_EM__22"
         },
         "createTime": {
           "type": "string"
@@ -6679,7 +6679,7 @@
         },
         "id": {
           "type": "string",
-          "example": "CLUSTER_ID_IN_TIEM__22"
+          "example": "CLUSTER_ID_IN_EM__22"
         },
         "name": {
           "type": "string",
@@ -7069,7 +7069,7 @@
       "properties": {
         "clusterId": {
           "type": "string",
-          "example": "CLUSTER_ID_IN_TIEM__22"
+          "example": "CLUSTER_ID_IN_EM__22"
         },
         "createTime": {
           "type": "string"
@@ -7100,7 +7100,7 @@
         },
         "id": {
           "type": "string",
-          "example": "CLUSTER_ID_IN_TIEM__22"
+          "example": "CLUSTER_ID_IN_EM__22"
         },
         "name": {
           "type": "string",
@@ -7512,7 +7512,7 @@
         },
         "targetClusterId": {
           "type": "string",
-          "example": "CLUSTER_ID_IN_TIEM__22"
+          "example": "CLUSTER_ID_IN_EM__22"
         },
         "tls": {
           "type": "boolean",
