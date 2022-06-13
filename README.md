@@ -6,7 +6,7 @@
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-green?style=flat-square)](./LICENSE)
 
-TiUniManager UI is a general purpose, web-based UI for [TiDB Enterprise Manger](https://github.com/pingcap/tiunimanager).
+TiUniManager UI is a general purpose, web-based UI for [TiUniManager](https://github.com/pingcap/tiunimanager), a database management platform built for operating and managing TiDB.
 
 It allows users to view and manage TiDB clusters through the web-based UI.
 
@@ -28,9 +28,9 @@ First you need to ensure that there is a local or remote TiUniManager server ava
 The followings are required for developing TiUniManager UI:
 
 - [Git](https://git-scm.com/downloads)
-- [Go](https://golang.org/)
-- [Node.js v16+](https://nodejs.org/)
-- [Yarn v1](https://classic.yarnpkg.com/en/docs/install)
+- [Go 1.17+](https://go.dev/doc/install)
+- [Node.js 16+](https://nodejs.org/)
+- [Yarn 1.22+](https://classic.yarnpkg.com/en/docs/install)
 
 ### Getting the Sources
 
