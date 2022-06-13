@@ -181,7 +181,7 @@ The `<type>` and `<summary>` fields are mandatory, the `(<scope>)` field is opti
 
 Suggested types:
 
-- **chore**: Miscellaneous changes like (example: .env, .eslintrc, git hooks)
+- **chore**: Miscellaneous changes (example: .env, .eslintrc, git hooks)
 - **build**: Changes that affect the build system or external dependencies (example scopes: vite, esbuild, npm)
 - **ci**: Changes to our CI configuration files and scripts
 - **docs**: Documentation only changes
