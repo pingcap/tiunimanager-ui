@@ -1,6 +1,6 @@
-# Contributing to TiEM UI
+# Contributing to TiUniManager UI
 
-Thanks for your interest in contributing to TiEM UI! As a contributor, here are the guidelines we would like you to follow:
+Thanks for your interest in contributing to TiUniManager UI! As a contributor, here are the guidelines we would like you to follow:
 
 - [Code of Conduct](#coc)
 - [Question or Problem?](#question)
@@ -11,7 +11,7 @@ Thanks for your interest in contributing to TiEM UI! As a contributor, here are 
 
 ## <a name="coc"></a> Code of Conduct
 
-Help us keep TiEM UI open and inclusive. Please read and follow our [Code of Conduct][coc].
+Help us keep TiUniManager UI open and inclusive. Please read and follow our [Code of Conduct][coc].
 
 ## <a name="question"></a> Got a Question or Problem?
 
@@ -63,11 +63,11 @@ Before you submit your Pull Request (PR) consider the following guidelines:
    git push origin fix/your-fixed-module
    ```
 
-9. In GitHub, send a pull request to `tiem-ui:master`.
+9. In GitHub, send a pull request to `tiunimanager-ui:master`.
 
 ### Reviewing a Pull Request
 
-The tiem-ui team reserves the right not to accept pull requests from community members who haven't been good citizens of the community. Such behavior includes not following the [Code of Conduct](./CODE_OF_CONDUCT.md) and applies within or outside our managed channels.
+The TiUniManager UI team reserves the right not to accept pull requests from community members who haven't been good citizens of the community. Such behavior includes not following the [Code of Conduct](./CODE_OF_CONDUCT.md) and applies within or outside our managed channels.
 
 #### Addressing review feedback
 
@@ -256,11 +256,11 @@ The content of the commit message body should contain:
 After sending pull requests, you can find our Contributor License Agreement (CLA) entrance in your PR's comments. Please Visit the link and click the **Sign in with GitHub to agree** button to sign the CLA. For any code changes to be accepted, the CLA must be signed.
 
 [coc]: CODE_OF_CONDUCT.md
-[discussions]: https://github.com/pingcap-inc/tiem-ui/discussions
+[discussions]: https://github.com/pingcap-inc/tiunimanager-ui/discussions
 [asktug]: https://asktug.com/c/administration/TiDB
-[github]: https://github.com/pingcap-inc/tiem-ui
-[issue-template]: https://github.com/pingcap-inc/tiem-ui/issues/new/choose
-[pr]: https://github.com/pingcap-inc/tiem-ui/pulls
+[github]: https://github.com/pingcap-inc/tiunimanager-ui
+[issue-template]: https://github.com/pingcap-inc/tiunimanager-ui/issues/new/choose
+[pr]: https://github.com/pingcap-inc/tiunimanager-ui/pulls
 [fork-help]: https://docs.github.com/en/github/getting-started-with-github/fork-a-repo
 [git-rebase-doc]: https://git-scm.com/docs/git-rebase#_interactive_mode
 [commit-message-format]: https://github.com/angular/angular/blob/main/CONTRIBUTING.md#-commit-message-format

@@ -2,15 +2,15 @@
   <img src="./public/img/logo/common.svg" alt="logo" height="140px">
 </p>
 
-# TiEM UI
+# TiUniManager UI
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-green?style=flat-square)](./LICENSE)
 
-TiEM UI is a general purpose, web-based UI for [TiDB Enterprise Manger](https://github.com/pingcap-inc/tiem).
+TiUniManager UI is a general purpose, web-based UI for [TiDB Enterprise Manger](https://github.com/pingcap/tiunimanager).
 
 It allows users to view and manage TiDB clusters through the web-based UI.
 
-Some of the features the TiEM UI supports:
+Some of the features the TiUniManager UI supports:
 
 - Cluster creation, deletion, scaling-out, cloning, upgrading etc...
 - Realtime monitoring and alerting of cluster status
@@ -21,11 +21,11 @@ Some of the features the TiEM UI supports:
 
 ## Getting Started
 
-First you need to ensure that there is a local or remote TiEM server available to provide API services.
+First you need to ensure that there is a local or remote TiUniManager server available to provide API services.
 
 ### Prerequisites
 
-The followings are required for developing TiEM UI:
+The followings are required for developing TiUniManager UI:
 
 - [Git](https://git-scm.com/downloads)
 - [Go](https://golang.org/)
@@ -36,10 +36,10 @@ The followings are required for developing TiEM UI:
 
 ```bash
 # Clone our GitHub repository:
-git clone https://github.com/pingcap-inc/tiem-ui
+git clone https://github.com/pingcap-inc/tiunimanager-ui
 
-# Go to the tiem-ui directory:
-cd tiem-ui
+# Go to the tiunimanager-ui directory:
+cd tiunimanager-ui
 ```
 
 ### Installing dependencies
@@ -62,33 +62,33 @@ yarn generate
 
 ### Build and run
 
-If you have a local TiEM server, you can just run
+If you have a local TiUniManager server, you can just run
 
 ```bash
 yarn dev
 ```
 
-That's it! You can access TiEM UI through http://127.0.0.1:3000.
+That's it! You can access TiUniManager UI through http://127.0.0.1:3000.
 
-Or if your TiEM server is a remote server, you need to do the following steps before running the command above:
+Or if your TiUniManager server is a remote server, you need to do the following steps before running the command above:
 
 1. Create a `.env.local` file in the root directory of the project
 2. Paste the following contents into the `.env.local` file
 
 ```ini
-# Replace {tiem-address} with the real
-# ip address of your remote TiEM server
-VITE_MONITOR_URL="http://{tiem-address}:4000/d/em000001/tiem-server?orgId=1&refresh=10s&kiosk=tv"
-VITE_LOG_URL="http://{tiem-address}:5601/app/discover"
-VITE_ALERT_URL="http://{tiem-address}:4131"
-VITE_TRACER_URL="http://{tiem-address}:16686"
-VITE_PROXY_API_TARGET="http://{tiem-address}:4100"
-VITE_PROXY_FS_TARGET="http://{tiem-address}:4102"
+# Replace {tiunimanager-srv-addr} with the real address
+# of your remote TiUniManager server
+VITE_MONITOR_URL="http://{tiunimanager-srv-addr}:4000/d/em000001/em-server?orgId=1&refresh=10s&kiosk=tv"
+VITE_LOG_URL="http://{tiunimanager-srv-addr}:5601/app/discover"
+VITE_ALERT_URL="http://{tiunimanager-srv-addr}:4131"
+VITE_TRACER_URL="http://{tiunimanager-srv-addr}:16686"
+VITE_PROXY_API_TARGET="http://{tiunimanager-srv-addr}:4100"
+VITE_PROXY_FS_TARGET="http://{tiunimanager-srv-addr}:4102"
 ```
 
 ## Browser support
 
-TiEM UI has been tested on modern evergreen browsers.
+TiUniManager UI has been tested on modern evergreen browsers.
 
 It generally supports:
 
@@ -99,7 +99,7 @@ It generally supports:
 
 ## Need help?
 
-Please use [Github Discussions](https://github.com/pingcap-inc/tiem-ui/discussions) for help requests and how-to questions.
+Please use [Github Discussions](https://github.com/pingcap-inc/tiunimanager-ui/discussions) for help requests and how-to questions.
 
 Please open GitHub issues for bugs only, not general help requests. You can search previous issues before creating a new issue.
 
@@ -107,7 +107,7 @@ Please open GitHub issues for bugs only, not general help requests. You can sear
 
 Read through our [contributing guidelines](./CONTRIBUTING.md) to learn about our submission process and more.
 
-If you want to contribute through code, read the [development guide](./doc/development.md) to learn about our development process, and how to build your changes to TiEM UI.
+If you want to contribute through code, read the [development guide](./doc/development.md) to learn about our development process, and how to build your changes to TiUniManager UI.
 
 ## License
 
