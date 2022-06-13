@@ -256,11 +256,11 @@ The content of the commit message body should contain:
 After sending pull requests, you can find our Contributor License Agreement (CLA) entrance in your PR's comments. Please Visit the link and click the **Sign in with GitHub to agree** button to sign the CLA. For any code changes to be accepted, the CLA must be signed.
 
 [coc]: CODE_OF_CONDUCT.md
-[discussions]: https://github.com/pingcap-inc/tiunimanager-ui/discussions
+[discussions]: https://github.com/pingcap/tiunimanager-ui/discussions
 [asktug]: https://asktug.com/c/administration/TiDB
-[github]: https://github.com/pingcap-inc/tiunimanager-ui
-[issue-template]: https://github.com/pingcap-inc/tiunimanager-ui/issues/new/choose
-[pr]: https://github.com/pingcap-inc/tiunimanager-ui/pulls
+[github]: https://github.com/pingcap/tiunimanager-ui
+[issue-template]: https://github.com/pingcap/tiunimanager-ui/issues/new/choose
+[pr]: https://github.com/pingcap/tiunimanager-ui/pulls
 [fork-help]: https://docs.github.com/en/github/getting-started-with-github/fork-a-repo
 [git-rebase-doc]: https://git-scm.com/docs/git-rebase#_interactive_mode
 [commit-message-format]: https://github.com/angular/angular/blob/main/CONTRIBUTING.md#-commit-message-format

@@ -36,7 +36,7 @@ The followings are required for developing TiUniManager UI:
 
 ```bash
 # Clone our GitHub repository:
-git clone https://github.com/pingcap-inc/tiunimanager-ui
+git clone https://github.com/pingcap/tiunimanager-ui
 
 # Go to the tiunimanager-ui directory:
 cd tiunimanager-ui
@@ -99,7 +99,7 @@ It generally supports:
 
 ## Need help?
 
-Please use [Github Discussions](https://github.com/pingcap-inc/tiunimanager-ui/discussions) for help requests and how-to questions.
+Please use [Github Discussions](https://github.com/pingcap/tiunimanager-ui/discussions) for help requests and how-to questions.
 
 Please open GitHub issues for bugs only, not general help requests. You can search previous issues before creating a new issue.
 
