@@ -78,7 +78,7 @@ export default function Login() {
           className={`${styles.container} ${styles.formContainer}`}
           bordered={false}
         >
-          <Logo type="common" className={styles.logo} logoWidth={140} />
+          <Logo type="common" className={styles.logo} logoWidth={240} />
           <Form
             className={styles.form}
             onFinish={handleSubmit}

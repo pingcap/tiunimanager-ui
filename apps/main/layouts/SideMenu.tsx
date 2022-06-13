@@ -88,7 +88,7 @@ const SideMenu: FC<SideMenuProps> = ({
       collapsed={collapsed}
       trigger={null}
     >
-      <Logo className={styles.logo} type="commonLight" logoWidth={100} />
+      <Logo className={styles.logo} type="commonLight" logoWidth={180} />
       <Menu
         theme="dark"
         mode="inline"
