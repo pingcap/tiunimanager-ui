@@ -50,7 +50,7 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 5. In your forked repository, make your changes in a new git branch:
 
    ```shell
-   git checkout -b fix/your-fixed-module master
+   git checkout -b fix/your-fixed-module main
    ```
 
 6. Create your patch, **including appropriate test cases if applicable**.
@@ -63,7 +63,7 @@ Before you submit your Pull Request (PR) consider the following guidelines:
    git push origin fix/your-fixed-module
    ```
 
-9. In GitHub, send a pull request to `tiunimanager-ui:master`.
+9. In GitHub, send a pull request to `tiunimanager-ui:main`.
 
 ### Reviewing a Pull Request
 
@@ -122,10 +122,10 @@ After your pull request is merged, you can safely delete your branch and pull th
   git push origin --delete fix/your-fixed-module
   ```
 
-- Check out the master branch:
+- Check out the `main` branch:
 
   ```shell
-  git checkout master -f
+  git checkout main -f
   ```
 
 - Delete the local branch:
@@ -134,10 +134,10 @@ After your pull request is merged, you can safely delete your branch and pull th
   git branch -D fix/your-fixed-module
   ```
 
-- Update your local `master` with the latest upstream version:
+- Update your local `main` with the latest upstream version:
 
   ```shell
-  git pull --ff upstream master
+  git pull --ff upstream main
   ```
 
 ## <a name="commit"></a> Commit Message Format
