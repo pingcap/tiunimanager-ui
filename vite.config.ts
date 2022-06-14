@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
+import { resolve } from 'path'
 import { defineConfig, loadEnv, ServerOptions } from 'vite'
 import reactRefresh from '@vitejs/plugin-react-refresh'
-import { resolve } from 'path'
 import vitePluginImp from 'vite-plugin-imp'
 import vitePluginHtml from 'vite-plugin-html'
 import pluginYaml from 'rollup-plugin-yamlx'
+import { createMacroPlugin } from 'vite-plugin-macro'
+import pluginDel from 'rollup-plugin-delete'
 import {
   provideAssets,
   provideComponents,
@@ -27,8 +29,7 @@ import {
   providePages,
 } from './macros'
 import { LANGUAGE_IDS } from './src/i18n'
-import { createMacroPlugin } from 'vite-plugin-macro'
-import pluginDel from 'rollup-plugin-delete'
+import AppPackage from './package.json'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -52,6 +53,7 @@ export default defineConfig(({ mode }) => {
         },
       },
     } as ServerOptions)
+
   return {
     plugins: [
       reactRefresh(),
@@ -131,6 +133,10 @@ export default defineConfig(({ mode }) => {
         // see https://github.com/vitejs/vite/issues/2185#issuecomment-784637827
         { find: /^~/, replacement: '' },
       ],
+    },
+    define: {
+      __APP_NAME__: JSON.stringify(AppPackage.name),
+      __APP_VERSION__: JSON.stringify(AppPackage.version),
     },
     esbuild: {
       jsxInject: `import React from 'react'`,
