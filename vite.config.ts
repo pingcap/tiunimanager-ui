@@ -46,6 +46,10 @@ export default defineConfig(({ mode }) => {
           target: env.VITE_PROXY_FS_TARGET,
           changeOrigin: true,
         },
+        '^/grafanas-': {
+          target: env.VITE_PROXY_WEB_TARGET,
+          changeOrigin: true,
+        },
       },
     } as ServerOptions)
   return {
