@@ -18,21 +18,32 @@ import { defineConfig, loadEnv, ProxyOptions } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const { VITE_PROXY_API_TARGET, VITE_PROXY_FS_TARGET } = loadEnv(
-    mode,
-    process.cwd()
-  )
+  const { VITE_PROXY_API_TARGET, VITE_PROXY_FS_TARGET, VITE_PROXY_WEB_TARGET } =
+    loadEnv(mode, process.cwd())
+
   const proxy: Record<string, ProxyOptions> = Object.create(null)
-  if (VITE_PROXY_API_TARGET)
+
+  if (VITE_PROXY_API_TARGET) {
     proxy['/api'] = {
       target: VITE_PROXY_API_TARGET,
       changeOrigin: true,
     }
-  if (VITE_PROXY_FS_TARGET)
+  }
+
+  if (VITE_PROXY_FS_TARGET) {
     proxy['/fs'] = {
       target: VITE_PROXY_FS_TARGET,
       changeOrigin: true,
     }
+  }
+
+  if (VITE_PROXY_WEB_TARGET) {
+    proxy['^/grafanas-'] = {
+      target: VITE_PROXY_WEB_TARGET,
+      changeOrigin: true,
+    }
+  }
+
   return {
     server: {
       proxy,
