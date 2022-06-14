@@ -20,9 +20,7 @@ import { BrowserTracing } from '@sentry/tracing'
 if (import.meta.env.PROD) {
   Sentry.init({
     dsn: import.meta.env.VITE_SENTRY_DSN,
-    release: `${import.meta.env.VITE_APP_NAME}@${
-      import.meta.env.VITE_APP_VERSION
-    }`,
+    release: `${__APP_NAME__}@${__APP_VERSION__}`,
     environment: import.meta.env.VITE_APP_DEPLOY_ENV,
     integrations: [new BrowserTracing()],
     tracesSampleRate: 0.1,

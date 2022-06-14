@@ -36,10 +36,11 @@ interface ImportMetaEnv {
   VITE_ALERT_URL: string
 
   // app info
-  VITE_APP_NAME: string
-  VITE_APP_VERSION: string
   VITE_APP_DEPLOY_ENV: string
 
   // error tracking
   VITE_SENTRY_DSN: string
 }
+
+declare const __APP_NAME__: string
+declare const __APP_VERSION__: string
