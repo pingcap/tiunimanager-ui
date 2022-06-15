@@ -24,7 +24,7 @@ Some of the features the TiUniManager UI supports:
 
 ## Getting Started
 
-First you need to ensure that there is a local or remote TiUniManager server available to provide services.
+First, you need to ensure that there is a local or remote TiUniManager server deployed via tiup-em available to provide services.
 
 ### Prerequisites
 
@@ -57,39 +57,49 @@ yarn bootstrap
 
 ### Generate external codes
 
-Next, generate remote request modules and error message translation files
+Next, generate remote request modules and error message translation files.
 
 ```bash
 yarn generate
 ```
 
-### Config env
+### Configure environment variables
+
+If your TiUniManager server is running locally and is deployed using the default configuration, you can skip this section.
+
+Otherwise, you need to finish the following steps.
+
+1. Create a `.env.local` file in the root directory of the project.
+2. Paste the following contents into the `.env.local` file.
+
+```ini
+# Replace {xxxx-host} with the real host of the services
+# for your TiUniManager server.
+# See the TiUniManager topology config.yaml for more details.
+# config.yaml is located in the /home/tidb directory of the machine
+# running your TiUniManager server.
+
+# System external services
+VITE_MONITOR_URL="http://{grafana-host}/d/em000001/em-server?orgId=1&refresh=10s&kiosk=tv"
+VITE_LOG_URL="http://{kibana-host}/app/discover"
+VITE_ALERT_URL="http://{alertmanager-host}"
+VITE_TRACER_URL="http://{tracer-host}"
+
+# Dev server proxy
+VITE_PROXY_WEB_TARGET="http://{web-srv-host}"
+VITE_PROXY_API_TARGET="http://{api-srv-host}"
+VITE_PROXY_FS_TARGET="http://{file-srv-host}"
+```
 
 ### Build and run
 
-If you have a local TiUniManager server, you can just run
+Now, run the following command to start a development server.
 
 ```bash
 yarn dev
 ```
 
 That's it! You can access TiUniManager UI through http://127.0.0.1:3000.
-
-Or if your TiUniManager server is a remote server, you need to finish the following steps before running the command above:
-
-1. Create a `.env.local` file in the root directory of the project
-2. Paste the following contents into the `.env.local` file
-
-```ini
-# Replace {tiunimanager-srv-addr} with the real address
-# of your remote TiUniManager server
-VITE_MONITOR_URL="http://{tiunimanager-srv-addr}/d/em000001/em-server?orgId=1&refresh=10s&kiosk=tv"
-VITE_LOG_URL="http://{tiunimanager-srv-addr}/app/discover"
-VITE_ALERT_URL="http://{tiunimanager-srv-addr}"
-VITE_TRACER_URL="http://{tiunimanager-srv-addr}"
-VITE_PROXY_API_TARGET="http://{tiunimanager-srv-addr}"
-VITE_PROXY_FS_TARGET="http://{tiunimanager-srv-addr}"
-```
 
 ## Browser support
 
