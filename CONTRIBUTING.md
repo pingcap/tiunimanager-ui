@@ -195,7 +195,7 @@ Other types are up to your discretion.
 
 ##### Scope
 
-The scope scope could be anything specifying the place of the commit chang.
+The scope could be anything specifying the place of the commit chang.
 
 For example, `hooks`, `store`, `components`, `api/model`, `cluster`, `user/password` etc...
 
