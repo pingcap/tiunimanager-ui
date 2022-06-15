@@ -114,6 +114,6 @@ If you want to contribute through code, read the [development guide](./doc/devel
 
 ## License
 
-Copyright 2022 PingCAP, Inc. All rights reserved.
+Copyright 2022 PingCAP. All rights reserved.
 
 Licensed under the [Apache 2.0 License](./LICENSE).
