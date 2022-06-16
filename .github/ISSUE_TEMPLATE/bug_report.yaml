@@ -1,0 +1,73 @@
+name: "\U0001F41B Bug Report"
+description: Create a bug report to help us improve
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: textarea
+    attributes:
+      label: Describe the bug
+      description: |
+        A clear and concise description of what the bug is.
+        If you intend to submit a PR for this issue, tell us in the description. Thanks!
+      placeholder: Bug description
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. In this page...
+        2. Fill this input box...
+        3. Click this button...
+        4. See error...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What is expected?
+      description: A clear and concise description of what you expected to happen.
+      placeholder: Expected behavior
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Version
+      description: What version of TiUniManager UI are you running?
+      options:
+        - "1.0.2"
+        - "1.0.1"
+        - "1.0.0"
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: What browsers are you seeing the problem on?
+      multiple: true
+      options:
+        - Chrome
+        - Firefox
+        - Safari
+        - Microsoft Edge
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Environment Info
+      description: Output of `npx envinfo --system --binaries --browsers`
+      placeholder: System, Binaries, Browsers
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Anything else?
+      description: |
+        Anything that will give us more context about the issue you are encountering!
+
+        Tip: You can attach images by clicking this area to highlight it and then dragging files in.
+    validations:
+      required: false
