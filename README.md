@@ -7,7 +7,9 @@
 
 # TiUniManager UI
 
-[![License](https://img.shields.io/badge/license-Apache--2.0-green?style=flat-square)](./LICENSE)
+[![CI](https://github.com/pingcap/tiunimanager-ui/actions/workflows/build.yaml/badge.svg?branch=main)](https://github.com/pingcap/tiunimanager-ui/actions)
+[![Version](https://img.shields.io/github/v/release/pingcap/tiunimanager-ui?color=green&include_prereleases&style=flat)](https://github.com/pingcap/tiunimanager-ui/releases)
+[![License](https://img.shields.io/badge/license-Apache--2.0-green?style=flat)](./LICENSE)
 
 TiUniManager UI is a general purpose, web-based UI for [TiUniManager](https://github.com/pingcap/tiunimanager), a database operation and maintenance management platform for TiDB.
 
