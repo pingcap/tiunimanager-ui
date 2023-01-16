@@ -1,0 +1,287 @@
+.filter-input {
+  display: flex;
+  margin-top: 12px;
+  padding: 0 8px;
+  justify-content: space-between;
+
+  .input-wrap {
+    position: relative;
+    max-width: 82%;
+
+    svg {
+      position: absolute;
+      right: 12px;
+      top: 8px;
+      color: #999;
+      cursor: pointer;
+    }
+  }
+
+  :global {
+    .add-btn {
+      &.ui.basic.button {
+        padding: 4px 7px 0;
+        height: 32px;
+        font-weight: bold;
+        border: 1px solid #e6e6e6;
+        color: #666 !important;
+        box-shadow: none !important;
+
+        &:hover {
+          border: 1px solid #cccccc;
+          background-color: #f9f9f9 !important;
+          color: #666 !important;
+        }
+
+        &:active {
+          border: 1px solid #666666;
+          background-color: #f4f4f4 !important;
+        }
+
+        svg {
+          width: 16px;
+          height: 16px;
+        }
+      }
+
+      &.disabled-btn {
+        padding: 7px 11px 9px !important;
+        opacity: 0.5;
+
+        &:hover {
+          border-color: #e6e6e6 !important;
+          color: #000 !important;
+        }
+      }
+    }
+
+    .input {
+      max-width: 100%;
+
+      input {
+        padding-right: 40px;
+        height: 32px;
+        padding-top: 0;
+        padding-bottom: 0;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+.file-list {
+  padding: 0 24px 8px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 92px;
+  bottom: 0;
+  overflow-y: auto;
+  z-index: 1;
+
+  .skeleton-wrap {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    bottom: 0;
+    left: 24px;
+    overflow: hidden;
+
+    :global {
+      .react-loading-skeleton {
+        margin-bottom: 24px;
+      }
+    }
+  }
+
+  .no-res {
+    margin-top: 24px;
+    text-align: center;
+  }
+
+  .file-item {
+    display: flex;
+    align-items: center;
+    height: 32px;
+    padding: 0 8px;
+    font-size: 14px;
+    color: #000;
+    white-space: nowrap;
+    border-radius: 8px;
+    cursor: pointer;
+
+    .file-name {
+      display: flex;
+      align-items: center;
+      line-height: 32px;
+      font-weight: 400;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      align-items: center;
+      flex: 1;
+      color: #666;
+
+      svg {
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+        color: #999;
+      }
+
+      > span {
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      :global {
+        .ui.input {
+          flex: 1;
+          max-width: 88%;
+        }
+      }
+    }
+
+    &.active {
+      .file-name {
+        color: var(--primary-color);
+
+        svg {
+          color: var(--primary-color);
+        }
+      }
+      &:hover {
+        :global {
+          .ui.dropdown {
+            span span {
+              background-color: var(--primary-color);
+            }
+          }
+        }
+      }
+    }
+
+    &:hover {
+      background-color: #f9f9f9;
+
+      :global {
+        .ui.dropdown {
+          display: block;
+        }
+
+        .ui.input {
+          max-width: 82%;
+        }
+      }
+    }
+
+    &:active {
+      background-color: var(--DropdownHover);
+    }
+
+    .ellipse {
+      span {
+        background-color: #ccc;
+      }
+    }
+
+    input {
+      height: 24px;
+      line-height: 24px;
+    }
+
+    :global {
+      .ellipse-btn {
+        height: 20px;
+        line-height: 20px;
+        margin: 0 -8px;
+        padding: 0 8px;
+
+        span {
+          span {
+            background-color: #999;
+          }
+        }
+      }
+
+      .ui.dropdown {
+        display: none;
+
+        .ellipse-btn {
+          span span {
+            width: 3px;
+            height: 3px;
+          }
+        }
+
+        .menu {
+          min-width: 120px;
+          border: 1px solid var(--border-color);
+
+          .item {
+            padding: 0 !important;
+
+            > div {
+              padding: 12px 16px;
+            }
+            i {
+              margin-right: 8px;
+              vertical-align: middle;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.modal {
+  width: 480px;
+
+  &.rename-modal {
+    :global {
+      .form-group {
+        margin-bottom: 0;
+      }
+
+      .hint {
+        height: 60px;
+      }
+    }
+  }
+  .content {
+    padding: 16px 24px 24px;
+
+    .title {
+      margin-bottom: 8px;
+      font-size: 16px;
+      line-height: 24px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    .btns {
+      text-align: right;
+    }
+
+    .desc {
+      margin-bottom: 24px;
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    :global {
+      .form-actions {
+        margin-top: 0;
+      }
+
+      .button {
+        margin-left: 24px;
+      }
+
+      .input {
+        width: 100%;
+      }
+    }
+  }
+}
