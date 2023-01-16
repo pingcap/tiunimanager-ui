@@ -73,6 +73,11 @@ const Layout: FC = ({ children }) => {
         tab: t('pages.replication'),
         disabled,
       },
+      {
+        key: resolveRoute('sql-editor', clusterId),
+        tab: t('pages.sql-editor'),
+        disabled,
+      },
     ]
   }, [i18n.language, clusterId, clusterDetailData.info?.status])
 

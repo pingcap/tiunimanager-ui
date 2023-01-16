@@ -22,3 +22,4 @@ pages:
   params: 参数管理
   backup: 备份管理
   replication: 数据同步
+  sql-editor: SQL Editor
