@@ -35,7 +35,7 @@ import AppPackage from './package.json'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())
   const proxy =
-    !env.VITE_MOCK &&
+    // !env.VITE_MOCK &&
     !!env.VITE_PROXY_API_TARGET &&
     ({
       proxy: {
