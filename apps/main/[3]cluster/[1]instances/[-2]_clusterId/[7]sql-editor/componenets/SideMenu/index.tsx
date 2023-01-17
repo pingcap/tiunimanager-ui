@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 
-import useStores from 'dbaas/stores/useStores'
-import { eventTracking } from 'dbaas/utils/tracking'
+// import useStores from 'dbaas/stores/useStores'
+// import { eventTracking } from 'dbaas/utils/tracking'
 
 import { SqlEditorContext } from '../context'
 import DatabaseList from '../DatabaseList'
@@ -10,9 +10,10 @@ import SqlFiles from '../SqlFiles'
 import styles from './index.module.less'
 
 const SideMenu = () => {
-  const {
-    store: { preloadedSQLEditor }
-  } = useStores()
+  // const {
+  //   store: { preloadedSQLEditor }
+  // } = useStores()
+  const preloadedSQLEditor: any = {}
 
   const { sideMenuAcitveIndex, setSideMenuAcitveIndex } = useContext(SqlEditorContext)
 
@@ -29,7 +30,7 @@ const SideMenu = () => {
   const menuChange = (index: number, menuName: string) => {
     setSideMenuAcitveIndex(index)
     localStorage.setItem('Chat2querySideMenuActive', `${index}`)
-    eventTracking(`${menuName} Tab Clicked`)
+    // eventTracking(`${menuName} Tab Clicked`)
   }
 
   return (

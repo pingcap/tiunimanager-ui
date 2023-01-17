@@ -1,7 +1,7 @@
 import { debounce } from 'lodash'
 import React, { useEffect, useRef, useState } from 'react'
 
-import useStores from 'dbaas/stores/useStores'
+// import useStores from 'dbaas/stores/useStores'
 
 import { SqlEditorProvider } from './context'
 import Editor from './Editor'
@@ -18,11 +18,12 @@ const SqlEditor = () => {
   const isMaxRef = useRef(false)
   const [isRun, setIsRun] = useState(false)
 
-  const {
-    store: {
-      config: { enableLayoutV3 }
-    }
-  } = useStores()
+  // const {
+  //   store: {
+  //     config: { enableLayoutV3 }
+  //   }
+  // } = useStores()
+  const enableLayoutV3 = true
 
   useEffect(() => {
     if (!ref.current) {
