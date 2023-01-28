@@ -22,7 +22,7 @@ import { eventTracking } from 'dbaas/utils/tracking'
 import { sqlEditorFileNameRules } from 'dbaas/utils/validationRules'
 
 import { SqlEditorContext } from '../context'
-import { SqlFile } from '../types.d'
+import { SqlFile } from '../types'
 
 import defaultContent, { newFileContent, preTips, affixTips } from './fileContent'
 import styles from './index.module.less'

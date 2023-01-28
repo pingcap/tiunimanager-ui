@@ -34,7 +34,7 @@ import { SqlEditorContext } from '../context'
 import { sql, MySQL } from '../Sql'
 import defautFileContent, { newFileContent } from '../SqlFiles/fileContent'
 import strip from '../StripComments'
-import { RequestStatus, SqlFile, UserSetting } from '../types.d'
+import { RequestStatus, SqlFile, UserSetting } from '../types'
 
 import styles from './index.module.less'
 import { bbedit } from './theme'

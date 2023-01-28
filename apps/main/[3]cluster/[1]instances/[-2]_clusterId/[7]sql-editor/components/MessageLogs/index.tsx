@@ -11,7 +11,7 @@ import { eventTracking } from 'dbaas/utils/tracking'
 
 import { SqlEditorContext } from '../context'
 import { Settings } from '../Editor'
-import { SqlRes, RequestStatus } from '../types.d'
+import { SqlRes, RequestStatus } from '../types'
 
 import styles from './index.module.less'
 import Results from './Results'

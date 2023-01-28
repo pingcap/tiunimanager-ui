@@ -23,7 +23,7 @@ import useStores from 'dbaas/stores/useStores'
 import { eventTracking } from 'dbaas/utils/tracking'
 
 import { SqlEditorContext } from '../context'
-import { SqlFile } from '../types.d'
+import { SqlFile } from '../types'
 
 import styles from './index.module.less'
 
