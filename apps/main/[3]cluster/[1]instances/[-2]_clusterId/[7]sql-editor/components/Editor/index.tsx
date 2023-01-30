@@ -1,33 +1,56 @@
 import { EditorState } from '@codemirror/state'
 import { Switch } from '@mantine/core'
 import { Loader } from '@mantine/core'
-import { Settings01, PlusSquare, DotsHorizontal, RunFill, XClose, AiExplore01 } from '@tidb-cloud-uikit/icons/raw'
-import functions from '@tidb-cloud-uikit/icons/raw/CodeCircle03.svg'
-import database from '@tidb-cloud-uikit/icons/raw/Database.svg'
-import tableSvg from '@tidb-cloud-uikit/icons/raw/DatabseTable.svg'
-import keyword from '@tidb-cloud-uikit/icons/raw/Key02.svg'
-import typesSvg from '@tidb-cloud-uikit/icons/raw/Types02.svg'
-import variable from '@tidb-cloud-uikit/icons/raw/Variable.svg'
-import { Button, Dropdown, Modal, Popup } from '@tidb-cloud/ui-components'
+// import { Settings01, PlusSquare, DotsHorizontal, RunFill, XClose, AiExplore01 } from '@tidb-cloud-uikit/icons/raw'
+// import functions from '@tidb-cloud-uikit/icons/raw/CodeCircle03.svg'
+// import database from '@tidb-cloud-uikit/icons/raw/Database.svg'
+// import tableSvg from '@tidb-cloud-uikit/icons/raw/DatabseTable.svg'
+// import keyword from '@tidb-cloud-uikit/icons/raw/Key02.svg'
+// import typesSvg from '@tidb-cloud-uikit/icons/raw/Types02.svg'
+// import variable from '@tidb-cloud-uikit/icons/raw/Variable.svg'
+
+import { Settings01, PlusSquare, DotsHorizontal, RunFill, XClose, AiExplore01 } from '../../ui-components/icons/raw'
+import functions from '../../ui-components/icons/raw/CodeCircle03.svg'
+import database from '../../ui-components/icons/raw/Database.svg'
+import tableSvg from '../../ui-components/icons/raw/DatabseTable.svg'
+import keyword from '../../ui-components/icons/raw/Key02.svg'
+import typesSvg from '../../ui-components/icons/raw/Types02.svg'
+import variable from '../../ui-components/icons/raw/Variable.svg'
+
+// import { Button, Dropdown, Modal, Popup } from '@tidb-cloud/ui-components'
+import { Button, Dropdown, Modal, Popup } from 'semantic-ui-react'
+
 import CodeMirror from '@uiw/react-codemirror'
 import { useMount } from 'ahooks'
-import { observer } from 'mobx-react'
+// import { observer } from 'mobx-react'
 import { useEffect, useState, useContext, useRef } from 'react'
 import React from 'react'
 
-import { Form, FormSelect, FormCheckbox } from 'dbaas/components/Form'
+// import { Form, FormSelect, FormCheckbox } from 'dbaas/components/Form'
+// import {
+//   sqlEditorSQLExecute,
+//   sqlEditorRowsSetting,
+//   createSqlEditorFile,
+//   updateSqlEditorFile,
+//   generateSqlByBot,
+//   updateAIUserSetting,
+//   getSqlEditorRowsSetting
+// } from 'dbaas/services'
+
 import {
   sqlEditorSQLExecute,
-  sqlEditorRowsSetting,
+  // sqlEditorRowsSetting,
   createSqlEditorFile,
   updateSqlEditorFile,
-  generateSqlByBot,
-  updateAIUserSetting,
+  // generateSqlByBot,
+  // updateAIUserSetting,
   getSqlEditorRowsSetting
-} from 'dbaas/services'
-import { getErrorMessage } from 'dbaas/services/errorCodes'
-import useStores from 'dbaas/stores/useStores'
-import { eventTracking } from 'dbaas/utils/tracking'
+} from '@/api/hooks/sql-editor'
+
+// import { getErrorMessage } from 'dbaas/services/errorCodes'
+import { getErrorMessage } from '../../utils/errorCodes'
+// import useStores from 'dbaas/stores/useStores'
+// import { eventTracking } from 'dbaas/utils/tracking'
 
 import { autocompletion, Completion } from '../Autocomplete'
 import { SqlEditorContext } from '../context'
@@ -101,11 +124,13 @@ const Editor = (props: { onRun: () => void }) => {
   } = useContext(SqlEditorContext)
   const sectionTextRef = useRef('')
 
-  const {
-    store: {
-      config: { enableSQLEditorAI, enableSQLEditorAIDB }
-    }
-  } = useStores()
+  // const {
+  //   store: {
+  //     config: { enableSQLEditorAI, enableSQLEditorAIDB }
+  //   }
+  // } = useStores()
+  const enableSQLEditorAI = false
+  const enableSQLEditorAIDB = false
 
   useEffect(() => {
     editorSettingRef.current = editorSetting
@@ -125,7 +150,7 @@ const Editor = (props: { onRun: () => void }) => {
     saveSqlAuto()
 
     return () => {
-      saveSqlTimer && clearTimeout(saveSqlTimer.current)
+      saveSqlTimer.current && clearTimeout(saveSqlTimer.current)
       window.removeEventListener('keydown', keydownHandler, true)
     }
   }, [])
@@ -177,11 +202,12 @@ const Editor = (props: { onRun: () => void }) => {
   })
 
   useEffect(() => {
-    const defaultData = {}
+    const defaultData = {} as any
     const tables: { label: string; type: string }[] = []
 
     dbList.map((database: any) => {
-      defaultData[database.name] = database.children.map((table: any) => {
+      const dbName = database.name as string
+      defaultData[dbName] = database.children.map((table: any) => {
         if (databaseName === database.name) {
           tables.push({
             label: table.name,
@@ -326,10 +352,10 @@ const Editor = (props: { onRun: () => void }) => {
         isAll = false
       }
 
-      eventTracking('SQL Editor Executed', {
-        source: 'Hot Key',
-        key: isAll ? 'run all' : 'run single line'
-      })
+      // eventTracking('SQL Editor Executed', {
+      //   source: 'Hot Key',
+      //   key: isAll ? 'run all' : 'run single line'
+      // })
     }
   }
 
@@ -356,7 +382,8 @@ const Editor = (props: { onRun: () => void }) => {
         content: sqlTextRef.current
       }
 
-      await updateSqlEditorFile(orgId, projectId, clusterId, fileRef.current.id, data)
+      // await updateSqlEditorFile(orgId, projectId, clusterId, fileRef.current.id, data)
+      await updateSqlEditorFile({ clusterId, sqlFileId: fileRef.current.id, body: data })
       if (fileRef.current.id === data.id) {
         setEditedSqlFile(data)
         fileRef.current = data
@@ -412,12 +439,12 @@ const Editor = (props: { onRun: () => void }) => {
       }
     }
 
-    if (key) {
-      eventTracking(`SQL Editor ${type} AI Result`, {
-        key,
-        question: curAiSql
-      })
-    }
+    // if (key) {
+    //   eventTracking(`SQL Editor ${type} AI Result`, {
+    //     key,
+    //     question: curAiSql
+    //   })
+    // }
   }
 
   const changeHandler = React.useCallback(async (sql: string, viewUpdate) => {
@@ -493,50 +520,50 @@ const Editor = (props: { onRun: () => void }) => {
     const preText = sqlTextRef.current.split('\n')
     const nextText = (preText[index + 1] || '').trim()
 
-    if (text === '' && curLine.indexOf('--') === 0 && curLine.substring(curLine.length - 2) !== '*/' && !nextText) {
-      const aiText = curLine.substring(2)
-      if (!aiText || !aiText.trim()) {
-        return
-      }
+    // if (text === '' && curLine.indexOf('--') === 0 && curLine.substring(curLine.length - 2) !== '*/' && !nextText) {
+    //   const aiText = curLine.substring(2)
+    //   if (!aiText || !aiText.trim()) {
+    //     return
+    //   }
 
-      if (!editorSettingRef.current?.is_privacy_allowed) {
-        return
-      }
+    //   if (!editorSettingRef.current?.is_privacy_allowed) {
+    //     return
+    //   }
 
-      addAiTips2Text(index + 1, fromA + 1, viewUpdate)
-      setAiLoadingIndex(index + 1)
-      generateAISql(curLine.substring(2), index + 1, viewUpdate)
-    }
+    //   addAiTips2Text(index + 1, fromA + 1, viewUpdate)
+    //   setAiLoadingIndex(index + 1)
+    //   generateAISql(curLine.substring(2), index + 1, viewUpdate)
+    // }
   }, [])
 
-  const userAggreementCancel = async () => {
-    setIsAIInit(true)
-    setIsAggVisible(false)
+  // const userAggreementCancel = async () => {
+  //   setIsAIInit(true)
+  //   setIsAggVisible(false)
 
-    await updateAIUserSetting(orgId, projectId, {
-      chat2query_init: true
-    })
-  }
+  //   await updateAIUserSetting(orgId, projectId, {
+  //     chat2query_init: true
+  //   })
+  // }
 
   const userAggreementModal = () => {
     setIsAggVisible(true)
   }
 
-  const saveEditorSetting = async (values: { is_privacy_allowed: boolean }) => {
-    eventTracking('User Aggreement Modal Confirm Button Clicked')
+  // const saveEditorSetting = async (values: { is_privacy_allowed: boolean }) => {
+  //   eventTracking('User Aggreement Modal Confirm Button Clicked')
 
-    const changeItems = {
-      chat2query_init: true,
-      is_privacy_allowed: values.is_privacy_allowed,
-      privacy_box_count: 1
-    }
+  //   const changeItems = {
+  //     chat2query_init: true,
+  //     is_privacy_allowed: values.is_privacy_allowed,
+  //     privacy_box_count: 1
+  //   }
 
-    await updateAIUserSetting(orgId, projectId, changeItems)
+  //   await updateAIUserSetting(orgId, projectId, changeItems)
 
-    setIsAIInit(true)
-    setEditorSetting(changeItems)
-    setIsAggVisible(false)
-  }
+  //   setIsAIInit(true)
+  //   setEditorSetting(changeItems)
+  //   setIsAggVisible(false)
+  // }
 
   const getLineNumByPos = (pos: number, texts: string[]) => {
     let len = 0
@@ -660,7 +687,8 @@ const Editor = (props: { onRun: () => void }) => {
       content: sqlTextRef.current
     }
 
-    await updateSqlEditorFile(orgId, projectId, clusterId, data.id || 0, data)
+    // await updateSqlEditorFile(orgId, projectId, clusterId, data.id || 0, data)
+    await updateSqlEditorFile({ clusterId, sqlFileId: data.id || 0, body: data })
 
     if (fileRef.current?.id === data.id) {
       setEditedSqlFile(data)
@@ -726,15 +754,15 @@ const Editor = (props: { onRun: () => void }) => {
     let count = 0
     while (count < len) {
       const index = len - count - 1
-      eventTracking('SQL Editor Run Sql Start', {
-        sql: list[index].sql,
-        sessionId
-      })
+      // eventTracking('SQL Editor Run Sql Start', {
+      //   sql: list[index].sql,
+      //   sessionId
+      // })
       const res = (await execSql(list[index].sql, sessionId)) as any
-      eventTracking('SQL Editor Run Sql Success', {
-        sql: list[index].sql,
-        sessionId
-      })
+      // eventTracking('SQL Editor Run Sql Success', {
+      //   sql: list[index].sql,
+      //   sessionId
+      // })
       const cur = list.slice()
       if (res && res.code === 200) {
         cur[index].res = res.data
@@ -779,15 +807,25 @@ const Editor = (props: { onRun: () => void }) => {
   const execSql = async (sqlLine: string, sessionId?: string) => {
     return new Promise(async (resolve, reject) => {
       try {
+        // const res = await sqlEditorSQLExecute(
+        //   orgId,
+        //   projectId,
+        //   clusterId,
+        //   {
+        //     sql: sqlLine,
+        //     sessionid: sessionId || fileRef.current?.sessionId
+        //   },
+        //   { timeout: 30 * 1000 }
+        // )
         const res = await sqlEditorSQLExecute(
-          orgId,
-          projectId,
-          clusterId,
           {
-            sql: sqlLine,
-            sessionid: sessionId || fileRef.current?.sessionId
+            clusterId,
+            body: {
+              sql: sqlLine,
+              sessionid: sessionId || fileRef.current?.sessionId
+            }
           },
-          { timeout: 30 * 1000 }
+          // { timeout: 30 * 1000 }
         )
         resolve(res)
       } catch (e) {
@@ -871,9 +909,9 @@ const Editor = (props: { onRun: () => void }) => {
       return
     }
 
-    eventTracking('SQL Editor Add New SQL Editor File Button Clicked', {
-      position: 'Editor'
-    })
+    // eventTracking('SQL Editor Add New SQL Editor File Button Clicked', {
+    //   position: 'Editor'
+    // })
 
     setSideMenuAcitveIndex(1)
 
@@ -884,7 +922,8 @@ const Editor = (props: { onRun: () => void }) => {
         content: newFileContent
       }
 
-      const createRes = await createSqlEditorFile(orgId, projectId, clusterId, fileParams)
+      // const createRes = await createSqlEditorFile(orgId, projectId, clusterId, fileParams)
+      const createRes = await createSqlEditorFile({ clusterId, body: fileParams })
       setIsCreatingFile(false)
 
       if (createRes.code !== 200) {
@@ -931,89 +970,89 @@ const Editor = (props: { onRun: () => void }) => {
     return name
   }
 
-  const generateAISql = async (aiSql: string, cursorIndex: number, viewUpdate: any) => {
-    if (aiLoadingIndex !== -1) {
-      return
-    }
+  // const generateAISql = async (aiSql: string, cursorIndex: number, viewUpdate: any) => {
+  //   if (aiLoadingIndex !== -1) {
+  //     return
+  //   }
 
-    setCurAiSql(aiSql)
+  //   setCurAiSql(aiSql)
 
-    const database = getDatabaseName(cursorIndex)
+  //   const database = getDatabaseName(cursorIndex)
 
-    eventTracking('SQL Editor Generate AI', {
-      question: aiSql,
-      database
-    })
+  //   eventTracking('SQL Editor Generate AI', {
+  //     question: aiSql,
+  //     database
+  //   })
 
-    try {
-      const res = await generateSqlByBot(orgId, projectId, {
-        question: aiSql,
-        bot_type: '',
-        database,
-        cluster_id: clusterId
-      })
+  //   try {
+  //     const res = await generateSqlByBot(orgId, projectId, {
+  //       question: aiSql,
+  //       bot_type: '',
+  //       database,
+  //       cluster_id: clusterId
+  //     })
 
-      eventTracking('SQL Editor Generate AI Success', {
-        question: aiSql,
-        dataset: database
-      })
+  //     eventTracking('SQL Editor Generate AI Success', {
+  //       question: aiSql,
+  //       dataset: database
+  //     })
 
-      setAiLoadingIndex(-1)
-      if (!res.response) {
-        return
-      }
+  //     setAiLoadingIndex(-1)
+  //     if (!res.response) {
+  //       return
+  //     }
 
-      // cursor start from 0
-      const from = cursorIndex + 1
-      const texts = sqlTextRef.current.split('\n')
-      const prefixArrs = texts.slice(0, cursorIndex + 1)
+  //     // cursor start from 0
+  //     const from = cursorIndex + 1
+  //     const texts = sqlTextRef.current.split('\n')
+  //     const prefixArrs = texts.slice(0, cursorIndex + 1)
 
-      const prefixLen = prefixArrs.length
-      if (prefixArrs[prefixLen - 1].includes(aiTips)) {
-        prefixArrs.pop()
-      } else {
-        return
-      }
+  //     const prefixLen = prefixArrs.length
+  //     if (prefixArrs[prefixLen - 1].includes(aiTips)) {
+  //       prefixArrs.pop()
+  //     } else {
+  //       return
+  //     }
 
-      const prefix = prefixArrs.join('\n')
-      const affix = texts.slice(cursorIndex + 1)
-      const preFormartRes = formatTextStatus(res.response)
-      const response = preFormartRes
+  //     const prefix = prefixArrs.join('\n')
+  //     const affix = texts.slice(cursorIndex + 1)
+  //     const preFormartRes = formatTextStatus(res.response)
+  //     const response = preFormartRes
 
-      const text =
-        prefix + (response.indexOf('\n') === 0 ? '' : '\n') + response + (affix.length ? '\n' : '') + affix.join('\n')
+  //     const text =
+  //       prefix + (response.indexOf('\n') === 0 ? '' : '\n') + response + (affix.length ? '\n' : '') + affix.join('\n')
 
-      const len = response.split('\n').length
-      setSqlText(text)
-      sqlTextRef.current = text
-      const aiTextLen = len
-      updateAiTipsPosInfo(from, aiTextLen, false)
+  //     const len = response.split('\n').length
+  //     setSqlText(text)
+  //     sqlTextRef.current = text
+  //     const aiTextLen = len
+  //     updateAiTipsPosInfo(from, aiTextLen, false)
 
-      const cursorLine = prefix.length
-      // let the ai text into view
-      setCursor(cursorLine + response.length, viewUpdate, true)
-      // set the correct cursor
-      setCursor(cursorLine + 1, viewUpdate)
-    } catch (e: any) {
-      // remove the ai tips
-      const texts = sqlTextRef.current.split('\n')
-      let index
-      for (let i = 0; i < texts.length; i++) {
-        if (texts[i].includes(aiTips)) {
-          texts[i] = ''
-          index = i
-          break
-        }
-      }
-      setSqlText(texts.join('\n'))
-      sqlTextRef.current = texts.join('\n')
+  //     const cursorLine = prefix.length
+  //     // let the ai text into view
+  //     setCursor(cursorLine + response.length, viewUpdate, true)
+  //     // set the correct cursor
+  //     setCursor(cursorLine + 1, viewUpdate)
+  //   } catch (e: any) {
+  //     // remove the ai tips
+  //     const texts = sqlTextRef.current.split('\n')
+  //     let index
+  //     for (let i = 0; i < texts.length; i++) {
+  //       if (texts[i].includes(aiTips)) {
+  //         texts[i] = ''
+  //         index = i
+  //         break
+  //       }
+  //     }
+  //     setSqlText(texts.join('\n'))
+  //     sqlTextRef.current = texts.join('\n')
 
-      setAiLoadingIndex(-1)
-      updateAiTipsPosInfo(-1, -1, false)
+  //     setAiLoadingIndex(-1)
+  //     updateAiTipsPosInfo(-1, -1, false)
 
-      setCursor(texts.slice(0, index).join('\n').length + 1, viewUpdate)
-    }
-  }
+  //     setCursor(texts.slice(0, index).join('\n').length + 1, viewUpdate)
+  //   }
+  // }
 
   const formatTextStatus = (text: string) => {
     let index = 0
@@ -1035,9 +1074,9 @@ const Editor = (props: { onRun: () => void }) => {
           primary
           loading={isRunning}
           onClick={() => {
-            eventTracking('SQL Editor Executed', {
-              source: 'Run Button'
-            })
+            // eventTracking('SQL Editor Executed', {
+            //   source: 'Run Button'
+            // })
             runSqlHandler(false, fileRef.current?.sessionId)
           }}
         >
@@ -1059,7 +1098,9 @@ const Editor = (props: { onRun: () => void }) => {
           icon={null}
           closeOnBlur
           direction="left"
-          trigger={<DotsHorizontal onClick={() => eventTracking('Sql Editor Ellipse Button Clicked')} />}
+          trigger={<DotsHorizontal
+          //  onClick={() => eventTracking('Sql Editor Ellipse Button Clicked')} 
+          />}
         >
           <Dropdown.Menu>
             <Dropdown.Item disabled={isCreatingFile}>
@@ -1069,9 +1110,9 @@ const Editor = (props: { onRun: () => void }) => {
               </div>
             </Dropdown.Item>
 
-            <Dropdown.Item>
+            {/* <Dropdown.Item>
               <Settings />
-            </Dropdown.Item>
+            </Dropdown.Item> */}
           </Dropdown.Menu>
         </Dropdown>
       </div>
@@ -1107,11 +1148,11 @@ const Editor = (props: { onRun: () => void }) => {
           onKeyDown={editorKeyDownHandler}
           onBlur={editorBlur}
           onUpdate={selectionHandler}
-          // root={document.getElementById('SqlEditor')?.shadowRoot || document}
+        // root={document.getElementById('SqlEditor')?.shadowRoot || document}
         />
       </div>
 
-      <Modal
+      {/* <Modal
         open={isAggVisible}
         closeOnDocumentClick={false}
         closeOnDimmerClick={false}
@@ -1162,11 +1203,12 @@ const Editor = (props: { onRun: () => void }) => {
             </Form>
           </div>
         </Modal.Content>
-      </Modal>
+
+      </Modal> */}
     </div>
   )
 }
-
+/*
 type FormValues = {
   limit: number
   show_system_db_schema: boolean
@@ -1195,7 +1237,8 @@ export const Settings: React.FC<{ trigger?: React.ReactElement }> = ({ trigger }
   const fetchSetting = async () => {
     setLoading(true)
     try {
-      const res = await getSqlEditorRowsSetting(orgId, projectId, clusterId)
+      // const res = await getSqlEditorRowsSetting(orgId, projectId, clusterId)
+      const res = await getSqlEditorRowsSetting({ clusterId })
       setLoading(false)
 
       if (!res || res.code !== 200) {
@@ -1218,16 +1261,19 @@ export const Settings: React.FC<{ trigger?: React.ReactElement }> = ({ trigger }
       show_system_db_schema: show
     }
 
-    eventTracking('SQL Editor Settings Confirm Button Clicked', params)
+    // eventTracking('SQL Editor Settings Confirm Button Clicked', params)
 
-    const res = await sqlEditorRowsSetting(orgId, projectId, clusterId, params)
+    // const res = await sqlEditorRowsSetting(orgId, projectId, clusterId, params)
 
-    if (res.code !== 200) {
-      return
-    }
+    // if (res.code !== 200) {
+    //   return
+    // }
 
-    setSqlLimit(values.limit)
-    setSystemShow(show)
+    // setSqlLimit(values.limit)
+    // setSystemShow(show)
+
+    setSqlLimit(500)
+    setSystemShow(false)
 
     closeModal()
   }
@@ -1244,7 +1290,7 @@ export const Settings: React.FC<{ trigger?: React.ReactElement }> = ({ trigger }
         trigger ? (
           React.cloneElement(trigger, {
             onClick: () => {
-              eventTracking('SQL Editor Row Settings Button Clicked')
+              // eventTracking('SQL Editor Row Settings Button Clicked')
               setVisible(true)
             }
           })
@@ -1252,7 +1298,7 @@ export const Settings: React.FC<{ trigger?: React.ReactElement }> = ({ trigger }
           <div
             className="operation-menu-item"
             onClick={() => {
-              eventTracking('SQL Editor Row Settings Button Clicked')
+              // eventTracking('SQL Editor Row Settings Button Clicked')
               setVisible(true)
             }}
           >
@@ -1312,5 +1358,7 @@ export const Settings: React.FC<{ trigger?: React.ReactElement }> = ({ trigger }
     </Modal>
   )
 }
+*/
 
-export default observer(Editor)
+// export default observer(Editor)
+export default Editor

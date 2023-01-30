@@ -520,7 +520,7 @@ const DatabaseList = () => {
     onExpand(JSON.parse(keys))
   }
 
-  const onExpand = (keys: React.Key[]) => {
+  const onExpand = (keys: any[]) => {
     setAutoExpandParent(false)
     const filters = keys.filter((k: string) => {
       const arrs = `${k}`.split('-')

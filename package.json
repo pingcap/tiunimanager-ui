@@ -37,6 +37,7 @@
     "@uiw/codemirror-theme-bbedit": "^4.15.1",
     "@uiw/react-codemirror": "^4.12.1",
     "ace-builds": "^1.4.12",
+    "ahooks": "^3.7.0",
     "antd": "^4.16.13",
     "axios": "^0.21.1",
     "codemirror": "^6.0.1",

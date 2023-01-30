@@ -75,3 +75,12 @@ export function createSqlEditorFile(payload: { clusterId: string; body: any }) {
     .post<Res>(`/api/v1/clusters/${payload.clusterId}/sqlfiles`, payload.body)
     .then((res) => res.data)
 }
+
+//////////
+
+export function sqlEditorSQLExecute(payload: { clusterId: string; body: any }) {
+  return axiosInstance.post<Res>(
+    `/api/v1/clusters/${payload.clusterId}/statements`,
+    payload.body
+  )
+}
