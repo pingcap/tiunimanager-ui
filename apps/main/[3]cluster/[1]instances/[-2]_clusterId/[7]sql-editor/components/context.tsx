@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
 
 import {
-  getSqlEditorRowsSetting,
+  // getSqlEditorRowsSetting,
   getSqlEditorFiles,
   updateSqlEditorFile,
   createsSqlEditorSession,
-  getAIUserSetting
-} from 'dbaas/services'
-import useStores from 'dbaas/stores/useStores'
+  // getAIUserSetting
+} from '@/api/hooks/sql-editor'
+import { useClusterContext } from '@apps/main/[3]cluster/[1]instances/[-2]_clusterId/context'
 
 import { SqlRes, SqlFile, UserSetting } from './types'
 
@@ -30,7 +29,7 @@ export const SqlEditorProvider: React.FC = (props) => {
   const [isCreatingFile, setIsCreatingFile] = useState(false)
   const [editSqlTexts, setEditSqlTexts] = useState([])
   const [sideMenuAcitveIndex, setSideMenuAcitveIndex] = useState(1)
-  const { id: clusterId } = useParams() as { id: string }
+  // const { id: clusterId } = useParams() as { id: string }
   const [queryLogsH, setQueryLogsH] = useState(120)
 
   const [isAIInit, setIsAIInit] = useState(true) // false: is the first time
@@ -40,9 +39,9 @@ export const SqlEditorProvider: React.FC = (props) => {
   const [isFromImport, setIsFromImport] = useState(false)
   const [newGeneSql, setNewGeneSql] = useState('')
   const [isRunAll, setIsRunAll] = useState(false)
-  const {
-    store: { activeProjectId, tenantData, preloadedSQLEditor }
-  } = useStores()
+
+  const { info } = useClusterContext()
+  const clusterId = info!.clusterId!
 
   useEffect(() => {
     getSettings()
@@ -51,48 +50,61 @@ export const SqlEditorProvider: React.FC = (props) => {
 
     runFileQueue()
 
-    localStorage.setItem(
-      'chat2queryDefaultData',
-      JSON.stringify({
-        database: preloadedSQLEditor?.db,
-        table: preloadedSQLEditor?.table
-      })
-    )
+    // preloadedSQLEditor is used by import task, we don't need it
+    // localStorage.setItem(
+    //   'chat2queryDefaultData',
+    //   JSON.stringify({
+    //     database: preloadedSQLEditor?.db,
+    //     table: preloadedSQLEditor?.table
+    //   })
+    // )
 
     return () => {
-      editFileQueueTimer && clearTimeout(editFileQueueTimer.current)
+      editFileQueueTimer.current && clearTimeout(editFileQueueTimer.current)
     }
   }, [])
 
   const getUserSetting = async () => {
-    const res = await getAIUserSetting(tenantData.id, activeProjectId)
-    if (!res || res.code !== 200) {
-      return
-    }
-    const data = res.data || {}
+    // {"code":200,"message":"ok","data":{"id":262,"created_by":"huangbaoling@pingcap.com","chat2query_init":true,"privacy_box_count":1,"is_privacy_allowed":true}}
 
-    setIsAIInit(data.chat2query_init === undefined ? true : data.chat2query_init)
-    setEditorSetting(data as UserSetting)
-    // setIsAIInit(false)
+    // const res = await getAIUserSetting({ clusterId })
+    // if (!res || res.code !== 200) {
+    //   return
+    // }
+    // const data = res.data || {}
+
+    // setIsAIInit(data.chat2query_init === undefined ? true : data.chat2query_init)
+    // setEditorSetting(data as UserSetting)
+    setIsAIInit(true)
+    setEditorSetting({
+      chat2query_init: true,
+      is_privacy_allowed: true,
+      privacy_box_count: 1
+    })
   }
 
   const getSettings = async () => {
-    const res = await getSqlEditorRowsSetting(tenantData.id, activeProjectId, clusterId)
-    if (!res || res.code !== 200) {
-      return
-    }
-    const data = res.data || {}
-    setSqlLimit(data.limit || 500)
-    setSystemShow(data.show_system_db_schema || false)
+    // {"code":200,"message":"ok","data":{"limit":500,"show_system_db_schema":false,"enable_dataapi":false}}
+
+    // const res = await getSqlEditorRowsSetting({ clusterId })
+    // if (!res || res.code !== 200) {
+    //   return
+    // }
+    // const data = res.data || {}
+    // setSqlLimit(data.limit || 500)
+    // setSystemShow(data.show_system_db_schema || false)
+    setSqlLimit(500)
+    setSystemShow(false)
   }
 
   const runFileQueue = () => {
-    editFileQueueTimer && clearTimeout(editFileQueueTimer.current)
+    editFileQueueTimer.current && clearTimeout(editFileQueueTimer.current)
 
     editFileQueueTimer.current = setTimeout(async () => {
       const list = editFileQueue.current || []
       if (list.length) {
-        await updateSqlEditorFile(tenantData.id, activeProjectId, clusterId, list[0].id, list[0])
+        // await updateSqlEditorFile(tenantData.id, activeProjectId, clusterId, list[0].id, list[0])
+        await updateSqlEditorFile({ clusterId, sqlFileId: list[0].id, body: list[0] })
         list.shift()
         editFileQueue.current = list
       }
@@ -100,7 +112,7 @@ export const SqlEditorProvider: React.FC = (props) => {
   }
 
   const getSqlFiles = async (needMatch: boolean, selectedFile?: SqlFile) => {
-    const res = await getSqlEditorFiles(tenantData.id, activeProjectId, clusterId)
+    const res = await getSqlEditorFiles({ clusterId })
     if (res.code !== 200) {
       return
     }
@@ -125,8 +137,10 @@ export const SqlEditorProvider: React.FC = (props) => {
   }
 
   const createSession = async (fileId: number, database: string) => {
-    const res = await createsSqlEditorSession(tenantData.id, activeProjectId, clusterId, {
-      database
+    const res = await createsSqlEditorSession({
+      clusterId, body: {
+        database
+      }
     })
 
     sqlFiles.forEach((item) => {
@@ -149,8 +163,6 @@ export const SqlEditorProvider: React.FC = (props) => {
     <SqlEditorContext.Provider
       value={{
         clusterId,
-        orgId: tenantData.id,
-        projectId: activeProjectId,
         sqlResultList,
         setSqlResultList,
         dbList,

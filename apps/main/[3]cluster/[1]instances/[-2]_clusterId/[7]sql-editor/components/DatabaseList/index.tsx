@@ -1,6 +1,8 @@
-import { Tree, Skeleton, Popup, Input, Dropdown } from '@tidb-cloud/ui-components'
-import { debounce } from 'lodash-es'
-import { observer } from 'mobx-react'
+// import { Tree, Skeleton, Popup, Input, Dropdown } from '@tidb-cloud/ui-components'
+import { Tree, Skeleton } from '../../ui-components'
+import { Popup, Dropdown, Input } from 'semantic-ui-react'
+import { debounce } from 'lodash'
+// import { observer } from 'mobx-react'
 import { useEffect, useContext, useState, useRef } from 'react'
 import {
   AlertCircle,
@@ -13,14 +15,15 @@ import {
   XClose,
   RefreshCw02,
   SystemDatabase
-} from 'uikit/icons/raw'
+} from '../../ui-components/icons/raw'
 
-import { EllipseIcon } from 'dbaas/components/Icon'
-import { LinkButton } from 'dbaas/components/LinkButton'
-import defaultContent, { preTips, affixTips } from 'dbaas/screens/SqlEditor/SqlFiles/fileContent'
-import { getDbMeta, getAllDbData, createSqlEditorFile } from 'dbaas/services'
-import useStores from 'dbaas/stores/useStores'
-import { eventTracking } from 'dbaas/utils/tracking'
+// import { EllipseIcon } from 'dbaas/components/Icon'
+import { EllipseIcon } from '../../ui-components/Icon'
+import { LinkButton } from '../../ui-components/LinkButton'
+import defaultContent, { preTips, affixTips } from '../SqlFiles/fileContent'
+import { getDbMeta, getAllDbData, createSqlEditorFile } from '@/api/hooks/sql-editor'
+// import useStores from 'dbaas/stores/useStores'
+// import { eventTracking } from 'dbaas/utils/tracking'
 
 import { SqlEditorContext } from '../context'
 import { SqlFile } from '../types'
@@ -41,9 +44,9 @@ type Columns = {
 }
 
 const DatabaseList = () => {
-  const {
-    store: { activeProjectId, tenantData }
-  } = useStores()
+  // const {
+  //   store: { activeProjectId, tenantData }
+  // } = useStores()
   const {
     dbList,
     setDbList,
@@ -113,9 +116,10 @@ const DatabaseList = () => {
     setDbList([])
 
     try {
-      const res = await getAllDbData(tenantData.id, activeProjectId, clusterId, {
-        isbrief: 'true'
-      })
+      // const res = await getAllDbData(tenantData.id, activeProjectId, clusterId, {
+      //   isbrief: 'true'
+      // })
+      const res = await getAllDbData({ clusterId, params: { isbrief: 'true' } })
       const dbs = formatDb(res.data as DB)
       setIsInit(false)
       setLoading(false)
@@ -247,9 +251,10 @@ const DatabaseList = () => {
 
   const getAll = async () => {
     try {
-      const res = await getAllDbData(tenantData.id, activeProjectId, clusterId, {
-        isbrief: 'false'
-      })
+      // const res = await getAllDbData(tenantData.id, activeProjectId, clusterId, {
+      //   isbrief: 'false'
+      // })
+      const res = await getAllDbData({ clusterId, params: { isbrief: 'false' } })
 
       setIsInit(false)
       const dbs = formatDb(res.data as DB)
@@ -274,7 +279,8 @@ const DatabaseList = () => {
 
   const getMetaList = async (databaseName: string, tableName: string, databaseIndex: number, tabIndex: number) => {
     try {
-      const res = (await getDbMeta(tenantData.id, activeProjectId, clusterId, databaseName, tableName)) as any
+      // const res = (await getDbMeta(tenantData.id, activeProjectId, clusterId, databaseName, tableName)) as any
+      const res = (await getDbMeta({ clusterId, dbName: databaseName, tableName })) as any
       const data = res.data.columns as { col: string; data_type: string }[]
       const metas = data.map((meta, index) => {
         return {
@@ -336,10 +342,11 @@ const DatabaseList = () => {
       sql += `\nSELECT * FROM ${dbName}.${tabName}${limit ? ' LIMIT ' + limit : ''};`
     }
     const content = `${preTips}\n${affixTips}\n${sql}`
-    const createRes = await createSqlEditorFile(tenantData.id, activeProjectId, clusterId, {
-      name,
-      content
-    })
+    // const createRes = await createSqlEditorFile(tenantData.id, activeProjectId, clusterId, {
+    //   name,
+    //   content
+    // })
+    const createRes = await createSqlEditorFile({ clusterId, body: { name, content } })
     const file: SqlFile = {
       id: createRes.data || 0,
       content,
@@ -418,7 +425,7 @@ const DatabaseList = () => {
       }
 
       if (pos.length === 3) {
-        eventTracking('SQL Editor Fetch Meta List')
+        // eventTracking('SQL Editor Fetch Meta List')
 
         getMetaList(db.name, db.children[pos[2]].name, pos[1], pos[2]).then((res) => {
           if (res) {
@@ -515,8 +522,8 @@ const DatabaseList = () => {
 
   const onExpand = (keys: React.Key[]) => {
     setAutoExpandParent(false)
-    const filters = keys.filter((key: string) => {
-      const arrs = `${key}`.split('-')
+    const filters = keys.filter((k: string) => {
+      const arrs = `${k}`.split('-')
       if (keys.includes(arrs[0])) {
         return true
       }
@@ -541,7 +548,7 @@ const DatabaseList = () => {
             maxLength={64}
             placeholder="Search"
             value={filter}
-            onFocus={() => eventTracking('SQL Editor Search File Focus')}
+            // onFocus={() => eventTracking('SQL Editor Search File Focus')}
             onInput={filterChange}
           />
           {filter && <XClose onClick={clearFilter} />}
@@ -583,4 +590,5 @@ const DatabaseList = () => {
   )
 }
 
-export default observer(DatabaseList)
+// export default observer(DatabaseList)
+export default DatabaseList
