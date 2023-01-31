@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import DOMPurify from 'dompurify'
-import { observer } from 'mobx-react'
+// import { observer } from 'mobx-react'
 import { useEffect, useMemo, useRef } from 'react'
 import { VariableSizeGrid } from 'react-window'
 
@@ -97,4 +97,5 @@ const Results: React.FC<{
   )
 }
 
-export default observer(Results)
+// export default observer(Results)
+export default Results

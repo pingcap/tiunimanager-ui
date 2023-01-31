@@ -1,16 +1,18 @@
-import { Download01, Run } from '@tidb-cloud-uikit/icons/raw'
+// import { Download01, Run } from '@tidb-cloud-uikit/icons/raw'
+import { Download01, Run } from '../../ui-components/icons/raw'
 import clsx from 'clsx'
-import { observer } from 'mobx-react'
+// import { observer } from 'mobx-react'
 import React, { useState, useContext, useEffect, useRef } from 'react'
 import { CSVLink } from 'react-csv'
-import { RightIndent01, LeftIndent01, Scale02, Scale03 } from 'uikit/icons/raw'
+import { RightIndent01, LeftIndent01, Scale02, Scale03 } from '../../ui-components/icons/raw'
 
-import ResizableContainer from 'dbaas/components/ResizableContainer'
-import useStores from 'dbaas/stores/useStores'
-import { eventTracking } from 'dbaas/utils/tracking'
+// import ResizableContainer from 'dbaas/components/ResizableContainer'
+import ResizableContainer from '../../ui-components/ResizableContainer'
+// import useStores from 'dbaas/stores/useStores'
+// import { eventTracking } from 'dbaas/utils/tracking'
 
 import { SqlEditorContext } from '../context'
-import { Settings } from '../Editor'
+// import { Settings } from '../Editor'
 import { SqlRes, RequestStatus } from '../types'
 
 import styles from './index.module.less'
@@ -45,11 +47,12 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
   const { sqlResultList, editSqlTexts, sqlLimit } = useContext(SqlEditorContext)
   const isMac = /macintosh|mac os x/i.test(navigator.userAgent)
 
-  const {
-    store: {
-      config: { enableLayoutV3 }
-    }
-  } = useStores()
+  // const {
+  //   store: {
+  //     config: { enableLayoutV3 }
+  //   }
+  // } = useStores()
+  const enableLayoutV3 = true
 
   useEffect(() => {
     setLeftWidth(isLeftOpen ? defaultLeftWidth : miniLeftWidth)
@@ -178,9 +181,9 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
             <span
               className={styles.scaleIcon}
               onClick={() => {
-                eventTracking('SQL Editor Query Log Expand Button Clicked', {
-                  mode: isLeftOpen ? 'scalein' : 'scaleout'
-                })
+                // eventTracking('SQL Editor Query Log Expand Button Clicked', {
+                //   mode: isLeftOpen ? 'scalein' : 'scaleout'
+                // })
 
                 setIsLeftOpen(!isLeftOpen)
               }}
@@ -192,14 +195,13 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
           <div className={`${styles.logs} ${isLeftOpen ? styles.open : styles.hide}`}>
             {sqlResultList?.map((item: SqlRes, index: number) => (
               <div
-                className={`${styles.logItem} ${curIndex === index ? styles.active : ''} ${
-                  isLeftOpen ? styles.open : styles.hide
-                }`}
+                className={`${styles.logItem} ${curIndex === index ? styles.active : ''} ${isLeftOpen ? styles.open : styles.hide
+                  }`}
                 key={index}
                 onClick={() => {
-                  eventTracking('SQL Editor Query Log Item Clicked', {
-                    index
-                  })
+                  // eventTracking('SQL Editor Query Log Item Clicked', {
+                  //   index
+                  // })
                   messageItemClick(index)
                 }}
               >
@@ -240,7 +242,8 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
             <span className={styles.subDesc}>
               {isLeftOpen || !sqlResultList.length ? null : (cur.res?.row_count || 0) > sqlLimit ? (
                 <span>
-                  (Row limit reached. Showing <Settings trigger={<a>{sqlLimit}</a>} /> rows of many)
+                  {/* (Row limit reached. Showing <Settings trigger={<a>{sqlLimit}</a>} /> rows of many) */}
+                  (Row limit reached. Showing {sqlLimit} rows of many)
                 </span>
               ) : (
                 `(showing ${cur.res?.row_count || 0} rows)`
@@ -253,7 +256,7 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
                   headers={(columns || []).map((col: { col: string }) => col.col)}
                   filename={`results-${downFileSuffix()}`}
                   onClick={() => {
-                    eventTracking('SQL Editor Download Button Clicked')
+                    // eventTracking('SQL Editor Download Button Clicked')
                   }}
                 >
                   <Download01 className={styles.download} />
@@ -266,9 +269,9 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
                 <Scale03
                   className={styles.resizeImg}
                   onClick={() => {
-                    eventTracking('SQL Editor Fullscreen Button Clicked', {
-                      mode: 'mini'
-                    })
+                    // eventTracking('SQL Editor Fullscreen Button Clicked', {
+                    //   mode: 'mini'
+                    // })
 
                     set2Max(false)
                   }}
@@ -277,9 +280,9 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
                 <Scale02
                   className={styles.resizeImg}
                   onClick={() => {
-                    eventTracking('SQL Editor Fullscreen Button Clicked', {
-                      mode: 'max'
-                    })
+                    // eventTracking('SQL Editor Fullscreen Button Clicked', {
+                    //   mode: 'max'
+                    // })
                     set2Max(true)
                   }}
                 />
@@ -342,4 +345,5 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
   )
 }
 
-export default observer(MessageLogs)
+// export default observer(MessageLogs)
+export default MessageLogs

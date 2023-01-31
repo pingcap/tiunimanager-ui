@@ -26,6 +26,23 @@ export function getSqlEditorFiles(payload: { clusterId: string }) {
     .then((res) => res.data)
 }
 
+export function createSqlEditorFile(payload: { clusterId: string; body: any }) {
+  return axiosInstance
+    .post<Res>(`/api/v1/clusters/${payload.clusterId}/sqlfiles`, payload.body)
+    .then((res) => res.data)
+}
+
+export function deleteSqlEditorFile(payload: {
+  clusterId: string
+  sqlFileId: number
+}) {
+  return axiosInstance
+    .delete<Res>(
+      `/api/v1/clusters/${payload.clusterId}/sqlfiles/${payload.sqlFileId}`
+    )
+    .then((res) => res.data)
+}
+
 export function updateSqlEditorFile(payload: {
   clusterId: string
   sqlFileId: number
@@ -39,18 +56,7 @@ export function updateSqlEditorFile(payload: {
     .then((res) => res.data)
 }
 
-export function createsSqlEditorSession(payload: {
-  clusterId: string
-  body: any
-}) {
-  return axiosInstance
-    .post<Res>(`/api/v1/clusters/${payload.clusterId}/session`, payload.body)
-    .then((res) => res.data)
-}
-
 /////////////////////
-
-// import { getDbMeta, getAllDbData, createSqlEditorFile } from 'dbaas/services'
 
 export function getAllDbData(payload: { clusterId: string; params: any }) {
   return axiosInstance
@@ -70,13 +76,16 @@ export function getDbMeta(payload: {
     .then((res) => res.data)
 }
 
-export function createSqlEditorFile(payload: { clusterId: string; body: any }) {
+//////////
+
+export function createsSqlEditorSession(payload: {
+  clusterId: string
+  body: any
+}) {
   return axiosInstance
-    .post<Res>(`/api/v1/clusters/${payload.clusterId}/sqlfiles`, payload.body)
+    .post<Res>(`/api/v1/clusters/${payload.clusterId}/session`, payload.body)
     .then((res) => res.data)
 }
-
-//////////
 
 export function sqlEditorSQLExecute(payload: { clusterId: string; body: any }) {
   return axiosInstance.post<Res>(

@@ -1,9 +1,9 @@
-import { Button, StrictButtonProps } from '@tidb-cloud/ui-components'
+import { Button, StrictButtonProps } from 'semantic-ui-react'
 import clsx from 'clsx'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { eventTracking } from 'dbaas/utils/tracking'
+// import { eventTracking } from 'dbaas/utils/tracking'
 
 import styles from './index.module.less'
 
@@ -34,9 +34,9 @@ export const LinkButton: React.FC<ButtonProps> = ({
       return
     }
     if (eventName) {
-      eventTracking(eventName, {
-        ...eventParams
-      })
+      // eventTracking(eventName, {
+      //   ...eventParams
+      // })
     }
 
     onClick?.(e, rest)

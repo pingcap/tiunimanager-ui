@@ -1,25 +1,27 @@
-import { Dropdown, Modal, Skeleton, Input, Popup } from '@tidb-cloud/ui-components'
-import { observer } from 'mobx-react'
+// import { Dropdown, Modal, Skeleton, Input, Popup } from '@tidb-cloud/ui-components'
+import { Dropdown, Modal, Input, Popup, Button } from 'semantic-ui-react'
+import { Skeleton } from '../../ui-components'
+// import { observer } from 'mobx-react'
 import { useEffect, useRef, useState, useContext } from 'react'
-import { UseFormMethods } from 'react-hook-form'
-import { Plus, XClose, File06 } from 'uikit/icons/raw'
+// import { UseFormMethods } from 'react-hook-form'
+import { Plus, XClose, File06 } from '../../ui-components/icons/raw'
 
-import Button from 'dbaas/components/Button'
-import { Form } from 'dbaas/components/Form'
-import { FormInput } from 'dbaas/components/Form'
-import { CIcon, EllipseIcon } from 'dbaas/components/Icon'
-import { LinkButton } from 'dbaas/components/LinkButton'
+// import Button from 'dbaas/components/Button'
+// import { Form } from 'dbaas/components/Form'
+// import { FormInput } from 'dbaas/components/Form'
+import { CIcon, EllipseIcon } from '../../ui-components/Icon'
+import { LinkButton } from '../../ui-components/LinkButton'
 import {
   getSqlEditorFiles,
   createSqlEditorFile,
   deleteSqlEditorFile,
   updateSqlEditorFile,
   createsSqlEditorSession,
-  getIsTableExist
-} from 'dbaas/services'
-import useStores from 'dbaas/stores/useStores'
-import { eventTracking } from 'dbaas/utils/tracking'
-import { sqlEditorFileNameRules } from 'dbaas/utils/validationRules'
+  // getIsTableExist
+} from '@/api/hooks/sql-editor'
+// import useStores from 'dbaas/stores/useStores'
+// import { eventTracking } from 'dbaas/utils/tracking'
+// import { sqlEditorFileNameRules } from 'dbaas/utils/validationRules'
 
 import { SqlEditorContext } from '../context'
 import { SqlFile } from '../types'
@@ -38,11 +40,11 @@ const SqlFiles = () => {
   const operFile = useRef<SqlFile | null>(null)
   const [renameFile, setRenameFile] = useState<SqlFile | null>(null)
 
-  const formRef = useRef<UseFormMethods<FormProps>>()
+  // const formRef = useRef<UseFormMethods<FormProps>>()
   const [loading, setLoading] = useState(true)
   const {
-    orgId,
-    projectId,
+    // orgId,
+    // projectId,
     clusterId,
     sqlFiles,
     setSqlFiles,
@@ -56,10 +58,11 @@ const SqlFiles = () => {
   } = useContext(SqlEditorContext)
   const [filterSqlFiles, setFilterSqlFiles] = useState<SqlFile[]>([])
   const [filter, setFilter] = useState('')
-  const {
-    store: { preloadedSQLEditor },
-    actions: { setPreloadedSQLEditor }
-  } = useStores()
+
+  // const {
+  //   store: { preloadedSQLEditor },
+  //   actions: { setPreloadedSQLEditor }
+  // } = useStores()
 
   useEffect(() => {
     init()
@@ -71,7 +74,8 @@ const SqlFiles = () => {
   }, [sqlFiles])
 
   const initNoImport = async () => {
-    const res = await getSqlEditorFiles(orgId, projectId, clusterId)
+    // const res = await getSqlEditorFiles(orgId, projectId, clusterId)
+    const res = await getSqlEditorFiles({ clusterId })
 
     if (res.code !== 200) {
       setLoading(false)
@@ -86,9 +90,15 @@ const SqlFiles = () => {
       setIsCreatingFile(true)
 
       const initName = 'Getting Started'
-      const createRes = await createSqlEditorFile(orgId, projectId, clusterId, {
-        name: initName,
-        content: defaultContent
+      // const createRes = await createSqlEditorFile(orgId, projectId, clusterId, {
+      //   name: initName,
+      //   content: defaultContent
+      // })
+      const createRes = await createSqlEditorFile({
+        clusterId, body: {
+          name: initName,
+          content: defaultContent
+        }
       })
 
       const file = {
@@ -112,7 +122,7 @@ const SqlFiles = () => {
       setSqlFiles(data)
 
       let cur = data[0]
-      data.forEach((file) => {
+      data.forEach((file: any) => {
         if (file.id === parseInt(lastFile)) {
           cur = file
         }
@@ -124,15 +134,19 @@ const SqlFiles = () => {
   }
 
   const init = async () => {
-    const { table = '', db = '' } = preloadedSQLEditor || {}
+    // const { table = '', db = '' } = preloadedSQLEditor || {}
+    const table = ''
+    const db = ''
     if (!table || !db) {
       initNoImport()
       return
     }
 
     try {
-      const res = await getIsTableExist(orgId, projectId, clusterId, db, table)
-      const { is_exist, session_id } = res.data || {}
+      // const res = await getIsTableExist(orgId, projectId, clusterId, db, table)
+      // const { is_exist, session_id } = res.data || {}
+      const is_exist = false
+      const session_id = ''
       if (!is_exist) {
         initNoImport()
         return
@@ -140,9 +154,15 @@ const SqlFiles = () => {
 
       const name = 'New query'
       const content = `${preTips}\n${affixTips}\nUSE ${db};\nSELECT * from ${db}.${table} limit 10;`
-      const createRes = await createSqlEditorFile(orgId, projectId, clusterId, {
-        name,
-        content
+      // const createRes = await createSqlEditorFile(orgId, projectId, clusterId, {
+      //   name,
+      //   content
+      // })
+      const createRes = await createSqlEditorFile({
+        clusterId, body: {
+          name,
+          content
+        }
       })
 
       if (createRes.code !== 200) {
@@ -160,7 +180,7 @@ const SqlFiles = () => {
       }
 
       getSqlFiles(false, file)
-      setPreloadedSQLEditor(null)
+      // setPreloadedSQLEditor(null)
       setIsFromImport(true)
 
       localStorage.setItem('SqlEditorEditedFileId', `${createRes.data || ''}`)
@@ -169,25 +189,26 @@ const SqlFiles = () => {
     }
   }
 
-  const confirm = async (values: FormProps) => {
-    if (!operFile.current) {
-      return
-    }
-    await updateSqlEditorFile(orgId, projectId, clusterId, operFile.current.id, {
-      ...operFile.current,
-      name: values.name
-    })
+  // const confirm = async (values: FormProps) => {
+  //   if (!operFile.current) {
+  //     return
+  //   }
+  //   await updateSqlEditorFile(orgId, projectId, clusterId, operFile.current.id, {
+  //     ...operFile.current,
+  //     name: values.name
+  //   })
 
-    setOpen(false)
-    getSqlFiles()
-  }
+  //   setOpen(false)
+  //   getSqlFiles()
+  // }
 
   const deleteFileConfirm = async () => {
     if (!operFile.current) {
       return
     }
 
-    await deleteSqlEditorFile(orgId, projectId, clusterId, operFile.current?.id)
+    // await deleteSqlEditorFile(orgId, projectId, clusterId, operFile.current?.id)
+    await deleteSqlEditorFile({ clusterId, sqlFileId: operFile.current?.id })
     setDeleteOpenVisible(false)
 
     const files = sqlFiles.slice()
@@ -246,7 +267,8 @@ const SqlFiles = () => {
         name: `New query`,
         content: newFileContent
       }
-      const createRes = await createSqlEditorFile(orgId, projectId, clusterId, fileParams)
+      // const createRes = await createSqlEditorFile(orgId, projectId, clusterId, fileParams)
+      const createRes = await createSqlEditorFile({ clusterId, body: fileParams })
 
       const { code, data: id } = createRes
 
@@ -263,7 +285,8 @@ const SqlFiles = () => {
 
       setSqlFiles(files)
 
-      const session = await createsSqlEditorSession(orgId, projectId, clusterId, {})
+      // const session = await createsSqlEditorSession(orgId, projectId, clusterId, {})
+      const session = await createsSqlEditorSession({ clusterId, body: {} })
       files.forEach((item: SqlFile) => {
         if (item.id === id) {
           item.sessionId = session.data
@@ -325,9 +348,15 @@ const SqlFiles = () => {
       return
     }
 
-    await updateSqlEditorFile(orgId, projectId, clusterId, renameFile.id, {
-      ...renameFile,
-      name
+    // await updateSqlEditorFile(orgId, projectId, clusterId, renameFile.id, {
+    //   ...renameFile,
+    //   name
+    // })
+    await updateSqlEditorFile({
+      clusterId, sqlFileId: renameFile.id, body: {
+        ...renameFile,
+        name
+      }
     })
 
     getSqlFiles(true)
@@ -361,7 +390,7 @@ const SqlFiles = () => {
             maxLength={64}
             placeholder="Search"
             value={filter}
-            onFocus={() => eventTracking('SQL Editor Search File Focus')}
+            // onFocus={() => eventTracking('SQL Editor Search File Focus')}
             onChange={filterChange}
           />
           {filter && <XClose onClick={clearFilter} />}
@@ -415,7 +444,7 @@ const SqlFiles = () => {
                     <Dropdown.Item>
                       <div
                         onClick={() => {
-                          eventTracking('SQL Editor File Rename Button Clicked')
+                          // eventTracking('SQL Editor File Rename Button Clicked')
 
                           setIsRename(true)
                           setRenameFile(file)
@@ -431,7 +460,7 @@ const SqlFiles = () => {
                       <Dropdown.Item>
                         <div
                           onClick={() => {
-                            eventTracking('SQL Editor File Delete Button Clicked')
+                            // eventTracking('SQL Editor File Delete Button Clicked')
 
                             setDeleteOpenVisible(true)
                             operFile.current = file
@@ -448,7 +477,7 @@ const SqlFiles = () => {
           </>
         )}
 
-        <Modal size="tiny" open={open} className={`${styles.modal} ${styles.renameModal}`}>
+        {/* <Modal size="tiny" open={open} className={`${styles.modal} ${styles.renameModal}`}>
           <Modal.Header>Rename</Modal.Header>
           <div className={styles.content}>
             <div className={styles.title}>File Name</div>
@@ -466,7 +495,7 @@ const SqlFiles = () => {
               <FormInput name="name" placeholder="New Query" maxLength={64} rules={sqlEditorFileNameRules} />
             </Form>
           </div>
-        </Modal>
+        </Modal> */}
 
         <Modal size="tiny" open={deleteOpenVisible} className={styles.modal}>
           <Modal.Header>Delete SQL File</Modal.Header>
@@ -488,4 +517,5 @@ const SqlFiles = () => {
   )
 }
 
-export default observer(SqlFiles)
+// export default observer(SqlFiles)
+export default SqlFiles
