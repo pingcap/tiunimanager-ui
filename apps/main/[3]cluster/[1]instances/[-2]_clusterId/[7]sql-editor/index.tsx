@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
+import SqlEditor from "./components";
+
 export default function () {
   return (
     <div>
-      SQL Editor
+      <SqlEditor/>
     </div>
   )
 }

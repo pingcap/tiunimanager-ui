@@ -1,4 +1,5 @@
-import React, { FC } from 'react'
+// import React, 
+import { FC } from 'react'
 import { Resizable, ResizableProps } from 're-resizable'
 
 const ResizableContainer: FC<ResizableProps> = ({ children, ...props }) => {

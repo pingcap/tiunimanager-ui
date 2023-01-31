@@ -1,6 +1,6 @@
 import { Button, StrictButtonProps } from 'semantic-ui-react'
 import clsx from 'clsx'
-import React from 'react'
+// import React from 'react'
 import { Link } from 'react-router-dom'
 
 // import { eventTracking } from 'dbaas/utils/tracking'

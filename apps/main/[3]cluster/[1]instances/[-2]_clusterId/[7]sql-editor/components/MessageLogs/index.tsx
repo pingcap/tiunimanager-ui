@@ -2,7 +2,8 @@
 import { Download01, Run } from '../../ui-components/icons/raw'
 import clsx from 'clsx'
 // import { observer } from 'mobx-react'
-import React, { useState, useContext, useEffect, useRef } from 'react'
+// import React, 
+import { useState, useContext, useEffect, useRef } from 'react'
 import { CSVLink } from 'react-csv'
 import { RightIndent01, LeftIndent01, Scale02, Scale03 } from '../../ui-components/icons/raw'
 

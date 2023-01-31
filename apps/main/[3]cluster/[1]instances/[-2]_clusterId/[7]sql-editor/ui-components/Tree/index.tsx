@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import RcTree from 'rc-tree'
 import type { TreeProps as RcTreeProps, BasicDataNode } from 'rc-tree'
 import type { DataNode, Key } from 'rc-tree/lib/interface'
-import React from 'react'
+// import React from 'react'
 
 import { collapseMotion } from './motion'
 import renderSwitcherIcon from './renderSwitcherIcon'
