@@ -20,8 +20,8 @@ import SqlEditor from "./components";
 
 export default function () {
   return (
-    <div>
-      <SqlEditor/>
+    <div style={{ position: 'relative', height: 'calc(100vh - 264px)' }}>
+      <SqlEditor />
     </div>
   )
 }

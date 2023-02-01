@@ -24,11 +24,15 @@ export function getSqlEditorFiles(payload: { clusterId: string }) {
   return axiosInstance
     .get<Res>(`/api/v1/dataapps/sqleditor/${payload.clusterId}/sqlfiles`)
     .then((res) => res.data)
+    .then(d => ({...d, data: d.data.list}))
 }
 
 export function createSqlEditorFile(payload: { clusterId: string; body: any }) {
   return axiosInstance
-    .post<Res>(`/api/v1/dataapps/sqleditor/${payload.clusterId}/sqlfiles`, payload.body)
+    .post<Res>(`/api/v1/dataapps/sqleditor/${payload.clusterId}/sqlfiles`, {
+      ...payload.body,
+      database: 'test',
+    })
     .then((res) => res.data)
 }
 
@@ -60,7 +64,9 @@ export function updateSqlEditorFile(payload: {
 
 export function getAllDbData(payload: { clusterId: string; params: any }) {
   return axiosInstance
-    .get<Res>(`/api/v1/dataapps/sqleditor/${payload.clusterId}/meta?isbrief=${payload.params.isbrief}`)
+    .get<Res>(
+      `/api/v1/dataapps/sqleditor/${payload.clusterId}/meta?isbrief=${payload.params.isbrief}`
+    )
     .then((res) => res.data)
 }
 
@@ -83,7 +89,10 @@ export function createsSqlEditorSession(payload: {
   body: any
 }) {
   return axiosInstance
-    .post<Res>(`/api/v1/dataapps/sqleditor/${payload.clusterId}/session`, payload.body)
+    .post<Res>(
+      `/api/v1/dataapps/sqleditor/${payload.clusterId}/session`,
+      payload.body
+    )
     .then((res) => res.data)
 }
 

@@ -119,6 +119,7 @@ export const SqlEditorProvider: React.FC = (props) => {
     }
 
     const list = res.data || []
+    console.log('sql files list:', list)
     setSqlFiles(list as SqlFile[])
 
     if (selectedFile) {

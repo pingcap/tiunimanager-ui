@@ -362,6 +362,8 @@ const SqlFiles = () => {
     getSqlFiles(true)
   }
 
+  console.log('file list:', sqlFiles)
+
   return (
     <div>
       <div className={styles.filterInput}>

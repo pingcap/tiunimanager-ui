@@ -82,7 +82,7 @@ const SqlEditor = () => {
   return (
     <SqlEditorProvider>
       <div ref={ref}>
-        <div className={`${styles.sqlEditor} ${enableLayoutV3 ? styles.newLayoutEditor : ''}`} style={{ top: top }}>
+        <div className={`${styles.sqlEditor} ${enableLayoutV3 ? styles.newLayoutEditor : ''}`} style={{ top: '32px'}}>
           <SideMenu />
 
           <div className={styles.sqlEditorContent} ref={sqlContentRef}>
