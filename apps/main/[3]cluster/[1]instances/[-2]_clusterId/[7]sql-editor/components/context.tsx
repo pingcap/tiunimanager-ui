@@ -1,5 +1,5 @@
 // import React, 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, createContext } from 'react'
 
 import {
   // getSqlEditorRowsSetting,
@@ -12,7 +12,7 @@ import { useClusterContext } from '@apps/main/[3]cluster/[1]instances/[-2]_clust
 
 import { SqlRes, SqlFile, UserSetting } from './types'
 
-export const SqlEditorContext = React.createContext<any>(null)
+export const SqlEditorContext = createContext<any>(null)
 
 export const SqlEditorProvider: React.FC = (props) => {
   const [sqlResultList, setSqlResultList] = useState<SqlRes[] | []>([])

@@ -23,7 +23,7 @@ import { Button, Dropdown, Modal, Popup } from 'semantic-ui-react'
 import CodeMirror from '@uiw/react-codemirror'
 import { useMount } from 'ahooks'
 // import { observer } from 'mobx-react'
-import { useEffect, useState, useContext, useRef } from 'react'
+import { useEffect, useState, useContext, useRef, useCallback } from 'react'
 // import React from 'react'
 
 // import { Form, FormSelect, FormCheckbox } from 'dbaas/components/Form'
@@ -447,7 +447,7 @@ const Editor = (props: { onRun: () => void }) => {
     // }
   }
 
-  const changeHandler = React.useCallback(async (sql: string, viewUpdate) => {
+  const changeHandler = useCallback(async (sql: string, viewUpdate) => {
     // console.log('change', viewUpdate)
     viewUpdateRef.current = viewUpdate
     const changes = viewUpdate.changedRanges || []

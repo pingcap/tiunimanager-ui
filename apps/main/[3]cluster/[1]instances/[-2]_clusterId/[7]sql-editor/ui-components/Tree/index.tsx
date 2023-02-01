@@ -4,6 +4,7 @@ import RcTree from 'rc-tree'
 import type { TreeProps as RcTreeProps, BasicDataNode } from 'rc-tree'
 import type { DataNode, Key } from 'rc-tree/lib/interface'
 // import React from 'react'
+import {forwardRef} from 'react'
 
 import { collapseMotion } from './motion'
 import renderSwitcherIcon from './renderSwitcherIcon'
@@ -90,7 +91,7 @@ export interface TreeNodeAttribute {
   disableCheckbox: boolean
 }
 
-export const Tree = React.forwardRef<RcTree, TreeProps>((props, ref) => {
+export const Tree = forwardRef<RcTree, TreeProps>((props, ref) => {
   const {
     prefixCls = 'tc-uikit-tree',
     className,
