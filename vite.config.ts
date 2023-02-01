@@ -22,7 +22,7 @@ import vitePluginHtml from 'vite-plugin-html'
 import pluginYaml from 'rollup-plugin-yamlx'
 import { createMacroPlugin } from 'vite-plugin-macro'
 import pluginDel from 'rollup-plugin-delete'
-// import svgr from 'vite-plugin-svgr'
+import svgr from 'vite-plugin-svgr'
 import {
   provideAssets,
   provideComponents,
@@ -57,7 +57,10 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [
-      // svgr(),
+      // svgr({
+      //   include: 'icons/raw/*.svg'
+      // }),
+      svgr(),
       reactRefresh(),
       vitePluginHtml({
         inject: {

@@ -29,7 +29,8 @@ import { UserInfo } from '@/api/model'
 import { doUserLogout, resetUserPassword } from '@/api/hooks/platform'
 import LanguageDropdown from '@/components/LanguageDropdown'
 import { Logo } from '@/components/Logo'
-import loginBgImg from '/img/background/login.svg'
+// import loginBgImg from '/img/background/login.svg'
+const loginBgImg = '/img/background/login.svg'
 
 import styles from './index.module.less'
 

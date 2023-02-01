@@ -28,7 +28,8 @@ import { doUserLogin } from '@/api/hooks/platform'
 import { Logo } from '@/components/Logo'
 import { AxiosError } from 'axios'
 
-import loginBgImg from '/img/background/login.svg'
+// import loginBgImg from '/img/background/login.svg'
+const loginBgImg = '/img/background/login.svg'
 
 export default function Login() {
   const { t } = useI18n()
