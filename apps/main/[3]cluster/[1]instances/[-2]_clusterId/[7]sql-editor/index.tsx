@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import 'semantic-ui-css/semantic.min.css'
+
 import SqlEditor from "./components";
 
 export default function () {

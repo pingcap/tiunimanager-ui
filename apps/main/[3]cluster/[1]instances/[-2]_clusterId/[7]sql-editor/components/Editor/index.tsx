@@ -44,7 +44,7 @@ import {
   updateSqlEditorFile,
   // generateSqlByBot,
   // updateAIUserSetting,
-  getSqlEditorRowsSetting
+  // getSqlEditorRowsSetting
 } from '@/api/hooks/sql-editor'
 
 // import { getErrorMessage } from 'dbaas/services/errorCodes'
