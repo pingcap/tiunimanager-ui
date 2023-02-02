@@ -57,8 +57,8 @@ const DatabaseList = () => {
     setSqlFiles,
     setEditedSqlFile,
     setIsRunAll,
-    setIsFromImport,
-    getSqlFiles
+    // setIsFromImport,
+    // getSqlFiles
   } = useContext(SqlEditorContext)
   const [loading, setLoading] = useState(true)
   const [dbError, setDbError] = useState(false)
@@ -169,9 +169,9 @@ const DatabaseList = () => {
                 <Dropdown.Item>
                   <div onClick={() => exploreDataHandler(db.name, db.tables)}>Explore data</div>
                 </Dropdown.Item>
-                <Dropdown.Item>
+                {/* <Dropdown.Item>
                   <div onClick={() => toImportData(db.name)}>Import data</div>
-                </Dropdown.Item>
+                </Dropdown.Item> */}
               </Dropdown.Menu>
             </Dropdown>
           </div>

@@ -114,12 +114,12 @@ export const SqlEditorProvider: React.FC = (props) => {
 
   const getSqlFiles = async (needMatch: boolean, selectedFile?: SqlFile) => {
     const res = await getSqlEditorFiles({ clusterId })
-    if (res.code !== 200) {
+    // if (res.code !== 200) {
+    if (res.code !== 0) {
       return
     }
 
     const list = res.data || []
-    console.log('sql files list:', list)
     setSqlFiles(list as SqlFile[])
 
     if (selectedFile) {

@@ -24,16 +24,28 @@ export function getSqlEditorFiles(payload: { clusterId: string }) {
   return axiosInstance
     .get<Res>(`/api/v1/dataapps/sqleditor/${payload.clusterId}/sqlfiles`)
     .then((res) => res.data)
-    .then(d => ({...d, data: d.data.list}))
+    .then((d) => {
+      return { ...d, data: d.data.list }
+    })
 }
 
 export function createSqlEditorFile(payload: { clusterId: string; body: any }) {
   return axiosInstance
-    .post<Res>(`/api/v1/dataapps/sqleditor/${payload.clusterId}/sqlfiles`, {
-      ...payload.body,
-      database: 'test',
-    })
+    .post<Res>(
+      `/api/v1/dataapps/sqleditor/${payload.clusterId}/sqlfiles`,
+      {
+        ...payload.body,
+        // database: 'test',
+      },
+      { skipSuccessNotification: true }
+    )
     .then((res) => res.data)
+    .then((d) => {
+      return {
+        ...d,
+        data: d.data.id,
+      }
+    })
 }
 
 export function deleteSqlEditorFile(payload: {
@@ -55,7 +67,8 @@ export function updateSqlEditorFile(payload: {
   return axiosInstance
     .put<Res>(
       `/api/v1/dataapps/sqleditor/${payload.clusterId}/sqlfiles/${payload.sqlFileId}`,
-      payload.body
+      payload.body,
+      { skipSuccessNotification: true }
     )
     .then((res) => res.data)
 }
@@ -91,14 +104,24 @@ export function createsSqlEditorSession(payload: {
   return axiosInstance
     .post<Res>(
       `/api/v1/dataapps/sqleditor/${payload.clusterId}/session`,
-      payload.body
+      payload.body,
+      { skipSuccessNotification: true }
     )
     .then((res) => res.data)
+    .then((d) => {
+      return {
+        ...d,
+        data: d.data.sessionID,
+      }
+    })
 }
 
 export function sqlEditorSQLExecute(payload: { clusterId: string; body: any }) {
-  return axiosInstance.post<Res>(
-    `/api/v1/dataapps/sqleditor/${payload.clusterId}/statements`,
-    payload.body
-  )
+  return axiosInstance
+    .post<Res>(
+      `/api/v1/dataapps/sqleditor/${payload.clusterId}/statements`,
+      payload.body,
+      { skipSuccessNotification: true }
+    )
+    .then((res) => res.data)
 }

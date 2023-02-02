@@ -764,7 +764,8 @@ const Editor = (props: { onRun: () => void }) => {
       //   sessionId
       // })
       const cur = list.slice()
-      if (res && res.code === 200) {
+      // if (res && res.code === 200) {
+      if (res && res.code === 0) {
         cur[index].res = res.data
         cur[index].status = RequestStatus.Success
         if (index !== 0) {
@@ -926,7 +927,8 @@ const Editor = (props: { onRun: () => void }) => {
       const createRes = await createSqlEditorFile({ clusterId, body: fileParams })
       setIsCreatingFile(false)
 
-      if (createRes.code !== 200) {
+      // if (createRes.code !== 200) {
+      if (createRes.code !== 0) {
         return
       }
 

@@ -308,9 +308,10 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
                   </span>{' '}
                   or hit <span>{isMac ? '⇧ + ⌘' : 'Shift + Ctrl'} + Enter </span> to run all queries.{' '}
                 </div>
-                <div>
+
+                {/* <div>
                   Type "-- your instruction" + <span>Enter</span> to try out AI-generated SQL queries.
-                </div>
+                </div> */}
               </div>
             )}
 

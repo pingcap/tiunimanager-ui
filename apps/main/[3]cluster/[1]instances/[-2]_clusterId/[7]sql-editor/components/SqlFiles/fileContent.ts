@@ -11,6 +11,10 @@ use sample_data;
    The AI model may occasionally generate inaccurate SQL statement due to limitations of AI model.
    You can edit the AI generated SQL statement as you like. */`
 
-export const preTips = `/* Enter "USE {database};" to start exploring your data.`
-export const affixTips = `   Type "-- your instruction" followed by the Enter key to try out AI-generated SQL queries.*/`
+// export const preTips = `/* Enter "USE {database};" to start exploring your data.`
+// export const affixTips = `   Type "-- your instruction" followed by the Enter key to try out AI-generated SQL queries.*/`
+
+export const preTips = `/* Enter "USE {database};" to start exploring your data. */`
+export const affixTips = ``
+
 export const newFileContent = `${preTips}\n${affixTips}\nUSE `

@@ -77,7 +77,8 @@ const SqlFiles = () => {
     // const res = await getSqlEditorFiles(orgId, projectId, clusterId)
     const res = await getSqlEditorFiles({ clusterId })
 
-    if (res.code !== 200) {
+    // if (res.code !== 200) {
+    if (res.code !== 0) {
       setLoading(false)
       return
     }
@@ -165,7 +166,8 @@ const SqlFiles = () => {
         }
       })
 
-      if (createRes.code !== 200) {
+      // if (createRes.code !== 200) {
+      if (createRes.code !== 0) {
         initNoImport()
         return
       }
@@ -361,8 +363,6 @@ const SqlFiles = () => {
 
     getSqlFiles(true)
   }
-
-  console.log('file list:', sqlFiles)
 
   return (
     <div>
