@@ -453,7 +453,7 @@ const SqlFiles = () => {
                           operFile.current = file
                         }}
                       >
-                        <CIcon name="pencil" />
+                        {/* <CIcon name="pencil" /> */}
                         Rename
                       </div>
                     </Dropdown.Item>
@@ -468,7 +468,8 @@ const SqlFiles = () => {
                             operFile.current = file
                           }}
                         >
-                          <CIcon name="trash" /> Delete
+                          {/* <CIcon name="trash" />  */}
+                          Delete
                         </div>
                       </Dropdown.Item>
                     )}
