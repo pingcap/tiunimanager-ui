@@ -274,7 +274,8 @@ const SqlFiles = () => {
 
       const { code, data: id } = createRes
 
-      if (code !== 200) {
+      // if (code !== 200) {
+      if (code !== 0) {
         setIsCreatingFile(false)
         return
       }
