@@ -143,8 +143,14 @@ export default defineConfig(({ mode }) => {
       __APP_NAME__: JSON.stringify(AppPackage.name),
       __APP_VERSION__: JSON.stringify(AppPackage.version),
     },
+    // esbuild: {
+    //   jsxInject: `import React from 'react'`,
+    // },
+    // https://github.com/vitejs/vite/issues/2369
     esbuild: {
-      jsxInject: `import React from 'react'`,
+      jsxFactory: '_jsx',
+      jsxFragment: '_jsxFragment',
+      jsxInject: `import { createElement as _jsx, Fragment as _jsxFragment } from 'react'`,
     },
     build: {
       target: ['chrome67', 'firefox68', 'edge79', 'safari14'],

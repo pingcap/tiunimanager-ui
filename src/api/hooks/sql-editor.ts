@@ -124,4 +124,10 @@ export function sqlEditorSQLExecute(payload: { clusterId: string; body: any }) {
       { skipSuccessNotification: true }
     )
     .then((res) => res.data)
+    .then((d) => {
+      return {
+        ...d,
+        data: d.data.data,
+      }
+    })
 }
