@@ -9,7 +9,8 @@ import { Plus, XClose, File06 } from '../../ui-components/icons/raw'
 // import Button from 'dbaas/components/Button'
 // import { Form } from 'dbaas/components/Form'
 // import { FormInput } from 'dbaas/components/Form'
-import { CIcon, EllipseIcon } from '../../ui-components/Icon'
+// import { CIcon, EllipseIcon } from '../../ui-components/Icon'
+import { EllipseIcon } from '../../ui-components/EllipseIcon'
 import { LinkButton } from '../../ui-components/LinkButton'
 import {
   getSqlEditorFiles,

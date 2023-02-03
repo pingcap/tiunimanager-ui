@@ -18,9 +18,10 @@ import {
 } from '../../ui-components/icons/raw'
 
 // import { EllipseIcon } from 'dbaas/components/Icon'
-import { EllipseIcon } from '../../ui-components/Icon'
+// import { EllipseIcon } from '../../ui-components/Icon'
+import { EllipseIcon } from '../../ui-components/EllipseIcon'
 import { LinkButton } from '../../ui-components/LinkButton'
-import defaultContent, { preTips, affixTips } from '../SqlFiles/fileContent'
+import { preTips, affixTips } from '../SqlFiles/fileContent'
 import { getDbMeta, getAllDbData, createSqlEditorFile } from '@/api/hooks/sql-editor'
 // import useStores from 'dbaas/stores/useStores'
 // import { eventTracking } from 'dbaas/utils/tracking'
