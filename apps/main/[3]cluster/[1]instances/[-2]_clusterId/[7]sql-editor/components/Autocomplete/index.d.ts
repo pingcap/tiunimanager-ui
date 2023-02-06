@@ -6,7 +6,7 @@ import {
   StateCommand,
   Facet,
   Extension,
-  StateEffect
+  StateEffect,
 } from '@codemirror/state'
 import { EditorView, KeyBinding, Command } from '@codemirror/view'
 import * as _lezer_common from '@lezer/common'
@@ -108,7 +108,9 @@ interface Completion {
     a plain string or a function that'll render the DOM structure to
     show when invoked.
     */
-  info?: string | ((completion: Completion) => Node | null | Promise<Node | null>)
+  info?:
+    | string
+    | ((completion: Completion) => Node | null | Promise<Node | null>)
   /**
     How to apply the completion. The default is to replace it with
     its [label](https://codemirror.net/6/docs/ref/#autocomplete.Completion.label). When this holds a
@@ -118,7 +120,14 @@ interface Completion {
     adding the [`pickedCompletion`](https://codemirror.net/6/docs/ref/#autocomplete.pickedCompletion)
     annotation to it.
     */
-  apply?: string | ((view: EditorView, completion: Completion, from: number, to: number) => void)
+  apply?:
+    | string
+    | ((
+        view: EditorView,
+        completion: Completion,
+        from: number,
+        to: number
+      ) => void)
   /**
     The type of the completion. This is used to pick an icon to show
     for the completion. Icons are styled with a CSS class created by
@@ -215,17 +224,25 @@ declare class CompletionContext {
 Given a a fixed array of options, return an autocompleter that
 completes them.
 */
-declare function completeFromList(list: readonly (string | Completion)[]): CompletionSource
+declare function completeFromList(
+  list: readonly (string | Completion)[]
+): CompletionSource
 /**
 Wrap the given completion source so that it will only fire when the
 cursor is in a syntax node with one of the given names.
 */
-declare function ifIn(nodes: readonly string[], source: CompletionSource): CompletionSource
+declare function ifIn(
+  nodes: readonly string[],
+  source: CompletionSource
+): CompletionSource
 /**
 Wrap the given completion source so that it will not fire when the
 cursor is in a syntax node with one of the given names.
 */
-declare function ifNotIn(nodes: readonly string[], source: CompletionSource): CompletionSource
+declare function ifNotIn(
+  nodes: readonly string[],
+  source: CompletionSource
+): CompletionSource
 /**
 The function signature for a completion source. Such a function
 may return its [result](https://codemirror.net/6/docs/ref/#autocomplete.CompletionResult)
@@ -263,7 +280,9 @@ interface CompletionResult {
     this list of options. This can help a lot with responsiveness,
     since it allows the completion list to be updated synchronously.
     */
-  validFor?: RegExp | ((text: string, from: number, to: number, state: EditorState) => boolean)
+  validFor?:
+    | RegExp
+    | ((text: string, from: number, to: number, state: EditorState) => boolean)
   /**
     By default, the library filters and scores completions. Set
     `filter` to `false` to disable this, and cause your completions
@@ -289,7 +308,12 @@ interface CompletionResult {
     [`validFor`](https://codemirror.net/6/docs/ref/#autocomplete.CompletionResult.validFor)) that the
     completion still applies in the new state.
     */
-  update?: (current: CompletionResult, from: number, to: number, context: CompletionContext) => CompletionResult | null
+  update?: (
+    current: CompletionResult,
+    from: number,
+    to: number,
+    context: CompletionContext
+  ) => CompletionResult | null
 }
 /**
 This annotation is added to transactions that are produced by
@@ -301,7 +325,12 @@ Helper function that returns a transaction spec which inserts a
 completion's text in the main selection range, and any other
 selection range that has the same text in front of it.
 */
-declare function insertCompletionText(state: EditorState, text: string, from: number, to: number): TransactionSpec
+declare function insertCompletionText(
+  state: EditorState,
+  text: string,
+  from: number,
+  to: number
+): TransactionSpec
 
 /**
 Convert a snippet template to a function that can
@@ -368,13 +397,19 @@ Create a completion from a snippet. Returns an object with the
 properties from `completion`, plus an `apply` function that
 applies the snippet.
 */
-declare function snippetCompletion(template: string, completion: Completion): Completion
+declare function snippetCompletion(
+  template: string,
+  completion: Completion
+): Completion
 
 /**
 Returns a command that moves the completion selection forward or
 backward by the given amount.
 */
-declare function moveCompletionSelection(forward: boolean, by?: 'option' | 'page'): Command
+declare function moveCompletionSelection(
+  forward: boolean,
+  by?: 'option' | 'page'
+): Command
 /**
 Accept the current completion.
 */
@@ -443,7 +478,10 @@ to programmatically insert brackets—the
 [`closeBrackets`](https://codemirror.net/6/docs/ref/#autocomplete.closeBrackets) extension will
 take care of running this for user input.)
 */
-declare function insertBracket(state: EditorState, bracket: string): Transaction | null
+declare function insertBracket(
+  state: EditorState,
+  bracket: string
+): Transaction | null
 
 /**
 Returns an extension that enables autocompletion.
@@ -467,7 +505,9 @@ this will return `"active"`. When completions are pending (in the
 process of being queried), this returns `"pending"`. Otherwise, it
 returns `null`.
 */
-declare function completionStatus(state: EditorState): null | 'active' | 'pending'
+declare function completionStatus(
+  state: EditorState
+): null | 'active' | 'pending'
 /**
 Returns the available completions as an array.
 */
@@ -519,5 +559,5 @@ export {
   snippet,
   snippetCompletion,
   snippetKeymap,
-  startCompletion
+  startCompletion,
 }

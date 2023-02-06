@@ -12,6 +12,6 @@ export type IconProps = {
 export const Icon: React.FC<IconProps> = ({ name, size, ...restProps }) => {
   return createElement(ICON_MAP[name], {
     ...restProps,
-    ...(typeof size !== 'undefined' ? { height: size, width: size } : {})
+    ...(typeof size !== 'undefined' ? { height: size, width: size } : {}),
   })
 }

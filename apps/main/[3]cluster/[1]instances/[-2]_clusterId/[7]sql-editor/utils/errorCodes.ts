@@ -152,7 +152,7 @@ export class TimeoutError extends Error {
 export class ResponseError extends Error {
   name = 'ResponseError'
   errorCode: number
-  originalMessage: string = ''
+  originalMessage = ''
   constructor(message: string, errorCode: number, originalMessage?: string) {
     super(message)
     Object.setPrototypeOf(this, ResponseError.prototype)

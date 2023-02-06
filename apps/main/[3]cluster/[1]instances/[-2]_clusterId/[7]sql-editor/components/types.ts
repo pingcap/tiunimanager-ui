@@ -8,7 +8,7 @@ export enum RequestStatus {
   Loading = 'loading',
   Success = 'success',
   Error = 'error',
-  Waiting = 'waiting'
+  Waiting = 'waiting',
 }
 
 export type SqlFetchRes = {

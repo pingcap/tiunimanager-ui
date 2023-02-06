@@ -6,7 +6,7 @@ import languages from './languages'
 const constants = {
   ESCAPED_CHAR_REGEX: /^\\./,
   QUOTED_STRING_REGEX: /^(['"`])((?:\\.|[^\1])+?)(\1)/,
-  NEWLINE_REGEX: /^\r*\n/
+  NEWLINE_REGEX: /^\r*\n/,
 }
 
 const parse = (input, options = {}) => {
@@ -104,7 +104,11 @@ const parse = (input, options = {}) => {
     }
 
     // block comment open
-    if (BLOCK_OPEN_REGEX && options.block && !(tripleQuotes && block.type === 'block')) {
+    if (
+      BLOCK_OPEN_REGEX &&
+      options.block &&
+      !(tripleQuotes && block.type === 'block')
+    ) {
       if ((token = scan(BLOCK_OPEN_REGEX, 'open'))) {
         push(new Block({ type: 'block' }))
         push(new Node(token))

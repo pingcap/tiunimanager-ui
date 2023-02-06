@@ -14,7 +14,7 @@ import {
   String01,
   XClose,
   RefreshCw02,
-  SystemDatabase
+  SystemDatabase,
 } from '../../ui-components/icons/raw'
 
 // import { EllipseIcon } from 'dbaas/components/Icon'
@@ -22,7 +22,11 @@ import {
 import { EllipseIcon } from '../../ui-components/EllipseIcon'
 import { LinkButton } from '../../ui-components/LinkButton'
 import { preTips, affixTips } from '../SqlFiles/fileContent'
-import { getDbMeta, getAllDbData, createSqlEditorFile } from '@/api/hooks/sql-editor'
+import {
+  getDbMeta,
+  getAllDbData,
+  createSqlEditorFile,
+} from '@/api/hooks/sql-editor'
 // import useStores from 'dbaas/stores/useStores'
 // import { eventTracking } from 'dbaas/utils/tracking'
 
@@ -137,7 +141,9 @@ const DatabaseList = () => {
   }
 
   const formatDb = (data: DB) => {
-    const importData = JSON.parse(localStorage.getItem('chat2queryDefaultData') || '{}')
+    const importData = JSON.parse(
+      localStorage.getItem('chat2queryDefaultData') || '{}'
+    )
     const systemDatabse = ['INFORMATION_SCHEMA', 'PERFORMANCE_SCHEMA', 'MYSQL']
     const keys: any = new Set()
     // const localData = localStorage.getItem('Chat2querySelectedKeys') || '[]'
@@ -153,7 +159,10 @@ const DatabaseList = () => {
       return {
         title: (
           <div className="db-name">
-            <span onDoubleClick={() => schemaClick(db.name)} onClick={() => toggleExpand(`${index}`)}>
+            <span
+              onDoubleClick={() => schemaClick(db.name)}
+              onClick={() => toggleExpand(`${index}`)}
+            >
               {db.name}
             </span>
             <Dropdown
@@ -168,7 +177,9 @@ const DatabaseList = () => {
             >
               <Dropdown.Menu>
                 <Dropdown.Item>
-                  <div onClick={() => exploreDataHandler(db.name, db.tables)}>Explore data</div>
+                  <div onClick={() => exploreDataHandler(db.name, db.tables)}>
+                    Explore data
+                  </div>
                 </Dropdown.Item>
                 {/* <Dropdown.Item>
                   <div onClick={() => toImportData(db.name)}>Import data</div>
@@ -181,7 +192,11 @@ const DatabaseList = () => {
         isLeaf: !(db.tables || []).length,
         loaded: true,
         key: `${index}`,
-        icon: systemDatabse.includes(db.name.toUpperCase()) ? <SystemDatabase /> : <Database01 />,
+        icon: systemDatabse.includes(db.name.toUpperCase()) ? (
+          <SystemDatabase />
+        ) : (
+          <Database01 />
+        ),
         children: (db.tables || []).map((table, idx) => {
           if (table.name === importData.table) {
             keys.add(`${index}-${idx}`)
@@ -196,7 +211,10 @@ const DatabaseList = () => {
             if (Array.from(keys).length) {
               setAutoExpandParent(false)
               setExpandedKeys(Array.from(keys))
-              localStorage.setItem('Chat2querySelectedKeys', JSON.stringify(Array.from(keys)))
+              localStorage.setItem(
+                'Chat2querySelectedKeys',
+                JSON.stringify(Array.from(keys))
+              )
             }
           }
 
@@ -223,7 +241,9 @@ const DatabaseList = () => {
                 >
                   <Dropdown.Menu>
                     <Dropdown.Item>
-                      <div onClick={() => tableClick(db.name, table.name, 100)}>Show 100 records</div>
+                      <div onClick={() => tableClick(db.name, table.name, 100)}>
+                        Show 100 records
+                      </div>
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
@@ -241,11 +261,11 @@ const DatabaseList = () => {
                 name: meta.col,
                 key: `${index}-${idx}-${metaIndex}`,
                 icon: getSchemaIcon(meta.data_type),
-                children: []
+                children: [],
               }
-            })
+            }),
           }
-        })
+        }),
       }
     })
   }
@@ -255,7 +275,10 @@ const DatabaseList = () => {
       // const res = await getAllDbData(tenantData.id, activeProjectId, clusterId, {
       //   isbrief: 'false'
       // })
-      const res = await getAllDbData({ clusterId, params: { isbrief: 'false' } })
+      const res = await getAllDbData({
+        clusterId,
+        params: { isbrief: 'false' },
+      })
 
       setIsInit(false)
       const dbs = formatDb(res.data as DB)
@@ -278,10 +301,19 @@ const DatabaseList = () => {
     }
   }, [dbList])
 
-  const getMetaList = async (databaseName: string, tableName: string, databaseIndex: number, tabIndex: number) => {
+  const getMetaList = async (
+    databaseName: string,
+    tableName: string,
+    databaseIndex: number,
+    tabIndex: number
+  ) => {
     try {
       // const res = (await getDbMeta(tenantData.id, activeProjectId, clusterId, databaseName, tableName)) as any
-      const res = (await getDbMeta({ clusterId, dbName: databaseName, tableName })) as any
+      const res = (await getDbMeta({
+        clusterId,
+        dbName: databaseName,
+        tableName,
+      })) as any
       const data = res.data.columns as { col: string; data_type: string }[]
       const metas = data.map((meta, index) => {
         return {
@@ -299,7 +331,7 @@ const DatabaseList = () => {
           name: meta.col,
           key: `${databaseIndex}-${tabIndex}-${index}`,
           icon: getSchemaIcon(meta.data_type),
-          children: []
+          children: [],
         }
       })
       const dbs = dbList.slice()
@@ -336,22 +368,31 @@ const DatabaseList = () => {
     tableClick(dbName, tables.length ? tables[0].name : '')
   }
 
-  const tableClick = async (dbName: string, tabName: string, limit?: number) => {
+  const tableClick = async (
+    dbName: string,
+    tabName: string,
+    limit?: number
+  ) => {
     const name = 'New query'
     let sql = `USE ${dbName};`
     if (tabName) {
-      sql += `\nSELECT * FROM ${dbName}.${tabName}${limit ? ' LIMIT ' + limit : ''};`
+      sql += `\nSELECT * FROM ${dbName}.${tabName}${
+        limit ? ' LIMIT ' + limit : ''
+      };`
     }
     const content = `${preTips}\n${affixTips}\n${sql}`
     // const createRes = await createSqlEditorFile(tenantData.id, activeProjectId, clusterId, {
     //   name,
     //   content
     // })
-    const createRes = await createSqlEditorFile({ clusterId, body: { name, content } })
+    const createRes = await createSqlEditorFile({
+      clusterId,
+      body: { name, content },
+    })
     const file: SqlFile = {
       id: createRes.data || 0,
       content,
-      name
+      name,
     }
 
     const files: any = sqlFileRef.current.slice()
@@ -379,7 +420,7 @@ const DatabaseList = () => {
         'FLOAT',
         'DOUBLE',
         'DECIMAL',
-        'NUMERIC'
+        'NUMERIC',
       ].includes(type)
     ) {
       return <Numberic />
@@ -400,7 +441,7 @@ const DatabaseList = () => {
         'MEDIUMBLOB',
         'LONGBLOB',
         'ENUM',
-        'SET'
+        'SET',
       ].includes(type)
     ) {
       return <String01 />
@@ -428,17 +469,19 @@ const DatabaseList = () => {
       if (pos.length === 3) {
         // eventTracking('SQL Editor Fetch Meta List')
 
-        getMetaList(db.name, db.children[pos[2]].name, pos[1], pos[2]).then((res) => {
-          if (res) {
-            reject()
-          } else {
-            const keys = new Set(expandedKeys)
-            keys.add(node.key)
-            setAutoExpandParent(false)
-            setExpandedKeys(Array.from(keys))
-            resolve()
+        getMetaList(db.name, db.children[pos[2]].name, pos[1], pos[2]).then(
+          (res) => {
+            if (res) {
+              reject()
+            } else {
+              const keys = new Set(expandedKeys)
+              keys.add(node.key)
+              setAutoExpandParent(false)
+              setExpandedKeys(Array.from(keys))
+              resolve()
+            }
           }
-        })
+        )
       }
     })
   }
@@ -480,10 +523,17 @@ const DatabaseList = () => {
 
     dbAllDataRef.current.forEach((item: any) => {
       item.children.map((table: any) => {
-        if (table.children.some((meta: any) => meta.name.toLowerCase().indexOf(val) > -1)) {
+        if (
+          table.children.some(
+            (meta: any) => meta.name.toLowerCase().indexOf(val) > -1
+          )
+        ) {
           newExpandedKeys.add(table.key)
         } else {
-          if (table.name.toLowerCase().indexOf(val) > -1 && !newExpandedKeys.has(item.key)) {
+          if (
+            table.name.toLowerCase().indexOf(val) > -1 &&
+            !newExpandedKeys.has(item.key)
+          ) {
             newExpandedKeys.add(item.key)
           }
         }
@@ -580,7 +630,10 @@ const DatabaseList = () => {
             <AlertCircle color="#E65C5C" />
             <div className={styles.errorText}>
               Failed to fetch databases. Check{' '}
-              <LinkButton eventName="Sql Editor Database List Error Link Clicked" to={`/console/clusters/${clusterId}`}>
+              <LinkButton
+                eventName="Sql Editor Database List Error Link Clicked"
+                to={`/console/clusters/${clusterId}`}
+              >
                 database status
               </LinkButton>
             </div>

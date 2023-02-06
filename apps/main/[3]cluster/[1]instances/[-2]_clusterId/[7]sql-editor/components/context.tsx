@@ -1,4 +1,4 @@
-// import React, 
+// import React,
 import { useEffect, useRef, useState, createContext } from 'react'
 
 import {
@@ -22,10 +22,13 @@ export const SqlEditorProvider: React.FC = (props) => {
   const [editorSetting, setEditorSetting] = useState<UserSetting>({
     chat2query_init: false,
     is_privacy_allowed: false,
-    privacy_box_count: 0
+    privacy_box_count: 0,
   })
   const [sqlFiles, setSqlFiles] = useState<SqlFile[]>([])
-  const [editedSqlFile, setEditedSqlFile] = useState<SqlFile>({ id: -1, name: '' })
+  const [editedSqlFile, setEditedSqlFile] = useState<SqlFile>({
+    id: -1,
+    name: '',
+  })
   const [databaseName, setDatabaseName] = useState('')
   const [isCreatingFile, setIsCreatingFile] = useState(false)
   const [editSqlTexts, setEditSqlTexts] = useState([])
@@ -80,7 +83,7 @@ export const SqlEditorProvider: React.FC = (props) => {
     setEditorSetting({
       chat2query_init: true,
       is_privacy_allowed: true,
-      privacy_box_count: 1
+      privacy_box_count: 1,
     })
   }
 
@@ -105,7 +108,11 @@ export const SqlEditorProvider: React.FC = (props) => {
       const list = editFileQueue.current || []
       if (list.length) {
         // await updateSqlEditorFile(tenantData.id, activeProjectId, clusterId, list[0].id, list[0])
-        await updateSqlEditorFile({ clusterId, sqlFileId: list[0].id, body: list[0] })
+        await updateSqlEditorFile({
+          clusterId,
+          sqlFileId: list[0].id,
+          body: list[0],
+        })
         list.shift()
         editFileQueue.current = list
       }
@@ -140,9 +147,10 @@ export const SqlEditorProvider: React.FC = (props) => {
 
   const createSession = async (fileId: number, database: string) => {
     const res = await createsSqlEditorSession({
-      clusterId, body: {
-        database
-      }
+      clusterId,
+      body: {
+        database,
+      },
     })
 
     sqlFiles.forEach((item) => {
@@ -156,7 +164,7 @@ export const SqlEditorProvider: React.FC = (props) => {
     if (editedSqlFile.id === fileId) {
       setEditedSqlFile({
         ...editedSqlFile,
-        sessionId: res.data
+        sessionId: res.data,
       })
     }
   }
@@ -199,7 +207,7 @@ export const SqlEditorProvider: React.FC = (props) => {
         newGeneSql,
         setNewGeneSql,
         setIsRunAll,
-        isRunAll
+        isRunAll,
       }}
     >
       {props.children}

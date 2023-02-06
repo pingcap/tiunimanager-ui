@@ -129,7 +129,10 @@ interface SQLConfig {
 Returns a completion source that provides keyword completion for
 the given SQL dialect.
 */
-declare function keywordCompletionSource(dialect: SQLDialect, upperCase?: boolean): CompletionSource
+declare function keywordCompletionSource(
+  dialect: SQLDialect,
+  upperCase?: boolean
+): CompletionSource
 /**
 Returns a completion sources that provides schema-based completion
 for the given configuration.
@@ -189,5 +192,5 @@ export {
   StandardSQL,
   keywordCompletionSource,
   schemaCompletionSource,
-  sql
+  sql,
 }

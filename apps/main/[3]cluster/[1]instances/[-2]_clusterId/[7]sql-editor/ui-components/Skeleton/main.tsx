@@ -1,6 +1,10 @@
 import { FC } from 'react'
 import { default as RawSkeleton, SkeletonTheme } from 'react-loading-skeleton'
-import type { SkeletonProps as SkeletonRawProps, SkeletonThemeProps, SkeletonStyleProps } from 'react-loading-skeleton'
+import type {
+  SkeletonProps as SkeletonRawProps,
+  SkeletonThemeProps,
+  SkeletonStyleProps,
+} from 'react-loading-skeleton'
 
 export interface SkeletonProps extends SkeletonRawProps {
   /**

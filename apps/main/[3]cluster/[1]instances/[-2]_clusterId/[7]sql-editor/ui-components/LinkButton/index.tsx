@@ -43,11 +43,23 @@ export const LinkButton: React.FC<ButtonProps> = ({
   }
 
   const btn = link ? (
-    <button className={clsx(className, link ? styles.link : '', disabled ? 'disabled' : '')} onClick={clickHandler}>
+    <button
+      className={clsx(
+        className,
+        link ? styles.link : '',
+        disabled ? 'disabled' : ''
+      )}
+      onClick={clickHandler}
+    >
       {children}
     </button>
   ) : (
-    <Button className={clsx(styles.button, className)} disabled={disabled} onClick={clickHandler} {...rest}>
+    <Button
+      className={clsx(styles.button, className)}
+      disabled={disabled}
+      onClick={clickHandler}
+      {...rest}
+    >
       {children}
     </Button>
   )

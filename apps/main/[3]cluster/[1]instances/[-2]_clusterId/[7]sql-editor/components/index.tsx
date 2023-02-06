@@ -64,7 +64,9 @@ const SqlEditor = () => {
   }
 
   const initHeight = () => {
-    const ele = document.getElementsByClassName('sql-editor-container')[0] as HTMLDivElement
+    const ele = document.getElementsByClassName(
+      'sql-editor-container'
+    )[0] as HTMLDivElement
     const btmH = parseInt(ele.style.height)
 
     const target = sqlRef.current as HTMLDivElement
@@ -82,7 +84,12 @@ const SqlEditor = () => {
   return (
     <SqlEditorProvider>
       <div ref={ref}>
-        <div className={`${styles.sqlEditor} ${enableLayoutV3 ? styles.newLayoutEditor : ''}`} style={{ top: '56px'}}>
+        <div
+          className={`${styles.sqlEditor} ${
+            enableLayoutV3 ? styles.newLayoutEditor : ''
+          }`}
+          style={{ top: '56px' }}
+        >
           <SideMenu />
 
           <div className={styles.sqlEditorContent} ref={sqlContentRef}>

@@ -181,7 +181,7 @@ export const ICON_MAP = {
   Users01,
   Variable,
   XCircle,
-  XClose
+  XClose,
 }
 
 export {
@@ -273,5 +273,5 @@ export {
   Users01,
   Variable,
   XCircle,
-  XClose
+  XClose,
 }

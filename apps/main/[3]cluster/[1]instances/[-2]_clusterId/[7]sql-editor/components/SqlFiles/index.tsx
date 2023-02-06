@@ -27,7 +27,11 @@ import {
 import { SqlEditorContext } from '../context'
 import { SqlFile } from '../types'
 
-import defaultContent, { newFileContent, preTips, affixTips } from './fileContent'
+import defaultContent, {
+  newFileContent,
+  preTips,
+  affixTips,
+} from './fileContent'
 import styles from './index.module.less'
 
 type FormProps = {
@@ -55,7 +59,7 @@ const SqlFiles = () => {
     isCreatingFile,
     setIsCreatingFile,
     setSqlResultList,
-    setIsFromImport
+    setIsFromImport,
   } = useContext(SqlEditorContext)
   const [filterSqlFiles, setFilterSqlFiles] = useState<SqlFile[]>([])
   const [filter, setFilter] = useState('')
@@ -71,7 +75,9 @@ const SqlFiles = () => {
 
   useEffect(() => {
     const files = (sqlFiles && sqlFiles.slice()) || []
-    setFilterSqlFiles(files.filter((file: SqlFile) => file.name.toLowerCase().includes(filter)))
+    setFilterSqlFiles(
+      files.filter((file: SqlFile) => file.name.toLowerCase().includes(filter))
+    )
   }, [sqlFiles])
 
   const initNoImport = async () => {
@@ -97,16 +103,17 @@ const SqlFiles = () => {
       //   content: defaultContent
       // })
       const createRes = await createSqlEditorFile({
-        clusterId, body: {
+        clusterId,
+        body: {
           name: initName,
-          content: defaultContent
-        }
+          content: defaultContent,
+        },
       })
 
       const file = {
         id: createRes.data,
         content: defaultContent,
-        name: initName
+        name: initName,
       } as SqlFile
 
       setSqlFiles([file])
@@ -161,10 +168,11 @@ const SqlFiles = () => {
       //   content
       // })
       const createRes = await createSqlEditorFile({
-        clusterId, body: {
+        clusterId,
+        body: {
           name,
-          content
-        }
+          content,
+        },
       })
 
       // if (createRes.code !== 200) {
@@ -179,7 +187,7 @@ const SqlFiles = () => {
         id: createRes.data || 0,
         content,
         sessionId: session_id,
-        name
+        name,
       }
 
       getSqlFiles(false, file)
@@ -215,7 +223,9 @@ const SqlFiles = () => {
     setDeleteOpenVisible(false)
 
     const files = sqlFiles.slice()
-    const index = files.findIndex((item: SqlFile) => item.id === operFile.current?.id)
+    const index = files.findIndex(
+      (item: SqlFile) => item.id === operFile.current?.id
+    )
     if (index > -1) {
       files.splice(index, 1)
     }
@@ -227,7 +237,9 @@ const SqlFiles = () => {
     }
 
     if (`${operFile.current?.id}` === `${editedSqlFile.id}`) {
-      const index = sqlFiles.findIndex((item: SqlFile) => item.id !== editedSqlFile.id)
+      const index = sqlFiles.findIndex(
+        (item: SqlFile) => item.id !== editedSqlFile.id
+      )
       setEditedSqlFile(sqlFiles[index])
     }
   }
@@ -249,7 +261,9 @@ const SqlFiles = () => {
     }
 
     const list = sqlFiles.slice()
-    const data = list.filter((file: SqlFile) => file.name.toLowerCase().includes(val))
+    const data = list.filter((file: SqlFile) =>
+      file.name.toLowerCase().includes(val)
+    )
     setFilterSqlFiles(data)
   }
 
@@ -268,10 +282,13 @@ const SqlFiles = () => {
     try {
       const fileParams = {
         name: `New query`,
-        content: newFileContent
+        content: newFileContent,
       }
       // const createRes = await createSqlEditorFile(orgId, projectId, clusterId, fileParams)
-      const createRes = await createSqlEditorFile({ clusterId, body: fileParams })
+      const createRes = await createSqlEditorFile({
+        clusterId,
+        body: fileParams,
+      })
 
       const { code, data: id } = createRes
 
@@ -284,7 +301,7 @@ const SqlFiles = () => {
       const files = sqlFiles.slice()
       files.unshift({
         id,
-        ...fileParams
+        ...fileParams,
       })
 
       setSqlFiles(files)
@@ -299,7 +316,7 @@ const SqlFiles = () => {
           setEditedSqlFile({
             id,
             sessionId: session.data,
-            ...fileParams
+            ...fileParams,
           })
         }
       })
@@ -332,7 +349,7 @@ const SqlFiles = () => {
 
     setRenameFile({
       ...renameFile,
-      name: value
+      name: value,
     } as SqlFile)
   }
 
@@ -357,10 +374,12 @@ const SqlFiles = () => {
     //   name
     // })
     await updateSqlEditorFile({
-      clusterId, sqlFileId: renameFile.id, body: {
+      clusterId,
+      sqlFileId: renameFile.id,
+      body: {
         ...renameFile,
-        name
-      }
+        name,
+      },
     })
 
     getSqlFiles(true)
@@ -381,7 +400,7 @@ const SqlFiles = () => {
               onClick={addNewFile}
               eventName="SQL Editor Add New SQL Editor File Button Clicked"
               eventParams={{
-                position: 'Side Menu'
+                position: 'Side Menu',
               }}
             >
               <Plus />
@@ -410,13 +429,19 @@ const SqlFiles = () => {
 
         {!!(!loading && sqlFiles.length) && (
           <>
-            {!filterSqlFiles.length && sqlFiles.length && <div className={styles.noRes}>No query files</div>}
+            {!filterSqlFiles.length && sqlFiles.length && (
+              <div className={styles.noRes}>No query files</div>
+            )}
 
             {filterSqlFiles.map((file: SqlFile) => (
               <div
                 key={file.id}
                 className={`${styles.fileItem}
-                  ${file.id === (editedSqlFile && editedSqlFile.id) ? styles.active : ''}
+                  ${
+                    file.id === (editedSqlFile && editedSqlFile.id)
+                      ? styles.active
+                      : ''
+                  }
                 `}
                 onClick={() => selectFileHandler(file)}
               >
@@ -505,13 +530,23 @@ const SqlFiles = () => {
         <Modal size="tiny" open={deleteOpenVisible} className={styles.modal}>
           <Modal.Header>Delete SQL File</Modal.Header>
           <div className={styles.content}>
-            <div className={styles.desc}>Are you sure you want to delete "{operFile.current?.name}"?</div>
+            <div className={styles.desc}>
+              Are you sure you want to delete "{operFile.current?.name}"?
+            </div>
 
             <div className={styles.btns}>
-              <Button eventName="Delete File Cancel Button Clicked" basic onClick={() => setDeleteOpenVisible(false)}>
+              <Button
+                eventName="Delete File Cancel Button Clicked"
+                basic
+                onClick={() => setDeleteOpenVisible(false)}
+              >
                 Cancel
               </Button>
-              <Button eventName="Delete File Confirm Button Clicked" negative onClick={deleteFileConfirm}>
+              <Button
+                eventName="Delete File Confirm Button Clicked"
+                negative
+                onClick={deleteFileConfirm}
+              >
                 Confirm
               </Button>
             </div>

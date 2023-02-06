@@ -4,19 +4,34 @@ import RcTree from 'rc-tree'
 import type { TreeProps as RcTreeProps, BasicDataNode } from 'rc-tree'
 import type { DataNode, Key } from 'rc-tree/lib/interface'
 // import React from 'react'
-import {forwardRef} from 'react'
+import { forwardRef } from 'react'
 
 import { collapseMotion } from './motion'
 import renderSwitcherIcon from './renderSwitcherIcon'
 import './index.css'
 
-export type { DataNode as TreeDataNode, EventDataNode as TreeEventDataNode } from 'rc-tree/lib/interface'
+export type {
+  DataNode as TreeDataNode,
+  EventDataNode as TreeEventDataNode,
+} from 'rc-tree/lib/interface'
 
-export type SwitcherIcon = React.ReactNode | ((props: TreeNodeProps) => React.ReactNode)
-export type TreeLeafIcon = React.ReactNode | ((props: TreeNodeProps) => React.ReactNode)
+export type SwitcherIcon =
+  | React.ReactNode
+  | ((props: TreeNodeProps) => React.ReactNode)
+export type TreeLeafIcon =
+  | React.ReactNode
+  | ((props: TreeNodeProps) => React.ReactNode)
 
 export interface TreeProps<T extends BasicDataNode = DataNode>
-  extends Omit<RcTreeProps<T>, 'prefixCls' | 'showLine' | 'direction' | 'draggable' | 'icon' | 'switcherIcon'> {
+  extends Omit<
+    RcTreeProps<T>,
+    | 'prefixCls'
+    | 'showLine'
+    | 'direction'
+    | 'draggable'
+    | 'icon'
+    | 'switcherIcon'
+  > {
   showLine?: boolean | { showLeafIcon: boolean | TreeLeafIcon }
   className?: string
   /** 是否支持多选 */
@@ -102,7 +117,7 @@ export const Tree = forwardRef<RcTree, TreeProps>((props, ref) => {
     children,
     checkable = false,
     selectable = true,
-    motion = { ...collapseMotion, motionAppear: false }
+    motion = { ...collapseMotion, motionAppear: false },
   } = props
 
   const newProps = {
@@ -112,7 +127,7 @@ export const Tree = forwardRef<RcTree, TreeProps>((props, ref) => {
     showIcon,
     motion,
     blockNode,
-    showLine: Boolean(showLine)
+    showLine: Boolean(showLine),
   }
 
   return (
@@ -124,13 +139,21 @@ export const Tree = forwardRef<RcTree, TreeProps>((props, ref) => {
         {
           [`${prefixCls}-icon-hide`]: !showIcon,
           [`${prefixCls}-block-node`]: blockNode,
-          [`${prefixCls}-unselectable`]: !selectable
+          [`${prefixCls}-unselectable`]: !selectable,
         },
         className
       )}
-      checkable={checkable ? <span className={`${prefixCls}-checkbox-inner`} /> : checkable}
+      checkable={
+        checkable ? (
+          <span className={`${prefixCls}-checkbox-inner`} />
+        ) : (
+          checkable
+        )
+      }
       prefixCls={prefixCls}
-      switcherIcon={(nodeProps: TreeNodeProps) => renderSwitcherIcon(prefixCls, switcherIcon, showLine, nodeProps)}
+      switcherIcon={(nodeProps: TreeNodeProps) =>
+        renderSwitcherIcon(prefixCls, switcherIcon, showLine, nodeProps)
+      }
     >
       {children}
     </RcTree>

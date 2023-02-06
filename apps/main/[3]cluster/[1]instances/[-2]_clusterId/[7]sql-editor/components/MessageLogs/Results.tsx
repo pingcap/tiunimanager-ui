@@ -63,7 +63,7 @@ const Results: React.FC<{
 
     return {
       widths: res,
-      total: sumW
+      total: sumW,
     }
   }, [list, columns])
 
@@ -81,10 +81,21 @@ const Results: React.FC<{
         >
           {({ rowIndex, columnIndex, style }) => {
             return (
-              <div style={style} className={clsx(styles.cell, rowIndex === 0 ? styles.header : '')}>
+              <div
+                style={style}
+                className={clsx(
+                  styles.cell,
+                  rowIndex === 0 ? styles.header : ''
+                )}
+              >
                 <pre
                   dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize(resColumns[rowIndex][columnIndex].replaceAll('\n', '<br />'))
+                    __html: DOMPurify.sanitize(
+                      resColumns[rowIndex][columnIndex].replaceAll(
+                        '\n',
+                        '<br />'
+                      )
+                    ),
                   }}
                 ></pre>
               </div>
@@ -92,7 +103,9 @@ const Results: React.FC<{
           }}
         </VariableSizeGrid>
       )}
-      {!list.length && <div className={styles.noData}>{message || 'empty set'}</div>}
+      {!list.length && (
+        <div className={styles.noData}>{message || 'empty set'}</div>
+      )}
     </div>
   )
 }

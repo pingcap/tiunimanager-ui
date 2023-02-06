@@ -1,4 +1,4 @@
-// import React, 
+// import React,
 import { FC } from 'react'
 import { Resizable, ResizableProps } from 're-resizable'
 

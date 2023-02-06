@@ -15,14 +15,21 @@ const SideMenu = () => {
   // } = useStores()
   const preloadedSQLEditor: any = {}
 
-  const { sideMenuAcitveIndex, setSideMenuAcitveIndex } = useContext(SqlEditorContext)
+  const { sideMenuAcitveIndex, setSideMenuAcitveIndex } =
+    useContext(SqlEditorContext)
 
   useEffect(() => {
-    if (preloadedSQLEditor && preloadedSQLEditor.db && preloadedSQLEditor.table) {
+    if (
+      preloadedSQLEditor &&
+      preloadedSQLEditor.db &&
+      preloadedSQLEditor.table
+    ) {
       setSideMenuAcitveIndex(0)
       localStorage.setItem('Chat2querySideMenuActive', '0')
     } else {
-      const lastIndex = parseInt(localStorage.getItem('Chat2querySideMenuActive') || '0')
+      const lastIndex = parseInt(
+        localStorage.getItem('Chat2querySideMenuActive') || '0'
+      )
       setSideMenuAcitveIndex(lastIndex)
     }
   }, [])
@@ -51,7 +58,7 @@ const SideMenu = () => {
         <DatabaseList />
       </div>
 
-      <div className={`${!!sideMenuAcitveIndex ? styles.open : styles.hide}`}>
+      <div className={`${sideMenuAcitveIndex ? styles.open : styles.hide}`}>
         <SqlFiles />
       </div>
     </div>

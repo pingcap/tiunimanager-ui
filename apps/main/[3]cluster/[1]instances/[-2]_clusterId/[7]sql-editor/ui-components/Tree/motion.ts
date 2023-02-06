@@ -3,9 +3,12 @@ const getRealHeight = (node: HTMLElement) => {
   const { scrollHeight } = node
   return { height: scrollHeight, opacity: 1 }
 }
-const getCurrentHeight = (node: HTMLElement) => ({ height: node ? node.offsetHeight : 0 })
+const getCurrentHeight = (node: HTMLElement) => ({
+  height: node ? node.offsetHeight : 0,
+})
 const skipOpacityTransition = (_: any, event: any) =>
-  event?.deadline === true || (event as TransitionEvent).propertyName === 'height'
+  event?.deadline === true ||
+  (event as TransitionEvent).propertyName === 'height'
 
 export const collapseMotion = {
   motionName: 'tc-uikit-tree-motion-collapse',
@@ -18,5 +21,5 @@ export const collapseMotion = {
   onAppearEnd: skipOpacityTransition,
   onEnterEnd: skipOpacityTransition,
   onLeaveEnd: skipOpacityTransition,
-  motionDeadline: 500
+  motionDeadline: 500,
 }

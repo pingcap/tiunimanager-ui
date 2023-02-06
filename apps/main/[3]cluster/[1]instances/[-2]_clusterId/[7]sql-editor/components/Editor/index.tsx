@@ -9,7 +9,14 @@ import { Loader } from '@mantine/core'
 // import typesSvg from '@tidb-cloud-uikit/icons/raw/Types02.svg'
 // import variable from '@tidb-cloud-uikit/icons/raw/Variable.svg'
 
-import { Settings01, PlusSquare, DotsHorizontal, RunFill, XClose, AiExplore01 } from '../../ui-components/icons/raw'
+import {
+  Settings01,
+  PlusSquare,
+  DotsHorizontal,
+  RunFill,
+  XClose,
+  AiExplore01,
+} from '../../ui-components/icons/raw'
 import functions from '../../ui-components/icons/raw/CodeCircle03.svg'
 import database from '../../ui-components/icons/raw/Database.svg'
 import tableSvg from '../../ui-components/icons/raw/DatabseTable.svg'
@@ -75,7 +82,7 @@ const Editor = (props: { onRun: () => void }) => {
   const [aiTipsPos, setAiTipsPos] = useState({
     start: -1,
     len: -1,
-    isGeneTip: false
+    isGeneTip: false,
   })
   const aiStartRef = useRef(-1)
   const aiTipStartRef = useRef(-1)
@@ -120,7 +127,7 @@ const Editor = (props: { onRun: () => void }) => {
     newGeneSql,
     setNewGeneSql,
     isRunAll,
-    setIsRunAll
+    setIsRunAll,
   } = useContext(SqlEditorContext)
   const sectionTextRef = useRef('')
 
@@ -211,13 +218,13 @@ const Editor = (props: { onRun: () => void }) => {
         if (databaseName === database.name) {
           tables.push({
             label: table.name,
-            type: 'table'
+            type: 'table',
           })
         }
 
         return {
           label: table.name,
-          type: 'table'
+          type: 'table',
         }
       })
     })
@@ -230,11 +237,11 @@ const Editor = (props: { onRun: () => void }) => {
           .map((db: any) => {
             return {
               label: db.name,
-              type: 'database'
+              type: 'database',
             }
           })
           .concat(tables),
-        upperCaseKeywords: true
+        upperCaseKeywords: true,
       }),
       autocompletion({
         activateOnTyping: true,
@@ -289,10 +296,10 @@ const Editor = (props: { onRun: () => void }) => {
                 return null
               }
             },
-            position: 0
-          }
-        ]
-      })
+            position: 0,
+          },
+        ],
+      }),
     ])
   }, [dbList, databaseName])
 
@@ -364,7 +371,9 @@ const Editor = (props: { onRun: () => void }) => {
   }
 
   const isRunAllCompositionKey = (e: KeyboardEvent) => {
-    return (e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'enter'
+    return (
+      (e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'enter'
+    )
   }
 
   const saveSqlAuto = () => {
@@ -379,11 +388,15 @@ const Editor = (props: { onRun: () => void }) => {
 
       const data = {
         ...fileRef.current,
-        content: sqlTextRef.current
+        content: sqlTextRef.current,
       }
 
       // await updateSqlEditorFile(orgId, projectId, clusterId, fileRef.current.id, data)
-      await updateSqlEditorFile({ clusterId, sqlFileId: fileRef.current.id, body: data })
+      await updateSqlEditorFile({
+        clusterId,
+        sqlFileId: fileRef.current.id,
+        body: data,
+      })
       if (fileRef.current.id === data.id) {
         setEditedSqlFile(data)
         fileRef.current = data
@@ -419,13 +432,19 @@ const Editor = (props: { onRun: () => void }) => {
       e.preventDefault()
       const text = sqlTextRef.current.split('\n')
 
-      text.splice(aiTipsPos.start - 1, e.code === 'Enter' ? aiTipsPos.len + 1 : aiTipsPos.len)
+      text.splice(
+        aiTipsPos.start - 1,
+        e.code === 'Enter' ? aiTipsPos.len + 1 : aiTipsPos.len
+      )
       text.splice(aiTipsPos.start - 1, 0, ' ')
       const content = text.join('\n')
       sqlTextRef.current = content
       setSqlText(content)
       setTimeout(() => {
-        setCursor(text.slice(0, start - 1).join('\n').length + 1, viewUpdateRef.current)
+        setCursor(
+          text.slice(0, start - 1).join('\n').length + 1,
+          viewUpdateRef.current
+        )
         updateAiTipsPosInfo(-1, -1, false)
       }, 0)
       key = e.code === 'Escape' ? 'Escape' : 'Others'
@@ -464,7 +483,7 @@ const Editor = (props: { onRun: () => void }) => {
       return
     }
 
-    let { fromA, toA, fromB, toB } = changes[0]
+    const { fromA, toA, fromB, toB } = changes[0]
 
     const start = aiStartRef.current
     const isGeneTip = isGeneTipRef.current
@@ -484,7 +503,7 @@ const Editor = (props: { onRun: () => void }) => {
     const pos = viewUpdate.view.lineBlockAt(fromA)
     let texts = viewUpdate.state.doc?.text || []
     if (!texts.length) {
-      let textArr: string[] = []
+      const textArr: string[] = []
       const childrens = viewUpdate.state.doc.children || []
       childrens.forEach((item: { text: string[] }) => {
         if (item.text) {
@@ -502,7 +521,8 @@ const Editor = (props: { onRun: () => void }) => {
       const prefixArrs = arr.slice(0, index + 1)
       const prefixLen = prefixArrs.length
 
-      const beforeText = (sql.substring(0, fromA) + sql.substring(toB)).split('\n') || []
+      const beforeText =
+        (sql.substring(0, fromA) + sql.substring(toB)).split('\n') || []
       if (beforeText[prefixLen - 1].includes(aiTips)) {
         const lineNum = getLineNumByPos(toB, texts)
         arr[lineNum] = ''
@@ -581,7 +601,11 @@ const Editor = (props: { onRun: () => void }) => {
     return lineNum
   }
 
-  const addAiTips2Text = (lineNum: number, cursorPos: number, viewUpdate: any) => {
+  const addAiTips2Text = (
+    lineNum: number,
+    cursorPos: number,
+    viewUpdate: any
+  ) => {
     const text = sqlTextRef.current.split('\n')
     text[lineNum] = aiTips
     sqlTextRef.current = text.join('\n')
@@ -593,7 +617,8 @@ const Editor = (props: { onRun: () => void }) => {
     const start = aiStartRef.current
     const len = aiTipLenRef.current
 
-    const curSqlText = sqlTextRef.current.substring(0, fromB) + sqlTextRef.current.substring(toB)
+    const curSqlText =
+      sqlTextRef.current.substring(0, fromB) + sqlTextRef.current.substring(toB)
     setSqlText(curSqlText)
     sqlTextRef.current = curSqlText
 
@@ -608,14 +633,14 @@ const Editor = (props: { onRun: () => void }) => {
   }
 
   const setCursor = (pos: number, viewUpdate: any, scrollIntoView = false) => {
-    let index = Math.min(pos, sqlTextRef.current.length)
+    const index = Math.min(pos, sqlTextRef.current.length)
     viewUpdate.view.focus()
     viewUpdate.view.dispatch({
       selection: {
         anchor: index,
-        head: index
+        head: index,
       },
-      scrollIntoView
+      scrollIntoView,
     })
   }
 
@@ -623,7 +648,7 @@ const Editor = (props: { onRun: () => void }) => {
     setAiTipsPos({
       start,
       len,
-      isGeneTip
+      isGeneTip,
     })
     aiTipStartRef.current = start
     aiTipLenRef.current = len
@@ -638,7 +663,7 @@ const Editor = (props: { onRun: () => void }) => {
       aiTipsTimerRef.current && clearInterval(aiTipsTimerRef.current)
     } else {
       aiTipsTimerRef.current = window.setInterval(() => {
-        let num = (aiTipNumRef.current + 1) % 7
+        const num = (aiTipNumRef.current + 1) % 7
         aiTipNumRef.current = num
         const texts = sqlTextRef.current.split('\n')
         let count = 0
@@ -678,17 +703,27 @@ const Editor = (props: { onRun: () => void }) => {
   }, [sqlText])
 
   const editorBlur = async () => {
-    if (isSqlInit.current || !(sqlText !== editedSqlFile.content || databaseName != editedSqlFile.databse)) {
+    if (
+      isSqlInit.current ||
+      !(
+        sqlText !== editedSqlFile.content ||
+        databaseName != editedSqlFile.databse
+      )
+    ) {
       return
     }
 
     const data = {
       ...fileRef.current,
-      content: sqlTextRef.current
+      content: sqlTextRef.current,
     }
 
     // await updateSqlEditorFile(orgId, projectId, clusterId, data.id || 0, data)
-    await updateSqlEditorFile({ clusterId, sqlFileId: data.id || 0, body: data })
+    await updateSqlEditorFile({
+      clusterId,
+      sqlFileId: data.id || 0,
+      body: data,
+    })
 
     if (fileRef.current?.id === data.id) {
       setEditedSqlFile(data)
@@ -737,14 +772,14 @@ const Editor = (props: { onRun: () => void }) => {
         return {
           status: RequestStatus.Loading,
           sql: _,
-          res: {}
+          res: {},
         }
       }
 
       return {
         status: RequestStatus.Waiting,
         sql: _,
-        res: {}
+        res: {},
       }
     })
 
@@ -794,12 +829,12 @@ const Editor = (props: { onRun: () => void }) => {
     }
 
     const noBlock = strip(text, {
-      line: false
+      line: false,
     })
 
     const res = strip(noBlock, {
       language: 'sql',
-      block: false
+      block: false,
     })
 
     return res
@@ -823,9 +858,9 @@ const Editor = (props: { onRun: () => void }) => {
             clusterId,
             body: {
               sql: sqlLine,
-              sessionid: sessionId || fileRef.current?.sessionId
-            }
-          },
+              sessionid: sessionId || fileRef.current?.sessionId,
+            },
+          }
           // { timeout: 30 * 1000 }
         )
         resolve(res)
@@ -872,12 +907,18 @@ const Editor = (props: { onRun: () => void }) => {
       let preText = (texts[pre] && texts[pre].trim()) || ''
       let lastText = (texts[last] && texts[last].trim()) || ''
 
-      while (pre > 0 && (!preText.length || preText[preText.length - 1] !== ';')) {
+      while (
+        pre > 0 &&
+        (!preText.length || preText[preText.length - 1] !== ';')
+      ) {
         pre--
         preText = (texts[pre] && texts[pre].trim()) || ''
       }
 
-      while (last < texts.length && (!lastText.length || lastText[lastText.length - 1] !== ';')) {
+      while (
+        last < texts.length &&
+        (!lastText.length || lastText[lastText.length - 1] !== ';')
+      ) {
         last++
         lastText = (texts[last] && texts[last].trim()) || ''
       }
@@ -920,11 +961,14 @@ const Editor = (props: { onRun: () => void }) => {
     try {
       const fileParams = {
         name: `New query`,
-        content: newFileContent
+        content: newFileContent,
       }
 
       // const createRes = await createSqlEditorFile(orgId, projectId, clusterId, fileParams)
-      const createRes = await createSqlEditorFile({ clusterId, body: fileParams })
+      const createRes = await createSqlEditorFile({
+        clusterId,
+        body: fileParams,
+      })
       setIsCreatingFile(false)
 
       // if (createRes.code !== 200) {
@@ -934,7 +978,7 @@ const Editor = (props: { onRun: () => void }) => {
 
       getSqlFiles(false, {
         id: createRes.data,
-        ...fileParams
+        ...fileParams,
       })
     } catch {
       setIsCreatingFile(false)
@@ -944,7 +988,7 @@ const Editor = (props: { onRun: () => void }) => {
   }
 
   const getDatabaseName = (lineNum: number) => {
-    let name = ''
+    const name = ''
 
     if (!enableSQLEditorAIDB) {
       return name
@@ -1086,7 +1130,11 @@ const Editor = (props: { onRun: () => void }) => {
         </Button>
 
         {!editorSetting.is_privacy_allowed && (
-          <Button basic className={styles.aiBtn} onClick={() => setIsAggVisible(true)}>
+          <Button
+            basic
+            className={styles.aiBtn}
+            onClick={() => setIsAggVisible(true)}
+          >
             <Popup
               size="mini"
               content={'Enable AI power for data exploring'}
@@ -1100,9 +1148,11 @@ const Editor = (props: { onRun: () => void }) => {
           icon={null}
           closeOnBlur
           direction="left"
-          trigger={<DotsHorizontal
-          //  onClick={() => eventTracking('Sql Editor Ellipse Button Clicked')} 
-          />}
+          trigger={
+            <DotsHorizontal
+            //  onClick={() => eventTracking('Sql Editor Ellipse Button Clicked')}
+            />
+          }
         >
           <Dropdown.Menu>
             <Dropdown.Item disabled={isCreatingFile}>
@@ -1137,11 +1187,13 @@ const Editor = (props: { onRun: () => void }) => {
 
             return res
           })()}
-          placeholder={'USE database;\nSELECT column FROM table WHERE condition;'}
+          placeholder={
+            'USE database;\nSELECT column FROM table WHERE condition;'
+          }
           basicSetup={{
             foldGutter: false,
             highlightActiveLine: true,
-            autocompletion: false
+            autocompletion: false,
             // completionKeymap: false
           }}
           extensions={extensions}
@@ -1150,7 +1202,7 @@ const Editor = (props: { onRun: () => void }) => {
           onKeyDown={editorKeyDownHandler}
           onBlur={editorBlur}
           onUpdate={selectionHandler}
-        // root={document.getElementById('SqlEditor')?.shadowRoot || document}
+          // root={document.getElementById('SqlEditor')?.shadowRoot || document}
         />
       </div>
 

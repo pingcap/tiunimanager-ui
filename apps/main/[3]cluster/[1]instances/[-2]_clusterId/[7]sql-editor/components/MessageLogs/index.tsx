@@ -2,10 +2,15 @@
 import { Download01, Run } from '../../ui-components/icons/raw'
 import clsx from 'clsx'
 // import { observer } from 'mobx-react'
-// import React, 
+// import React,
 import { useState, useContext, useEffect, useRef } from 'react'
 import { CSVLink } from 'react-csv'
-import { RightIndent01, LeftIndent01, Scale02, Scale03 } from '../../ui-components/icons/raw'
+import {
+  RightIndent01,
+  LeftIndent01,
+  Scale02,
+  Scale03,
+} from '../../ui-components/icons/raw'
 
 // import ResizableContainer from 'dbaas/components/ResizableContainer'
 import ResizableContainer from '../../ui-components/ResizableContainer'
@@ -19,7 +24,9 @@ import { SqlRes, RequestStatus } from '../types'
 import styles from './index.module.less'
 import Results from './Results'
 
-const Status: React.FC<{ status: RequestStatus }> = ({ status = RequestStatus.Loading }) => {
+const Status: React.FC<{ status: RequestStatus }> = ({
+  status = RequestStatus.Loading,
+}) => {
   return (
     <div className={styles.sqlStatus}>
       <span className={styles[status]}></span>
@@ -27,11 +34,11 @@ const Status: React.FC<{ status: RequestStatus }> = ({ status = RequestStatus.Lo
   )
 }
 
-const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight: number; isRun: boolean }> = ({
-  sqlRef,
-  maxHeight,
-  isRun
-}) => {
+const MessageLogs: React.FC<{
+  sqlRef: React.RefObject<HTMLDivElement>
+  maxHeight: number
+  isRun: boolean
+}> = ({ sqlRef, maxHeight, isRun }) => {
   const defaultLeftWidth = 840
   const miniLeftWidth = 240
   const [leftWidth, setLeftWidth] = useState(miniLeftWidth)
@@ -67,7 +74,9 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
 
   useEffect(() => {
     if (isRun && curHeightRef.current < runHeight) {
-      const ele = document.getElementsByClassName('sql-editor-container')[0] as HTMLDivElement
+      const ele = document.getElementsByClassName(
+        'sql-editor-container'
+      )[0] as HTMLDivElement
       ele.style.height = `${runHeight}px`
 
       const target = sqlRef.current as HTMLDivElement
@@ -118,7 +127,9 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
   }
 
   const set2Max = (isMax: boolean) => {
-    const ele = document.getElementsByClassName('sql-editor-container')[0] as HTMLDivElement
+    const ele = document.getElementsByClassName(
+      'sql-editor-container'
+    )[0] as HTMLDivElement
 
     if (isMax) {
       ele.style.height = `${maxHeight}px`
@@ -156,10 +167,12 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
   return (
     <ResizableContainer
       as="div"
-      className={`${styles.sqlEditorContainer} ${enableLayoutV3 ? styles.newLayoutContainer : ''} sql-editor-container`}
+      className={`${styles.sqlEditorContainer} ${
+        enableLayoutV3 ? styles.newLayoutContainer : ''
+      } sql-editor-container`}
       defaultSize={{
         width: `100%`,
-        height: defaultHeight
+        height: defaultHeight,
       }}
       style={{
         background: '#fff',
@@ -168,7 +181,7 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
         left: '272px',
         right: '0',
         width: 'auto',
-        height: defaultHeight
+        height: defaultHeight,
       }}
       enable={{ top: true }}
       minHeight={minHeight}
@@ -176,7 +189,10 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
       onResize={messlogResize}
     >
       <div className={styles.messageLogs}>
-        <div className={styles.leftInfo} style={{ width: isLeftOpen ? '70%' : leftWidth }}>
+        <div
+          className={styles.leftInfo}
+          style={{ width: isLeftOpen ? '70%' : leftWidth }}
+        >
           <div className={`${styles.title} ${styles.leftTitle}`}>
             <span>Query log</span>
             <span
@@ -193,11 +209,16 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
             </span>
           </div>
 
-          <div className={`${styles.logs} ${isLeftOpen ? styles.open : styles.hide}`}>
+          <div
+            className={`${styles.logs} ${
+              isLeftOpen ? styles.open : styles.hide
+            }`}
+          >
             {sqlResultList?.map((item: SqlRes, index: number) => (
               <div
-                className={`${styles.logItem} ${curIndex === index ? styles.active : ''} ${isLeftOpen ? styles.open : styles.hide
-                  }`}
+                className={`${styles.logItem} ${
+                  curIndex === index ? styles.active : ''
+                } ${isLeftOpen ? styles.open : styles.hide}`}
                 key={index}
                 onClick={() => {
                   // eventTracking('SQL Editor Query Log Item Clicked', {
@@ -208,27 +229,55 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
               >
                 {isLeftOpen ? (
                   <div className={styles.openInfo}>
-                    <span className={styles.logIndex}>{sqlResultList.length - index}</span>
+                    <span className={styles.logIndex}>
+                      {sqlResultList.length - index}
+                    </span>
                     <Status status={item.status} />
                     <div className={styles.sqlLog}>
-                      <span className={`${styles.text} ${item.status === RequestStatus.Waiting ? styles.loading : ''}`}>
+                      <span
+                        className={`${styles.text} ${
+                          item.status === RequestStatus.Waiting
+                            ? styles.loading
+                            : ''
+                        }`}
+                      >
                         {item.sql}
                       </span>
-                      <span className={styles.resDesc}>{getStatusDesc(item.status, item.res?.execute_time || '')}</span>
-                      <span className={styles.resDesc}>Rows {item.res?.row_count || 0}</span>
+                      <span className={styles.resDesc}>
+                        {getStatusDesc(
+                          item.status,
+                          item.res?.execute_time || ''
+                        )}
+                      </span>
+                      <span className={styles.resDesc}>
+                        Rows {item.res?.row_count || 0}
+                      </span>
                     </div>
                   </div>
                 ) : (
                   <div className={`${styles.hideInfo}`}>
                     <div className={styles.left}>
-                      <span className={styles.logIndex}>{sqlResultList.length - index}</span>
+                      <span className={styles.logIndex}>
+                        {sqlResultList.length - index}
+                      </span>
                       <Status status={item.status} />
                     </div>
                     <div className={styles.right}>
-                      <span className={`${styles.text} ${item.status === RequestStatus.Waiting ? styles.loading : ''}`}>
+                      <span
+                        className={`${styles.text} ${
+                          item.status === RequestStatus.Waiting
+                            ? styles.loading
+                            : ''
+                        }`}
+                      >
                         {item.sql}
                       </span>
-                      <span className={styles.resDesc}>{getStatusDesc(item.status, item.res?.execute_time || '')}</span>
+                      <span className={styles.resDesc}>
+                        {getStatusDesc(
+                          item.status,
+                          item.res?.execute_time || ''
+                        )}
+                      </span>
                     </div>
                   </div>
                 )}
@@ -241,7 +290,8 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
           <div className={styles.title}>
             <span>Results </span>
             <span className={styles.subDesc}>
-              {isLeftOpen || !sqlResultList.length ? null : (cur.res?.row_count || 0) > sqlLimit ? (
+              {isLeftOpen || !sqlResultList.length ? null : (cur.res
+                  ?.row_count || 0) > sqlLimit ? (
                 <span>
                   {/* (Row limit reached. Showing <Settings trigger={<a>{sqlLimit}</a>} /> rows of many) */}
                   (Row limit reached. Showing {sqlLimit} rows of many)
@@ -251,10 +301,12 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
               )}
             </span>
             <div className={styles.logBtns}>
-              {!!((rows || []).length || (columns || []).length) ? (
+              {(rows || []).length || (columns || []).length ? (
                 <CSVLink
                   data={rows || []}
-                  headers={(columns || []).map((col: { col: string }) => col.col)}
+                  headers={(columns || []).map(
+                    (col: { col: string }) => col.col
+                  )}
                   filename={`results-${downFileSuffix()}`}
                   onClick={() => {
                     // eventTracking('SQL Editor Download Button Clicked')
@@ -263,7 +315,9 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
                   <Download01 className={styles.download} />
                 </CSVLink>
               ) : (
-                <Download01 className={clsx(styles.download, styles.disabled)} />
+                <Download01
+                  className={clsx(styles.download, styles.disabled)}
+                />
               )}
 
               {isMax ? (
@@ -299,14 +353,17 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
                   <div className={styles.emptyIcon}>
                     <Run />
                   </div>{' '}
-                  or hit <span>{isMac ? '⌘' : 'Ctrl'} + Enter</span> to execute your query.
+                  or hit <span>{isMac ? '⌘' : 'Ctrl'} + Enter</span> to execute
+                  your query.
                 </div>
                 <div>
                   Select multiple queries then click{' '}
                   <span className={styles.emptyIcon}>
                     <Run />
                   </span>{' '}
-                  or hit <span>{isMac ? '⇧ + ⌘' : 'Shift + Ctrl'} + Enter </span> to run all queries.{' '}
+                  or hit{' '}
+                  <span>{isMac ? '⇧ + ⌘' : 'Shift + Ctrl'} + Enter </span> to
+                  run all queries.{' '}
                 </div>
 
                 {/* <div>
@@ -315,17 +372,32 @@ const MessageLogs: React.FC<{ sqlRef: React.RefObject<HTMLDivElement>; maxHeight
               </div>
             )}
 
-            {!!(cur.status !== RequestStatus.Error && columns && columns.length) && (
-              <Results sqlRef={sqlRef} columns={columns || []} list={rows || []} message={''} height={height} />
+            {!!(
+              cur.status !== RequestStatus.Error &&
+              columns &&
+              columns.length
+            ) && (
+              <Results
+                sqlRef={sqlRef}
+                columns={columns || []}
+                list={rows || []}
+                message={''}
+                height={height}
+              />
             )}
 
-            {!!sqlResultList.length && cur.status === RequestStatus.Success && !columns?.length && (
-              <div className={styles.ddlRes}>{query}</div>
-            )}
+            {!!sqlResultList.length &&
+              cur.status === RequestStatus.Success &&
+              !columns?.length && <div className={styles.ddlRes}>{query}</div>}
 
-            {(cur.status === RequestStatus.Error || cur.status === RequestStatus.Loading) && (
+            {(cur.status === RequestStatus.Error ||
+              cur.status === RequestStatus.Loading) && (
               <div className={styles.errInfo}>
-                <div className={`${styles.errContent} ${cur.status === RequestStatus.Loading ? styles.running : ''}`}>
+                <div
+                  className={`${styles.errContent} ${
+                    cur.status === RequestStatus.Loading ? styles.running : ''
+                  }`}
+                >
                   {cur.status === RequestStatus.Error ? (
                     <div>
                       <div className={styles.errTitle}>Query failed.</div>

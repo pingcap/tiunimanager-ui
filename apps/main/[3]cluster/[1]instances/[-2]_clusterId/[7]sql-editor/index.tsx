@@ -16,13 +16,20 @@
 
 import 'semantic-ui-css/semantic.min.css'
 
-import SqlEditor from "./components";
+import SqlEditor from './components'
 
-import styles from './index.module.less';
+import styles from './index.module.less'
 
 export default function () {
   return (
-    <div className={styles.sqlEditorRoot} style={{ position: 'relative', height: 'calc(100vh - 264px)', margin: '-24px' }}>
+    <div
+      className={styles.sqlEditorRoot}
+      style={{
+        position: 'relative',
+        height: 'calc(100vh - 264px)',
+        margin: '-24px',
+      }}
+    >
       <SqlEditor />
     </div>
   )
