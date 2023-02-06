@@ -1,6 +1,8 @@
+/* eslint-disable */
+
 import { EditorState } from '@codemirror/state'
-import { Switch } from '@mantine/core'
-import { Loader } from '@mantine/core'
+// import { Switch } from '@mantine/core'
+// import { Loader } from '@mantine/core'
 // import { Settings01, PlusSquare, DotsHorizontal, RunFill, XClose, AiExplore01 } from '@tidb-cloud-uikit/icons/raw'
 // import functions from '@tidb-cloud-uikit/icons/raw/CodeCircle03.svg'
 // import database from '@tidb-cloud-uikit/icons/raw/Database.svg'

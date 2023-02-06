@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // import { Tree, Skeleton, Popup, Input, Dropdown } from '@tidb-cloud/ui-components'
 import { Tree, Skeleton } from '../../ui-components'
 import { Popup, Dropdown, Input } from 'semantic-ui-react'

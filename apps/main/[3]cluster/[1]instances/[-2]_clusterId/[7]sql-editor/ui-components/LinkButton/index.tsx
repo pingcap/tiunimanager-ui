@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Button, StrictButtonProps } from 'semantic-ui-react'
 import clsx from 'clsx'
 // import React from 'react'

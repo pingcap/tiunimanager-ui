@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // import { Download01, Run } from '@tidb-cloud-uikit/icons/raw'
 import { Download01, Run } from '../../ui-components/icons/raw'
 import clsx from 'clsx'

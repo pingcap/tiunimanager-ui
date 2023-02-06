@@ -20,7 +20,7 @@ import {
   PayloadWithOptions,
   withRequestId,
 } from '@/api/hooks/utils'
-import { APIS, axiosInstance } from '@/api/client'
+import { APIS } from '@/api/client'
 import {
   DataCenterItemInfo,
   ProductItemInfo,
@@ -29,7 +29,6 @@ import {
 } from '@/api/model'
 
 export function doUserLogin(payload: UserLoginRequest) {
-  // return axiosInstance.get('/api/v1/test')
   return APIS.Platform.userLoginPost(payload, {
     skipNotifications: true,
   })

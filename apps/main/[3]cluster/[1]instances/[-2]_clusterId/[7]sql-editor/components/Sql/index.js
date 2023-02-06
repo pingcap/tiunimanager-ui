@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { ifNotIn, completeFromList } from '@codemirror/autocomplete'
 import {
   syntaxTree,

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import clsx from 'clsx'
 import DOMPurify from 'dompurify'
 // import { observer } from 'mobx-react'

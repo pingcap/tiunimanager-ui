@@ -1,3 +1,9 @@
+/* eslint-disable */
+
+// eslint ignore file doesn't work in this project,
+// because it can't ignore the path which include squre bracket (aka `[]`)
+// see issue: https://github.com/kaelzhang/node-ignore/issues/59
+
 // import { Dropdown, Modal, Skeleton, Input, Popup } from '@tidb-cloud/ui-components'
 import { Dropdown, Modal, Input, Popup, Button } from 'semantic-ui-react'
 import { Skeleton } from '../../ui-components'
