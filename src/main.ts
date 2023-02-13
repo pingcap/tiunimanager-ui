@@ -18,7 +18,8 @@
 if (import.meta.env.DEV) await import('@/devtools')
 
 // init error tracking tools
-import '@/track'
+// close tracking
+// import '@/track'
 
 // bootstrap application
 import bootstrap from '@/bootstrap'
