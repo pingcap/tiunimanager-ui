@@ -14,7 +14,7 @@
 
 name: Get Started
 header:
-  title: Get Started with TiUniManager
+  title: Get Started with TEM
   desc: Finish the following config to start your TiDB database management
 steps:
   dataCenter:

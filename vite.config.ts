@@ -60,7 +60,7 @@ export default defineConfig(({ mode }) => {
       vitePluginHtml({
         inject: {
           injectData: {
-            title: env.VITE_TITLE || 'TiUniManager',
+            title: env.VITE_TITLE || 'TEM',
             description:
               env.VITE_DESCRIPTION ||
               'A management platform built for operating and managing TiDB',

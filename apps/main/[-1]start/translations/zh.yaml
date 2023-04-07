@@ -14,7 +14,7 @@
 
 name: 开始
 header:
-  title: 欢迎使用 TiUniManager
+  title: 欢迎使用 TEM
   desc: 完成以下配置，开始 TiDB 数据库管理
 steps:
   dataCenter:
