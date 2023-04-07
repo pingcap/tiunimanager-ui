@@ -1,6 +1,6 @@
 {
-  "name": "tiunimanager-ui",
-  "version": "1.1.0-beta.4",
+  "name": "tem-ui",
+  "version": "1.0.3",
   "private": true,
   "license": "Apache-2.0",
   "scripts": {
