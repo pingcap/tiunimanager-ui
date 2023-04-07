@@ -5,17 +5,17 @@
   <br>
 </p>
 
-# TiUniManager UI
+# TEM UI
 
 [![CI](https://github.com/pingcap/tiunimanager-ui/actions/workflows/build.yaml/badge.svg?branch=main)](https://github.com/pingcap/tiunimanager-ui/actions)
 [![Version](https://img.shields.io/github/v/release/pingcap/tiunimanager-ui?color=green&include_prereleases&style=flat)](https://github.com/pingcap/tiunimanager-ui/releases)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green?style=flat)](./LICENSE)
 
-TiUniManager UI is a general purpose, web-based UI for [TiUniManager](https://github.com/pingcap/tiunimanager), a database operation and maintenance management platform for TiDB.
+TEM UI is a general purpose, web-based UI for [TEM](https://github.com/pingcap/tiunimanager), a database operation and maintenance management platform for TiDB.
 
 It allows users to view and manage TiDB clusters through the web-based UI.
 
-Some of the features the TiUniManager UI supports:
+Some of the features the TEM UI supports:
 
 - Cluster creation, deletion, scaling-out, cloning, upgrading etc...
 - Realtime monitoring and alerting of cluster status
@@ -26,11 +26,11 @@ Some of the features the TiUniManager UI supports:
 
 ## Getting Started
 
-First, you need to ensure that there is a local or remote TiUniManager server deployed via tiup-em available to provide services.
+First, you need to ensure that there is a local or remote TEM server deployed via tiup-em available to provide services.
 
 ### Prerequisites
 
-The followings are required for developing TiUniManager UI:
+The followings are required for developing TEM UI:
 
 - [Git](https://git-scm.com/downloads)
 - [Go 1.17+](https://go.dev/doc/install)
@@ -67,7 +67,7 @@ yarn generate
 
 ### Configure environment variables
 
-If your TiUniManager server is running locally and is deployed using the default configuration, you can skip this section.
+If your TEM server is running locally and is deployed using the default configuration, you can skip this section.
 
 Otherwise, you need to finish the following steps.
 
@@ -76,10 +76,10 @@ Otherwise, you need to finish the following steps.
 
 ```ini
 # Replace {xxxx-host} with the real host of the services
-# for your TiUniManager server.
-# See the TiUniManager topology config.yaml for more details.
+# for your TEM server.
+# See the TEM topology config.yaml for more details.
 # config.yaml is located in the /home/tidb directory of the machine
-# running your TiUniManager server.
+# running your TEM server.
 
 # System external services
 VITE_MONITOR_URL="http://{grafana-host}/d/em000001/em-server?orgId=1&refresh=10s&kiosk=tv"
@@ -101,11 +101,11 @@ Now, run the following command to start a development server.
 yarn dev
 ```
 
-That's it! You can access TiUniManager UI through http://127.0.0.1:3000.
+That's it! You can access TEM UI through http://127.0.0.1:3000.
 
 ## Browser support
 
-TiUniManager UI has been tested on modern evergreen browsers.
+TEM UI has been tested on modern evergreen browsers.
 
 It generally supports:
 
@@ -124,7 +124,7 @@ Please open GitHub issues for bugs only, not general help requests. You can sear
 
 Read through our [contributing guidelines](./CONTRIBUTING.md) to learn about our submission process and more.
 
-If you want to contribute through code, read the [development guide](./doc/development.md) to learn about our development process, and how to build your changes to TiUniManager UI.
+If you want to contribute through code, read the [development guide](./doc/development.md) to learn about our development process, and how to build your changes to TEM UI.
 
 ## License
 

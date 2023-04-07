@@ -1,6 +1,6 @@
-# Contributing to TiUniManager UI
+# Contributing to TEM UI
 
-Thanks for your interest in contributing to TiUniManager UI! As a contributor, here are the guidelines we would like you to follow:
+Thanks for your interest in contributing to TEM UI! As a contributor, here are the guidelines we would like you to follow:
 
 - [Code of Conduct](#coc)
 - [Question or Problem?](#question)
@@ -11,7 +11,7 @@ Thanks for your interest in contributing to TiUniManager UI! As a contributor, h
 
 ## <a name="coc"></a> Code of Conduct
 
-Help us keep TiUniManager UI open and inclusive. Please read and follow our [Code of Conduct][coc].
+Help us keep TEM UI open and inclusive. Please read and follow our [Code of Conduct][coc].
 
 ## <a name="question"></a> Got a Question or Problem?
 
@@ -67,7 +67,7 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 
 ### Reviewing a Pull Request
 
-The TiUniManager UI team reserves the right not to accept pull requests from community members who haven't been good citizens of the community. Such behavior includes not following the [Code of Conduct](./CODE_OF_CONDUCT.md) and applies within or outside our managed channels.
+The TEM UI team reserves the right not to accept pull requests from community members who haven't been good citizens of the community. Such behavior includes not following the [Code of Conduct](./CODE_OF_CONDUCT.md) and applies within or outside our managed channels.
 
 #### Addressing review feedback
 
