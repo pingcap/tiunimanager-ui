@@ -14,9 +14,13 @@
  * limitations under the License.
  */
 
-import commonLogo from '/img/logo/common.svg'
-import commonLightLogo from '/img/logo/common-light.svg'
-import smallLogo from '/img/logo/small.svg'
+// import commonLogo from '/img/logo/common.svg'
+// import commonLightLogo from '/img/logo/common-light.svg'
+// import smallLogo from '/img/logo/small.svg'
+
+const commonLogo = '/img/logo/common.svg'
+const commonLightLogo = '/img/logo/common-light.svg'
+const smallLogo = '/img/logo/small.svg'
 
 const logoHashmap = {
   common: commonLogo,

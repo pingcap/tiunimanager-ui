@@ -1,0 +1,239 @@
+{
+  "code": 200,
+  "message": "ok",
+  "data": [
+    {
+      "name": "gharchive_dev",
+      "tables": [
+        {
+          "name": "github_events",
+          "columns": [
+            { "col": "id", "data_type": "bigint", "nullable": true },
+            { "col": "type", "data_type": "varchar", "nullable": true },
+            { "col": "created_at", "data_type": "datetime", "nullable": true },
+            { "col": "repo_id", "data_type": "bigint", "nullable": true },
+            { "col": "repo_name", "data_type": "varchar", "nullable": true },
+            { "col": "actor_id", "data_type": "bigint", "nullable": true },
+            { "col": "actor_login", "data_type": "varchar", "nullable": true },
+            {
+              "col": "actor_location",
+              "data_type": "varchar",
+              "nullable": true
+            },
+            { "col": "language", "data_type": "varchar", "nullable": true },
+            { "col": "additions", "data_type": "bigint", "nullable": true },
+            { "col": "deletions", "data_type": "bigint", "nullable": true },
+            { "col": "action", "data_type": "varchar", "nullable": true },
+            { "col": "number", "data_type": "int", "nullable": true },
+            { "col": "commit_id", "data_type": "varchar", "nullable": true },
+            { "col": "comment_id", "data_type": "bigint", "nullable": true },
+            { "col": "org_login", "data_type": "varchar", "nullable": true },
+            { "col": "org_id", "data_type": "bigint", "nullable": true },
+            { "col": "state", "data_type": "varchar", "nullable": true },
+            { "col": "closed_at", "data_type": "datetime", "nullable": true },
+            { "col": "comments", "data_type": "int", "nullable": true },
+            {
+              "col": "pr_merged_at",
+              "data_type": "datetime",
+              "nullable": true
+            },
+            { "col": "pr_merged", "data_type": "tinyint", "nullable": true },
+            { "col": "pr_changed_files", "data_type": "int", "nullable": true },
+            {
+              "col": "pr_review_comments",
+              "data_type": "int",
+              "nullable": true
+            },
+            {
+              "col": "pr_or_issue_id",
+              "data_type": "bigint",
+              "nullable": true
+            },
+            { "col": "event_day", "data_type": "date", "nullable": true },
+            { "col": "event_month", "data_type": "date", "nullable": true },
+            {
+              "col": "author_association",
+              "data_type": "varchar",
+              "nullable": true
+            },
+            { "col": "event_year", "data_type": "int", "nullable": true },
+            { "col": "push_size", "data_type": "int", "nullable": true },
+            {
+              "col": "push_distinct_size",
+              "data_type": "int",
+              "nullable": true
+            }
+          ]
+        },
+        {
+          "name": "programming_language_repos",
+          "columns": [
+            { "col": "id", "data_type": "varchar", "nullable": false },
+            { "col": "name", "data_type": "varchar", "nullable": true }
+          ]
+        },
+        {
+          "name": "users",
+          "columns": [
+            { "col": "id", "data_type": "int", "nullable": false },
+            { "col": "login", "data_type": "varchar", "nullable": false },
+            { "col": "company", "data_type": "varchar", "nullable": true },
+            { "col": "company_name", "data_type": "varchar", "nullable": true },
+            {
+              "col": "created_at",
+              "data_type": "timestamp",
+              "nullable": false
+            },
+            { "col": "type", "data_type": "varchar", "nullable": false },
+            { "col": "fake", "data_type": "tinyint", "nullable": false },
+            { "col": "deleted", "data_type": "tinyint", "nullable": false },
+            { "col": "long", "data_type": "decimal", "nullable": true },
+            { "col": "lat", "data_type": "decimal", "nullable": true },
+            { "col": "country_code", "data_type": "char", "nullable": true },
+            { "col": "state", "data_type": "varchar", "nullable": true },
+            { "col": "city", "data_type": "varchar", "nullable": true },
+            { "col": "location", "data_type": "varchar", "nullable": true }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "sample_data",
+      "tables": [
+        {
+          "name": "github_events",
+          "columns": [
+            { "col": "id", "data_type": "bigint", "nullable": false },
+            { "col": "type", "data_type": "varchar", "nullable": false },
+            { "col": "created_at", "data_type": "datetime", "nullable": false },
+            { "col": "repo_id", "data_type": "bigint", "nullable": false },
+            { "col": "repo_name", "data_type": "varchar", "nullable": false },
+            { "col": "actor_id", "data_type": "bigint", "nullable": false },
+            { "col": "actor_login", "data_type": "varchar", "nullable": false },
+            { "col": "language", "data_type": "varchar", "nullable": false },
+            { "col": "additions", "data_type": "bigint", "nullable": false },
+            { "col": "deletions", "data_type": "bigint", "nullable": false },
+            { "col": "action", "data_type": "varchar", "nullable": false },
+            { "col": "number", "data_type": "int", "nullable": false },
+            { "col": "commit_id", "data_type": "varchar", "nullable": false },
+            { "col": "comment_id", "data_type": "bigint", "nullable": false },
+            { "col": "org_login", "data_type": "varchar", "nullable": false },
+            { "col": "org_id", "data_type": "bigint", "nullable": false },
+            { "col": "state", "data_type": "varchar", "nullable": false },
+            { "col": "closed_at", "data_type": "datetime", "nullable": false },
+            { "col": "comments", "data_type": "int", "nullable": false },
+            {
+              "col": "pr_merged_at",
+              "data_type": "datetime",
+              "nullable": false
+            },
+            { "col": "pr_merged", "data_type": "tinyint", "nullable": false },
+            {
+              "col": "pr_changed_files",
+              "data_type": "int",
+              "nullable": false
+            },
+            {
+              "col": "pr_review_comments",
+              "data_type": "int",
+              "nullable": false
+            },
+            {
+              "col": "pr_or_issue_id",
+              "data_type": "bigint",
+              "nullable": false
+            },
+            { "col": "event_day", "data_type": "date", "nullable": false },
+            { "col": "event_month", "data_type": "date", "nullable": false },
+            { "col": "event_year", "data_type": "int", "nullable": false },
+            { "col": "push_size", "data_type": "int", "nullable": false },
+            {
+              "col": "push_distinct_size",
+              "data_type": "int",
+              "nullable": false
+            },
+            {
+              "col": "creator_user_login",
+              "data_type": "varchar",
+              "nullable": false
+            },
+            {
+              "col": "creator_user_id",
+              "data_type": "bigint",
+              "nullable": false
+            },
+            {
+              "col": "pr_or_issue_created_at",
+              "data_type": "datetime",
+              "nullable": false
+            }
+          ]
+        },
+        {
+          "name": "global_fortune_500_2018_2022",
+          "columns": [
+            { "col": "rank", "data_type": "bigint", "nullable": true },
+            { "col": "company_name", "data_type": "varchar", "nullable": true },
+            { "col": "country", "data_type": "varchar", "nullable": true },
+            { "col": "employees_num", "data_type": "bigint", "nullable": true },
+            { "col": "previous_rank", "data_type": "bigint", "nullable": true },
+            {
+              "col": "revenues_million",
+              "data_type": "bigint",
+              "nullable": true
+            },
+            {
+              "col": "revene_change_percentage",
+              "data_type": "double",
+              "nullable": true
+            },
+            {
+              "col": "profit_million",
+              "data_type": "double",
+              "nullable": true
+            },
+            {
+              "col": "profit_change_percentage",
+              "data_type": "double",
+              "nullable": true
+            },
+            { "col": "asset_million", "data_type": "bigint", "nullable": true },
+            { "col": "year", "data_type": "bigint", "nullable": true }
+          ]
+        },
+        {
+          "name": "imdb_movie_ratings",
+          "columns": [
+            { "col": "rank", "data_type": "bigint", "nullable": true },
+            { "col": "movie_name", "data_type": "varchar", "nullable": true },
+            { "col": "year", "data_type": "year", "nullable": true },
+            { "col": "certificate", "data_type": "varchar", "nullable": true },
+            {
+              "col": "runtime_in_min",
+              "data_type": "bigint",
+              "nullable": true
+            },
+            { "col": "genre", "data_type": "varchar", "nullable": true },
+            { "col": "metascore", "data_type": "double", "nullable": true },
+            { "col": "gross_in_$_m", "data_type": "double", "nullable": true },
+            { "col": "rating_from_10", "data_type": "double", "nullable": true }
+          ]
+        },
+        {
+          "name": "sold_car_orders",
+          "columns": [
+            { "col": "name", "data_type": "varchar", "nullable": true },
+            { "col": "year", "data_type": "year", "nullable": true },
+            { "col": "selling_price", "data_type": "bigint", "nullable": true },
+            { "col": "km_driven", "data_type": "bigint", "nullable": true },
+            { "col": "fuel", "data_type": "varchar", "nullable": true },
+            { "col": "seller_type", "data_type": "varchar", "nullable": true },
+            { "col": "transmission", "data_type": "varchar", "nullable": true },
+            { "col": "owner", "data_type": "varchar", "nullable": true }
+          ]
+        }
+      ]
+    },
+    { "name": "test", "tables": [] }
+  ]
+}

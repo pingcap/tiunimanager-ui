@@ -1,0 +1,24 @@
+{
+  "code": 200,
+  "message": "ok",
+  "data": [
+    {
+      "name": "gharchive_dev",
+      "tables": [
+        { "name": "github_events", "columns": null },
+        { "name": "programming_language_repos", "columns": null },
+        { "name": "users", "columns": null }
+      ]
+    },
+    {
+      "name": "sample_data",
+      "tables": [
+        { "name": "github_events", "columns": null },
+        { "name": "global_fortune_500_2018_2022", "columns": null },
+        { "name": "imdb_movie_ratings", "columns": null },
+        { "name": "sold_car_orders", "columns": null }
+      ]
+    },
+    { "name": "test", "tables": [] }
+  ]
+}

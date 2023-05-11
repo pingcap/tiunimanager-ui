@@ -22,6 +22,7 @@ import vitePluginHtml from 'vite-plugin-html'
 import pluginYaml from 'rollup-plugin-yamlx'
 import { createMacroPlugin } from 'vite-plugin-macro'
 import pluginDel from 'rollup-plugin-delete'
+import svgr from 'vite-plugin-svgr'
 import {
   provideAssets,
   provideComponents,
@@ -35,7 +36,7 @@ import AppPackage from './package.json'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())
   const proxy =
-    !env.VITE_MOCK &&
+    // !env.VITE_MOCK &&
     !!env.VITE_PROXY_API_TARGET &&
     ({
       proxy: {
@@ -56,6 +57,10 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [
+      // svgr({
+      //   include: 'icons/raw/*.svg'
+      // }),
+      svgr(),
       reactRefresh(),
       vitePluginHtml({
         inject: {
@@ -138,8 +143,14 @@ export default defineConfig(({ mode }) => {
       __APP_NAME__: JSON.stringify(AppPackage.name),
       __APP_VERSION__: JSON.stringify(AppPackage.version),
     },
+    // esbuild: {
+    //   jsxInject: `import React from 'react'`,
+    // },
+    // https://github.com/vitejs/vite/issues/2369
     esbuild: {
-      jsxInject: `import React from 'react'`,
+      jsxFactory: '_jsx',
+      jsxFragment: '_jsxFragment',
+      jsxInject: `import { createElement as _jsx, Fragment as _jsxFragment } from 'react'`,
     },
     build: {
       target: ['chrome67', 'firefox68', 'edge79', 'safari14'],

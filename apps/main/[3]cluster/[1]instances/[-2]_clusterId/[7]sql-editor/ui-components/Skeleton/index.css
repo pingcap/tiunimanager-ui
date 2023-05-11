@@ -1,0 +1,6 @@
+@import 'react-loading-skeleton/dist/skeleton.css';
+
+.react-loading-skeleton {
+  --base-color: #f0f0f0;
+  --highlight-color: #f4f4f4;
+}

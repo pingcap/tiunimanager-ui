@@ -16,8 +16,10 @@
 
 import { setupWorker } from 'msw'
 
+import { handlers } from './handlers'
+
 export function initMock() {
-  const worker = setupWorker()
+  const worker = setupWorker(...handlers)
   return worker.start({
     onUnhandledRequest: 'bypass',
   })

@@ -21,8 +21,10 @@ import { resolveRoute } from '@pages-macro'
 import { useI18n } from '@i18n-macro'
 import { useSystemState } from '@store/system'
 
-import startImg from '/img/background/start.svg'
+// import startImg from '/img/background/start.svg'
 import styles from './index.module.less'
+
+const startImg = '/img/background/start.svg'
 
 export default function () {
   const { t } = useI18n()

@@ -22,3 +22,4 @@ pages:
   params: Parameters
   backup: Backup
   replication: Data Replication
+  sql-editor: SQL Editor

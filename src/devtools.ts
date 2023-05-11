@@ -30,6 +30,7 @@ window.console.error = (...data: any[]) => {
 }
 
 if (import.meta.env.VITE_MOCK) {
+  console.log('mock...')
   const mock = await import('@mock/index')
   // By default, MSW will catch all requests during its initialization
   mock.initMock().then()
